@@ -11,6 +11,8 @@ import GKeybindInput from './g/GKeybindInput/GKeybindInput.vue'
 import GTile from './g/GTile/GTile.vue'
 import GRail from './g/GRail/GRail.vue'
 import GCombo from './g/GCombo/GCombo.vue'
+import GList from './g/GList/GList.vue'
+import GListItem from './g/GListItem/GListItem.vue'
 import GMenuList from './g/GMenuList/GMenuList.vue'
 import GCheckbox from './g/GCheckbox/GCheckbox.vue'
 import GNumberInput from './g/GNumberInput/GNumberInput.vue'
@@ -54,6 +56,10 @@ export function registerCustomComponents(app: App): void {
   app.component('grail', GRail)
   app.component('GCombo', GCombo)
   app.component('gcombo', GCombo)
+  app.component('GList', GList)
+  app.component('glist', GList)
+  app.component('GListItem', GListItem)
+  app.component('glistitem', GListItem)
   app.component('GMenuList', GMenuList)
   app.component('gmenulist', GMenuList)
   app.component('GCheckbox', GCheckbox)

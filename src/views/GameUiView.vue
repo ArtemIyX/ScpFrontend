@@ -32,6 +32,7 @@ const role = ref('medic')
 const difficulty = ref('standard')
 const graphicsQuality = ref<'low' | 'medium' | 'high' | 'epic' | 'cinematic'>('high')
 const menuAction = ref('resume')
+const menuRules = ref(['Stay with your squad.', 'Check the door status before moving.', 'Keep the radio line clear.'])
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -1175,6 +1176,56 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GList</p>
+              <p class="debug-meta">
+                Default content lists for notes, objectives, briefings, and simple numbered steps.
+              </p>
+            </div>
+          </div>
+
+          <div class="list-grid">
+            <GList
+              label="Bullet list"
+              helper="Used for notes and quick readouts."
+              marker="bullet"
+              preset="surface"
+              width="full"
+              background
+            >
+              <GListItem v-for="rule in menuRules" :key="rule" :text="rule" />
+            </GList>
+
+            <GList
+              label="Indexed list"
+              helper="Used for steps, objectives, and ordered tasks."
+              marker="indexed"
+              preset="purple"
+              width="full"
+              background
+            >
+              <GListItem text="Open the first secure door." secondary="Step 1" tone="purple" />
+              <GListItem text="Check the corridor cameras." secondary="Step 2" tone="purple" />
+              <GListItem text="Report the room status." secondary="Step 3" tone="purple" />
+            </GList>
+
+            <GList
+              label="Without marker"
+              helper="For compact text blocks when bullets would be noisy."
+              marker="none"
+              preset="quiet"
+              width="full"
+              compact
+            >
+              <GListItem text="Containment log updated." />
+              <GListItem text="Server link is stable." />
+              <GListItem text="Lobby roster synced." />
+            </GList>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GSection</p>
               <p class="debug-meta">
                 Higher-level block for settings pages, lobby panels, and grouped in-game options.
@@ -1574,6 +1625,13 @@ function closeModalFromFooter(message: string): void {
 }
 
 .menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 1rem;

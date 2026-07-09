@@ -1,0 +1,63 @@
+.glistitem {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+  color: inherit;
+  padding-left: 1.55rem;
+}
+
+.glist--none .glistitem {
+  padding-left: 0;
+}
+
+.glist--bullet .glistitem::before,
+.glist--indexed .glistitem::before {
+  position: absolute;
+  left: 0;
+  top: 0.18rem;
+  width: 1.1rem;
+  color: var(--glist-accent);
+  font-weight: 700;
+  text-align: right;
+  line-height: 1;
+}
+
+.glist--bullet .glistitem::before {
+  content: '\2022';
+  font-size: 1rem;
+}
+
+.glist--indexed .glistitem {
+  counter-increment: glist-item;
+}
+
+.glist--indexed .glistitem::before {
+  content: counter(glist-item) '.';
+}
+
+.glistitem--selected {
+  color: var(--glist-text);
+}
+
+.glistitem--disabled {
+  opacity: 0.5;
+}
+
+.glistitem__main {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.glistitem__text,
+.glistitem__secondary {
+  min-width: 0;
+}
+
+.glistitem__secondary {
+  flex: 0 0 auto;
+  text-align: right;
+}
