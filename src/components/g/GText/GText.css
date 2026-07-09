@@ -1,0 +1,59 @@
+.gtext {
+  margin: 0;
+  min-width: 0;
+  color: var(--ui-text-main);
+}
+
+.gtext--body {
+  font-family: var(--ui-body-font);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ui-text-soft);
+}
+
+.gtext--muted {
+  font-family: var(--ui-body-font);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ui-text-muted);
+}
+
+.gtext--title {
+  font-family: var(--ui-title-font);
+  font-size: 1.875rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.gtext--header {
+  font-family: var(--ui-header-font);
+  font-size: 1.125rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.gtext--caps {
+  font-family: var(--ui-caps-font);
+  font-size: 1rem;
+  line-height: 1.1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ui-status-warning-300);
+}
+
+.gtext--technical {
+  font-family: var(--ui-technical-font);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--ui-text-main);
+  font-variant-ligatures: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.gtext--handwrite {
+  font-family: var(--ui-handwrite-font);
+  font-size: 1.375rem;
+  line-height: 1.35;
+}
+
