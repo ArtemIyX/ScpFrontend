@@ -1,0 +1,165 @@
+.gmodal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ui-z-modal);
+  display: grid;
+  place-items: center;
+  padding: 1.75rem;
+  background:
+    radial-gradient(circle at top, rgba(198, 255, 74, 0.08), transparent 40%),
+    rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gmodal {
+  --gmodal-width: min(48rem, calc(100vw - 3.5rem));
+  --gmodal-max-height: calc(100vh - 3.5rem);
+
+  width: var(--gmodal-width);
+  max-width: 100%;
+  max-height: var(--gmodal-max-height);
+  display: grid;
+  gap: 1.125rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 1.25rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(198, 255, 74, 0.18);
+  background:
+    linear-gradient(180deg, rgba(12, 16, 20, 0.98), rgba(8, 10, 14, 0.96)),
+    rgba(10, 14, 17, 0.9);
+  overflow: hidden;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.gmodal--height-full {
+  height: var(--gmodal-max-height);
+}
+
+.gmodal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  padding: 0.125rem 0.25rem 0;
+}
+
+.gmodal__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.gmodal__title {
+  min-width: 0;
+  font-size: 1.625rem;
+  line-height: 1.05;
+}
+
+.gmodal__subtitle {
+  min-width: 0;
+}
+
+.gmodal__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.gmodal__status {
+  white-space: nowrap;
+}
+
+.gmodal__body {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  gap: 1rem;
+  padding: 0.25rem;
+  overflow: hidden auto;
+}
+
+.gmodal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.25rem 0.25rem 0.125rem;
+}
+
+.gmodal__close-icon {
+  position: relative;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.gmodal__close-icon::before,
+.gmodal__close-icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.gmodal__close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gmodal__close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.gmodal--sm {
+  --gmodal-width: min(32rem, calc(100vw - 3rem));
+}
+
+.gmodal--md {
+  --gmodal-width: min(40rem, calc(100vw - 3rem));
+}
+
+.gmodal--lg {
+  --gmodal-width: min(52rem, calc(100vw - 3rem));
+}
+
+.gmodal--xl {
+  --gmodal-width: min(68rem, calc(100vw - 3rem));
+}
+
+.gmodal--width-full {
+  --gmodal-width: calc(100vw - 3rem);
+}
+
+.gmodal--strong {
+  background: var(--ui-surface-strong);
+  border-color: var(--ui-border-strong);
+}
+
+@media (max-width: 640px) {
+  .gmodal__backdrop {
+    padding: 1rem;
+  }
+
+  .gmodal {
+    --gmodal-width: calc(100vw - 2rem);
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .gmodal__header {
+    flex-direction: column;
+  }
+
+  .gmodal__chrome {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -9,6 +9,9 @@ const region = ref('eu-west')
 const role = ref('medic')
 const difficulty = ref('standard')
 const activeTab = ref('menu')
+const modalOpen = ref(false)
+const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
+const modalEvent = ref('No modal events yet.')
 
 const presetButtons = [
   { preset: 'surface', label: 'Surface' },
@@ -69,6 +72,59 @@ const windowActions = [
   { label: 'Back', preset: 'ghost' },
 ] as const
 
+const modalModes = [
+  {
+    key: 'standard',
+    label: 'Standard',
+    description: 'X button, backdrop close, and escape close.',
+  },
+  {
+    key: 'no-button',
+    label: 'Header Only',
+    description: 'Backdrop close on, no X button.',
+  },
+  {
+    key: 'locked',
+    label: 'Locked',
+    description: 'No X button and no backdrop close.',
+  },
+] as const
+
+const modalConfig = computed(() => {
+  switch (modalMode.value) {
+    case 'no-button':
+      return {
+        title: 'Header Only Modal',
+        subtitle: 'The modal still closes on backdrop and Escape, but has no X button.',
+        status: 'Backdrop close',
+        closable: true,
+        backdropClosable: true,
+        escapeClosable: true,
+        showCloseButton: false,
+      }
+    case 'locked':
+      return {
+        title: 'Locked Modal',
+        subtitle: 'This one is intentionally persistent until footer action closes it.',
+        status: 'Locked',
+        closable: false,
+        backdropClosable: false,
+        escapeClosable: false,
+        showCloseButton: false,
+      }
+    default:
+      return {
+        title: 'Standard Modal',
+        subtitle: 'The usual framework behavior with all close paths enabled.',
+        status: 'Closable',
+        closable: true,
+        backdropClosable: true,
+        escapeClosable: true,
+        showCloseButton: true,
+      }
+  }
+})
+
 const disabledLabel = computed(() => (isActionDisabled.value ? 'Disabled' : 'Enabled'))
 const queryStatus = computed(() =>
   query.value.trim().length > 0
@@ -78,6 +134,33 @@ const queryStatus = computed(() =>
 
 function toggleDisabled(): void {
   isActionDisabled.value = !isActionDisabled.value
+}
+
+function openModal(mode: 'standard' | 'no-button' | 'locked'): void {
+  modalMode.value = mode
+  modalOpen.value = true
+  modalEvent.value = `Showing ${mode} modal.`
+}
+
+function onModalOpen(): void {
+  modalEvent.value = `Showing ${modalMode.value} modal.`
+}
+
+function onModalClose(reason?: 'button' | 'backdrop' | 'escape'): void {
+  modalEvent.value = reason ? `Closed via ${reason}.` : 'Closed modal.'
+}
+
+function onModalBackdropClick(): void {
+  modalEvent.value = 'Backdrop click received.'
+}
+
+function onModalEscape(): void {
+  modalEvent.value = 'Escape key received.'
+}
+
+function closeModalFromFooter(message: string): void {
+  modalEvent.value = message
+  modalOpen.value = false
 }
 </script>
 
@@ -353,7 +436,7 @@ function toggleDisabled(): void {
                     {{ currentTab?.value === 'menu' ? 'Start Session' : 'Return to Menu' }}
                   </GButton>
                   <GButton preset="ghost">
-                    {{ currentTab?.value === 'pause' ? 'Resume Game' : 'Open Pause' }}
+                    {{ currentTab?.value === 'pause' ? 'Resume Game' : 'Pause Menu' }}
                   </GButton>
                   <GButton preset="purple" width="full">
                     {{ currentTab?.value === 'hud' ? 'HUD Live' : 'HUD Preview' }}
@@ -389,7 +472,7 @@ function toggleDisabled(): void {
               </div>
 
               <template #footer>
-                <GButton preset="accent">Open Briefing</GButton>
+                <GButton preset="accent">Briefing</GButton>
                 <GButton preset="ghost">Dismiss</GButton>
               </template>
             </GPanel>
@@ -447,8 +530,96 @@ function toggleDisabled(): void {
             </template>
           </GWindow>
         </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GModal</p>
+              <p class="debug-meta">
+                Blocking overlay with header, content, footer, and close behavior flags.
+              </p>
+            </div>
+          </div>
+
+          <div class="modal-toolbar">
+            <GButton
+              v-for="mode in modalModes"
+              :key="mode.key"
+              :preset="mode.key === 'locked' ? 'warning' : 'surface'"
+              @click="openModal(mode.key)"
+            >
+              {{ mode.label }} modal
+            </GButton>
+          </div>
+
+          <GText preset="muted" class="modal-event" :text="modalEvent" />
+        </section>
       </GScroller>
     </div>
+
+    <GModal
+      v-model="modalOpen"
+      :title="modalConfig.title"
+      :subtitle="modalConfig.subtitle"
+      :status="modalConfig.status"
+      :closable="modalConfig.closable"
+      :backdrop-closable="modalConfig.backdropClosable"
+      :escape-closable="modalConfig.escapeClosable"
+      :show-close-button="modalConfig.showCloseButton"
+      width="lg"
+      @open="onModalOpen"
+      @close="onModalClose"
+      @backdrop-click="onModalBackdropClick"
+      @escape="onModalEscape"
+    >
+      <template #header="{ close, isOpen }">
+        <div class="modal-custom-header">
+          <div class="modal-custom-header__text">
+            <GText preset="header">{{ modalConfig.title }}</GText>
+            <GText preset="muted">{{ modalConfig.subtitle }}</GText>
+          </div>
+          <div class="modal-custom-header__actions">
+            <GButton
+              v-if="modalConfig.showCloseButton && modalConfig.closable"
+              preset="ghost"
+              shape="chip"
+              icon-only
+              aria-label="Close modal"
+              @click="close('button')"
+            >
+              <template #icon>
+                <span class="modal-close-icon" aria-hidden="true"></span>
+              </template>
+            </GButton>
+          </div>
+        </div>
+      </template>
+
+      <div class="modal-body">
+        <GText preset="body">
+          This modal demonstrates close button control, backdrop control, and event binding.
+          The footer buttons are custom content, not framework filler.
+        </GText>
+
+        <GPanel title="Runtime Details" subtitle="Custom content in the modal body." width="full">
+          <div class="modal-details">
+            <GText preset="technical" text="modal_id = 42\nclose_paths = configurable\ntransport = websocket" />
+            <GText preset="muted">
+              In a real game, this is where confirmations, warnings, and mini-game prompts live.
+            </GText>
+          </div>
+        </GPanel>
+      </div>
+
+      <template #footer="{ close }">
+        <GButton preset="accent" @click="closeModalFromFooter('Closed from footer confirm.')">
+          Confirm
+        </GButton>
+        <GButton preset="ghost" @click="closeModalFromFooter('Closed from footer action.')">
+          Footer Close
+        </GButton>
+      </template>
+    </GModal>
   </div>
 </template>
 
@@ -519,6 +690,73 @@ function toggleDisabled(): void {
 
 .window-grid :deep(.gpanel) {
   min-width: 0;
+}
+
+.modal-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.modal-event {
+  margin-top: 1rem;
+}
+
+.modal-custom-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.modal-custom-header__text {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.modal-custom-header__actions {
+  display: grid;
+  justify-items: end;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.modal-close-icon {
+  position: relative;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.modal-close-icon::before,
+.modal-close-icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.modal-close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.modal-close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.modal-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.modal-details {
+  display: grid;
+  gap: 0.75rem;
 }
 
 .demo-icon {

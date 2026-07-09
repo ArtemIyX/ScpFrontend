@@ -30,6 +30,8 @@ describe('App', () => {
     expect(wrapper.text()).toContain('GTabs')
     expect(wrapper.text()).toContain('GPanel')
     expect(wrapper.text()).toContain('GWindow')
+    expect(wrapper.text()).toContain('GModal')
+    expect(wrapper.text()).toContain('Standard modal')
     expect(wrapper.find('.gscroller').exists()).toBe(true)
     expect(wrapper.text()).toContain('Disabled launch')
     expect(wrapper.text()).toContain('Warning preset')
@@ -43,6 +45,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('Lobby')
     expect(wrapper.text()).toContain('Containment Briefing')
     expect(wrapper.text()).toContain('Settings Window')
+    expect(wrapper.text()).toContain('Modal')
     expect(wrapper.find('button[disabled]').exists()).toBe(true)
     expect(wrapper.text()).toContain('message UiEvent')
     expect(wrapper.find('.gscroller').exists()).toBe(true)
@@ -52,5 +55,15 @@ describe('App', () => {
     expect(wrapper.find('.gtabs').exists()).toBe(true)
     expect(wrapper.find('.gpanel').exists()).toBe(true)
     expect(wrapper.find('.gwindow').exists()).toBe(true)
+
+    const openButton = wrapper
+      .findAll('button')
+      .find((button) => button.text().includes('Standard modal'))
+
+    expect(openButton).toBeTruthy()
+    await openButton!.trigger('click')
+
+    expect(wrapper.find('.gmodal').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Standard Modal')
   })
 })

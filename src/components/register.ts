@@ -5,6 +5,7 @@ import GCombo from './g/GCombo/GCombo.vue'
 import GInput from './g/GInput/GInput.vue'
 import GPanel from './g/GPanel/GPanel.vue'
 import GTabs from './g/GTabs/GTabs.vue'
+import GModal from './g/GModal/GModal.vue'
 import GWindow from './g/GWindow/GWindow.vue'
 import GScroller from './g/GScroller/GScroller.vue'
 import GText from './g/GText/GText.vue'
@@ -22,6 +23,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gpanel', GPanel)
   app.component('GTabs', GTabs)
   app.component('gtabs', GTabs)
+  app.component('GModal', GModal)
+  app.component('gmodal', GModal)
   app.component('GWindow', GWindow)
   app.component('gwindow', GWindow)
   app.component('GScroller', GScroller)

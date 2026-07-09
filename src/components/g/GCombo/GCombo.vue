@@ -95,7 +95,9 @@ function openMenu(): void {
 
   nextTick(() => {
     const option = rootRef.value?.querySelector<HTMLElement>(`[data-gcombo-option-index="${activeIndex.value}"]`)
-    option?.scrollIntoView({ block: 'nearest' })
+    if (option && typeof option.scrollIntoView === 'function') {
+      option.scrollIntoView({ block: 'nearest' })
+    }
   })
 }
 
