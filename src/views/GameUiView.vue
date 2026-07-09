@@ -314,10 +314,14 @@ function closeModalFromFooter(message: string): void {
                 {{ disabledLabel }} launch
               </GButton>
 
-              <GButton preset="ghost" @click="toggleDisabled">
-                Toggle disabled
-              </GButton>
+              <GTooltip text="Hover or focus for the quick hint." placement="bottom">
+                <GButton preset="ghost" @click="toggleDisabled">
+                  Toggle disabled
+                </GButton>
+              </GTooltip>
             </div>
+
+            <GText preset="caps">GTooltip</GText>
 
             <div class="button-grid">
               <GButton
@@ -1283,6 +1287,7 @@ function closeModalFromFooter(message: string): void {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  align-items: center;
 }
 
 .button-grid {
