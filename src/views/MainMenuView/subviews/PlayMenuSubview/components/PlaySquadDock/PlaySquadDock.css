@@ -1,14 +1,15 @@
 .play-squad-dock {
-  display: grid;
-  justify-items: end;
-  gap: 1rem;
-  width: min(100%, 24rem);
+  display: flex;
+  justify-content: flex-end;
+  width: min(100%, 34rem);
   padding: 1rem 0 0;
 }
 
-.play-squad-dock__invite-row {
+.play-squad-dock__row {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 0.75rem;
   width: 100%;
 }
 
@@ -16,8 +17,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  min-height: 2.875rem;
-  padding: 0.75rem 1.05rem;
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
   border: none;
   border-radius: 999px;
   background:
@@ -25,7 +26,7 @@
     linear-gradient(90deg, rgba(16, 24, 19, 0.86), rgba(8, 12, 10, 0.72));
   color: rgba(245, 249, 243, 0.96);
   font-family: var(--ui-body-font);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -76,40 +77,19 @@
 }
 
 .play-squad-dock__slots {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 0 0 auto;
 }
 
 .play-squad-dock__slot {
   position: relative;
-  display: grid;
-  justify-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 0.75rem;
-  min-width: 0;
-  border-radius: 1.15rem;
-  background:
-    linear-gradient(180deg, rgba(18, 24, 22, 0.56), rgba(8, 11, 9, 0.26)),
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 65%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 0.8rem 1.6rem rgba(0, 0, 0, 0.18);
-  overflow: hidden;
-}
-
-.play-squad-dock__slot::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(198, 255, 74, 0.08), transparent 55%);
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-.play-squad-dock__slot--filled::before {
-  opacity: 0.95;
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 .play-squad-dock__avatar {
@@ -117,7 +97,7 @@
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 4.2rem;
+  width: 3.6rem;
   aspect-ratio: 1;
   border-radius: 50%;
   background:
@@ -125,7 +105,11 @@
     linear-gradient(180deg, rgba(14, 17, 16, 0.86), rgba(9, 11, 11, 0.68));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 0 0 1px rgba(255, 255, 255, 0.04);
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0.7rem 1.25rem rgba(0, 0, 0, 0.18);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .play-squad-dock__avatar--filled {
@@ -152,42 +136,112 @@
   line-height: 1;
 }
 
-.play-squad-dock__meta {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 0.2rem;
-  justify-items: center;
-  min-width: 0;
+.play-squad-dock__slot:hover .play-squad-dock__avatar,
+.play-squad-dock__slot:focus-visible .play-squad-dock__avatar {
+  transform: translateY(-0.12rem);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(198, 255, 74, 0.16),
+    0 0.95rem 1.5rem rgba(0, 0, 0, 0.24),
+    0 0 1rem rgba(198, 255, 74, 0.1);
 }
 
-.play-squad-dock__label {
-  color: rgba(198, 255, 74, 0.7);
+.play-squad-dock__slot:focus-visible {
+  outline: none;
+}
+
+.play-squad-dock__tooltip {
+  position: absolute;
+  right: 50%;
+  bottom: calc(100% + 0.7rem);
+  display: grid;
+  gap: 0.15rem;
+  min-width: max-content;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(180deg, rgba(16, 22, 19, 0.96), rgba(8, 11, 10, 0.92)),
+    rgba(0, 0, 0, 0.24);
+  box-shadow:
+    0 0.8rem 1.6rem rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transform: translateX(50%) translateY(0.3rem);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+.play-squad-dock__tooltip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 0.05rem);
+  width: 0.7rem;
+  height: 0.7rem;
+  background: rgba(8, 11, 10, 0.94);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.play-squad-dock__slot:hover .play-squad-dock__tooltip,
+.play-squad-dock__slot:focus-visible .play-squad-dock__tooltip {
+  transform: translateX(50%) translateY(0);
+  opacity: 1;
+}
+
+.play-squad-dock__tooltip-label {
+  color: rgba(198, 255, 74, 0.68);
   font-family: var(--ui-technical-font);
-  font-size: 0.72rem;
+  font-size: 0.67rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.play-squad-dock__name {
-  color: rgba(231, 236, 233, 0.86);
+.play-squad-dock__tooltip-name {
+  color: rgba(236, 241, 238, 0.94);
   font-family: var(--ui-body-font);
-  font-size: 0.9rem;
-  text-align: center;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.play-squad-dock__slot:first-child .play-squad-dock__tooltip {
+  right: auto;
+  left: 0;
+  transform: translateX(0) translateY(0.3rem);
+}
+
+.play-squad-dock__slot:first-child:hover .play-squad-dock__tooltip,
+.play-squad-dock__slot:first-child:focus-visible .play-squad-dock__tooltip {
+  transform: translateX(0) translateY(0);
+}
+
+.play-squad-dock__slot:first-child .play-squad-dock__tooltip::after {
+  left: 1.25rem;
 }
 
 @media (max-width: 48rem) {
   .play-squad-dock {
     width: 100%;
-    justify-items: stretch;
   }
 
-  .play-squad-dock__invite-row {
+  .play-squad-dock__row {
+    align-items: stretch;
+    flex-direction: column;
     justify-content: stretch;
   }
 
   .play-squad-dock__invite-button {
     justify-content: center;
     width: 100%;
+  }
+
+  .play-squad-dock__slots {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .play-squad-dock__tooltip {
+    display: none;
   }
 }
