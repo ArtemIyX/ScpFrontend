@@ -5,6 +5,9 @@ const isActionDisabled = ref(true)
 const nickname = ref('Operative 17')
 const query = ref('containment log')
 const clearanceCode = ref('')
+const region = ref('eu-west')
+const role = ref('medic')
+const difficulty = ref('standard')
 
 const presetButtons = [
   { preset: 'surface', label: 'Surface' },
@@ -26,6 +29,25 @@ const shapeButtons = [
   { shape: 'soft', label: 'Soft' },
   { shape: 'block', label: 'Block' },
   { shape: 'chip', label: 'Chip' },
+] as const
+
+const regionOptions = [
+  { value: 'us-east', label: 'US East', description: 'Low ping for East Coast rooms.' },
+  { value: 'eu-west', label: 'EU West', description: 'Default for the current demo.' },
+  { value: 'asia', label: 'Asia', description: 'Useful for international lobbies.' },
+] as const
+
+const roleOptions = [
+  { value: 'medic', label: 'Medic', description: 'Supports the team and revives allies.' },
+  { value: 'guard', label: 'Guard', description: 'Handles doors, security, and escort tasks.' },
+  { value: 'researcher', label: 'Researcher', description: 'Works with notes, samples, and terminals.' },
+] as const
+
+const difficultyOptions = [
+  { value: 'easy', label: 'Easy' },
+  { value: 'standard', label: 'Standard' },
+  { value: 'hard', label: 'Hard' },
+  { value: 'nightmare', label: 'Nightmare', description: 'Locked behind the scary stories.' },
 ] as const
 
 const disabledLabel = computed(() => (isActionDisabled.value ? 'Disabled' : 'Enabled'))
@@ -243,6 +265,48 @@ function toggleDisabled(): void {
           </div>
 
           <GText preset="muted" class="input-status" :text="queryStatus" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GCombo</p>
+              <p class="debug-meta">
+                Dropdown selection for region, role, and game mode with keyboard support.
+              </p>
+            </div>
+          </div>
+
+          <div class="input-stack">
+            <GCombo
+              v-model="region"
+              label="Region"
+              helper="Used by lobby matchmaking and reconnect flow."
+              :options="regionOptions"
+              preset="surface"
+              width="full"
+              clearable
+            />
+
+            <GCombo
+              v-model="role"
+              label="Role"
+              helper="No clear button here, just a clean select for the same pattern."
+              :options="roleOptions"
+              preset="quiet"
+              width="full"
+            />
+
+            <GCombo
+              v-model="difficulty"
+              label="Difficulty"
+              error="Nightmare mode is not available in the current build."
+              :options="difficultyOptions"
+              preset="warning"
+              width="full"
+              clearable
+            />
+          </div>
         </section>
       </GScroller>
     </div>
