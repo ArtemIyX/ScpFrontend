@@ -85,6 +85,30 @@ Agents should design with layer separation in mind so these systems can coexist 
 - Keep component APIs narrow and explicit.
 - Reuse common visual primitives across all screens.
 
+### Preferred Component Selection
+
+Use the smallest `G*` element that fits the job.
+
+- Text and labels: `GText`, `GLabel`
+- Buttons and tokens: `GButton`, `GChip`, `GBadge`, `GToolbar`
+- Forms and inputs: `GInput`, `GTextarea`, `GNumberInput`, `GSlider`, `GSwitch`, `GCheckbox`, `GRadio`, `GCombo`, `GKeybindInput`, `GField`
+- Containers and layout blocks: `GSection`, `GCard`, `GPanel`, `GTile`, `GWindow`
+- Navigation and selection: `GBreadcrumbs`, `GTabs`, `GPagination`, `GRail`, `GAccordion`
+- Menus and action lists: `GMenuList`, `GList`, `GListItem`
+- Runtime feedback and status: `GAlert`, `GBanner`, `GToast`, `GEmptyState`, `GLoading`, `GSkeleton`, `GProgress`, `GStat`
+- Visual helpers and primitives: `GIcon`, `GAvatar`, `GDivider`, `GPopover`, `GTooltip`, `GScroller`
+
+Rules of thumb:
+
+- Prefer `GText` and `GLabel` for readable text instead of plain browser typography.
+- Prefer `GButton`, `GChip`, and `GToolbar` for compact action rows and quick in-game commands.
+- Prefer `GAlert`, `GBanner`, and `GToast` for feedback, warnings, and notifications rather than custom ad hoc boxes.
+- Prefer `GSection`, `GPanel`, `GCard`, `GTile`, and `GWindow` for grouped content or framed surfaces instead of generic `div` containers.
+- Prefer `GTabs`, `GBreadcrumbs`, `GPagination`, `GRail`, `GAccordion`, and `GMenuList` for navigation, paging, and choice browsing instead of browser-native controls.
+- Prefer `GInput`, `GTextarea`, `GNumberInput`, `GSlider`, `GSwitch`, `GCheckbox`, `GRadio`, `GCombo`, and `GKeybindInput` for settings and runtime forms instead of raw HTML inputs unless the user asks otherwise.
+- Prefer `GLoading`, `GSkeleton`, `GEmptyState`, `GProgress`, and `GStat` for runtime state, loading, and readouts.
+- Prefer `GPopover`, `GTooltip`, `GIcon`, `GAvatar`, and `GDivider` for compact helpers and visual structure.
+
 ## UI Behavior Principles
 
 - Make important game states immediately visible.
