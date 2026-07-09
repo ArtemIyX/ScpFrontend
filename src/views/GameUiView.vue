@@ -35,6 +35,10 @@ const menuAction = ref('resume')
 const menuRules = ref(['Stay with your squad.', 'Check the door status before moving.', 'Keep the radio line clear.'])
 const profileLoaded = ref(false)
 const rosterEmpty = ref(true)
+const alertVisible = ref(true)
+const bannerVisible = ref(true)
+const alertEvent = ref('No alert events yet.')
+const bannerEvent = ref('No banner events yet.')
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -361,6 +365,16 @@ function onModalEscape(): void {
 function closeModalFromFooter(message: string): void {
   modalEvent.value = message
   modalOpen.value = false
+}
+
+function closeAlert(): void {
+  alertVisible.value = false
+  alertEvent.value = 'Alert closed.'
+}
+
+function closeBanner(): void {
+  bannerVisible.value = false
+  bannerEvent.value = 'Banner closed.'
 }
 </script>
 
@@ -1398,6 +1412,84 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GAlert</p>
+              <p class="debug-meta">
+                Inline notice for compact warnings, confirmations, and status messages in menus.
+              </p>
+            </div>
+          </div>
+
+          <div class="alert-stack">
+            <div class="alert-toolbar">
+              <GButton preset="accent" @click="alertVisible = true">Show alert</GButton>
+              <GButton preset="ghost" @click="closeAlert">Hide alert</GButton>
+            </div>
+
+            <GAlert
+              v-if="alertVisible"
+              title="Squad channel unstable"
+              message="The radio handshake dropped for a second. The mission can continue, but voice chat may stutter."
+              icon="warning"
+              preset="warning"
+              variant="soft"
+              width="full"
+              closable
+              show-close-button
+              close-label="Dismiss alert"
+              @close="closeAlert"
+            >
+              <template #footer>
+                <GButton preset="accent" size="sm">Recheck radio</GButton>
+                <GButton preset="ghost" size="sm">Ignore</GButton>
+              </template>
+            </GAlert>
+
+            <GText preset="muted" class="alert-event" :text="alertEvent" />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GBanner</p>
+              <p class="debug-meta">
+                Wider top-level notice for round-start messages, announcements, and live updates.
+              </p>
+            </div>
+          </div>
+
+          <div class="banner-stack">
+            <div class="banner-toolbar">
+              <GButton preset="accent" @click="bannerVisible = true">Show banner</GButton>
+              <GButton preset="ghost" @click="closeBanner">Hide banner</GButton>
+            </div>
+
+            <GBanner
+              v-if="bannerVisible"
+              title="Containment protocol updated"
+              message="New lobby rules and localized briefing text are now available from the Unreal HTTP bridge."
+              icon="info"
+              preset="purple"
+              variant="soft"
+              width="full"
+              closable
+              show-close-button
+              close-label="Dismiss banner"
+              @close="closeBanner"
+            >
+              <template #footer="{ close }">
+                <GButton preset="purple" size="sm">Read update</GButton>
+                <GButton preset="ghost" size="sm" @click="close()">Later</GButton>
+              </template>
+            </GBanner>
+
+            <GText preset="muted" class="banner-event" :text="bannerEvent" />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GSkeleton</p>
               <p class="debug-meta">
                 Content placeholder for panels, cards, and HUD blocks while data is still
@@ -1924,6 +2016,24 @@ function closeModalFromFooter(message: string): void {
 .empty-stack {
   display: grid;
   gap: 1rem;
+}
+
+.alert-stack,
+.banner-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.alert-toolbar,
+.banner-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.alert-event,
+.banner-event {
+  margin-top: 0;
 }
 
 .roster-grid {

@@ -1,0 +1,202 @@
+.galert {
+  --galert-bg: rgba(10, 14, 17, 0.92);
+  --galert-bg-hover: rgba(14, 18, 22, 0.98);
+  --galert-border: rgba(198, 255, 74, 0.18);
+  --galert-text: var(--ui-text-main);
+  --galert-muted: var(--ui-text-muted);
+  --galert-accent: var(--ui-accent);
+  --galert-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+  --galert-radius: 0.3125rem;
+  --galert-padding-x: 0.875rem;
+  --galert-padding-y: 0.875rem;
+  --galert-gap: 0.75rem;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: stretch;
+  min-width: 0;
+  border: 1px solid var(--galert-border);
+  border-radius: var(--galert-radius);
+  background: var(--galert-bg);
+  box-shadow: var(--galert-shadow);
+  color: var(--galert-text);
+  overflow: hidden;
+}
+
+.galert--full {
+  width: 100%;
+}
+
+.galert__accent {
+  width: 0.25rem;
+  background: linear-gradient(180deg, var(--galert-accent), rgba(255, 255, 255, 0.08));
+}
+
+.galert__shell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--galert-gap);
+  min-width: 0;
+  padding: var(--galert-padding-y) var(--galert-padding-x);
+}
+
+.galert__icon {
+  display: grid;
+  place-items: start center;
+  padding-top: 0.1rem;
+  color: var(--galert-accent);
+}
+
+.galert__content {
+  display: grid;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.galert__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.galert__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.galert__title {
+  color: inherit;
+}
+
+.galert__chrome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.galert__message {
+  min-width: 0;
+  color: var(--galert-muted);
+  font-family: var(--ui-body-font);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.galert__message :deep(p) {
+  margin: 0;
+}
+
+.galert__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.galert__close-icon {
+  position: relative;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.galert__close-icon::before,
+.galert__close-icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.galert__close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.galert__close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.galert--closable {
+  padding-right: 0.125rem;
+}
+
+.galert--sm {
+  --galert-padding-x: 0.75rem;
+  --galert-padding-y: 0.75rem;
+  --galert-gap: 0.625rem;
+}
+
+.galert--lg {
+  --galert-padding-x: 1rem;
+  --galert-padding-y: 1rem;
+  --galert-gap: 0.875rem;
+}
+
+.galert--soft {
+  --galert-bg: rgba(10, 14, 17, 0.92);
+  --galert-border: rgba(198, 255, 74, 0.18);
+}
+
+.galert--solid {
+  --galert-bg: rgba(198, 255, 74, 0.12);
+  --galert-border: rgba(198, 255, 74, 0.3);
+  --galert-text: #eff7d0;
+  --galert-muted: rgba(239, 247, 208, 0.84);
+}
+
+.galert--outline {
+  --galert-bg: rgba(8, 10, 12, 0.72);
+  --galert-border: rgba(255, 255, 255, 0.12);
+  --galert-text: var(--ui-text-main);
+  --galert-muted: var(--ui-text-muted);
+}
+
+.galert--accent {
+  --galert-border: rgba(198, 255, 74, 0.3);
+  --galert-accent: var(--ui-accent);
+}
+
+.galert--danger {
+  --galert-bg: rgba(255, 59, 48, 0.12);
+  --galert-border: rgba(255, 59, 48, 0.28);
+  --galert-text: #ffe2df;
+  --galert-muted: rgba(255, 226, 223, 0.84);
+  --galert-accent: #ff8b82;
+}
+
+.galert--warning {
+  --galert-bg: rgba(255, 176, 0, 0.12);
+  --galert-border: rgba(255, 176, 0, 0.28);
+  --galert-text: #fff0c8;
+  --galert-muted: rgba(255, 240, 200, 0.84);
+  --galert-accent: #ffd26b;
+}
+
+.galert--purple {
+  --galert-bg: rgba(139, 68, 255, 0.12);
+  --galert-border: rgba(139, 68, 255, 0.28);
+  --galert-text: #eadcff;
+  --galert-muted: rgba(234, 220, 255, 0.84);
+  --galert-accent: #cfa9ff;
+}
+
+.galert--ghost {
+  --galert-bg: transparent;
+  --galert-border: rgba(255, 255, 255, 0.08);
+  --galert-text: rgba(236, 240, 244, 0.88);
+  --galert-muted: rgba(236, 240, 244, 0.72);
+}
+
+.galert--quiet {
+  --galert-bg: rgba(8, 10, 12, 0.96);
+  --galert-border: rgba(198, 255, 74, 0.12);
+}
+

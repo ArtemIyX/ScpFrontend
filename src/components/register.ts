@@ -28,6 +28,8 @@ import GRadio from './g/GRadio/GRadio.vue'
 import GInput from './g/GInput/GInput.vue'
 import GSlider from './g/GSlider/GSlider.vue'
 import GToast from './g/GToast/GToast.vue'
+import GAlert from './g/GAlert/GAlert.vue'
+import GBanner from './g/GBanner/GBanner.vue'
 import GCard from './g/GCard/GCard.vue'
 import GPanel from './g/GPanel/GPanel.vue'
 import GTabs from './g/GTabs/GTabs.vue'
@@ -95,6 +97,10 @@ export function registerCustomComponents(app: App): void {
   app.component('gslider', GSlider)
   app.component('GToast', GToast)
   app.component('gtoast', GToast)
+  app.component('GAlert', GAlert)
+  app.component('galert', GAlert)
+  app.component('GBanner', GBanner)
+  app.component('gbanner', GBanner)
   app.component('GCard', GCard)
   app.component('gcard', GCard)
   app.component('GPanel', GPanel)
