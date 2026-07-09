@@ -63,7 +63,22 @@ function syncMeasurements(): void {
 }
 
 function applyScroll(value: number): void {
-  scrollTop.value = clampScroll(value)
+  const viewport = viewportRef.value
+  const nextScroll = clampScroll(value)
+
+  scrollTop.value = nextScroll
+  if (viewport) {
+    viewport.scrollTop = nextScroll
+  }
+}
+
+function onScroll(): void {
+  const viewport = viewportRef.value
+  if (!viewport) {
+    return
+  }
+
+  scrollTop.value = viewport.scrollTop
 }
 
 function onWheel(event: WheelEvent): void {
@@ -76,6 +91,7 @@ function onWheel(event: WheelEvent): void {
   }
 
   event.preventDefault()
+  event.stopPropagation()
   applyScroll(scrollTop.value + event.deltaY)
 }
 
@@ -178,12 +194,8 @@ onBeforeUnmount(() => {
     @wheel="onWheel"
     @keydown="onKeydown"
   >
-    <div ref="viewportRef" class="gscroller__viewport">
-      <div
-        ref="contentRef"
-        class="gscroller__content"
-        :style="{ transform: `translate3d(0, ${-scrollTop}px, 0)` }"
-      >
+    <div ref="viewportRef" class="gscroller__viewport" @scroll="onScroll">
+      <div ref="contentRef" class="gscroller__content">
         <slot />
       </div>
     </div>

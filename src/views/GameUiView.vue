@@ -31,6 +31,7 @@ const region = ref('eu-west')
 const role = ref('medic')
 const difficulty = ref('standard')
 const graphicsQuality = ref<'low' | 'medium' | 'high' | 'epic' | 'cinematic'>('high')
+const menuAction = ref('resume')
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -83,6 +84,55 @@ const graphicsQualityOptions = [
   { value: 'high', title: 'High', subtitle: 'Recommended preset', meta: 'Recommended', recommended: true, preset: 'accent' },
   { value: 'epic', title: 'Epic', subtitle: 'Sharper lighting and textures', meta: 'Heavy', preset: 'purple' },
   { value: 'cinematic', title: 'Cinematic', subtitle: 'Maximum visual quality', meta: 'Largest load', preset: 'warning' },
+] as const
+
+const menuItems = [
+  {
+    value: 'resume',
+    label: 'Resume Session',
+    description: 'Return to the current match immediately.',
+    shortcut: 'Esc',
+    tone: 'accent',
+    selected: true,
+  },
+  {
+    value: 'briefing',
+    label: 'Containment Briefing',
+    description: 'Open notes, objectives, and live orders.',
+    shortcut: 'B',
+    tone: 'purple',
+  },
+  {
+    value: 'inventory',
+    label: 'Inventory',
+    description: 'Check loadout, ammo, and quick slots.',
+    shortcut: 'I',
+  },
+  {
+    kind: 'separator',
+    label: 'System',
+  },
+  {
+    value: 'settings',
+    label: 'Settings',
+    description: 'Open graphics, audio, and control pages.',
+    shortcut: 'F1',
+    tone: 'warning',
+  },
+  {
+    value: 'leave',
+    label: 'Leave Session',
+    description: 'Exit back to the main menu.',
+    shortcut: 'L',
+    tone: 'danger',
+  },
+  {
+    value: 'locked',
+    label: 'Locked Action',
+    description: 'Disabled example row for state styling.',
+    badge: 'Unavailable',
+    disabled: true,
+  },
 ] as const
 
 const screenTabs = [
@@ -255,6 +305,12 @@ const graphicsQualityLabel = computed(
 const graphicsQualitySummary = computed(
   () => `Selected quality: ${graphicsQualityLabel.value}.`,
 )
+
+const menuSelectionLabel = computed(
+  () => menuItems.find((item) => 'value' in item && item.value === menuAction.value)?.label ?? 'Unknown action',
+)
+
+const menuSummary = computed(() => `Selected menu action: ${menuSelectionLabel.value}.`)
 
 function toggleDisabled(): void {
   isActionDisabled.value = !isActionDisabled.value
@@ -1080,6 +1136,45 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GMenuList</p>
+              <p class="debug-meta">
+                Action menu list for pause menus, dropdowns, and right-click commands with a
+                custom scroller.
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-grid">
+            <GMenuList
+              v-model="menuAction"
+              label="Pause Menu"
+              helper="A dropdown-style action list that keeps the rows readable and game-like."
+              :items="menuItems"
+              preset="surface"
+              width="full"
+              background
+              max-height="15rem"
+            />
+
+            <GCard
+              title="Selected Action"
+              subtitle="Live menu state"
+              meta="Updated from the menu list"
+              preset="quiet"
+              width="full"
+            >
+              <GText preset="body" :text="menuSummary" />
+              <template #footer>
+                <GButton preset="accent">Confirm</GButton>
+                <GButton preset="ghost">Back</GButton>
+              </template>
+            </GCard>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GSection</p>
               <p class="debug-meta">
                 Higher-level block for settings pages, lobby panels, and grouped in-game options.
@@ -1476,6 +1571,13 @@ function closeModalFromFooter(message: string): void {
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  align-items: start;
 }
 
 .textarea-stack {
