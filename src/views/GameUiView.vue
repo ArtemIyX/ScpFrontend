@@ -4,6 +4,8 @@ import { computed, ref } from 'vue'
 const isActionDisabled = ref(true)
 const nickname = ref('Operative 17')
 const query = ref('containment log')
+const briefingNote = ref('Report to decontamination and then meet the team in the lower corridor.')
+const radioLog = ref('Door sealed. Lights down. Waiting for the next checkpoint.')
 const clearanceCode = ref('')
 const masterVolume = ref(72)
 const sensitivity = ref(42)
@@ -203,6 +205,10 @@ const queryStatus = computed(() =>
   query.value.trim().length > 0
     ? 'Search input is active for logs, players, or object names.'
     : 'Search is empty.',
+)
+
+const textareaSummary = computed(
+  () => `Briefing ${briefingNote.value.length} chars / Log ${radioLog.value.length} chars`,
 )
 
 const sliderSummary = computed(
@@ -466,6 +472,43 @@ function closeModalFromFooter(message: string): void {
           </div>
 
           <GText preset="muted" class="input-status" :text="queryStatus" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GTextarea</p>
+              <p class="debug-meta">
+                Multiline input for notes, lobby chat, mission text, and player briefings.
+              </p>
+            </div>
+          </div>
+
+          <div class="textarea-stack">
+            <GTextarea
+              v-model="briefingNote"
+              label="Briefing Note"
+              helper="Visible counter shows the current length."
+              preset="surface"
+              width="full"
+              :rows="4"
+              maxlength="160"
+              placeholder="Write briefing text"
+            />
+
+            <GTextarea
+              v-model="radioLog"
+              label="Radio Log"
+              helper="Same control, but the counter is hidden."
+              preset="quiet"
+              width="full"
+              :rows="4"
+              :show-counter="false"
+              placeholder="Write the radio log"
+            />
+          </div>
+
+          <GText preset="muted" class="textarea-status" :text="textareaSummary" />
         </section>
 
         <section class="font-card ui-panel">
@@ -1155,6 +1198,15 @@ function closeModalFromFooter(message: string): void {
 }
 
 .input-status {
+  margin-top: 1rem;
+}
+
+.textarea-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.textarea-status {
   margin-top: 1rem;
 }
 

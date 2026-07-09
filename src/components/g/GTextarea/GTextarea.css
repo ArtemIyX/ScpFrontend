@@ -1,0 +1,243 @@
+.gtextarea {
+  --gtextarea-bg: rgba(255, 255, 255, 0.04);
+  --gtextarea-bg-hover: rgba(255, 255, 255, 0.06);
+  --gtextarea-bg-focus: rgba(255, 255, 255, 0.08);
+  --gtextarea-border: rgba(255, 255, 255, 0.1);
+  --gtextarea-border-hover: rgba(255, 255, 255, 0.16);
+  --gtextarea-border-focus: rgba(198, 255, 74, 0.34);
+  --gtextarea-text: var(--ui-text-main);
+  --gtextarea-placeholder: rgba(236, 240, 244, 0.42);
+  --gtextarea-helper: var(--ui-text-muted);
+  --gtextarea-error-text: #ffb8b3;
+  --gtextarea-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gtextarea-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gtextarea-padding-x: 1rem;
+  --gtextarea-padding-y: 0.875rem;
+  --gtextarea-min-height: 8rem;
+  --gtextarea-radius: 0.375rem;
+  --gtextarea-font-size: 0.9375rem;
+  --gtextarea-gap: 0.5rem;
+  --gtextarea-label-color: var(--ui-text-muted);
+  --gtextarea-ring: rgba(198, 255, 74, 0.24);
+
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.gtextarea--full {
+  width: 100%;
+}
+
+.gtextarea__label {
+  margin: 0;
+  font-family: var(--ui-header-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gtextarea-label-color);
+}
+
+.gtextarea__field {
+  position: relative;
+  display: grid;
+  gap: var(--gtextarea-gap);
+  min-height: var(--gtextarea-min-height);
+  padding: var(--gtextarea-padding-y) var(--gtextarea-padding-x);
+  border: 1px solid var(--gtextarea-border);
+  border-radius: var(--gtextarea-radius);
+  background: var(--gtextarea-bg);
+  box-shadow: var(--gtextarea-shadow);
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    filter 140ms ease;
+  overflow: hidden;
+}
+
+.gtextarea:hover .gtextarea__field {
+  background: var(--gtextarea-bg-hover);
+  border-color: var(--gtextarea-border-hover);
+}
+
+.gtextarea--focused .gtextarea__field {
+  background: var(--gtextarea-bg-focus);
+  border-color: var(--gtextarea-border-focus);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gtextarea-ring),
+    var(--gtextarea-shadow-focus);
+}
+
+.gtextarea--disabled,
+.gtextarea--readonly {
+  opacity: 0.72;
+}
+
+.gtextarea--error .gtextarea__field {
+  border-color: rgba(255, 59, 48, 0.42);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px rgba(255, 59, 48, 0.18),
+    var(--gtextarea-shadow);
+}
+
+.gtextarea__input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--gtextarea-text);
+  font-family: var(--ui-body-font);
+  font-size: var(--gtextarea-font-size);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  caret-color: var(--ui-accent);
+  resize: vertical;
+  min-height: calc(var(--gtextarea-min-height) - (var(--gtextarea-padding-y) * 2));
+}
+
+.gtextarea__input::placeholder {
+  color: var(--gtextarea-placeholder);
+}
+
+.gtextarea__input:disabled {
+  cursor: not-allowed;
+}
+
+.gtextarea__counter {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 1rem;
+}
+
+.gtextarea__counter-text {
+  color: var(--ui-text-muted);
+}
+
+.gtextarea__meta {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.gtextarea__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gtextarea-helper);
+}
+
+.gtextarea__helper--error {
+  color: var(--gtextarea-error-text);
+}
+
+.gtextarea--sm {
+  --gtextarea-padding-x: 0.875rem;
+  --gtextarea-padding-y: 0.75rem;
+  --gtextarea-min-height: 6.5rem;
+  --gtextarea-font-size: 0.875rem;
+  --gtextarea-radius: 0.3125rem;
+}
+
+.gtextarea--md {
+  --gtextarea-padding-x: 1rem;
+  --gtextarea-padding-y: 0.875rem;
+  --gtextarea-min-height: 8rem;
+  --gtextarea-font-size: 0.9375rem;
+  --gtextarea-radius: 0.375rem;
+}
+
+.gtextarea--lg {
+  --gtextarea-padding-x: 1.125rem;
+  --gtextarea-padding-y: 1rem;
+  --gtextarea-min-height: 9.5rem;
+  --gtextarea-font-size: 1rem;
+  --gtextarea-radius: 0.4375rem;
+}
+
+.gtextarea--surface {
+  --gtextarea-bg: rgba(255, 255, 255, 0.04);
+  --gtextarea-bg-hover: rgba(255, 255, 255, 0.06);
+  --gtextarea-bg-focus: rgba(255, 255, 255, 0.08);
+  --gtextarea-border: rgba(255, 255, 255, 0.1);
+  --gtextarea-border-hover: rgba(255, 255, 255, 0.16);
+  --gtextarea-border-focus: rgba(198, 255, 74, 0.34);
+}
+
+.gtextarea--accent {
+  --gtextarea-bg: rgba(198, 255, 74, 0.08);
+  --gtextarea-bg-hover: rgba(198, 255, 74, 0.12);
+  --gtextarea-bg-focus: rgba(198, 255, 74, 0.14);
+  --gtextarea-border: rgba(198, 255, 74, 0.16);
+  --gtextarea-border-hover: rgba(198, 255, 74, 0.28);
+  --gtextarea-border-focus: rgba(198, 255, 74, 0.48);
+  --gtextarea-ring: rgba(198, 255, 74, 0.3);
+}
+
+.gtextarea--danger {
+  --gtextarea-bg: rgba(255, 59, 48, 0.08);
+  --gtextarea-bg-hover: rgba(255, 59, 48, 0.12);
+  --gtextarea-bg-focus: rgba(255, 59, 48, 0.14);
+  --gtextarea-border: rgba(255, 59, 48, 0.18);
+  --gtextarea-border-hover: rgba(255, 59, 48, 0.28);
+  --gtextarea-border-focus: rgba(255, 59, 48, 0.42);
+  --gtextarea-ring: rgba(255, 59, 48, 0.26);
+}
+
+.gtextarea--warning {
+  --gtextarea-bg: rgba(255, 176, 0, 0.08);
+  --gtextarea-bg-hover: rgba(255, 176, 0, 0.12);
+  --gtextarea-bg-focus: rgba(255, 176, 0, 0.14);
+  --gtextarea-border: rgba(255, 176, 0, 0.18);
+  --gtextarea-border-hover: rgba(255, 176, 0, 0.28);
+  --gtextarea-border-focus: rgba(255, 176, 0, 0.44);
+  --gtextarea-ring: rgba(255, 176, 0, 0.24);
+}
+
+.gtextarea--purple {
+  --gtextarea-bg: rgba(139, 68, 255, 0.08);
+  --gtextarea-bg-hover: rgba(139, 68, 255, 0.12);
+  --gtextarea-bg-focus: rgba(139, 68, 255, 0.14);
+  --gtextarea-border: rgba(139, 68, 255, 0.18);
+  --gtextarea-border-hover: rgba(139, 68, 255, 0.28);
+  --gtextarea-border-focus: rgba(139, 68, 255, 0.44);
+  --gtextarea-ring: rgba(139, 68, 255, 0.24);
+}
+
+.gtextarea--ghost {
+  --gtextarea-bg: transparent;
+  --gtextarea-bg-hover: rgba(255, 255, 255, 0.03);
+  --gtextarea-bg-focus: rgba(255, 255, 255, 0.05);
+  --gtextarea-border: rgba(255, 255, 255, 0.08);
+  --gtextarea-border-hover: rgba(198, 255, 74, 0.18);
+  --gtextarea-border-focus: rgba(198, 255, 74, 0.28);
+  --gtextarea-shadow: none;
+  --gtextarea-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.gtextarea--quiet {
+  --gtextarea-bg: rgba(12, 15, 20, 0.96);
+  --gtextarea-bg-hover: rgba(18, 22, 28, 0.98);
+  --gtextarea-bg-focus: rgba(10, 12, 16, 0.98);
+  --gtextarea-border: rgba(198, 255, 74, 0.1);
+  --gtextarea-border-hover: rgba(198, 255, 74, 0.2);
+  --gtextarea-border-focus: rgba(198, 255, 74, 0.3);
+  --gtextarea-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --gtextarea-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+}
+
+.gtextarea--background {
+  --gtextarea-bg: rgba(4, 6, 8, 0.7);
+  --gtextarea-bg-hover: rgba(8, 10, 12, 0.82);
+  --gtextarea-bg-focus: rgba(2, 3, 4, 0.88);
+  --gtextarea-border: rgba(198, 255, 74, 0.2);
+  --gtextarea-border-hover: rgba(198, 255, 74, 0.34);
+  --gtextarea-border-focus: rgba(198, 255, 74, 0.52);
+  --gtextarea-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --gtextarea-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+}

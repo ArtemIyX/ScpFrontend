@@ -6,6 +6,7 @@ import GCombo from './g/GCombo/GCombo.vue'
 import GCheckbox from './g/GCheckbox/GCheckbox.vue'
 import GNumberInput from './g/GNumberInput/GNumberInput.vue'
 import GProgress from './g/GProgress/GProgress.vue'
+import GTextarea from './g/GTextarea/GTextarea.vue'
 import GSwitch from './g/GSwitch/GSwitch.vue'
 import GRadio from './g/GRadio/GRadio.vue'
 import GInput from './g/GInput/GInput.vue'
@@ -33,6 +34,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gnumberinput', GNumberInput)
   app.component('GProgress', GProgress)
   app.component('gprogress', GProgress)
+  app.component('GTextarea', GTextarea)
+  app.component('gtextarea', GTextarea)
   app.component('GSwitch', GSwitch)
   app.component('gswitch', GSwitch)
   app.component('GRadio', GRadio)
