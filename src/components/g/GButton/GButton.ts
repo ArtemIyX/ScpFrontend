@@ -1,6 +1,6 @@
 export type GButtonPreset = 'surface' | 'accent' | 'danger' | 'warning' | 'purple' | 'ghost' | 'quiet'
 export type GButtonSize = 'sm' | 'md' | 'lg'
-export type GButtonShape = 'round' | 'pill' | 'square'
+export type GButtonShape = 'soft' | 'block' | 'chip'
 export type GButtonWidth = 'auto' | 'full'
 export type GButtonBackground = boolean
 

@@ -7,7 +7,7 @@ import { buildGButtonClasses, type GButtonEmits, type GButtonProps } from './GBu
 const props = withDefaults(defineProps<GButtonProps>(), {
   preset: 'surface',
   size: 'md',
-  shape: 'pill',
+  shape: 'soft',
   width: 'auto',
   background: false,
   type: 'button',

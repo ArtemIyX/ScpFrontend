@@ -12,7 +12,7 @@
   --gbutton-padding-y: 0.75rem;
   --gbutton-gap: 0.625rem;
   --gbutton-min-height: 2.75rem;
-  --gbutton-radius: 999px;
+  --gbutton-radius: 0.625rem;
   --gbutton-font-size: 0.9375rem;
   --gbutton-letter-spacing: 0.02em;
   --gbutton-ring: rgba(198, 255, 74, 0.28);
@@ -193,35 +193,37 @@
   --gbutton-font-size: 1rem;
 }
 
-.gbutton--round {
-  --gbutton-radius: 0.75rem;
+.gbutton--soft {
+  --gbutton-radius: 0.625rem;
 }
 
-.gbutton--pill {
+.gbutton--block {
+  --gbutton-radius: 0.125rem;
+}
+
+.gbutton--chip {
   --gbutton-radius: 999px;
 }
 
-.gbutton--square {
-  --gbutton-radius: 0.75rem;
+.gbutton--chip.gbutton--icon-only {
   aspect-ratio: 1;
   padding-inline: 0;
 }
 
-.gbutton--square .gbutton__content {
-  width: 100%;
-  justify-content: center;
-}
-
-.gbutton--square.gbutton--sm {
+.gbutton--chip.gbutton--sm {
   min-width: 2.25rem;
 }
 
-.gbutton--square.gbutton--md {
+.gbutton--chip.gbutton--md {
   min-width: 2.75rem;
 }
 
-.gbutton--square.gbutton--lg {
+.gbutton--chip.gbutton--lg {
   min-width: 3.25rem;
+}
+
+.gbutton--block {
+  --gbutton-radius: 0.0625rem;
 }
 
 .gbutton--icon-only {
@@ -288,6 +290,18 @@
   --gbutton-text: rgba(236, 240, 244, 0.72);
   --gbutton-ring: rgba(198, 255, 74, 0.18);
   border-style: dashed;
+}
+
+.gbutton--block {
+  letter-spacing: 0.09em;
+}
+
+.gbutton--block .gbutton__content {
+  transform: translateY(-0.03em);
+}
+
+.gbutton--soft {
+  letter-spacing: 0.02em;
 }
 
 .gbutton--quiet {

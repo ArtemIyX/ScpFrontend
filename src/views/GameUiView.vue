@@ -20,9 +20,9 @@ const sizeButtons = [
 ] as const
 
 const shapeButtons = [
-  { shape: 'round', label: 'Round' },
-  { shape: 'pill', label: 'Pill' },
-  { shape: 'square', label: 'Square' },
+  { shape: 'soft', label: 'Soft' },
+  { shape: 'block', label: 'Block' },
+  { shape: 'chip', label: 'Chip' },
 ] as const
 
 const disabledLabel = computed(() => (isActionDisabled.value ? 'Disabled' : 'Enabled'))
@@ -122,7 +122,7 @@ function toggleDisabled(): void {
 
               <GButton
                 preset="ghost"
-                shape="square"
+                shape="chip"
                 icon-only
                 aria-label="Close overlay"
               >
