@@ -2,6 +2,7 @@ import type { App } from 'vue'
 
 import GButton from './g/GButton/GButton.vue'
 import GChip from './g/GChip/GChip.vue'
+import GToolbar from './g/GToolbar/GToolbar.vue'
 import GBreadcrumbs from './g/GBreadcrumbs/GBreadcrumbs.vue'
 import GBadge from './g/GBadge/GBadge.vue'
 import GLabel from './g/GLabel/GLabel.vue'
@@ -51,6 +52,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gbutton', GButton)
   app.component('GChip', GChip)
   app.component('gchip', GChip)
+  app.component('GToolbar', GToolbar)
+  app.component('gtoolbar', GToolbar)
   app.component('GBreadcrumbs', GBreadcrumbs)
   app.component('gbreadcrumbs', GBreadcrumbs)
   app.component('GBadge', GBadge)

@@ -1,0 +1,138 @@
+.gtoolbar {
+  --gtoolbar-bg: rgba(255, 255, 255, 0.04);
+  --gtoolbar-bg-hover: rgba(255, 255, 255, 0.06);
+  --gtoolbar-border: rgba(255, 255, 255, 0.1);
+  --gtoolbar-border-hover: rgba(255, 255, 255, 0.16);
+  --gtoolbar-text: var(--ui-text-main);
+  --gtoolbar-muted: var(--ui-text-muted);
+  --gtoolbar-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gtoolbar-radius: 0.375rem;
+  --gtoolbar-padding-x: 0.875rem;
+  --gtoolbar-padding-y: 0.75rem;
+  --gtoolbar-gap: 0.75rem;
+
+  display: grid;
+  gap: var(--gtoolbar-gap);
+  min-width: 0;
+  padding: var(--gtoolbar-padding-y) var(--gtoolbar-padding-x);
+  border: 1px solid var(--gtoolbar-border);
+  border-radius: var(--gtoolbar-radius);
+  background: var(--gtoolbar-bg);
+  box-shadow: var(--gtoolbar-shadow);
+  color: var(--gtoolbar-text);
+}
+
+.gtoolbar--full {
+  width: 100%;
+}
+
+.gtoolbar__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.gtoolbar__heading {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.gtoolbar__title {
+  min-width: 0;
+}
+
+.gtoolbar__subtitle {
+  min-width: 0;
+}
+
+.gtoolbar__status {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.gtoolbar__body {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.gtoolbar__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.gtoolbar--wrap .gtoolbar__body {
+  flex-wrap: wrap;
+}
+
+.gtoolbar--between .gtoolbar__body {
+  justify-content: space-between;
+}
+
+.gtoolbar--center .gtoolbar__body {
+  justify-content: center;
+}
+
+.gtoolbar--end .gtoolbar__body {
+  justify-content: flex-end;
+}
+
+.gtoolbar--sm {
+  --gtoolbar-padding-x: 0.75rem;
+  --gtoolbar-padding-y: 0.625rem;
+  --gtoolbar-gap: 0.625rem;
+}
+
+.gtoolbar--lg {
+  --gtoolbar-padding-x: 1rem;
+  --gtoolbar-padding-y: 0.875rem;
+  --gtoolbar-gap: 0.875rem;
+}
+
+.gtoolbar--surface {
+  --gtoolbar-bg: rgba(255, 255, 255, 0.04);
+  --gtoolbar-border: rgba(255, 255, 255, 0.1);
+}
+
+.gtoolbar--accent {
+  --gtoolbar-bg: rgba(198, 255, 74, 0.08);
+  --gtoolbar-border: rgba(198, 255, 74, 0.18);
+}
+
+.gtoolbar--danger {
+  --gtoolbar-bg: rgba(255, 59, 48, 0.08);
+  --gtoolbar-border: rgba(255, 59, 48, 0.18);
+}
+
+.gtoolbar--warning {
+  --gtoolbar-bg: rgba(255, 176, 0, 0.08);
+  --gtoolbar-border: rgba(255, 176, 0, 0.18);
+}
+
+.gtoolbar--purple {
+  --gtoolbar-bg: rgba(139, 68, 255, 0.08);
+  --gtoolbar-border: rgba(139, 68, 255, 0.18);
+}
+
+.gtoolbar--ghost {
+  --gtoolbar-bg: transparent;
+  --gtoolbar-border: rgba(255, 255, 255, 0.08);
+  --gtoolbar-shadow: none;
+}
+
+.gtoolbar--quiet {
+  --gtoolbar-bg: rgba(8, 10, 12, 0.96);
+  --gtoolbar-border: rgba(198, 255, 74, 0.12);
+}
+
+.gtoolbar--background {
+  --gtoolbar-bg: rgba(4, 6, 8, 0.7);
+  --gtoolbar-border: rgba(198, 255, 74, 0.2);
+  --gtoolbar-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+}

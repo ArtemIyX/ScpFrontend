@@ -1945,6 +1945,47 @@ function onChipRemove(value: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GToolbar</p>
+              <p class="debug-meta">
+                Compact action rows for menus, HUD strips, and quick runtime controls.
+              </p>
+            </div>
+          </div>
+
+          <div class="toolbar-stack">
+            <GToolbar
+              title="Quick Actions"
+              subtitle="Small command row for menu and lobby use."
+              status="Runtime"
+              preset="quiet"
+              width="full"
+              background
+            >
+              <GButton preset="accent" size="sm">Apply</GButton>
+              <GButton preset="ghost" size="sm">Back</GButton>
+              <GChip preset="quiet" size="sm" selected>Auto</GChip>
+              <GBadge preset="warning" variant="outline">Draft</GBadge>
+            </GToolbar>
+
+            <GToolbar
+              title="HUD Strip"
+              subtitle="A slightly wider row for live in-game controls."
+              preset="purple"
+              align="between"
+              width="full"
+              background
+            >
+              <GButton preset="surface" size="sm">Inventory</GButton>
+              <GButton preset="surface" size="sm">Map</GButton>
+              <GButton preset="surface" size="sm">Radio</GButton>
+              <GButton preset="ghost" size="sm">Ping</GButton>
+            </GToolbar>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GStat</p>
               <p class="debug-meta">
                 Compact runtime readouts for one label and one value, with optional detail.
@@ -2613,6 +2654,11 @@ function onChipRemove(value: string): void {
 .pagination-event,
 .pagination-summary {
   margin-top: 0;
+}
+
+.toolbar-stack {
+  display: grid;
+  gap: 1rem;
 }
 
 .stat-grid {
