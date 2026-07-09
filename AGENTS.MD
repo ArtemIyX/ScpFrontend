@@ -101,6 +101,9 @@ Agents should design with layer separation in mind so these systems can coexist 
 - Prefer predictable layout rules over clever CSS tricks.
 - Keep styles centralized enough that the game can maintain one coherent look.
 - Separate theme tokens, spacing, typography, and motion concerns where practical.
+- Use `rem` for typography, spacing, and most component sizing.
+- Use `%`, `vh`, `vw`, and `fr` for layout.
+- Use `px` only for sharp details that benefit from exact device pixels, like 1px borders, hairlines, icon nudges, and some debug/demo boards.
 
 ## Mini-Game Expectations
 
