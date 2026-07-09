@@ -5,6 +5,9 @@ const isActionDisabled = ref(true)
 const nickname = ref('Operative 17')
 const query = ref('containment log')
 const clearanceCode = ref('')
+const masterVolume = ref(72)
+const sensitivity = ref(42)
+const threatLevel = ref(18)
 const region = ref('eu-west')
 const role = ref('medic')
 const difficulty = ref('standard')
@@ -185,6 +188,10 @@ const queryStatus = computed(() =>
   query.value.trim().length > 0
     ? 'Search input is active for logs, players, or object names.'
     : 'Search is empty.',
+)
+
+const sliderSummary = computed(
+  () => `Volume ${masterVolume.value} / Sensitivity ${sensitivity.value} / Threat ${threatLevel.value}`,
 )
 
 function toggleDisabled(): void {
@@ -422,6 +429,58 @@ function closeModalFromFooter(message: string): void {
           </div>
 
           <GText preset="muted" class="input-status" :text="queryStatus" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GSlider</p>
+              <p class="debug-meta">
+                Range control for audio, gameplay tuning, and runtime thresholds.
+              </p>
+            </div>
+          </div>
+
+          <div class="slider-stack">
+            <GSlider
+              v-model="masterVolume"
+              label="Master Volume"
+              helper="Used for menu music, SFX, and ambient loops."
+              preset="accent"
+              width="full"
+              :min="0"
+              :max="100"
+              :step="1"
+              value-suffix="%"
+            />
+
+            <GSlider
+              v-model="sensitivity"
+              label="Look Sensitivity"
+              helper="Mouse and stick response for the in-game camera."
+              preset="purple"
+              width="full"
+              :min="0"
+              :max="100"
+              :step="1"
+              value-suffix="%"
+            />
+
+            <GSlider
+              v-model="threatLevel"
+              label="Threat Threshold"
+              error="This value is locked by the current test scenario."
+              preset="warning"
+              width="full"
+              :min="0"
+              :max="100"
+              :step="1"
+              value-suffix="%"
+              disabled
+            />
+          </div>
+
+          <GText preset="muted" class="slider-status" :text="sliderSummary" />
         </section>
 
         <section class="font-card ui-panel">
@@ -775,6 +834,15 @@ function closeModalFromFooter(message: string): void {
 }
 
 .input-status {
+  margin-top: 1rem;
+}
+
+.slider-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.slider-status {
   margin-top: 1rem;
 }
 

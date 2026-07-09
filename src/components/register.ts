@@ -4,6 +4,7 @@ import GButton from './g/GButton/GButton.vue'
 import GBadge from './g/GBadge/GBadge.vue'
 import GCombo from './g/GCombo/GCombo.vue'
 import GInput from './g/GInput/GInput.vue'
+import GSlider from './g/GSlider/GSlider.vue'
 import GToast from './g/GToast/GToast.vue'
 import GPanel from './g/GPanel/GPanel.vue'
 import GTabs from './g/GTabs/GTabs.vue'
@@ -23,6 +24,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gcombo', GCombo)
   app.component('GInput', GInput)
   app.component('ginput', GInput)
+  app.component('GSlider', GSlider)
+  app.component('gslider', GSlider)
   app.component('GToast', GToast)
   app.component('gtoast', GToast)
   app.component('GPanel', GPanel)

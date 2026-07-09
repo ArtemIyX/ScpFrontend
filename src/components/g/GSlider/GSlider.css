@@ -1,0 +1,251 @@
+.gslider {
+  --gslider-track-bg: rgba(255, 255, 255, 0.06);
+  --gslider-track-fill: var(--ui-accent);
+  --gslider-track-border: rgba(255, 255, 255, 0.1);
+  --gslider-thumb-bg: #ecf0f4;
+  --gslider-thumb-border: rgba(198, 255, 74, 0.42);
+  --gslider-thumb-shadow: 0 6px 14px rgba(0, 0, 0, 0.36);
+  --gslider-text: var(--ui-text-main);
+  --gslider-helper: var(--ui-text-muted);
+  --gslider-error: #ffb8b3;
+  --gslider-gap: 0.5rem;
+  --gslider-head-gap: 0.75rem;
+  --gslider-track-height: 0.375rem;
+  --gslider-thumb-size: 1rem;
+  --gslider-track-radius: 999px;
+  --gslider-ring: rgba(198, 255, 74, 0.28);
+
+  display: grid;
+  gap: var(--gslider-gap);
+  min-width: 0;
+}
+
+.gslider--full {
+  width: 100%;
+}
+
+.gslider__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gslider-head-gap);
+  min-width: 0;
+}
+
+.gslider__label {
+  margin: 0;
+}
+
+.gslider__value {
+  flex: 0 0 auto;
+  min-width: 0;
+  color: var(--ui-accent);
+}
+
+.gslider__value-text {
+  color: inherit;
+}
+
+.gslider__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.gslider__prefix,
+.gslider__suffix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: rgba(236, 240, 244, 0.72);
+}
+
+.gslider__input {
+  --gslider-progress: 50%;
+
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  height: 1.75rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.gslider__input::-webkit-slider-runnable-track {
+  height: var(--gslider-track-height);
+  border: 1px solid var(--gslider-track-border);
+  border-radius: var(--gslider-track-radius);
+  background:
+    linear-gradient(90deg, var(--gslider-track-fill) 0 var(--gslider-progress), transparent 0),
+    var(--gslider-track-bg);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.gslider__input::-moz-range-track {
+  height: var(--gslider-track-height);
+  border: 1px solid var(--gslider-track-border);
+  border-radius: var(--gslider-track-radius);
+  background: var(--gslider-track-bg);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.gslider__input::-moz-range-progress {
+  height: var(--gslider-track-height);
+  border-radius: var(--gslider-track-radius);
+  background: var(--gslider-track-fill);
+}
+
+.gslider__input::-webkit-slider-thumb {
+  appearance: none;
+  width: var(--gslider-thumb-size);
+  height: var(--gslider-thumb-size);
+  margin-top: calc((var(--gslider-track-height) - var(--gslider-thumb-size)) / 2);
+  border: 1px solid var(--gslider-thumb-border);
+  border-radius: 999px;
+  background: var(--gslider-thumb-bg);
+  box-shadow: var(--gslider-thumb-shadow);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gslider__input::-moz-range-thumb {
+  width: var(--gslider-thumb-size);
+  height: var(--gslider-thumb-size);
+  border: 1px solid var(--gslider-thumb-border);
+  border-radius: 999px;
+  background: var(--gslider-thumb-bg);
+  box-shadow: var(--gslider-thumb-shadow);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gslider__input:hover::-webkit-slider-thumb,
+.gslider__input:hover::-moz-range-thumb {
+  transform: scale(1.05);
+  border-color: rgba(198, 255, 74, 0.68);
+}
+
+.gslider__input:focus-visible::-webkit-slider-thumb,
+.gslider__input:focus-visible::-moz-range-thumb {
+  border-color: var(--gslider-ring);
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.48),
+    0 0 0 5px var(--gslider-ring),
+    var(--gslider-thumb-shadow);
+}
+
+.gslider__input:active::-webkit-slider-thumb,
+.gslider__input:active::-moz-range-thumb {
+  transform: scale(0.98);
+}
+
+.gslider__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.gslider__meta {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.gslider__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gslider-helper);
+}
+
+.gslider__helper--error {
+  color: var(--gslider-error);
+}
+
+.gslider--sm {
+  --gslider-gap: 0.375rem;
+  --gslider-thumb-size: 0.875rem;
+  --gslider-track-height: 0.3125rem;
+}
+
+.gslider--md {
+  --gslider-gap: 0.5rem;
+  --gslider-thumb-size: 1rem;
+  --gslider-track-height: 0.375rem;
+}
+
+.gslider--lg {
+  --gslider-gap: 0.625rem;
+  --gslider-thumb-size: 1.125rem;
+  --gslider-track-height: 0.4375rem;
+}
+
+.gslider--surface {
+  --gslider-track-bg: rgba(255, 255, 255, 0.06);
+  --gslider-track-border: rgba(255, 255, 255, 0.1);
+  --gslider-track-fill: var(--ui-accent);
+}
+
+.gslider--accent {
+  --gslider-track-bg: rgba(198, 255, 74, 0.08);
+  --gslider-track-border: rgba(198, 255, 74, 0.16);
+  --gslider-track-fill: var(--ui-accent);
+  --gslider-thumb-border: rgba(198, 255, 74, 0.5);
+}
+
+.gslider--danger {
+  --gslider-track-bg: rgba(255, 59, 48, 0.08);
+  --gslider-track-border: rgba(255, 59, 48, 0.16);
+  --gslider-track-fill: #ff8b82;
+  --gslider-thumb-border: rgba(255, 59, 48, 0.5);
+}
+
+.gslider--warning {
+  --gslider-track-bg: rgba(255, 176, 0, 0.08);
+  --gslider-track-border: rgba(255, 176, 0, 0.16);
+  --gslider-track-fill: #ffd26b;
+  --gslider-thumb-border: rgba(255, 176, 0, 0.5);
+}
+
+.gslider--purple {
+  --gslider-track-bg: rgba(139, 68, 255, 0.08);
+  --gslider-track-border: rgba(139, 68, 255, 0.16);
+  --gslider-track-fill: #cfa9ff;
+  --gslider-thumb-border: rgba(139, 68, 255, 0.5);
+}
+
+.gslider--ghost {
+  --gslider-track-bg: rgba(255, 255, 255, 0.03);
+  --gslider-track-border: rgba(255, 255, 255, 0.08);
+  --gslider-track-fill: rgba(236, 240, 244, 0.6);
+  --gslider-thumb-bg: rgba(236, 240, 244, 0.9);
+  --gslider-thumb-border: rgba(255, 255, 255, 0.16);
+}
+
+.gslider--quiet {
+  --gslider-track-bg: rgba(12, 15, 20, 0.96);
+  --gslider-track-border: rgba(198, 255, 74, 0.1);
+  --gslider-track-fill: var(--ui-accent);
+}
+
+.gslider--background {
+  --gslider-track-bg: rgba(4, 6, 8, 0.74);
+  --gslider-track-border: rgba(198, 255, 74, 0.18);
+}
+
+.gslider--disabled {
+  opacity: 0.72;
+}
+
+.gslider--error .gslider__input::-webkit-slider-runnable-track,
+.gslider--error .gslider__input::-moz-range-track {
+  border-color: rgba(255, 59, 48, 0.32);
+}
