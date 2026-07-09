@@ -33,6 +33,7 @@ const difficulty = ref('standard')
 const graphicsQuality = ref<'low' | 'medium' | 'high' | 'epic' | 'cinematic'>('high')
 const menuAction = ref('resume')
 const menuRules = ref(['Stay with your squad.', 'Check the door status before moving.', 'Keep the radio line clear.'])
+const profileLoaded = ref(false)
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -312,6 +313,7 @@ const menuSelectionLabel = computed(
 )
 
 const menuSummary = computed(() => `Selected menu action: ${menuSelectionLabel.value}.`)
+const profileSkeletonLabel = computed(() => (profileLoaded.value ? 'Show skeleton' : 'Show content'))
 
 function toggleDisabled(): void {
   isActionDisabled.value = !isActionDisabled.value
@@ -1214,6 +1216,50 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GSkeleton</p>
+              <p class="debug-meta">
+                Content placeholder for panels, cards, and HUD blocks while data is still
+                loading.
+              </p>
+            </div>
+          </div>
+
+          <div class="skeleton-stack">
+            <GButton preset="accent" @click="profileLoaded = !profileLoaded">
+              {{ profileSkeletonLabel }}
+            </GButton>
+
+            <GSkeleton
+              :loading="!profileLoaded"
+              label="Profile card"
+              helper="The content stays in place; the skeleton stands in while it is hidden."
+              preset="quiet"
+              width="full"
+              background
+              shape="circle"
+              :lines="3"
+            >
+              <div class="skeleton-demo-card">
+                <div class="skeleton-demo-card__avatar"></div>
+                <div class="skeleton-demo-card__body">
+                  <GText preset="header">Operative 17</GText>
+                  <GText preset="body">
+                    Connected to the session. This block represents live content once the data
+                    arrives.
+                  </GText>
+                  <div class="skeleton-demo-card__meta">
+                    <GBadge preset="accent" variant="soft">Online</GBadge>
+                    <GBadge preset="purple" variant="outline">Ready</GBadge>
+                  </div>
+                </div>
+              </div>
+            </GSkeleton>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GList</p>
               <p class="debug-meta">
                 Default content lists for notes, objectives, briefings, and simple numbered steps.
@@ -1674,6 +1720,40 @@ function closeModalFromFooter(message: string): void {
   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 1rem;
   align-items: start;
+}
+
+.skeleton-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.skeleton-demo-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.skeleton-demo-card__avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.16), transparent 42%),
+    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(198, 255, 74, 0.18);
+}
+
+.skeleton-demo-card__body {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.skeleton-demo-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .list-grid {
