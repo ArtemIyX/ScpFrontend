@@ -1,0 +1,226 @@
+.gprogress {
+  --gprogress-track-bg: rgba(255, 255, 255, 0.06);
+  --gprogress-track-border: rgba(255, 255, 255, 0.1);
+  --gprogress-fill: var(--ui-accent);
+  --gprogress-fill-soft: rgba(198, 255, 74, 0.16);
+  --gprogress-text: var(--ui-text-main);
+  --gprogress-helper: var(--ui-text-muted);
+  --gprogress-error: #ffb8b3;
+  --gprogress-gap: 0.5rem;
+  --gprogress-head-gap: 0.75rem;
+  --gprogress-track-height: 0.5rem;
+  --gprogress-ring-size: 4.5rem;
+  --gprogress-radius: 999px;
+
+  display: grid;
+  gap: var(--gprogress-gap);
+  min-width: 0;
+  color: var(--gprogress-text);
+}
+
+.gprogress--full {
+  width: 100%;
+}
+
+.gprogress__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gprogress-head-gap);
+  min-width: 0;
+}
+
+.gprogress__label {
+  margin: 0;
+}
+
+.gprogress__value {
+  flex: 0 0 auto;
+  min-width: 0;
+  color: var(--ui-accent);
+}
+
+.gprogress__value-text {
+  color: inherit;
+}
+
+.gprogress__track {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--gprogress-track-border);
+  border-radius: var(--gprogress-radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.14)),
+    var(--gprogress-track-bg);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.gprogress__fill {
+  display: block;
+  width: var(--gprogress-percent);
+  height: 100%;
+  min-height: var(--gprogress-track-height);
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent),
+    var(--gprogress-fill);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--gprogress-fill) 28%, transparent);
+  transition: width 180ms ease;
+}
+
+.gprogress__shine {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, transparent 0 35%, rgba(255, 255, 255, 0.16) 50%, transparent 65%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0 0.5rem,
+      rgba(255, 255, 255, 0) 0.5rem 1rem
+    );
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.gprogress__ring-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--ui-caps-font);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  color: var(--ui-text-main);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.gprogress__meta {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.gprogress__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gprogress-helper);
+}
+
+.gprogress__helper--error {
+  color: var(--gprogress-error);
+}
+
+.gprogress--sm {
+  --gprogress-gap: 0.375rem;
+  --gprogress-track-height: 0.375rem;
+  --gprogress-ring-size: 3.5rem;
+}
+
+.gprogress--md {
+  --gprogress-gap: 0.5rem;
+  --gprogress-track-height: 0.5rem;
+  --gprogress-ring-size: 4.5rem;
+}
+
+.gprogress--lg {
+  --gprogress-gap: 0.625rem;
+  --gprogress-track-height: 0.625rem;
+  --gprogress-ring-size: 5.5rem;
+}
+
+.gprogress--surface {
+  --gprogress-track-bg: rgba(255, 255, 255, 0.06);
+  --gprogress-track-border: rgba(255, 255, 255, 0.1);
+  --gprogress-fill: var(--ui-accent);
+}
+
+.gprogress--accent {
+  --gprogress-track-bg: rgba(198, 255, 74, 0.08);
+  --gprogress-track-border: rgba(198, 255, 74, 0.16);
+  --gprogress-fill: var(--ui-accent);
+}
+
+.gprogress--danger {
+  --gprogress-track-bg: rgba(255, 59, 48, 0.08);
+  --gprogress-track-border: rgba(255, 59, 48, 0.16);
+  --gprogress-fill: #ff8b82;
+}
+
+.gprogress--warning {
+  --gprogress-track-bg: rgba(255, 176, 0, 0.08);
+  --gprogress-track-border: rgba(255, 176, 0, 0.16);
+  --gprogress-fill: #ffd26b;
+}
+
+.gprogress--purple {
+  --gprogress-track-bg: rgba(139, 68, 255, 0.08);
+  --gprogress-track-border: rgba(139, 68, 255, 0.16);
+  --gprogress-fill: #cfa9ff;
+}
+
+.gprogress--ghost {
+  --gprogress-track-bg: rgba(255, 255, 255, 0.03);
+  --gprogress-track-border: rgba(255, 255, 255, 0.08);
+  --gprogress-fill: rgba(236, 240, 244, 0.6);
+}
+
+.gprogress--quiet {
+  --gprogress-track-bg: rgba(12, 15, 20, 0.96);
+  --gprogress-track-border: rgba(198, 255, 74, 0.1);
+  --gprogress-fill: var(--ui-accent);
+}
+
+.gprogress--background {
+  --gprogress-track-bg: rgba(4, 6, 8, 0.74);
+  --gprogress-track-border: rgba(198, 255, 74, 0.18);
+}
+
+.gprogress--error .gprogress__track {
+  border-color: rgba(255, 59, 48, 0.38);
+}
+
+.gprogress--striped .gprogress__fill {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.18) 0 0.5rem,
+      rgba(255, 255, 255, 0) 0.5rem 1rem
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent),
+    var(--gprogress-fill);
+}
+
+.gprogress--ring {
+  gap: 0.375rem;
+}
+
+.gprogress--ring .gprogress__track {
+  width: var(--gprogress-ring-size);
+  height: var(--gprogress-ring-size);
+  border-radius: 999px;
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.55) 0 55%, transparent 56%),
+    conic-gradient(var(--gprogress-fill) var(--gprogress-percent), var(--gprogress-track-bg) 0);
+}
+
+.gprogress--ring .gprogress__fill,
+.gprogress--ring .gprogress__shine {
+  display: none;
+}
+
+.gprogress--ring .gprogress__track::before {
+  content: '';
+  position: absolute;
+  inset: 0.3rem;
+  border-radius: 999px;
+  background: rgba(6, 8, 10, 0.88);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+}
+
+.gprogress--ring .gprogress__ring-text {
+  inset: 0.3rem;
+}

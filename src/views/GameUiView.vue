@@ -8,6 +8,9 @@ const clearanceCode = ref('')
 const masterVolume = ref(72)
 const sensitivity = ref(42)
 const threatLevel = ref(18)
+const progressLoad = ref(64)
+const progressScan = ref(31)
+const progressRing = ref(88)
 const itemCount = ref(12)
 const splitAmount = ref(2.5)
 const soundEnabled = ref(true)
@@ -204,6 +207,10 @@ const queryStatus = computed(() =>
 
 const sliderSummary = computed(
   () => `Volume ${masterVolume.value} / Sensitivity ${sensitivity.value} / Threat ${threatLevel.value}`,
+)
+
+const progressSummary = computed(
+  () => `Load ${progressLoad.value}% / Scan ${progressScan.value}% / Core ${progressRing.value}%`,
 )
 
 const numberSummary = computed(
@@ -511,6 +518,53 @@ function closeModalFromFooter(message: string): void {
           </div>
 
           <GText preset="muted" class="slider-status" :text="sliderSummary" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GProgress</p>
+              <p class="debug-meta">
+                Read-only progress display with value label control and multiple visual styles.
+              </p>
+            </div>
+          </div>
+
+          <div class="progress-stack">
+            <GProgress
+              v-model="progressLoad"
+              label="Asset Load"
+              helper="Standard horizontal bar with a visible numeric value."
+              preset="accent"
+              width="full"
+              variant="bar"
+              value-suffix="%"
+            />
+
+            <GProgress
+              v-model="progressScan"
+              label="Scan Sweep"
+              helper="Striped bar with the numeric value hidden."
+              preset="purple"
+              width="full"
+              variant="striped"
+              :show-value="false"
+            />
+
+            <GProgress
+              v-model="progressRing"
+              label="Core Stability"
+              helper="Ring style with a custom label beside the number."
+              preset="warning"
+              width="full"
+              variant="ring"
+              value-label="Stable"
+              value-position="prefix"
+              value-suffix="%"
+            />
+          </div>
+
+          <GText preset="muted" class="progress-status" :text="progressSummary" />
         </section>
 
         <section class="font-card ui-panel">
@@ -1110,6 +1164,15 @@ function closeModalFromFooter(message: string): void {
 }
 
 .slider-status {
+  margin-top: 1rem;
+}
+
+.progress-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.progress-status {
   margin-top: 1rem;
 }
 
