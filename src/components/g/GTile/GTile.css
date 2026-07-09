@@ -1,0 +1,160 @@
+.gtile {
+  --gtile-bg: rgba(255, 255, 255, 0.04);
+  --gtile-bg-hover: rgba(255, 255, 255, 0.06);
+  --gtile-border: rgba(255, 255, 255, 0.1);
+  --gtile-border-hover: rgba(255, 255, 255, 0.16);
+  --gtile-text: var(--ui-text-main);
+  --gtile-muted: var(--ui-text-muted);
+  --gtile-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gtile-radius: 0.375rem;
+  --gtile-padding-x: 0.875rem;
+  --gtile-padding-y: 0.875rem;
+  --gtile-gap: 0.625rem;
+  --gtile-icon-size: 1.75rem;
+
+  display: grid;
+  gap: var(--gtile-gap);
+  min-width: 0;
+  padding: var(--gtile-padding-y) var(--gtile-padding-x);
+  border: 1px solid var(--gtile-border);
+  border-radius: var(--gtile-radius);
+  background: var(--gtile-bg);
+  box-shadow: var(--gtile-shadow);
+}
+
+.gtile--full {
+  width: 100%;
+}
+
+.gtile__head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gtile__heading {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.gtile__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--gtile-icon-size);
+  height: var(--gtile-icon-size);
+  border: 1px solid rgba(198, 255, 74, 0.18);
+  border-radius: 0.3125rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ui-accent);
+}
+
+.gtile__icon-mark {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.08);
+}
+
+.gtile__label-wrap {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.gtile__label,
+.gtile__status,
+.gtile__value,
+.gtile__subtitle {
+  margin: 0;
+}
+
+.gtile__body {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.gtile__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.gtile--sm {
+  --gtile-padding-x: 0.75rem;
+  --gtile-padding-y: 0.75rem;
+  --gtile-gap: 0.5rem;
+  --gtile-icon-size: 1.5rem;
+}
+
+.gtile--md {
+  --gtile-padding-x: 0.875rem;
+  --gtile-padding-y: 0.875rem;
+  --gtile-gap: 0.625rem;
+}
+
+.gtile--lg {
+  --gtile-padding-x: 1rem;
+  --gtile-padding-y: 1rem;
+  --gtile-gap: 0.75rem;
+  --gtile-icon-size: 2rem;
+}
+
+.gtile--surface {
+  --gtile-bg: rgba(255, 255, 255, 0.04);
+  --gtile-bg-hover: rgba(255, 255, 255, 0.06);
+  --gtile-border: rgba(255, 255, 255, 0.1);
+  --gtile-border-hover: rgba(255, 255, 255, 0.16);
+}
+
+.gtile--accent {
+  --gtile-bg: rgba(198, 255, 74, 0.08);
+  --gtile-bg-hover: rgba(198, 255, 74, 0.12);
+  --gtile-border: rgba(198, 255, 74, 0.16);
+  --gtile-border-hover: rgba(198, 255, 74, 0.28);
+}
+
+.gtile--danger {
+  --gtile-bg: rgba(255, 59, 48, 0.08);
+  --gtile-bg-hover: rgba(255, 59, 48, 0.12);
+  --gtile-border: rgba(255, 59, 48, 0.18);
+  --gtile-border-hover: rgba(255, 59, 48, 0.28);
+}
+
+.gtile--warning {
+  --gtile-bg: rgba(255, 176, 0, 0.08);
+  --gtile-bg-hover: rgba(255, 176, 0, 0.12);
+  --gtile-border: rgba(255, 176, 0, 0.18);
+  --gtile-border-hover: rgba(255, 176, 0, 0.28);
+}
+
+.gtile--purple {
+  --gtile-bg: rgba(139, 68, 255, 0.08);
+  --gtile-bg-hover: rgba(139, 68, 255, 0.12);
+  --gtile-border: rgba(139, 68, 255, 0.18);
+  --gtile-border-hover: rgba(139, 68, 255, 0.28);
+}
+
+.gtile--ghost {
+  --gtile-bg: transparent;
+  --gtile-bg-hover: rgba(255, 255, 255, 0.03);
+  --gtile-border: rgba(255, 255, 255, 0.08);
+  --gtile-border-hover: rgba(198, 255, 74, 0.18);
+  --gtile-shadow: none;
+}
+
+.gtile--quiet {
+  --gtile-bg: rgba(12, 15, 20, 0.96);
+  --gtile-bg-hover: rgba(18, 22, 28, 0.98);
+  --gtile-border: rgba(198, 255, 74, 0.1);
+  --gtile-border-hover: rgba(198, 255, 74, 0.2);
+  --gtile-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+}

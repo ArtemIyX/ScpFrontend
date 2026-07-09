@@ -730,6 +730,57 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GTile</p>
+              <p class="debug-meta">
+                Small styled HUD blocks for health, ammo, objectives, and live runtime status.
+              </p>
+            </div>
+          </div>
+
+          <div class="tile-grid">
+            <GTile
+              label="Health"
+              value="87%"
+              status="Stable"
+              subtitle="Containment suit integrity"
+              preset="accent"
+              width="full"
+              icon
+            />
+
+            <GTile
+              label="Ammo"
+              value="24"
+              status="Ready"
+              subtitle="Rounds in the current magazine"
+              preset="warning"
+              width="full"
+              icon
+            />
+
+            <GTile
+              label="Objective"
+              value="Seal Door 12"
+              subtitle="Hold the corridor until backup arrives"
+              preset="purple"
+              width="full"
+            />
+
+            <GTile
+              label="Signal"
+              value="3 / 5"
+              status="Weak"
+              subtitle="Radio strength and remote link"
+              preset="quiet"
+              width="full"
+              icon
+            />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GCheckbox</p>
               <p class="debug-meta">
                 Boolean settings for audio, readability, and gameplay convenience.
@@ -1404,6 +1455,12 @@ function closeModalFromFooter(message: string): void {
 .keybind-stack {
   display: grid;
   gap: 1rem;
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.875rem;
 }
 
 .checkbox-stack {
