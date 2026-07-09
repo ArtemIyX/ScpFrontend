@@ -88,6 +88,45 @@ const windowActions = [
   { label: 'Back', preset: 'ghost' },
 ] as const
 
+type ToastItem = {
+  title: string
+  message: string
+  status: string
+  preset: 'neutral' | 'accent' | 'danger' | 'warning' | 'purple' | 'ghost' | 'quiet'
+  variant?: 'solid' | 'soft' | 'outline'
+  footer?: boolean
+}
+
+const toastItems: ToastItem[] = [
+  {
+    title: 'Connection stable',
+    message: 'Web socket handshake finished and the UI can now receive gameplay state.',
+    status: 'Live',
+    preset: 'accent',
+    footer: true,
+  },
+  {
+    title: 'Clearance update',
+    message: 'The current squad is missing one field entry before the match can begin.',
+    status: 'Warning',
+    preset: 'warning',
+  },
+  {
+    title: 'Containment breach',
+    message: 'This is the higher urgency variant with a darker frame and a harder edge.',
+    status: 'Alert',
+    preset: 'danger',
+    variant: 'solid',
+  },
+  {
+    title: 'Document sync',
+    message: 'Localized text and image payloads can arrive through the Unreal HTTP bridge.',
+    status: 'Quiet',
+    preset: 'quiet',
+    variant: 'outline',
+  },
+] as const
+
 const modalModes = [
   {
     key: 'standard',
@@ -536,6 +575,46 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GToast</p>
+              <p class="debug-meta">
+                Visual notification card for the future toast system, with header, body, footer,
+                and close event wiring.
+              </p>
+            </div>
+          </div>
+
+          <div class="toast-grid">
+            <GToast
+              v-for="item in toastItems"
+              :key="item.title"
+              :title="item.title"
+              :message="item.message"
+              :status="item.status"
+              :preset="item.preset"
+              :variant="item.variant || 'soft'"
+              closable
+            >
+              <template #icon>
+                <span
+                  class="toast-icon"
+                  :class="`toast-icon--${item.preset}`"
+                  aria-hidden="true"
+                ></span>
+              </template>
+
+              <template #footer="{ close }">
+                <template v-if="item.footer">
+                  <GButton preset="ghost" @click="close">Dismiss</GButton>
+                  <GButton preset="accent">Retry link</GButton>
+                </template>
+              </template>
+            </GToast>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GWindow</p>
               <p class="debug-meta">
                 Larger framed surface for settings, inventory, and pause-style overlays.
@@ -719,6 +798,40 @@ function closeModalFromFooter(message: string): void {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.toast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 0.875rem;
+}
+
+.toast-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 999px;
+  border: 0.125rem solid currentColor;
+  box-shadow: 0 0 0 0.125rem rgba(0, 0, 0, 0.2);
+}
+
+.toast-icon--accent {
+  background: var(--ui-accent);
+  color: var(--ui-accent);
+}
+
+.toast-icon--warning {
+  background: #ffd26b;
+  color: #ffd26b;
+}
+
+.toast-icon--danger {
+  background: #ff8b82;
+  color: #ff8b82;
+}
+
+.toast-icon--quiet {
+  background: rgba(236, 240, 244, 0.56);
+  color: rgba(236, 240, 244, 0.56);
 }
 
 .panel-stats {

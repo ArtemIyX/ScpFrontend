@@ -1,0 +1,251 @@
+.gtoast {
+  --gtoast-bg: rgba(10, 14, 17, 0.92);
+  --gtoast-bg-hover: rgba(14, 18, 22, 0.98);
+  --gtoast-border: rgba(198, 255, 74, 0.18);
+  --gtoast-border-strong: rgba(198, 255, 74, 0.32);
+  --gtoast-text: var(--ui-text);
+  --gtoast-muted: var(--ui-text-muted);
+  --gtoast-accent: var(--ui-accent);
+  --gtoast-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
+  --gtoast-radius: 0.75rem;
+  --gtoast-padding-x: 0.875rem;
+  --gtoast-padding-y: 0.875rem;
+  --gtoast-gap: 0.75rem;
+  --gtoast-title-size: 0.8125rem;
+  --gtoast-message-size: 0.875rem;
+  --gtoast-action-gap: 0.5rem;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: stretch;
+  gap: 0;
+  min-width: 0;
+  border: 1px solid var(--gtoast-border);
+  border-radius: var(--gtoast-radius);
+  background: var(--gtoast-bg);
+  box-shadow: var(--gtoast-shadow);
+  color: var(--gtoast-text);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gtoast--closable {
+  padding-right: 0.125rem;
+}
+
+.gtoast__accent {
+  width: 0.25rem;
+  background: linear-gradient(180deg, var(--gtoast-accent), rgba(255, 255, 255, 0.08));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--gtoast-accent) 40%, transparent);
+}
+
+.gtoast__shell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--gtoast-gap);
+  min-width: 0;
+  padding: var(--gtoast-padding-y) var(--gtoast-padding-x);
+}
+
+.gtoast__icon {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  padding-top: 0.125rem;
+  color: var(--gtoast-accent);
+}
+
+.gtoast__content {
+  display: grid;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.gtoast__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gtoast__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.gtoast__title {
+  color: inherit;
+  font-size: var(--gtoast-title-size);
+}
+
+.gtoast__status {
+  color: var(--gtoast-accent);
+}
+
+.gtoast__chrome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.375rem;
+  flex: 0 0 auto;
+}
+
+.gtoast__message {
+  min-width: 0;
+  color: var(--gtoast-muted);
+  font-family: var(--ui-body-font);
+  font-size: var(--gtoast-message-size);
+  line-height: 1.55;
+  user-select: text;
+}
+
+.gtoast__message :deep(p) {
+  margin: 0;
+}
+
+.gtoast__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gtoast-action-gap);
+  align-items: center;
+}
+
+.gtoast__close-icon {
+  position: relative;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.gtoast__close-icon::before,
+.gtoast__close-icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.gtoast__close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gtoast__close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.gtoast--sm {
+  --gtoast-padding-x: 0.75rem;
+  --gtoast-padding-y: 0.75rem;
+  --gtoast-gap: 0.625rem;
+  --gtoast-title-size: 0.75rem;
+  --gtoast-message-size: 0.8125rem;
+}
+
+.gtoast--md {
+  --gtoast-padding-x: 0.875rem;
+  --gtoast-padding-y: 0.875rem;
+  --gtoast-gap: 0.75rem;
+  --gtoast-title-size: 0.8125rem;
+  --gtoast-message-size: 0.875rem;
+}
+
+.gtoast--lg {
+  --gtoast-padding-x: 1rem;
+  --gtoast-padding-y: 1rem;
+  --gtoast-gap: 0.875rem;
+  --gtoast-title-size: 0.875rem;
+  --gtoast-message-size: 0.9375rem;
+}
+
+.gtoast--solid {
+  --gtoast-bg: rgba(198, 255, 74, 0.12);
+  --gtoast-bg-hover: rgba(198, 255, 74, 0.16);
+  --gtoast-border: rgba(198, 255, 74, 0.3);
+  --gtoast-border-strong: rgba(198, 255, 74, 0.42);
+  --gtoast-text: #eff7d0;
+  --gtoast-muted: rgba(239, 247, 208, 0.84);
+  --gtoast-accent: var(--ui-accent);
+}
+
+.gtoast--soft {
+  --gtoast-bg: rgba(10, 14, 17, 0.92);
+  --gtoast-bg-hover: rgba(14, 18, 22, 0.98);
+  --gtoast-border: rgba(198, 255, 74, 0.18);
+  --gtoast-border-strong: rgba(198, 255, 74, 0.32);
+}
+
+.gtoast--outline {
+  --gtoast-bg: rgba(8, 10, 12, 0.72);
+  --gtoast-bg-hover: rgba(10, 12, 15, 0.84);
+  --gtoast-border: rgba(255, 255, 255, 0.12);
+  --gtoast-border-strong: rgba(255, 255, 255, 0.18);
+  --gtoast-text: var(--ui-text);
+  --gtoast-muted: var(--ui-text-muted);
+  --gtoast-accent: var(--ui-text-muted);
+}
+
+.gtoast--neutral {
+  --gtoast-accent: var(--ui-text-muted);
+}
+
+.gtoast--accent {
+  --gtoast-bg: rgba(198, 255, 74, 0.12);
+  --gtoast-bg-hover: rgba(198, 255, 74, 0.16);
+  --gtoast-border: rgba(198, 255, 74, 0.3);
+  --gtoast-border-strong: rgba(198, 255, 74, 0.42);
+  --gtoast-accent: var(--ui-accent);
+}
+
+.gtoast--danger {
+  --gtoast-bg: rgba(255, 59, 48, 0.12);
+  --gtoast-bg-hover: rgba(255, 59, 48, 0.16);
+  --gtoast-border: rgba(255, 59, 48, 0.28);
+  --gtoast-border-strong: rgba(255, 59, 48, 0.4);
+  --gtoast-text: #ffe2df;
+  --gtoast-muted: rgba(255, 226, 223, 0.84);
+  --gtoast-accent: #ff8b82;
+}
+
+.gtoast--warning {
+  --gtoast-bg: rgba(255, 176, 0, 0.12);
+  --gtoast-bg-hover: rgba(255, 176, 0, 0.16);
+  --gtoast-border: rgba(255, 176, 0, 0.28);
+  --gtoast-border-strong: rgba(255, 176, 0, 0.4);
+  --gtoast-text: #fff0c8;
+  --gtoast-muted: rgba(255, 240, 200, 0.84);
+  --gtoast-accent: #ffd26b;
+}
+
+.gtoast--purple {
+  --gtoast-bg: rgba(139, 68, 255, 0.12);
+  --gtoast-bg-hover: rgba(139, 68, 255, 0.16);
+  --gtoast-border: rgba(139, 68, 255, 0.28);
+  --gtoast-border-strong: rgba(139, 68, 255, 0.42);
+  --gtoast-text: #eadcff;
+  --gtoast-muted: rgba(234, 220, 255, 0.84);
+  --gtoast-accent: #cfa9ff;
+}
+
+.gtoast--ghost {
+  --gtoast-bg: rgba(255, 255, 255, 0.02);
+  --gtoast-bg-hover: rgba(255, 255, 255, 0.05);
+  --gtoast-border: rgba(255, 255, 255, 0.08);
+  --gtoast-border-strong: rgba(255, 255, 255, 0.14);
+  --gtoast-text: rgba(236, 240, 244, 0.88);
+  --gtoast-muted: rgba(236, 240, 244, 0.68);
+  --gtoast-accent: rgba(236, 240, 244, 0.68);
+}
+
+.gtoast--quiet {
+  --gtoast-bg: rgba(8, 10, 12, 0.96);
+  --gtoast-bg-hover: rgba(12, 15, 20, 0.98);
+  --gtoast-border: rgba(198, 255, 74, 0.12);
+  --gtoast-border-strong: rgba(198, 255, 74, 0.22);
+}
