@@ -23,6 +23,7 @@ describe('App', () => {
     })
 
     expect(wrapper.text()).toContain('Component showcases')
+    expect(wrapper.text()).toContain('GBreadcrumbs')
     expect(wrapper.text()).toContain('GText')
     expect(wrapper.text()).toContain('GButton')
     expect(wrapper.text()).toContain('GTooltip')
@@ -62,6 +63,8 @@ describe('App', () => {
     expect(wrapper.text()).toContain('Standard modal')
     expect(wrapper.find('.gscroller').exists()).toBe(true)
     expect(wrapper.text()).toContain('Disabled launch')
+    expect(wrapper.text()).toContain('Main Menu')
+    expect(wrapper.text()).toContain('Observation Room A')
     expect(wrapper.text()).toContain('Warning preset')
     expect(wrapper.text()).toContain('Purple preset')
     expect(wrapper.text()).toContain('Background anomaly')
@@ -101,6 +104,7 @@ describe('App', () => {
     expect(wrapper.find('button[disabled]').exists()).toBe(true)
     expect(wrapper.text()).toContain('message UiEvent')
     expect(wrapper.find('.gscroller').exists()).toBe(true)
+    expect(wrapper.find('.gbreadcrumbs').exists()).toBe(true)
     expect(wrapper.find('.gbutton').exists()).toBe(true)
     expect(wrapper.find('.gtooltip__anchor').exists()).toBe(true)
     expect(wrapper.find('.gpopover').exists()).toBe(true)
@@ -149,6 +153,15 @@ describe('App', () => {
 
     expect(wrapper.find('.gmodal').exists()).toBe(true)
     expect(wrapper.text()).toContain('Standard Modal')
+
+    const breadcrumbButton = wrapper
+      .findAll('a')
+      .find((anchor) => anchor.text().includes('Lobby'))
+
+    expect(breadcrumbButton).toBeTruthy()
+    await breadcrumbButton!.trigger('click')
+
+    expect(wrapper.text()).toContain('Selected breadcrumb: Lobby.')
 
     const popoverButton = wrapper
       .findAll('button')

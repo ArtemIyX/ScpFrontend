@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 
 import GButton from './g/GButton/GButton.vue'
+import GBreadcrumbs from './g/GBreadcrumbs/GBreadcrumbs.vue'
 import GBadge from './g/GBadge/GBadge.vue'
 import GLabel from './g/GLabel/GLabel.vue'
 import GField from './g/GField/GField.vue'
@@ -45,6 +46,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gtext', GText)
   app.component('GButton', GButton)
   app.component('gbutton', GButton)
+  app.component('GBreadcrumbs', GBreadcrumbs)
+  app.component('gbreadcrumbs', GBreadcrumbs)
   app.component('GBadge', GBadge)
   app.component('gbadge', GBadge)
   app.component('GLabel', GLabel)

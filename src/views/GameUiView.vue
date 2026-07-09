@@ -43,6 +43,7 @@ const popoverOpen = ref(false)
 const popoverEvent = ref('No popover events yet.')
 const accordionValue = ref<'security' | 'briefing' | 'anomaly'>('security')
 const accordionEvent = ref('No accordion events yet.')
+const breadcrumbEvent = ref('No breadcrumb events yet.')
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -133,6 +134,21 @@ const iconSamples = [
   { name: 'info', label: 'Info' },
   { name: 'menu', label: 'Menu' },
   { name: 'chevron-down', label: 'Chevron' },
+] as const
+
+const breadcrumbItems = [
+  { label: 'Main Menu', href: '#menu', meta: 'Home' },
+  { label: 'Lobby', href: '#lobby', icon: 'menu', meta: 'Squad' },
+  { label: 'Containment Wing', href: '#wing', icon: 'chevron-right', meta: 'Area' },
+  { label: 'Sector 7', current: true, meta: 'Current' },
+] as const
+
+const breadcrumbTrail = [
+  { label: 'Archive', href: '#archive' },
+  { label: 'Research Block', href: '#research' },
+  { label: 'Level 3 Access Corridor', href: '#corridor' },
+  { label: 'Observation Room A', href: '#obs-a' },
+  { label: 'Maintenance Console', current: true },
 ] as const
 
 const iconSvgSrc = '/icons/scp-sigil.svg'
@@ -430,6 +446,10 @@ function onAccordionOpen(item: { value: 'security' | 'briefing' | 'anomaly' }): 
 function onAccordionClose(item: { value: 'security' | 'briefing' | 'anomaly' }): void {
   accordionEvent.value = `Closed ${item.value}.`
 }
+
+function onBreadcrumbSelect(item: { label: string }): void {
+  breadcrumbEvent.value = `Selected breadcrumb: ${item.label}.`
+}
 </script>
 
 <template>
@@ -443,6 +463,40 @@ function onAccordionClose(item: { value: 'security' | 'briefing' | 'anomaly' }):
       </header>
 
       <GScroller class="game-scroll">
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GBreadcrumbs</p>
+              <p class="debug-meta">
+                Navigation trail for menus, lobbies, and deep in-game locations.
+              </p>
+            </div>
+          </div>
+
+          <div class="breadcrumb-stack">
+            <GBreadcrumbs
+              :items="breadcrumbItems"
+              preset="quiet"
+              width="full"
+              background
+              @select="onBreadcrumbSelect"
+            />
+
+            <GBreadcrumbs
+              :items="breadcrumbTrail"
+              preset="purple"
+              size="sm"
+              width="full"
+              background
+              truncate
+              separator="slash"
+              @select="onBreadcrumbSelect"
+            />
+
+            <GText preset="muted" class="breadcrumb-event" :text="breadcrumbEvent" />
+          </div>
+        </section>
+
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
@@ -2065,6 +2119,15 @@ function onAccordionClose(item: { value: 'security' | 'briefing' | 'anomaly' }):
 .button-stack {
   display: grid;
   gap: 0.875rem;
+}
+
+.breadcrumb-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.breadcrumb-event {
+  margin-top: 0;
 }
 
 .button-row {
