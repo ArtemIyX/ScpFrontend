@@ -22,7 +22,8 @@ describe('App', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Main Menu')
+    expect(wrapper.text()).toContain('Deploy Into The Facility')
+    expect(wrapper.text()).toContain('Play')
     expect(wrapper.find('.main-menu').exists()).toBe(true)
     expect(wrapper.find('.main-menu__window').exists()).toBe(true)
   })

@@ -1,3 +1,44 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+
+const menuTabs = [
+  {
+    value: 'play',
+    label: 'Play',
+    heading: 'Deploy Into The Facility',
+    detail: 'Queue into containment, form a response squad, and re-enter the breach zone.',
+    status: 'Squad channel online',
+  },
+  {
+    value: 'documents',
+    label: 'Documents',
+    heading: 'Review Field Records',
+    detail: 'Open recovered reports, incident logs, and classified directives before the next run.',
+    status: 'Archive mirror synchronized',
+  },
+  {
+    value: 'customization',
+    label: 'Customization',
+    heading: 'Tune Your Loadout',
+    detail: 'Adjust operator profile, insignia, and surface kit elements used across the session.',
+    status: 'Profile cache stable',
+  },
+  {
+    value: 'settings',
+    label: 'Settings',
+    heading: 'Calibrate Runtime Systems',
+    detail: 'Refine audio mix, visual clarity, and control behavior without breaking match flow.',
+    status: 'Config bridge ready',
+  },
+] as const
+
+const activeTab = ref<(typeof menuTabs)[number]['value']>('play')
+
+const currentTab = computed(
+  () => menuTabs.find((tab) => tab.value === activeTab.value) ?? menuTabs[0],
+)
+</script>
+
 <template>
   <main class="ui-page main-menu">
     <div class="main-menu__backdrop" aria-hidden="true">
@@ -7,18 +48,43 @@
     </div>
 
     <section class="main-menu__stage">
+      <div class="main-menu__topbar">
+        <div class="main-menu__tabs-frame" aria-hidden="true">
+          <span class="main-menu__tabs-line main-menu__tabs-line--left"></span>
+          <span class="main-menu__tabs-line main-menu__tabs-line--right"></span>
+        </div>
+
+        <GTabs
+          v-model="activeTab"
+          class="main-menu__tabs"
+          :tabs="menuTabs"
+          preset="ghost"
+          size="lg"
+          align="center"
+          aria-label="Main menu navigation"
+        />
+      </div>
+
       <GWindow
         class="main-menu__window"
-        status="Online"
+        :status="currentTab.status"
         width="full"
         height="auto"
         strong
       >
         <div class="main-menu__title-wrap">
           <div class="main-menu__sigil" aria-hidden="true"></div>
-          <GText as="h1" preset="title" class="main-menu__title">
-            Main Menu
-          </GText>
+          <div class="main-menu__copy">
+            <GText as="p" preset="caps" class="main-menu__eyebrow">
+              SCP Tactical Command
+            </GText>
+            <GText as="h1" preset="title" class="main-menu__title">
+              {{ currentTab.heading }}
+            </GText>
+            <GText as="p" preset="body" class="main-menu__subtitle">
+              {{ currentTab.detail }}
+            </GText>
+          </div>
         </div>
       </GWindow>
     </section>
@@ -27,12 +93,11 @@
 
 <style scoped>
 .main-menu {
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: stretch;
   overflow: hidden;
-  background:
-    radial-gradient(circle at top, rgba(198, 255, 74, 0.08), transparent 32%),
-    linear-gradient(180deg, rgba(4, 6, 8, 0.78), rgba(2, 3, 4, 0.96));
+  padding: 1.5rem 1.5rem 2rem;
+  background: transparent;
 }
 
 .main-menu__backdrop {
@@ -48,7 +113,7 @@
   height: 36rem;
   border-radius: 50%;
   filter: blur(5rem);
-  opacity: 0.42;
+  opacity: 0.12;
 }
 
 .main-menu__glow--left {
@@ -66,28 +131,215 @@
 .main-menu__grid {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(198, 255, 74, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(198, 255, 74, 0.08) 1px, transparent 1px);
-  background-size: 6rem 6rem;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.85));
+  background: none;
 }
 
 .main-menu__stage {
   position: relative;
   z-index: 1;
   width: min(100%, 62rem);
+  margin: 0 auto;
+  padding-top: 4.75rem;
+}
+
+.main-menu__topbar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  width: min(calc(100% - 2.5rem), 48rem);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.main-menu__tabs-frame {
+  position: absolute;
+  inset: -0.4rem -0.9rem auto;
+  height: calc(100% + 0.8rem);
+  border: 1px solid rgba(198, 255, 74, 0.12);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(198, 255, 74, 0.06), transparent 62%),
+    linear-gradient(180deg, rgba(12, 18, 16, 0.82), rgba(5, 8, 7, 0.68));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 1.2rem 2.4rem rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+.main-menu__tabs-line {
+  position: absolute;
+  top: 50%;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid rgba(198, 255, 74, 0.16);
+  background: radial-gradient(circle, rgba(198, 255, 74, 0.08), transparent 70%);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+  filter: blur(0.2px);
+}
+
+.main-menu__tabs-line--left {
+  left: 0.6rem;
+}
+
+.main-menu__tabs-line--right {
+  right: 0.6rem;
+}
+
+.main-menu__tabs {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  pointer-events: auto;
+  --gtabs-gap: 0;
+  --gtabs-panel-padding: 0;
+  --gtabs-tab-min-height: 4.25rem;
+  --gtabs-tab-padding-x: 1.5rem;
+  --gtabs-tab-padding-y: 1rem;
+  --gtabs-border: rgba(198, 255, 74, 0.18);
+  --gtabs-border-hover: rgba(198, 255, 74, 0.38);
+  --gtabs-border-active: rgba(198, 255, 74, 0.64);
+  --gtabs-shadow: 0 0 0 1px rgba(198, 255, 74, 0.08), 0 1rem 2rem rgba(0, 0, 0, 0.32);
+  --gtabs-shadow-active:
+    0 0 0 1px rgba(198, 255, 74, 0.22),
+    0 1.25rem 2.6rem rgba(0, 0, 0, 0.42),
+    0 0 2rem rgba(198, 255, 74, 0.12);
+  --gtabs-ring: rgba(198, 255, 74, 0.24);
+}
+
+.main-menu__tabs:deep(.gtabs__list) {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(198, 255, 74, 0.08);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(14, 20, 18, 0.78), rgba(7, 10, 9, 0.56)),
+    rgba(0, 0, 0, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 0 0 1px rgba(198, 255, 74, 0.03);
+  overflow: hidden;
+}
+
+.main-menu__tabs:deep(.gtabs__list)::before,
+.main-menu__tabs:deep(.gtabs__list)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.main-menu__tabs:deep(.gtabs__list)::before {
+  background:
+    linear-gradient(90deg, transparent, rgba(198, 255, 74, 0.08), transparent);
+  opacity: 0.4;
+}
+
+.main-menu__tabs:deep(.gtabs__list)::after {
+  inset: auto 1.2rem 0.25rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(198, 255, 74, 0.24), transparent);
+  opacity: 0.85;
+}
+
+.main-menu__tabs:deep(.gtabs__tab) {
+  min-width: 0;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    transform 180ms ease,
+    color 180ms ease;
+}
+
+.main-menu__tabs:deep(.gtabs__tab)::before {
+  content: '';
+  position: absolute;
+  inset: 0.2rem 0.15rem;
+  border: 1px solid rgba(198, 255, 74, 0.18);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(198, 255, 74, 0.16), rgba(198, 255, 74, 0.04)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  opacity: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0.6rem 1.4rem rgba(0, 0, 0, 0.14);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.main-menu__tabs:deep(.gtabs__tab)::after {
+  content: '';
+  position: absolute;
+  inset: auto 26% 0.38rem;
+  height: 0.14rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(198, 255, 74, 0.95), transparent);
+  box-shadow: 0 0 0.8rem rgba(198, 255, 74, 0.32);
+  transform: scaleX(0.25);
+  opacity: 0;
+  transition:
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+
+.main-menu__tabs:deep(.gtabs__tab:hover) {
+  transform: translateY(-0.16rem);
+}
+
+.main-menu__tabs:deep(.gtabs__tab:hover)::before,
+.main-menu__tabs:deep(.gtabs__tab--active)::before {
+  opacity: 1;
+  transform: translateY(-0.02rem);
+}
+
+.main-menu__tabs:deep(.gtabs__tab--active)::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.main-menu__tabs:deep(.gtabs__tab--active) {
+  color: rgba(246, 250, 244, 0.98);
+}
+
+.main-menu__tabs:deep(.gtabs__tab-body) {
+  justify-items: center;
+}
+
+.main-menu__tabs:deep(.gtabs__label) {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  text-shadow: 0 0 0.8rem rgba(198, 255, 74, 0.08);
+}
+
+.main-menu__tabs:deep(.gtabs__description) {
+  display: none;
+}
+
+.main-menu__tabs:deep(.gtabs__panel) {
+  display: none;
 }
 
 .main-menu__window {
   border-radius: 0;
-  border-color: rgba(198, 255, 74, 0.28);
-  background:
-    linear-gradient(180deg, rgba(11, 15, 12, 0.95), rgba(5, 8, 7, 0.98)),
-    rgba(0, 0, 0, 0.72);
-  box-shadow:
-    0 0 0 1px rgba(198, 255, 74, 0.08),
-    0 2rem 4rem rgba(0, 0, 0, 0.42);
+  border-color: rgba(198, 255, 74, 0.18);
+  background: transparent;
+  box-shadow: none;
 }
 
 .main-menu__window::before,
@@ -97,7 +349,7 @@
   left: 1.25rem;
   right: 1.25rem;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(198, 255, 74, 0.45), transparent);
+  background: linear-gradient(90deg, transparent, rgba(198, 255, 74, 0.3), transparent);
 }
 
 .main-menu__window::before {
@@ -111,9 +363,22 @@
 .main-menu__title-wrap {
   display: grid;
   place-items: center;
-  gap: 1.5rem;
+  gap: 1.75rem;
   min-height: 18rem;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1.5rem;
+}
+
+.main-menu__copy {
+  display: grid;
+  gap: 0.85rem;
+  justify-items: center;
+  max-width: 42rem;
+}
+
+.main-menu__eyebrow {
+  color: rgba(198, 255, 74, 0.82);
+  letter-spacing: 0.22em;
+  text-align: center;
 }
 
 .main-menu__sigil {
@@ -139,9 +404,40 @@
   text-shadow: 0 0 1.5rem rgba(198, 255, 74, 0.18);
 }
 
+.main-menu__subtitle {
+  max-width: 36rem;
+  color: rgba(225, 232, 228, 0.76);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
 @media (max-width: 48rem) {
   .main-menu {
-    padding: 1rem;
+    padding: 1rem 1rem 1.5rem;
+  }
+
+  .main-menu__stage {
+    padding-top: 4rem;
+  }
+
+  .main-menu__tabs {
+    --gtabs-tab-min-height: 3.4rem;
+    --gtabs-tab-padding-x: 0.8rem;
+    --gtabs-tab-padding-y: 0.8rem;
+  }
+
+  .main-menu__topbar {
+    width: calc(100% - 1.5rem);
+  }
+
+  .main-menu__tabs:deep(.gtabs__list) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-radius: 1.5rem;
+  }
+
+  .main-menu__tabs:deep(.gtabs__label) {
+    font-size: 0.75rem;
   }
 
   .main-menu__title-wrap {
