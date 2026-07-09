@@ -930,33 +930,42 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
-              <p class="ui-heading">GField</p>
+              <p class="ui-heading">GSection</p>
               <p class="debug-meta">
-                Generic settings row for labels, controls, helper text, and future custom layouts.
+                Higher-level block for settings pages, lobby panels, and grouped in-game options.
               </p>
             </div>
           </div>
 
-          <div class="field-stack">
-            <GField
-              label="Graphics Quality"
-              helper="One wrapper, any control inside it. This one holds the direct preset rail."
-              layout="row"
-              width="full"
-              background
-              preset="quiet"
-            >
-              <GRail
-                v-model="graphicsQuality"
-                :items="graphicsQualityOptions"
-                preset="quiet"
+          <GSection
+            title="Video Settings"
+            subtitle="The top-level container for related controls inside a settings page."
+            status="Runtime ready"
+            width="full"
+            preset="quiet"
+            background
+          >
+            <div class="field-stack">
+              <GField
+                label="Graphics Quality"
+                helper="One wrapper, any control inside it. This one holds the direct preset rail."
+                layout="row"
                 width="full"
                 background
-              />
-            </GField>
+                preset="quiet"
+              >
+                <GRail
+                  v-model="graphicsQuality"
+                  :items="graphicsQualityOptions"
+                  preset="quiet"
+                  width="full"
+                  background
+                />
+              </GField>
 
-            <GText preset="muted" class="field-status" :text="graphicsQualitySummary" />
-          </div>
+              <GText preset="muted" class="field-status" :text="graphicsQualitySummary" />
+            </div>
+          </GSection>
         </section>
 
         <section class="font-card ui-panel">

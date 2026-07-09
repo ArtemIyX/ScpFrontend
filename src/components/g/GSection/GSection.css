@@ -1,0 +1,143 @@
+.gsection {
+  --gsection-bg: rgba(255, 255, 255, 0.04);
+  --gsection-bg-hover: rgba(255, 255, 255, 0.06);
+  --gsection-border: rgba(255, 255, 255, 0.1);
+  --gsection-border-hover: rgba(255, 255, 255, 0.16);
+  --gsection-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gsection-radius: 0.375rem;
+  --gsection-padding-x: 1rem;
+  --gsection-padding-y: 1rem;
+  --gsection-gap: 0.75rem;
+
+  display: grid;
+  gap: var(--gsection-gap);
+  min-width: 0;
+  padding: var(--gsection-padding-y) var(--gsection-padding-x);
+  border: 1px solid var(--gsection-border);
+  border-radius: var(--gsection-radius);
+  background: var(--gsection-bg);
+  box-shadow: var(--gsection-shadow);
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gsection:hover {
+  background: var(--gsection-bg-hover);
+  border-color: var(--gsection-border-hover);
+}
+
+.gsection--full {
+  width: 100%;
+}
+
+.gsection__head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.gsection__head-text {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.gsection__title {
+  margin: 0;
+}
+
+.gsection__subtitle {
+  margin: 0;
+}
+
+.gsection__status {
+  flex: 0 0 auto;
+  align-self: center;
+}
+
+.gsection__body {
+  display: grid;
+  gap: 0.875rem;
+  min-width: 0;
+}
+
+.gsection__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gsection--sm {
+  --gsection-padding-x: 0.875rem;
+  --gsection-padding-y: 0.875rem;
+}
+
+.gsection--lg {
+  --gsection-padding-x: 1.125rem;
+  --gsection-padding-y: 1.125rem;
+}
+
+.gsection--surface {
+  --gsection-bg: rgba(255, 255, 255, 0.04);
+  --gsection-bg-hover: rgba(255, 255, 255, 0.06);
+  --gsection-border: rgba(255, 255, 255, 0.1);
+  --gsection-border-hover: rgba(255, 255, 255, 0.16);
+}
+
+.gsection--accent {
+  --gsection-bg: rgba(198, 255, 74, 0.08);
+  --gsection-bg-hover: rgba(198, 255, 74, 0.12);
+  --gsection-border: rgba(198, 255, 74, 0.16);
+  --gsection-border-hover: rgba(198, 255, 74, 0.28);
+}
+
+.gsection--danger {
+  --gsection-bg: rgba(255, 59, 48, 0.08);
+  --gsection-bg-hover: rgba(255, 59, 48, 0.12);
+  --gsection-border: rgba(255, 59, 48, 0.18);
+  --gsection-border-hover: rgba(255, 59, 48, 0.28);
+}
+
+.gsection--warning {
+  --gsection-bg: rgba(255, 176, 0, 0.08);
+  --gsection-bg-hover: rgba(255, 176, 0, 0.12);
+  --gsection-border: rgba(255, 176, 0, 0.18);
+  --gsection-border-hover: rgba(255, 176, 0, 0.28);
+}
+
+.gsection--purple {
+  --gsection-bg: rgba(139, 68, 255, 0.08);
+  --gsection-bg-hover: rgba(139, 68, 255, 0.12);
+  --gsection-border: rgba(139, 68, 255, 0.18);
+  --gsection-border-hover: rgba(139, 68, 255, 0.28);
+}
+
+.gsection--ghost {
+  --gsection-bg: transparent;
+  --gsection-bg-hover: rgba(255, 255, 255, 0.03);
+  --gsection-border: rgba(255, 255, 255, 0.08);
+  --gsection-border-hover: rgba(198, 255, 74, 0.18);
+  --gsection-shadow: none;
+}
+
+.gsection--quiet {
+  --gsection-bg: rgba(12, 15, 20, 0.96);
+  --gsection-bg-hover: rgba(18, 22, 28, 0.98);
+  --gsection-border: rgba(198, 255, 74, 0.1);
+  --gsection-border-hover: rgba(198, 255, 74, 0.2);
+  --gsection-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+}
+
+.gsection--background {
+  --gsection-bg: rgba(4, 6, 8, 0.7);
+  --gsection-bg-hover: rgba(8, 10, 12, 0.82);
+  --gsection-border: rgba(198, 255, 74, 0.2);
+  --gsection-border-hover: rgba(198, 255, 74, 0.34);
+  --gsection-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+}
