@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, useSlots, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch, type CSSProperties } from 'vue'
 
 import GButton from '../GButton/GButton.vue'
 import GIcon from '../GIcon/GIcon.vue'
@@ -25,6 +25,8 @@ const props = withDefaults(defineProps<GPopoverProps>(), {
 const emit = defineEmits<GPopoverEmits>()
 const slots = useSlots()
 const rootRef = ref<HTMLElement | null>(null)
+const panelRef = ref<HTMLElement | null>(null)
+const panelStyle = ref<CSSProperties>({})
 
 const isOpen = computed(() => Boolean(props.modelValue))
 const classes = computed(() =>
@@ -38,6 +40,58 @@ const classes = computed(() =>
     hasIcon: Boolean(props.icon || props.iconSrc || slots.icon),
   }),
 )
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max)
+}
+
+function updatePosition(): void {
+  if (!isOpen.value || typeof window === 'undefined' || !rootRef.value) {
+    return
+  }
+
+  const rect = rootRef.value.getBoundingClientRect()
+  const viewportPadding = 10
+  const centerX = clamp(rect.left + rect.width / 2, viewportPadding, window.innerWidth - viewportPadding)
+  const centerY = clamp(rect.top + rect.height / 2, viewportPadding, window.innerHeight - viewportPadding)
+  const gap = 10
+
+  switch (props.placement) {
+    case 'top':
+      panelStyle.value = {
+        position: 'fixed',
+        top: `${Math.max(viewportPadding, rect.top - gap)}px`,
+        left: `${centerX}px`,
+        transform: 'translate(-50%, -100%)',
+      }
+      break
+    case 'left':
+      panelStyle.value = {
+        position: 'fixed',
+        top: `${centerY}px`,
+        left: `${Math.max(viewportPadding, rect.left - gap)}px`,
+        transform: 'translate(-100%, -50%)',
+      }
+      break
+    case 'right':
+      panelStyle.value = {
+        position: 'fixed',
+        top: `${centerY}px`,
+        left: `${Math.min(window.innerWidth - viewportPadding, rect.right + gap)}px`,
+        transform: 'translateY(-50%)',
+      }
+      break
+    case 'bottom':
+    default:
+      panelStyle.value = {
+        position: 'fixed',
+        top: `${Math.min(window.innerHeight - viewportPadding, rect.bottom + gap)}px`,
+        left: `${centerX}px`,
+        transform: 'translateX(-50%)',
+      }
+      break
+  }
+}
 
 function setOpen(next: boolean): void {
   if (next === isOpen.value) {
@@ -90,7 +144,12 @@ function onDocumentPointerDown(event: PointerEvent): void {
   }
 
   const target = event.target as Node | null
-  if (target && rootRef.value && !rootRef.value.contains(target)) {
+  if (
+    target &&
+    rootRef.value &&
+    !rootRef.value.contains(target) &&
+    !(panelRef.value && panelRef.value.contains(target))
+  ) {
     closePopover('outside')
   }
 }
@@ -132,13 +191,24 @@ watch(
     if (value) {
       document.addEventListener('pointerdown', onDocumentPointerDown, true)
       document.addEventListener('keydown', onDocumentKeydown)
+      void nextTick(() => {
+        updatePosition()
+      })
       return
     }
 
     document.removeEventListener('pointerdown', onDocumentPointerDown, true)
     document.removeEventListener('keydown', onDocumentKeydown)
+    panelStyle.value = {}
   },
   { immediate: true },
+)
+
+watch(
+  () => props.placement,
+  () => {
+    updatePosition()
+  },
 )
 
 onBeforeUnmount(() => {
@@ -159,63 +229,68 @@ onBeforeUnmount(() => {
       </slot>
     </span>
 
-    <transition name="gpopover-fade">
-      <section
-        v-if="isOpen"
-        class="gpopover__panel"
-        @click.stop
-        role="dialog"
-        aria-modal="false"
-        :aria-label="ariaLabel || title || message"
-        :aria-describedby="ariaDescribedby"
-      >
-        <div class="gpopover__accent" aria-hidden="true"></div>
+    <Teleport to="body">
+      <transition name="gpopover-fade">
+        <section
+          v-if="isOpen"
+          ref="panelRef"
+          class="gpopover__panel"
+          :style="panelStyle"
+          @click.stop
+          @pointerdown.stop
+          role="dialog"
+          aria-modal="false"
+          :aria-label="ariaLabel || title || message"
+          :aria-describedby="ariaDescribedby"
+        >
+          <div class="gpopover__accent" aria-hidden="true"></div>
 
-        <div class="gpopover__shell">
-          <div v-if="slots.icon || icon || iconSrc" class="gpopover__icon" aria-hidden="true">
-            <slot name="icon">
-              <GIcon v-if="iconSrc" :src="iconSrc" preset="quiet" />
-              <GIcon v-else-if="icon" :name="icon" preset="quiet" />
-            </slot>
-          </div>
-
-          <div class="gpopover__content">
-            <header v-if="slots.header || title || closable" class="gpopover__header">
-              <slot name="header" :close="closePopover">
-                <div class="gpopover__heading">
-                  <GText v-if="title" as="span" preset="header" class="gpopover__title">
-                    {{ title }}
-                  </GText>
-                </div>
-
-                <div class="gpopover__chrome">
-                  <GButton
-                    v-if="showCloseButton && closable"
-                    preset="ghost"
-                    shape="chip"
-                    icon-only
-                    :aria-label="closeLabel"
-                    @click.stop="closePopover('button')"
-                  >
-                    <template #icon>
-                      <span class="gpopover__close-icon" aria-hidden="true"></span>
-                    </template>
-                  </GButton>
-                </div>
+          <div class="gpopover__shell">
+            <div v-if="slots.icon || icon || iconSrc" class="gpopover__icon" aria-hidden="true">
+              <slot name="icon">
+                <GIcon v-if="iconSrc" :src="iconSrc" preset="quiet" />
+                <GIcon v-else-if="icon" :name="icon" preset="quiet" />
               </slot>
-            </header>
-
-            <div class="gpopover__message">
-              <slot>{{ message }}</slot>
             </div>
 
-            <footer v-if="slots.footer" class="gpopover__footer">
-              <slot name="footer" :close="closePopover" />
-            </footer>
+            <div class="gpopover__content">
+              <header v-if="slots.header || title || closable" class="gpopover__header">
+                <slot name="header" :close="closePopover">
+                  <div class="gpopover__heading">
+                    <GText v-if="title" as="span" preset="header" class="gpopover__title">
+                      {{ title }}
+                    </GText>
+                  </div>
+
+                  <div class="gpopover__chrome">
+                    <GButton
+                      v-if="showCloseButton && closable"
+                      preset="ghost"
+                      shape="chip"
+                      icon-only
+                      :aria-label="closeLabel"
+                      @click.stop="closePopover('button')"
+                    >
+                      <template #icon>
+                        <span class="gpopover__close-icon" aria-hidden="true"></span>
+                      </template>
+                    </GButton>
+                  </div>
+                </slot>
+              </header>
+
+              <div class="gpopover__message">
+                <slot>{{ message }}</slot>
+              </div>
+
+              <footer v-if="slots.footer" class="gpopover__footer">
+                <slot name="footer" :close="closePopover" />
+              </footer>
+            </div>
           </div>
-        </div>
-      </section>
-    </transition>
+        </section>
+      </transition>
+    </Teleport>
   </span>
 </template>
 

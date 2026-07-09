@@ -170,7 +170,7 @@ describe('App', () => {
     expect(popoverButton).toBeTruthy()
     await popoverButton!.trigger('click')
 
-    expect(wrapper.find('.gpopover__panel').exists()).toBe(true)
-    expect(wrapper.text()).toContain('Containment note')
+    expect(document.body.querySelector('.gpopover__panel')).not.toBeNull()
+    expect(document.body.textContent).toContain('Containment note')
   })
 })

@@ -3,6 +3,7 @@
   display: inline-flex;
   align-items: center;
   min-width: 0;
+  z-index: 0;
 }
 
 .gpopover__trigger {
@@ -23,8 +24,8 @@
   --gpopover-gap: 0.75rem;
   --gpopover-width: min(24rem, calc(100vw - 1.5rem));
 
-  position: absolute;
-  z-index: 40;
+  position: fixed;
+  z-index: 5000;
   display: grid;
   grid-template-columns: auto 1fr;
   width: var(--gpopover-width);
