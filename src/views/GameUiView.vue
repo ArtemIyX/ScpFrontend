@@ -100,6 +100,8 @@ const iconSamples = [
 ] as const
 
 const iconSvgSrc = '/icons/scp-sigil.svg'
+const avatarSvgSrc = '/avatars/operative-17.svg'
+const avatarFallback = 'O17'
 
 const menuItems = [
   {
@@ -1269,6 +1271,62 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GAvatar</p>
+              <p class="debug-meta">
+                Player portraits and team markers with image, initials, and live status support.
+              </p>
+            </div>
+          </div>
+
+          <div class="avatar-grid">
+            <div class="avatar-demo">
+              <GAvatar
+                :src="avatarSvgSrc"
+                name="Operative 17"
+                alt="Operative 17 portrait"
+                preset="accent"
+                status="online"
+                size="lg"
+              />
+              <GText preset="caps">Image src</GText>
+            </div>
+
+            <div class="avatar-demo">
+              <GAvatar name="Elena V." initials="EV" preset="purple" status="away" size="lg" />
+              <GText preset="caps">Initials</GText>
+            </div>
+
+            <div class="avatar-demo">
+              <GAvatar preset="warning" shape="square" status="busy" size="lg">
+                <GIcon name="info" preset="warning" size="lg" />
+              </GAvatar>
+              <GText preset="caps">Slot content</GText>
+            </div>
+
+            <GCard title="Roster sample" subtitle="Live player card media" meta="Ready" preset="quiet" width="full">
+              <template #media>
+                <div class="card-media card-media--avatar">
+                  <GAvatar
+                    :src="avatarSvgSrc"
+                    name="Operative 17"
+                    alt="Operative 17 portrait"
+                    preset="accent"
+                    status="online"
+                    size="lg"
+                  />
+                </div>
+              </template>
+              <GText preset="body">
+                `GAvatar` can sit in cards, lobbies, and HUD overlays for portrait displays and
+                lightweight presence states.
+              </GText>
+            </GCard>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GSkeleton</p>
               <p class="debug-meta">
                 Content placeholder for panels, cards, and HUD blocks while data is still
@@ -1775,6 +1833,23 @@ function closeModalFromFooter(message: string): void {
   align-items: start;
 }
 
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.875rem;
+  align-items: start;
+}
+
+.avatar-demo {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.3125rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
 .icon-stack {
   display: grid;
   gap: 1rem;
@@ -1897,6 +1972,15 @@ function closeModalFromFooter(message: string): void {
     linear-gradient(180deg, rgba(198, 255, 74, 0.16), rgba(0, 0, 0, 0)),
     linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-media--avatar {
+  display: grid;
+  place-items: center;
+  min-height: 8.5rem;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(198, 255, 74, 0.1), transparent 35%),
+    linear-gradient(180deg, rgba(18, 24, 20, 0.94), rgba(7, 9, 11, 0.98));
 }
 
 .card-media--player {
