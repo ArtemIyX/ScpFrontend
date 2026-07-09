@@ -1,0 +1,341 @@
+.gbutton {
+  --gbutton-bg: rgba(255, 255, 255, 0.04);
+  --gbutton-bg-hover: rgba(255, 255, 255, 0.08);
+  --gbutton-bg-active: rgba(255, 255, 255, 0.1);
+  --gbutton-border: rgba(255, 255, 255, 0.1);
+  --gbutton-border-hover: rgba(255, 255, 255, 0.16);
+  --gbutton-text: var(--ui-text-main);
+  --gbutton-shadow: 0 10px 20px rgba(0, 0, 0, 0.22);
+  --gbutton-shadow-hover: 0 14px 30px rgba(0, 0, 0, 0.34);
+  --gbutton-shadow-active: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --gbutton-padding-x: 1rem;
+  --gbutton-padding-y: 0.75rem;
+  --gbutton-gap: 0.625rem;
+  --gbutton-min-height: 2.75rem;
+  --gbutton-radius: 999px;
+  --gbutton-font-size: 0.9375rem;
+  --gbutton-letter-spacing: 0.02em;
+  --gbutton-ring: rgba(198, 255, 74, 0.28);
+  --gbutton-accent-glow: rgba(198, 255, 74, 0.28);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gbutton-gap);
+  min-width: 0;
+  min-height: var(--gbutton-min-height);
+  padding: var(--gbutton-padding-y) var(--gbutton-padding-x);
+  border: 1px solid var(--gbutton-border);
+  border-radius: var(--gbutton-radius);
+  background: var(--gbutton-bg);
+  color: var(--gbutton-text);
+  box-shadow: var(--gbutton-shadow);
+  font-family: var(--ui-header-font);
+  font-size: var(--gbutton-font-size);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--gbutton-letter-spacing);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  overflow: hidden;
+  transform: translateY(0) scale(1);
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease,
+    filter 140ms ease;
+  animation: gbutton-idle 5.5s ease-in-out infinite;
+}
+
+.gbutton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 35%);
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.gbutton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, var(--gbutton-accent-glow), transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.gbutton:hover {
+  background: var(--gbutton-bg-hover);
+  border-color: var(--gbutton-border-hover);
+  box-shadow: var(--gbutton-shadow-hover);
+  transform: translateY(-1px) scale(1.01);
+}
+
+.gbutton:hover::before {
+  opacity: 0.5;
+}
+
+.gbutton:hover::after {
+  opacity: 1;
+}
+
+.gbutton:active,
+.gbutton--pressed {
+  background: var(--gbutton-bg-active);
+  box-shadow: var(--gbutton-shadow-active);
+  transform: translateY(1px) scale(0.985);
+  animation-duration: 1.7s;
+}
+
+.gbutton:focus-visible {
+  outline: none;
+  border-color: var(--gbutton-ring);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.55),
+    0 0 0 4px var(--gbutton-ring),
+    var(--gbutton-shadow-hover);
+}
+
+.gbutton:disabled,
+.gbutton--disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+  transform: none;
+  box-shadow: var(--gbutton-shadow-active);
+  animation: none;
+}
+
+.gbutton:disabled::after,
+.gbutton--disabled::after {
+  opacity: 0;
+}
+
+.gbutton__content {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gbutton-gap);
+  min-width: 0;
+  width: 100%;
+}
+
+.gbutton__label {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gbutton__icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: inherit;
+}
+
+.gbutton__icon :deep(svg) {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gbutton__spinner {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-top-color: currentColor;
+  animation: gbutton-spin 0.8s linear infinite;
+}
+
+.gbutton--full {
+  width: 100%;
+}
+
+.gbutton--sm {
+  --gbutton-padding-x: 0.875rem;
+  --gbutton-padding-y: 0.625rem;
+  --gbutton-gap: 0.5rem;
+  --gbutton-min-height: 2.25rem;
+  --gbutton-font-size: 0.875rem;
+}
+
+.gbutton--md {
+  --gbutton-padding-x: 1rem;
+  --gbutton-padding-y: 0.75rem;
+  --gbutton-gap: 0.625rem;
+  --gbutton-min-height: 2.75rem;
+  --gbutton-font-size: 0.9375rem;
+}
+
+.gbutton--lg {
+  --gbutton-padding-x: 1.125rem;
+  --gbutton-padding-y: 0.875rem;
+  --gbutton-gap: 0.75rem;
+  --gbutton-min-height: 3.25rem;
+  --gbutton-font-size: 1rem;
+}
+
+.gbutton--round {
+  --gbutton-radius: 0.75rem;
+}
+
+.gbutton--pill {
+  --gbutton-radius: 999px;
+}
+
+.gbutton--square {
+  --gbutton-radius: 0.75rem;
+  aspect-ratio: 1;
+  padding-inline: 0;
+}
+
+.gbutton--square .gbutton__content {
+  width: 100%;
+  justify-content: center;
+}
+
+.gbutton--square.gbutton--sm {
+  min-width: 2.25rem;
+}
+
+.gbutton--square.gbutton--md {
+  min-width: 2.75rem;
+}
+
+.gbutton--square.gbutton--lg {
+  min-width: 3.25rem;
+}
+
+.gbutton--icon-only {
+  padding-inline: 0;
+}
+
+.gbutton--icon-only .gbutton__content {
+  justify-content: center;
+}
+
+.gbutton--accent {
+  --gbutton-bg: rgba(198, 255, 74, 0.14);
+  --gbutton-bg-hover: rgba(198, 255, 74, 0.22);
+  --gbutton-bg-active: rgba(198, 255, 74, 0.18);
+  --gbutton-border: rgba(198, 255, 74, 0.25);
+  --gbutton-border-hover: rgba(198, 255, 74, 0.42);
+  --gbutton-text: var(--ui-accent);
+  --gbutton-ring: rgba(198, 255, 74, 0.5);
+  --gbutton-accent-glow: rgba(198, 255, 74, 0.24);
+}
+
+.gbutton--danger {
+  --gbutton-bg: rgba(255, 59, 48, 0.14);
+  --gbutton-bg-hover: rgba(255, 59, 48, 0.22);
+  --gbutton-bg-active: rgba(255, 59, 48, 0.18);
+  --gbutton-border: rgba(255, 59, 48, 0.24);
+  --gbutton-border-hover: rgba(255, 59, 48, 0.42);
+  --gbutton-text: #ffb8b3;
+  --gbutton-ring: rgba(255, 59, 48, 0.46);
+  --gbutton-accent-glow: rgba(255, 59, 48, 0.24);
+}
+
+.gbutton--warning {
+  --gbutton-bg: rgba(255, 176, 0, 0.14);
+  --gbutton-bg-hover: rgba(255, 176, 0, 0.2);
+  --gbutton-bg-active: rgba(255, 176, 0, 0.16);
+  --gbutton-border: rgba(255, 176, 0, 0.24);
+  --gbutton-border-hover: rgba(255, 176, 0, 0.4);
+  --gbutton-text: #ffd26b;
+  --gbutton-ring: rgba(255, 176, 0, 0.42);
+  --gbutton-accent-glow: rgba(255, 176, 0, 0.2);
+}
+
+.gbutton--purple {
+  --gbutton-bg: rgba(139, 68, 255, 0.16);
+  --gbutton-bg-hover: rgba(139, 68, 255, 0.24);
+  --gbutton-bg-active: rgba(139, 68, 255, 0.2);
+  --gbutton-border: rgba(139, 68, 255, 0.28);
+  --gbutton-border-hover: rgba(139, 68, 255, 0.46);
+  --gbutton-text: #dbc4ff;
+  --gbutton-ring: rgba(139, 68, 255, 0.48);
+  --gbutton-accent-glow: rgba(139, 68, 255, 0.24);
+}
+
+.gbutton--ghost {
+  --gbutton-bg: transparent;
+  --gbutton-bg-hover: rgba(255, 255, 255, 0.03);
+  --gbutton-bg-active: rgba(255, 255, 255, 0.05);
+  --gbutton-border: rgba(255, 255, 255, 0.08);
+  --gbutton-border-hover: rgba(198, 255, 74, 0.22);
+  --gbutton-shadow: none;
+  --gbutton-shadow-hover: none;
+  --gbutton-shadow-active: none;
+  --gbutton-text: rgba(236, 240, 244, 0.72);
+  --gbutton-ring: rgba(198, 255, 74, 0.18);
+  border-style: dashed;
+}
+
+.gbutton--quiet {
+  --gbutton-bg: rgba(12, 15, 20, 0.96);
+  --gbutton-bg-hover: rgba(18, 22, 28, 0.98);
+  --gbutton-bg-active: rgba(8, 10, 14, 0.98);
+  --gbutton-border: rgba(198, 255, 74, 0.1);
+  --gbutton-border-hover: rgba(198, 255, 74, 0.22);
+  --gbutton-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --gbutton-shadow-hover: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --gbutton-shadow-active: 0 10px 20px rgba(0, 0, 0, 0.3);
+  --gbutton-text: var(--ui-text-main);
+  --gbutton-ring: rgba(198, 255, 74, 0.34);
+}
+
+.gbutton--background {
+  --gbutton-bg: rgba(4, 6, 8, 0.7);
+  --gbutton-bg-hover: rgba(8, 10, 12, 0.82);
+  --gbutton-bg-active: rgba(2, 3, 4, 0.88);
+  --gbutton-border: rgba(198, 255, 74, 0.22);
+  --gbutton-border-hover: rgba(198, 255, 74, 0.36);
+  --gbutton-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --gbutton-shadow-hover: 0 18px 34px rgba(0, 0, 0, 0.48);
+}
+
+@keyframes gbutton-idle {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.03);
+  }
+}
+
+@keyframes gbutton-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gbutton,
+  .gbutton::before,
+  .gbutton::after,
+  .gbutton__spinner {
+    animation: none;
+    transition: none;
+  }
+}
