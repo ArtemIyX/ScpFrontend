@@ -3,6 +3,7 @@ import type { App } from 'vue'
 import GButton from './g/GButton/GButton.vue'
 import GBadge from './g/GBadge/GBadge.vue'
 import GLabel from './g/GLabel/GLabel.vue'
+import GRail from './g/GRail/GRail.vue'
 import GCombo from './g/GCombo/GCombo.vue'
 import GCheckbox from './g/GCheckbox/GCheckbox.vue'
 import GNumberInput from './g/GNumberInput/GNumberInput.vue'
@@ -29,6 +30,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gbadge', GBadge)
   app.component('GLabel', GLabel)
   app.component('glabel', GLabel)
+  app.component('GRail', GRail)
+  app.component('grail', GRail)
   app.component('GCombo', GCombo)
   app.component('gcombo', GCombo)
   app.component('GCheckbox', GCheckbox)

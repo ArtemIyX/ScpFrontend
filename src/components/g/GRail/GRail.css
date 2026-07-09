@@ -1,0 +1,302 @@
+.grail {
+  --grail-bg: rgba(255, 255, 255, 0.04);
+  --grail-bg-hover: rgba(255, 255, 255, 0.06);
+  --grail-bg-active: rgba(255, 255, 255, 0.08);
+  --grail-border: rgba(255, 255, 255, 0.1);
+  --grail-border-hover: rgba(255, 255, 255, 0.16);
+  --grail-border-active: rgba(198, 255, 74, 0.34);
+  --grail-text: var(--ui-text-main);
+  --grail-muted: var(--ui-text-muted);
+  --grail-helper: var(--ui-text-muted);
+  --grail-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --grail-shadow-active: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --grail-padding: 0.375rem;
+  --grail-gap: 0.5rem;
+  --grail-radius: 0.5rem;
+  --grail-item-min-height: 3.75rem;
+  --grail-item-padding-x: 0.875rem;
+  --grail-item-padding-y: 0.75rem;
+  --grail-item-radius: 0.375rem;
+  --grail-title-size: 0.9375rem;
+  --grail-subtitle-size: 0.8125rem;
+  --grail-meta-size: 0.75rem;
+  --grail-ring: rgba(198, 255, 74, 0.24);
+  --grail-selected-shadow: 0 0 0 1px rgba(198, 255, 74, 0.12) inset;
+
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.grail--full {
+  width: 100%;
+}
+
+.grail__label {
+  margin: 0;
+  font-family: var(--ui-header-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--grail-muted);
+}
+
+.grail__rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--grail-gap);
+  padding: var(--grail-padding);
+  border: 1px solid var(--grail-border);
+  border-radius: var(--grail-radius);
+  background: var(--grail-bg);
+  box-shadow: var(--grail-shadow);
+  min-width: 0;
+}
+
+.grail--start .grail__rail {
+  justify-content: flex-start;
+}
+
+.grail--center .grail__rail {
+  justify-content: center;
+}
+
+.grail--end .grail__rail {
+  justify-content: flex-end;
+}
+
+.grail__item {
+  position: relative;
+  flex: 1 1 8rem;
+  min-width: 0;
+  min-height: var(--grail-item-min-height);
+  padding: var(--grail-item-padding-y) var(--grail-item-padding-x);
+  border: 1px solid var(--grail-border);
+  border-radius: var(--grail-item-radius);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--grail-text);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.grail__item:hover:not(:disabled) {
+  background: var(--grail-bg-hover);
+  border-color: var(--grail-border-hover);
+  transform: translateY(-1px);
+}
+
+.grail__item:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.grail__item:focus-visible {
+  outline: none;
+  background: var(--grail-bg-active);
+  border-color: var(--grail-border-active);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--grail-ring),
+    var(--grail-shadow-active);
+}
+
+.grail__item--selected {
+  background: var(--grail-bg-active);
+  border-color: var(--grail-border-active);
+  box-shadow: var(--grail-selected-shadow), var(--grail-shadow-active);
+}
+
+.grail__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.grail__item-body {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.grail__item-head {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.grail__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.grail__item-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--ui-header-font);
+  font-size: var(--grail-title-size);
+  line-height: 1.15;
+}
+
+.grail__badge {
+  flex: 0 0 auto;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(198, 255, 74, 0.12);
+  color: var(--ui-accent);
+  font-family: var(--ui-technical-font);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.grail__item-meta {
+  font-family: var(--ui-technical-font);
+  font-size: var(--grail-meta-size);
+  line-height: 1.2;
+  color: var(--grail-muted);
+}
+
+.grail__item-subtitle {
+  font-family: var(--ui-body-font);
+  font-size: var(--grail-subtitle-size);
+  line-height: 1.35;
+  color: var(--grail-helper);
+}
+
+.grail__meta-row {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.grail__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--grail-helper);
+}
+
+.grail__helper--error {
+  color: #ffb8b3;
+}
+
+.grail--sm {
+  --grail-item-min-height: 3.25rem;
+  --grail-item-padding-x: 0.75rem;
+  --grail-item-padding-y: 0.625rem;
+  --grail-title-size: 0.875rem;
+  --grail-subtitle-size: 0.75rem;
+}
+
+.grail--lg {
+  --grail-item-min-height: 4.25rem;
+  --grail-item-padding-x: 1rem;
+  --grail-item-padding-y: 0.875rem;
+  --grail-title-size: 1rem;
+  --grail-subtitle-size: 0.875rem;
+}
+
+.grail--surface {
+  --grail-bg: rgba(255, 255, 255, 0.04);
+  --grail-bg-hover: rgba(255, 255, 255, 0.06);
+  --grail-bg-active: rgba(255, 255, 255, 0.08);
+  --grail-border: rgba(255, 255, 255, 0.1);
+  --grail-border-hover: rgba(255, 255, 255, 0.16);
+  --grail-border-active: rgba(198, 255, 74, 0.34);
+}
+
+.grail--accent {
+  --grail-bg: rgba(198, 255, 74, 0.08);
+  --grail-bg-hover: rgba(198, 255, 74, 0.12);
+  --grail-bg-active: rgba(198, 255, 74, 0.14);
+  --grail-border: rgba(198, 255, 74, 0.16);
+  --grail-border-hover: rgba(198, 255, 74, 0.28);
+  --grail-border-active: rgba(198, 255, 74, 0.48);
+  --grail-ring: rgba(198, 255, 74, 0.3);
+}
+
+.grail--danger {
+  --grail-bg: rgba(255, 59, 48, 0.08);
+  --grail-bg-hover: rgba(255, 59, 48, 0.12);
+  --grail-bg-active: rgba(255, 59, 48, 0.14);
+  --grail-border: rgba(255, 59, 48, 0.18);
+  --grail-border-hover: rgba(255, 59, 48, 0.28);
+  --grail-border-active: rgba(255, 59, 48, 0.42);
+  --grail-ring: rgba(255, 59, 48, 0.24);
+}
+
+.grail--warning {
+  --grail-bg: rgba(255, 176, 0, 0.08);
+  --grail-bg-hover: rgba(255, 176, 0, 0.12);
+  --grail-bg-active: rgba(255, 176, 0, 0.14);
+  --grail-border: rgba(255, 176, 0, 0.18);
+  --grail-border-hover: rgba(255, 176, 0, 0.28);
+  --grail-border-active: rgba(255, 176, 0, 0.44);
+  --grail-ring: rgba(255, 176, 0, 0.24);
+}
+
+.grail--purple {
+  --grail-bg: rgba(139, 68, 255, 0.08);
+  --grail-bg-hover: rgba(139, 68, 255, 0.12);
+  --grail-bg-active: rgba(139, 68, 255, 0.14);
+  --grail-border: rgba(139, 68, 255, 0.18);
+  --grail-border-hover: rgba(139, 68, 255, 0.28);
+  --grail-border-active: rgba(139, 68, 255, 0.44);
+  --grail-ring: rgba(139, 68, 255, 0.24);
+}
+
+.grail--ghost {
+  --grail-bg: transparent;
+  --grail-bg-hover: rgba(255, 255, 255, 0.03);
+  --grail-bg-active: rgba(255, 255, 255, 0.05);
+  --grail-border: rgba(255, 255, 255, 0.08);
+  --grail-border-hover: rgba(198, 255, 74, 0.18);
+  --grail-border-active: rgba(198, 255, 74, 0.28);
+  --grail-shadow: none;
+  --grail-shadow-active: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.grail--quiet {
+  --grail-bg: rgba(12, 15, 20, 0.96);
+  --grail-bg-hover: rgba(18, 22, 28, 0.98);
+  --grail-bg-active: rgba(10, 12, 16, 0.98);
+  --grail-border: rgba(198, 255, 74, 0.1);
+  --grail-border-hover: rgba(198, 255, 74, 0.2);
+  --grail-border-active: rgba(198, 255, 74, 0.3);
+  --grail-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --grail-shadow-active: 0 16px 30px rgba(0, 0, 0, 0.42);
+}
+
+.grail--background {
+  --grail-bg: rgba(4, 6, 8, 0.7);
+  --grail-bg-hover: rgba(8, 10, 12, 0.82);
+  --grail-bg-active: rgba(2, 3, 4, 0.88);
+  --grail-border: rgba(198, 255, 74, 0.2);
+  --grail-border-hover: rgba(198, 255, 74, 0.34);
+  --grail-border-active: rgba(198, 255, 74, 0.52);
+  --grail-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --grail-shadow-active: 0 18px 34px rgba(0, 0, 0, 0.48);
+}
+
+.grail--disabled {
+  opacity: 0.72;
+}
+
+.grail--error .grail__rail {
+  border-color: rgba(255, 59, 48, 0.42);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px rgba(255, 59, 48, 0.18),
+    var(--grail-shadow);
+}

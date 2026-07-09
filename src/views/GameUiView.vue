@@ -28,6 +28,7 @@ const powerState = ref<'on' | 'off'>('on')
 const region = ref('eu-west')
 const role = ref('medic')
 const difficulty = ref('standard')
+const graphicsQuality = ref<'low' | 'medium' | 'high' | 'epic' | 'cinematic'>('high')
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -72,6 +73,14 @@ const difficultyOptions = [
   { value: 'standard', label: 'Standard' },
   { value: 'hard', label: 'Hard' },
   { value: 'nightmare', label: 'Nightmare', description: 'Locked behind the scary stories.' },
+] as const
+
+const graphicsQualityOptions = [
+  { value: 'low', title: 'Low', subtitle: 'Best performance', meta: 'Fast' },
+  { value: 'medium', title: 'Medium', subtitle: 'Balanced defaults', meta: 'Stable' },
+  { value: 'high', title: 'High', subtitle: 'Recommended preset', meta: 'Recommended', recommended: true, preset: 'accent' },
+  { value: 'epic', title: 'Epic', subtitle: 'Sharper lighting and textures', meta: 'Heavy', preset: 'purple' },
+  { value: 'cinematic', title: 'Cinematic', subtitle: 'Maximum visual quality', meta: 'Largest load', preset: 'warning' },
 ] as const
 
 const screenTabs = [
@@ -235,6 +244,14 @@ const switchSummary = computed(() => {
 
 const radioSummary = computed(
   () => `Mission ${missionStyle.value} / Feed ${feedStyle.value} / Power ${powerState.value}`,
+)
+
+const graphicsQualityLabel = computed(
+  () => graphicsQualityOptions.find((item) => item.value === graphicsQuality.value)?.title ?? 'Unknown',
+)
+
+const graphicsQualitySummary = computed(
+  () => `Selected quality: ${graphicsQualityLabel.value}.`,
 )
 
 function toggleDisabled(): void {
@@ -913,6 +930,32 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GRail</p>
+              <p class="debug-meta">
+                Direct preset selector for graphics quality, game settings, and other one-choice
+                options.
+              </p>
+            </div>
+          </div>
+
+          <div class="rail-stack">
+            <GRail
+              v-model="graphicsQuality"
+              label="Graphics Quality"
+              helper="One click jumps straight to the preset, with text large enough for first-time users."
+              :items="graphicsQualityOptions"
+              preset="quiet"
+              width="full"
+              background
+            />
+
+            <GText preset="muted" class="rail-status" :text="graphicsQualitySummary" />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GTabs</p>
               <p class="debug-meta">
                 Page switching for menu, lobby, HUD, and pause screens inside the game UI.
@@ -1226,6 +1269,15 @@ function closeModalFromFooter(message: string): void {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.rail-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.rail-status {
+  margin-top: 0;
 }
 
 .textarea-stack {
