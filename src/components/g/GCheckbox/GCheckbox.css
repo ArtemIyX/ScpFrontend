@@ -1,0 +1,217 @@
+.gcheckbox {
+  --gcheckbox-box-bg: rgba(255, 255, 255, 0.05);
+  --gcheckbox-box-border: rgba(255, 255, 255, 0.12);
+  --gcheckbox-box-fill: rgba(198, 255, 74, 0.12);
+  --gcheckbox-mark: var(--ui-accent);
+  --gcheckbox-text: var(--ui-text-main);
+  --gcheckbox-helper: var(--ui-text-muted);
+  --gcheckbox-error: #ffb8b3;
+  --gcheckbox-ring: rgba(198, 255, 74, 0.28);
+  --gcheckbox-gap: 0.75rem;
+  --gcheckbox-size: 1.125rem;
+  --gcheckbox-radius: 0.375rem;
+  --gcheckbox-min-height: 2.5rem;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--gcheckbox-gap);
+  align-items: start;
+  min-width: 0;
+  color: var(--gcheckbox-text);
+}
+
+.gcheckbox--full {
+  width: 100%;
+}
+
+.gcheckbox__control {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--gcheckbox-size);
+  height: var(--gcheckbox-size);
+  margin-top: 0.2rem;
+  flex: 0 0 auto;
+}
+
+.gcheckbox__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.gcheckbox__box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--gcheckbox-size);
+  height: var(--gcheckbox-size);
+  border: 1px solid var(--gcheckbox-box-border);
+  border-radius: var(--gcheckbox-radius);
+  background: var(--gcheckbox-box-bg);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gcheckbox__mark {
+  width: 0.45rem;
+  height: 0.25rem;
+  border-left: 0.125rem solid transparent;
+  border-bottom: 0.125rem solid transparent;
+  transform: rotate(-45deg) translateY(-0.025rem);
+  transition:
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.gcheckbox__content {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  min-height: var(--gcheckbox-min-height);
+  padding-top: 0.1rem;
+}
+
+.gcheckbox__label {
+  margin: 0;
+  color: inherit;
+}
+
+.gcheckbox__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gcheckbox-helper);
+}
+
+.gcheckbox__helper--error {
+  color: var(--gcheckbox-error);
+}
+
+.gcheckbox:hover .gcheckbox__box {
+  transform: translateY(-1px);
+  border-color: rgba(198, 255, 74, 0.24);
+}
+
+.gcheckbox__input:focus-visible + .gcheckbox__box {
+  border-color: var(--gcheckbox-ring);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gcheckbox-ring);
+}
+
+.gcheckbox__input:checked + .gcheckbox__box,
+.gcheckbox__input:indeterminate + .gcheckbox__box {
+  background: var(--gcheckbox-box-fill);
+  border-color: var(--gcheckbox-mark);
+}
+
+.gcheckbox__input:checked + .gcheckbox__box .gcheckbox__mark {
+  width: 0.5rem;
+  height: 0.28rem;
+  border-left-color: var(--gcheckbox-mark);
+  border-bottom-color: var(--gcheckbox-mark);
+}
+
+.gcheckbox__input:indeterminate + .gcheckbox__box .gcheckbox__mark {
+  width: 0.52rem;
+  height: 0.12rem;
+  border: 0;
+  background: var(--gcheckbox-mark);
+  transform: none;
+}
+
+.gcheckbox__input:active + .gcheckbox__box {
+  transform: translateY(1px);
+}
+
+.gcheckbox__input:disabled {
+  cursor: not-allowed;
+}
+
+.gcheckbox--disabled {
+  opacity: 0.68;
+}
+
+.gcheckbox--sm {
+  --gcheckbox-gap: 0.625rem;
+  --gcheckbox-size: 1rem;
+  --gcheckbox-min-height: 2.25rem;
+}
+
+.gcheckbox--md {
+  --gcheckbox-gap: 0.75rem;
+  --gcheckbox-size: 1.125rem;
+  --gcheckbox-min-height: 2.5rem;
+}
+
+.gcheckbox--lg {
+  --gcheckbox-gap: 0.875rem;
+  --gcheckbox-size: 1.25rem;
+  --gcheckbox-min-height: 2.75rem;
+}
+
+.gcheckbox--surface {
+  --gcheckbox-box-bg: rgba(255, 255, 255, 0.05);
+  --gcheckbox-box-border: rgba(255, 255, 255, 0.12);
+  --gcheckbox-box-fill: rgba(198, 255, 74, 0.14);
+}
+
+.gcheckbox--accent {
+  --gcheckbox-box-bg: rgba(198, 255, 74, 0.08);
+  --gcheckbox-box-border: rgba(198, 255, 74, 0.18);
+  --gcheckbox-box-fill: rgba(198, 255, 74, 0.18);
+}
+
+.gcheckbox--danger {
+  --gcheckbox-box-bg: rgba(255, 59, 48, 0.08);
+  --gcheckbox-box-border: rgba(255, 59, 48, 0.18);
+  --gcheckbox-box-fill: rgba(255, 59, 48, 0.18);
+  --gcheckbox-mark: #ff8b82;
+  --gcheckbox-ring: rgba(255, 59, 48, 0.28);
+}
+
+.gcheckbox--warning {
+  --gcheckbox-box-bg: rgba(255, 176, 0, 0.08);
+  --gcheckbox-box-border: rgba(255, 176, 0, 0.18);
+  --gcheckbox-box-fill: rgba(255, 176, 0, 0.18);
+  --gcheckbox-mark: #ffd26b;
+  --gcheckbox-ring: rgba(255, 176, 0, 0.28);
+}
+
+.gcheckbox--purple {
+  --gcheckbox-box-bg: rgba(139, 68, 255, 0.08);
+  --gcheckbox-box-border: rgba(139, 68, 255, 0.18);
+  --gcheckbox-box-fill: rgba(139, 68, 255, 0.18);
+  --gcheckbox-mark: #cfa9ff;
+  --gcheckbox-ring: rgba(139, 68, 255, 0.28);
+}
+
+.gcheckbox--ghost {
+  --gcheckbox-box-bg: rgba(255, 255, 255, 0.03);
+  --gcheckbox-box-border: rgba(255, 255, 255, 0.08);
+  --gcheckbox-box-fill: rgba(236, 240, 244, 0.12);
+  --gcheckbox-mark: rgba(236, 240, 244, 0.82);
+}
+
+.gcheckbox--quiet {
+  --gcheckbox-box-bg: rgba(12, 15, 20, 0.96);
+  --gcheckbox-box-border: rgba(198, 255, 74, 0.1);
+  --gcheckbox-box-fill: rgba(198, 255, 74, 0.12);
+}
+
+.gcheckbox--background {
+  --gcheckbox-box-bg: rgba(4, 6, 8, 0.72);
+  --gcheckbox-box-border: rgba(198, 255, 74, 0.16);
+}
+
+.gcheckbox--error .gcheckbox__box {
+  border-color: rgba(255, 59, 48, 0.38);
+}

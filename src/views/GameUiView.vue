@@ -8,6 +8,10 @@ const clearanceCode = ref('')
 const masterVolume = ref(72)
 const sensitivity = ref(42)
 const threatLevel = ref(18)
+const soundEnabled = ref(true)
+const subtitlesEnabled = ref(true)
+const playerNamesEnabled = ref(false)
+const motionBlurEnabled = ref(false)
 const region = ref('eu-west')
 const role = ref('medic')
 const difficulty = ref('standard')
@@ -193,6 +197,11 @@ const queryStatus = computed(() =>
 const sliderSummary = computed(
   () => `Volume ${masterVolume.value} / Sensitivity ${sensitivity.value} / Threat ${threatLevel.value}`,
 )
+
+const checkboxSummary = computed(() => {
+  const enabledCount = [soundEnabled.value, subtitlesEnabled.value, playerNamesEnabled.value, motionBlurEnabled.value].filter(Boolean).length
+  return `${enabledCount} settings enabled`
+})
 
 function toggleDisabled(): void {
   isActionDisabled.value = !isActionDisabled.value
@@ -481,6 +490,55 @@ function closeModalFromFooter(message: string): void {
           </div>
 
           <GText preset="muted" class="slider-status" :text="sliderSummary" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GCheckbox</p>
+              <p class="debug-meta">
+                Boolean settings for audio, readability, and gameplay convenience.
+              </p>
+            </div>
+          </div>
+
+          <div class="checkbox-stack">
+            <GCheckbox
+              v-model="soundEnabled"
+              label="Sound Enabled"
+              helper="Keeps music, effects, and ambience active."
+              preset="accent"
+              width="full"
+            />
+
+            <GCheckbox
+              v-model="subtitlesEnabled"
+              label="Subtitles"
+              helper="Helps with whispers, system alerts, and mission text."
+              preset="purple"
+              width="full"
+            />
+
+            <GCheckbox
+              v-model="playerNamesEnabled"
+              label="Show Player Names"
+              helper="Useful for HUD tags and 3D overhead labels."
+              preset="ghost"
+              width="full"
+            />
+
+            <GCheckbox
+              v-model="motionBlurEnabled"
+              label="Motion Blur"
+              helper="Disabled in this demo because the setting is locked."
+              error="Locked in the current build."
+              preset="warning"
+              width="full"
+              disabled
+            />
+          </div>
+
+          <GText preset="muted" class="checkbox-status" :text="checkboxSummary" />
         </section>
 
         <section class="font-card ui-panel">
@@ -843,6 +901,15 @@ function closeModalFromFooter(message: string): void {
 }
 
 .slider-status {
+  margin-top: 1rem;
+}
+
+.checkbox-stack {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.checkbox-status {
   margin-top: 1rem;
 }
 

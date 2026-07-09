@@ -3,6 +3,7 @@ import type { App } from 'vue'
 import GButton from './g/GButton/GButton.vue'
 import GBadge from './g/GBadge/GBadge.vue'
 import GCombo from './g/GCombo/GCombo.vue'
+import GCheckbox from './g/GCheckbox/GCheckbox.vue'
 import GInput from './g/GInput/GInput.vue'
 import GSlider from './g/GSlider/GSlider.vue'
 import GToast from './g/GToast/GToast.vue'
@@ -22,6 +23,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gbadge', GBadge)
   app.component('GCombo', GCombo)
   app.component('gcombo', GCombo)
+  app.component('GCheckbox', GCheckbox)
+  app.component('gcheckbox', GCheckbox)
   app.component('GInput', GInput)
   app.component('ginput', GInput)
   app.component('GSlider', GSlider)
