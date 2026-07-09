@@ -1,0 +1,250 @@
+.gchip {
+  --gchip-bg: rgba(12, 15, 20, 0.96);
+  --gchip-bg-hover: rgba(18, 22, 28, 0.98);
+  --gchip-bg-selected: rgba(198, 255, 74, 0.14);
+  --gchip-border: rgba(198, 255, 74, 0.1);
+  --gchip-border-hover: rgba(198, 255, 74, 0.22);
+  --gchip-border-selected: rgba(198, 255, 74, 0.34);
+  --gchip-text: var(--ui-text-main);
+  --gchip-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gchip-radius: 999px;
+  --gchip-gap: 0.45rem;
+  --gchip-padding-x: 0.7rem;
+  --gchip-padding-y: 0.4rem;
+  --gchip-font-size: 0.6875rem;
+  --gchip-ring: rgba(198, 255, 74, 0.28);
+  --gchip-indicator: rgba(198, 255, 74, 0.88);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: var(--gchip-padding-y) var(--gchip-padding-x);
+  border: 1px solid var(--gchip-border);
+  border-radius: var(--gchip-radius);
+  background: var(--gchip-bg);
+  box-shadow: var(--gchip-shadow);
+  color: var(--gchip-text);
+  font-family: var(--ui-technical-font);
+  font-size: var(--gchip-font-size);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.gchip__content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gchip-gap);
+  min-width: 0;
+}
+
+.gchip__indicator {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--gchip-indicator);
+  box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.08);
+  flex: 0 0 auto;
+}
+
+.gchip__text {
+  color: inherit;
+}
+
+.gchip--interactive,
+.gchip--removable {
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gchip--interactive:hover,
+.gchip--removable:hover {
+  background: var(--gchip-bg-hover);
+  border-color: var(--gchip-border-hover);
+  transform: translateY(-1px);
+}
+
+.gchip--interactive:focus-visible,
+.gchip--removable:focus-visible {
+  outline: none;
+  border-color: var(--gchip-ring);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.48),
+    0 0 0 4px var(--gchip-ring);
+}
+
+.gchip--interactive:active,
+.gchip--removable:active {
+  transform: translateY(1px);
+}
+
+.gchip--selected {
+  background: var(--gchip-bg-selected);
+  border-color: var(--gchip-border-selected);
+}
+
+.gchip--disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.gchip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    transform 140ms ease;
+}
+
+.gchip__remove:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.gchip__remove:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--gchip-ring);
+}
+
+.gchip__remove-icon {
+  position: relative;
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+}
+
+.gchip__remove-icon::before,
+.gchip__remove-icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 0.75rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.gchip__remove-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gchip__remove-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.gchip--sm {
+  --gchip-padding-x: 0.6rem;
+  --gchip-padding-y: 0.325rem;
+  --gchip-font-size: 0.625rem;
+  --gchip-gap: 0.3rem;
+}
+
+.gchip--md {
+  --gchip-padding-x: 0.7rem;
+  --gchip-padding-y: 0.4rem;
+  --gchip-font-size: 0.6875rem;
+  --gchip-gap: 0.35rem;
+}
+
+.gchip--lg {
+  --gchip-padding-x: 0.8rem;
+  --gchip-padding-y: 0.45rem;
+  --gchip-font-size: 0.75rem;
+  --gchip-gap: 0.4rem;
+}
+
+.gchip--solid {
+  --gchip-text: #09110a;
+  --gchip-bg: var(--ui-accent);
+  --gchip-bg-hover: #dcff7e;
+  --gchip-border: rgba(198, 255, 74, 0.52);
+  --gchip-border-hover: rgba(198, 255, 74, 0.68);
+  --gchip-border-selected: rgba(198, 255, 74, 0.72);
+  --gchip-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+  --gchip-indicator: rgba(9, 17, 10, 0.72);
+}
+
+.gchip--soft {
+  --gchip-bg: rgba(198, 255, 74, 0.12);
+  --gchip-bg-hover: rgba(198, 255, 74, 0.18);
+  --gchip-border: rgba(198, 255, 74, 0.24);
+  --gchip-text: var(--ui-accent);
+}
+
+.gchip--outline {
+  --gchip-bg: transparent;
+  --gchip-bg-hover: rgba(255, 255, 255, 0.04);
+  --gchip-border: rgba(255, 255, 255, 0.16);
+  --gchip-text: var(--ui-text-main);
+  --gchip-indicator: rgba(236, 240, 244, 0.52);
+}
+
+.gchip--neutral {
+  --gchip-bg: rgba(255, 255, 255, 0.05);
+  --gchip-bg-hover: rgba(255, 255, 255, 0.08);
+  --gchip-border: rgba(255, 255, 255, 0.1);
+}
+
+.gchip--accent {
+  --gchip-bg: rgba(198, 255, 74, 0.12);
+  --gchip-bg-hover: rgba(198, 255, 74, 0.18);
+  --gchip-border: rgba(198, 255, 74, 0.24);
+  --gchip-text: var(--ui-accent);
+}
+
+.gchip--danger {
+  --gchip-bg: rgba(255, 59, 48, 0.12);
+  --gchip-bg-hover: rgba(255, 59, 48, 0.18);
+  --gchip-border: rgba(255, 59, 48, 0.24);
+  --gchip-text: #ffb8b3;
+  --gchip-indicator: rgba(255, 184, 179, 0.9);
+}
+
+.gchip--warning {
+  --gchip-bg: rgba(255, 176, 0, 0.12);
+  --gchip-bg-hover: rgba(255, 176, 0, 0.18);
+  --gchip-border: rgba(255, 176, 0, 0.24);
+  --gchip-text: #ffd26b;
+  --gchip-indicator: rgba(255, 210, 107, 0.9);
+}
+
+.gchip--purple {
+  --gchip-bg: rgba(139, 68, 255, 0.12);
+  --gchip-bg-hover: rgba(139, 68, 255, 0.18);
+  --gchip-border: rgba(139, 68, 255, 0.24);
+  --gchip-text: #dbc4ff;
+  --gchip-indicator: rgba(219, 196, 255, 0.9);
+}
+
+.gchip--ghost {
+  --gchip-bg: transparent;
+  --gchip-bg-hover: rgba(255, 255, 255, 0.03);
+  --gchip-border: rgba(255, 255, 255, 0.08);
+  --gchip-text: rgba(236, 240, 244, 0.72);
+  --gchip-indicator: rgba(236, 240, 244, 0.5);
+}
+
+.gchip--quiet {
+  --gchip-bg: rgba(12, 15, 20, 0.96);
+  --gchip-bg-hover: rgba(18, 22, 28, 0.98);
+  --gchip-border: rgba(198, 255, 74, 0.1);
+  --gchip-text: var(--ui-text-main);
+}

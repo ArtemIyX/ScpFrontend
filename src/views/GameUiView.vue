@@ -48,6 +48,8 @@ const paginationPage = ref(4)
 const paginationCompactPage = ref(2)
 const paginationEvent = ref('No pagination events yet.')
 const paginationPageCount = 12
+const chipSelection = ref('all')
+const chipEvent = ref('No chip events yet.')
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -467,6 +469,15 @@ function onPaginationChange(value: number): void {
 function onCompactPaginationChange(value: number): void {
   paginationCompactPage.value = value
   paginationEvent.value = `Compact pagination moved to page ${value}.`
+}
+
+function onChipSelect(value: string): void {
+  chipSelection.value = value
+  chipEvent.value = `Selected chip: ${value}.`
+}
+
+function onChipRemove(value: string): void {
+  chipEvent.value = `Removed chip: ${value}.`
 }
 </script>
 
@@ -1998,6 +2009,42 @@ function onCompactPaginationChange(value: number): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GChip</p>
+              <p class="debug-meta">
+                Tiny selectable tokens for filters, squad tags, and compact action states.
+              </p>
+            </div>
+          </div>
+
+          <div class="chip-stack">
+            <div class="chip-row">
+              <GChip
+                v-for="value in ['all', 'active', 'offline', 'priority']"
+                :key="value"
+                :preset="value === 'priority' ? 'warning' : 'quiet'"
+                :selected="chipSelection === value"
+                interactive
+                @click="onChipSelect(value)"
+              >
+                {{ value }}
+              </GChip>
+            </div>
+
+            <div class="chip-row">
+              <GChip preset="accent" selected interactive>Selected token</GChip>
+              <GChip preset="purple" variant="outline" removable @remove="onChipRemove('purple tag')">
+                Purple tag
+              </GChip>
+              <GChip preset="danger" variant="soft">Locked</GChip>
+            </div>
+
+            <GText preset="muted" class="chip-event" :text="chipEvent" />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GToast</p>
               <p class="debug-meta">
                 Visual notification card for the future toast system, with header, body, footer,
@@ -2540,6 +2587,21 @@ function onCompactPaginationChange(value: number): void {
 .panel-grid {
   display: grid;
   gap: 1rem;
+}
+
+.chip-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.chip-event {
+  margin-top: 0;
 }
 
 .badge-grid {

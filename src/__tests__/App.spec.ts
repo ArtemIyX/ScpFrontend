@@ -58,6 +58,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('GPagination')
     expect(wrapper.text()).toContain('GPanel')
     expect(wrapper.text()).toContain('GBadge')
+    expect(wrapper.text()).toContain('GChip')
     expect(wrapper.text()).toContain('GToast')
     expect(wrapper.text()).toContain('GWindow')
     expect(wrapper.text()).toContain('GModal')
@@ -101,6 +102,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('Lobby')
     expect(wrapper.text()).toContain('Containment Briefing')
     expect(wrapper.text()).toContain('Ready')
+    expect(wrapper.text()).toContain('Selected token')
     expect(wrapper.text()).toContain('Settings Window')
     expect(wrapper.text()).toContain('Modal')
     expect(wrapper.find('button[disabled]').exists()).toBe(true)
@@ -143,6 +145,7 @@ describe('App', () => {
     expect(wrapper.find('.gpagination').exists()).toBe(true)
     expect(wrapper.find('.gpanel').exists()).toBe(true)
     expect(wrapper.find('.gbadge').exists()).toBe(true)
+    expect(wrapper.find('.gchip').exists()).toBe(true)
     expect(wrapper.find('.gtoast').exists()).toBe(true)
     expect(wrapper.find('.gwindow').exists()).toBe(true)
     expect(wrapper.text()).toContain('Connection stable')
@@ -156,6 +159,14 @@ describe('App', () => {
 
     expect(wrapper.find('.gmodal').exists()).toBe(true)
     expect(wrapper.text()).toContain('Standard Modal')
+
+    const chipButton = wrapper
+      .findAll('button')
+      .find((button) => button.text().includes('active'))
+
+    expect(chipButton).toBeTruthy()
+    await chipButton!.trigger('click')
+    expect(wrapper.text()).toContain('Selected chip: active.')
 
     const nextPageButton = wrapper.find('.gpagination button[aria-label="Next page"]')
     expect(nextPageButton.exists()).toBe(true)
