@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 
 import GButton from './g/GButton/GButton.vue'
+import GInput from './g/GInput/GInput.vue'
 import GScroller from './g/GScroller/GScroller.vue'
 import GText from './g/GText/GText.vue'
 
@@ -9,6 +10,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gtext', GText)
   app.component('GButton', GButton)
   app.component('gbutton', GButton)
+  app.component('GInput', GInput)
+  app.component('ginput', GInput)
   app.component('GScroller', GScroller)
   app.component('gscroller', GScroller)
 }

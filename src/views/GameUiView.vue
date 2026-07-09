@@ -2,6 +2,9 @@
 import { computed, ref } from 'vue'
 
 const isActionDisabled = ref(true)
+const nickname = ref('Operative 17')
+const query = ref('containment log')
+const clearanceCode = ref('')
 
 const presetButtons = [
   { preset: 'surface', label: 'Surface' },
@@ -26,6 +29,11 @@ const shapeButtons = [
 ] as const
 
 const disabledLabel = computed(() => (isActionDisabled.value ? 'Disabled' : 'Enabled'))
+const queryStatus = computed(() =>
+  query.value.trim().length > 0
+    ? 'Search input is active for logs, players, or object names.'
+    : 'Search is empty.',
+)
 
 function toggleDisabled(): void {
   isActionDisabled.value = !isActionDisabled.value
@@ -38,7 +46,7 @@ function toggleDisabled(): void {
       <header class="debug-header ui-panel ui-panel--strong">
         <GText preset="header">Component showcases</GText>
         <GText preset="body">
-          GText and GButton are the main building blocks for the in-game UI surface.
+          GText, GButton, and GInput are the main building blocks for the in-game UI surface.
         </GText>
       </header>
 
@@ -150,8 +158,8 @@ function toggleDisabled(): void {
             Containment Archive / Архив изоляции / Архів ізоляції
           </GText>
           <GText preset="body">
-            Body text stays plain and calm for descriptions, notes, and system messages.
-            Это текст для описаний и заметок. Це текст для описів і нотаток.
+            Body text stays plain and calm for descriptions, notes, and system messages. Это
+            текст для описаний и заметок. Це текст для описів і нотаток.
           </GText>
           <GText preset="caps">Warning / Тревога / Тривога</GText>
           <GText preset="handwrite">
@@ -176,6 +184,65 @@ function toggleDisabled(): void {
             preset="muted"
             text="This component keeps the API small now so buttons and combo boxes can follow the same pattern later."
           />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GInput</p>
+              <p class="debug-meta">
+                Model binding, helper/error states, clear button, and prefix slots for in-game
+                forms.
+              </p>
+            </div>
+          </div>
+
+          <div class="input-stack">
+            <GInput
+              v-model="nickname"
+              label="Nickname"
+              helper="Used for lobby, HUD tags, and 3D overhead names."
+              placeholder="Enter player nickname"
+              preset="surface"
+              width="full"
+              clearable
+            />
+
+            <GInput
+              v-model="query"
+              label="Search logs"
+              helper="Search by object name, room, or local note."
+              placeholder="Search containment log"
+              preset="quiet"
+              width="full"
+              type="search"
+            >
+              <template #prefix>
+                <span class="demo-icon demo-icon--search" aria-hidden="true"></span>
+              </template>
+            </GInput>
+
+            <GInput
+              v-model="clearanceCode"
+              label="Clearance code"
+              error="Access denied. Code must be six digits."
+              placeholder="000000"
+              preset="warning"
+              width="full"
+              inputmode="numeric"
+            />
+
+            <GInput
+              model-value="Read only field"
+              label="Locked field"
+              helper="Disabled inputs can still show state without taking focus."
+              preset="ghost"
+              width="full"
+              disabled
+            />
+          </div>
+
+          <GText preset="muted" class="input-status" :text="queryStatus" />
         </section>
       </GScroller>
     </div>
@@ -204,6 +271,15 @@ function toggleDisabled(): void {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   gap: 0.75rem;
+}
+
+.input-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.input-status {
+  margin-top: 1rem;
 }
 
 .demo-icon {
@@ -238,5 +314,24 @@ function toggleDisabled(): void {
 
 .demo-icon--close::after {
   transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.demo-icon--search {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  border: 0.125rem solid currentColor;
+  border-radius: 50%;
+}
+
+.demo-icon--search::after {
+  content: '';
+  position: absolute;
+  right: -0.25rem;
+  bottom: -0.0625rem;
+  width: 0.375rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform: rotate(45deg);
+  transform-origin: right center;
 }
 </style>

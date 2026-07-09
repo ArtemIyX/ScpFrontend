@@ -1,0 +1,285 @@
+.ginput {
+  --ginput-bg: rgba(255, 255, 255, 0.04);
+  --ginput-bg-hover: rgba(255, 255, 255, 0.06);
+  --ginput-bg-focus: rgba(255, 255, 255, 0.08);
+  --ginput-border: rgba(255, 255, 255, 0.1);
+  --ginput-border-hover: rgba(255, 255, 255, 0.16);
+  --ginput-border-focus: rgba(198, 255, 74, 0.34);
+  --ginput-text: var(--ui-text-main);
+  --ginput-placeholder: rgba(236, 240, 244, 0.42);
+  --ginput-helper: var(--ui-text-muted);
+  --ginput-error-text: #ffb8b3;
+  --ginput-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --ginput-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --ginput-padding-x: 1rem;
+  --ginput-padding-y: 0.75rem;
+  --ginput-min-height: 2.75rem;
+  --ginput-radius: 0.375rem;
+  --ginput-font-size: 0.9375rem;
+  --ginput-gap: 0.625rem;
+  --ginput-label-color: var(--ui-text-muted);
+  --ginput-ring: rgba(198, 255, 74, 0.24);
+
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.ginput--full {
+  width: 100%;
+}
+
+.ginput__label {
+  margin: 0;
+  font-family: var(--ui-header-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ginput-label-color);
+}
+
+.ginput__field {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--ginput-gap);
+  min-height: var(--ginput-min-height);
+  padding: var(--ginput-padding-y) var(--ginput-padding-x);
+  border: 1px solid var(--ginput-border);
+  border-radius: var(--ginput-radius);
+  background: var(--ginput-bg);
+  box-shadow: var(--ginput-shadow);
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    filter 140ms ease;
+  overflow: hidden;
+}
+
+.ginput--clearable .ginput__field {
+  padding-right: calc(var(--ginput-padding-x) + 2.5rem);
+}
+
+.ginput:hover .ginput__field {
+  background: var(--ginput-bg-hover);
+  border-color: var(--ginput-border-hover);
+}
+
+.ginput--focused .ginput__field {
+  background: var(--ginput-bg-focus);
+  border-color: var(--ginput-border-focus);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--ginput-ring),
+    var(--ginput-shadow-focus);
+}
+
+.ginput--disabled,
+.ginput--readonly {
+  opacity: 0.72;
+}
+
+.ginput--error .ginput__field {
+  border-color: rgba(255, 59, 48, 0.42);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px rgba(255, 59, 48, 0.18),
+    var(--ginput-shadow);
+}
+
+.ginput__prefix,
+.ginput__suffix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: rgba(236, 240, 244, 0.72);
+}
+
+.ginput__input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ginput-text);
+  font-family: var(--ui-body-font);
+  font-size: var(--ginput-font-size);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  caret-color: var(--ui-accent);
+}
+
+.ginput__input[type='search']::-webkit-search-cancel-button,
+.ginput__input[type='search']::-webkit-search-decoration,
+.ginput__input[type='search']::-webkit-search-results-button,
+.ginput__input[type='search']::-webkit-search-results-decoration {
+  appearance: none;
+}
+
+.ginput__input[type='search'] {
+  appearance: textfield;
+}
+
+.ginput__input::placeholder {
+  color: var(--ginput-placeholder);
+}
+
+.ginput__input:disabled {
+  cursor: not-allowed;
+}
+
+.ginput__clear {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--ginput-padding-x) - 0.125rem);
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.3125rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ui-text-main);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+
+.ginput__clear:hover {
+  border-color: rgba(198, 255, 74, 0.24);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.ginput__clear:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+.ginput__meta {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ginput__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--ginput-helper);
+}
+
+.ginput__helper--error {
+  color: var(--ginput-error-text);
+}
+
+.ginput--sm {
+  --ginput-padding-x: 0.875rem;
+  --ginput-padding-y: 0.625rem;
+  --ginput-min-height: 2.25rem;
+  --ginput-font-size: 0.875rem;
+  --ginput-radius: 0.3125rem;
+}
+
+.ginput--md {
+  --ginput-padding-x: 1rem;
+  --ginput-padding-y: 0.75rem;
+  --ginput-min-height: 2.75rem;
+  --ginput-font-size: 0.9375rem;
+  --ginput-radius: 0.375rem;
+}
+
+.ginput--lg {
+  --ginput-padding-x: 1.125rem;
+  --ginput-padding-y: 0.875rem;
+  --ginput-min-height: 3.25rem;
+  --ginput-font-size: 1rem;
+  --ginput-radius: 0.4375rem;
+}
+
+.ginput--surface {
+  --ginput-bg: rgba(255, 255, 255, 0.04);
+  --ginput-bg-hover: rgba(255, 255, 255, 0.06);
+  --ginput-bg-focus: rgba(255, 255, 255, 0.08);
+  --ginput-border: rgba(255, 255, 255, 0.1);
+  --ginput-border-hover: rgba(255, 255, 255, 0.16);
+  --ginput-border-focus: rgba(198, 255, 74, 0.34);
+}
+
+.ginput--accent {
+  --ginput-bg: rgba(198, 255, 74, 0.08);
+  --ginput-bg-hover: rgba(198, 255, 74, 0.12);
+  --ginput-bg-focus: rgba(198, 255, 74, 0.14);
+  --ginput-border: rgba(198, 255, 74, 0.16);
+  --ginput-border-hover: rgba(198, 255, 74, 0.28);
+  --ginput-border-focus: rgba(198, 255, 74, 0.48);
+  --ginput-ring: rgba(198, 255, 74, 0.3);
+}
+
+.ginput--danger {
+  --ginput-bg: rgba(255, 59, 48, 0.08);
+  --ginput-bg-hover: rgba(255, 59, 48, 0.12);
+  --ginput-bg-focus: rgba(255, 59, 48, 0.14);
+  --ginput-border: rgba(255, 59, 48, 0.18);
+  --ginput-border-hover: rgba(255, 59, 48, 0.28);
+  --ginput-border-focus: rgba(255, 59, 48, 0.42);
+  --ginput-ring: rgba(255, 59, 48, 0.26);
+}
+
+.ginput--warning {
+  --ginput-bg: rgba(255, 176, 0, 0.08);
+  --ginput-bg-hover: rgba(255, 176, 0, 0.12);
+  --ginput-bg-focus: rgba(255, 176, 0, 0.14);
+  --ginput-border: rgba(255, 176, 0, 0.18);
+  --ginput-border-hover: rgba(255, 176, 0, 0.28);
+  --ginput-border-focus: rgba(255, 176, 0, 0.44);
+  --ginput-ring: rgba(255, 176, 0, 0.24);
+}
+
+.ginput--purple {
+  --ginput-bg: rgba(139, 68, 255, 0.08);
+  --ginput-bg-hover: rgba(139, 68, 255, 0.12);
+  --ginput-bg-focus: rgba(139, 68, 255, 0.14);
+  --ginput-border: rgba(139, 68, 255, 0.18);
+  --ginput-border-hover: rgba(139, 68, 255, 0.28);
+  --ginput-border-focus: rgba(139, 68, 255, 0.44);
+  --ginput-ring: rgba(139, 68, 255, 0.24);
+}
+
+.ginput--ghost {
+  --ginput-bg: transparent;
+  --ginput-bg-hover: rgba(255, 255, 255, 0.03);
+  --ginput-bg-focus: rgba(255, 255, 255, 0.05);
+  --ginput-border: rgba(255, 255, 255, 0.08);
+  --ginput-border-hover: rgba(198, 255, 74, 0.18);
+  --ginput-border-focus: rgba(198, 255, 74, 0.28);
+  --ginput-shadow: none;
+  --ginput-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.ginput--quiet {
+  --ginput-bg: rgba(12, 15, 20, 0.96);
+  --ginput-bg-hover: rgba(18, 22, 28, 0.98);
+  --ginput-bg-focus: rgba(10, 12, 16, 0.98);
+  --ginput-border: rgba(198, 255, 74, 0.1);
+  --ginput-border-hover: rgba(198, 255, 74, 0.2);
+  --ginput-border-focus: rgba(198, 255, 74, 0.3);
+  --ginput-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --ginput-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+}
+
+.ginput--background {
+  --ginput-bg: rgba(4, 6, 8, 0.7);
+  --ginput-bg-hover: rgba(8, 10, 12, 0.82);
+  --ginput-bg-focus: rgba(2, 3, 4, 0.88);
+  --ginput-border: rgba(198, 255, 74, 0.2);
+  --ginput-border-hover: rgba(198, 255, 74, 0.34);
+  --ginput-border-focus: rgba(198, 255, 74, 0.52);
+  --ginput-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --ginput-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+}
