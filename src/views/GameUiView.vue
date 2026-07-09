@@ -781,6 +781,68 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GCard</p>
+              <p class="debug-meta">
+                General-purpose card block for inventory, logs, squad entries, and feature panels.
+              </p>
+            </div>
+          </div>
+
+          <div class="card-grid">
+            <GCard
+              title="Player Card"
+              subtitle="Operative 17"
+              meta="Online"
+              preset="quiet"
+              width="full"
+              strong
+            >
+              <template #media>
+                <div class="card-media card-media--player"></div>
+              </template>
+
+              <GText preset="body">
+                Current role is Medic. The card can hold portrait media, summary text, and action
+                buttons.
+              </GText>
+
+              <template #footer>
+                <GButton preset="accent">Inspect</GButton>
+                <GButton preset="ghost">Mute</GButton>
+              </template>
+            </GCard>
+
+            <GCard
+              title="Mission Log"
+              subtitle="Containment breach route"
+              meta="Updated 12s ago"
+              preset="surface"
+              width="full"
+            >
+              <GText preset="body">
+                The north corridor stayed clear, but the east junction needs another sweep before
+                the squad moves forward.
+              </GText>
+            </GCard>
+
+            <GCard
+              title="Inventory"
+              subtitle="Quick access slots"
+              meta="3 items equipped"
+              preset="purple"
+              width="full"
+            >
+              <div class="card-stat-row">
+                <GTile label="Keycard" value="Level 4" subtitle="Access tier" preset="accent" />
+                <GTile label="Medkit" value="2" subtitle="Remaining" preset="warning" />
+              </div>
+            </GCard>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GCheckbox</p>
               <p class="debug-meta">
                 Boolean settings for audio, readability, and gameplay convenience.
@@ -1461,6 +1523,33 @@ function closeModalFromFooter(message: string): void {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   gap: 0.875rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.875rem;
+}
+
+.card-media {
+  min-height: 8rem;
+  border-radius: 0.3125rem;
+  background:
+    linear-gradient(180deg, rgba(198, 255, 74, 0.16), rgba(0, 0, 0, 0)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-media--player {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(198, 255, 74, 0.24), transparent 35%),
+    linear-gradient(180deg, rgba(18, 24, 20, 0.9), rgba(6, 8, 10, 0.96));
+}
+
+.card-stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
 }
 
 .checkbox-stack {

@@ -11,15 +11,33 @@
   --gtile-padding-y: 0.875rem;
   --gtile-gap: 0.625rem;
   --gtile-icon-size: 1.75rem;
+  --gtile-accent: rgba(198, 255, 74, 0.34);
+  --gtile-accent-soft: rgba(198, 255, 74, 0.08);
 
+  position: relative;
+  overflow: hidden;
   display: grid;
   gap: var(--gtile-gap);
   min-width: 0;
   padding: var(--gtile-padding-y) var(--gtile-padding-x);
   border: 1px solid var(--gtile-border);
   border-radius: var(--gtile-radius);
-  background: var(--gtile-bg);
-  box-shadow: var(--gtile-shadow);
+  background:
+    linear-gradient(180deg, var(--gtile-accent-soft), rgba(255, 255, 255, 0) 36%),
+    var(--gtile-bg);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.18) inset,
+    var(--gtile-shadow);
+}
+
+.gtile::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 0.1875rem;
+  background: linear-gradient(90deg, transparent, var(--gtile-accent), transparent);
+  opacity: 0.88;
+  pointer-events: none;
 }
 
 .gtile--full {
@@ -48,9 +66,9 @@
   flex: 0 0 auto;
   width: var(--gtile-icon-size);
   height: var(--gtile-icon-size);
-  border: 1px solid rgba(198, 255, 74, 0.18);
+  border: 1px solid rgba(198, 255, 74, 0.28);
   border-radius: 0.3125rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(198, 255, 74, 0.1);
   color: var(--ui-accent);
 }
 
@@ -109,38 +127,48 @@
 }
 
 .gtile--surface {
-  --gtile-bg: rgba(255, 255, 255, 0.04);
-  --gtile-bg-hover: rgba(255, 255, 255, 0.06);
-  --gtile-border: rgba(255, 255, 255, 0.1);
-  --gtile-border-hover: rgba(255, 255, 255, 0.16);
+  --gtile-bg: rgba(255, 255, 255, 0.08);
+  --gtile-bg-hover: rgba(255, 255, 255, 0.1);
+  --gtile-border: rgba(255, 255, 255, 0.16);
+  --gtile-border-hover: rgba(255, 255, 255, 0.22);
+  --gtile-accent: rgba(236, 240, 244, 0.18);
+  --gtile-accent-soft: rgba(236, 240, 244, 0.05);
 }
 
 .gtile--accent {
-  --gtile-bg: rgba(198, 255, 74, 0.08);
-  --gtile-bg-hover: rgba(198, 255, 74, 0.12);
-  --gtile-border: rgba(198, 255, 74, 0.16);
-  --gtile-border-hover: rgba(198, 255, 74, 0.28);
+  --gtile-bg: rgba(198, 255, 74, 0.16);
+  --gtile-bg-hover: rgba(198, 255, 74, 0.2);
+  --gtile-border: rgba(198, 255, 74, 0.32);
+  --gtile-border-hover: rgba(198, 255, 74, 0.42);
+  --gtile-accent: rgba(198, 255, 74, 0.8);
+  --gtile-accent-soft: rgba(198, 255, 74, 0.18);
 }
 
 .gtile--danger {
-  --gtile-bg: rgba(255, 59, 48, 0.08);
-  --gtile-bg-hover: rgba(255, 59, 48, 0.12);
-  --gtile-border: rgba(255, 59, 48, 0.18);
-  --gtile-border-hover: rgba(255, 59, 48, 0.28);
+  --gtile-bg: rgba(255, 59, 48, 0.16);
+  --gtile-bg-hover: rgba(255, 59, 48, 0.2);
+  --gtile-border: rgba(255, 59, 48, 0.34);
+  --gtile-border-hover: rgba(255, 59, 48, 0.44);
+  --gtile-accent: rgba(255, 144, 136, 0.84);
+  --gtile-accent-soft: rgba(255, 59, 48, 0.18);
 }
 
 .gtile--warning {
-  --gtile-bg: rgba(255, 176, 0, 0.08);
-  --gtile-bg-hover: rgba(255, 176, 0, 0.12);
-  --gtile-border: rgba(255, 176, 0, 0.18);
-  --gtile-border-hover: rgba(255, 176, 0, 0.28);
+  --gtile-bg: rgba(255, 176, 0, 0.16);
+  --gtile-bg-hover: rgba(255, 176, 0, 0.2);
+  --gtile-border: rgba(255, 176, 0, 0.34);
+  --gtile-border-hover: rgba(255, 176, 0, 0.44);
+  --gtile-accent: rgba(255, 210, 107, 0.84);
+  --gtile-accent-soft: rgba(255, 176, 0, 0.18);
 }
 
 .gtile--purple {
-  --gtile-bg: rgba(139, 68, 255, 0.08);
-  --gtile-bg-hover: rgba(139, 68, 255, 0.12);
-  --gtile-border: rgba(139, 68, 255, 0.18);
-  --gtile-border-hover: rgba(139, 68, 255, 0.28);
+  --gtile-bg: rgba(139, 68, 255, 0.16);
+  --gtile-bg-hover: rgba(139, 68, 255, 0.2);
+  --gtile-border: rgba(139, 68, 255, 0.34);
+  --gtile-border-hover: rgba(139, 68, 255, 0.44);
+  --gtile-accent: rgba(219, 196, 255, 0.86);
+  --gtile-accent-soft: rgba(139, 68, 255, 0.18);
 }
 
 .gtile--ghost {
@@ -149,12 +177,16 @@
   --gtile-border: rgba(255, 255, 255, 0.08);
   --gtile-border-hover: rgba(198, 255, 74, 0.18);
   --gtile-shadow: none;
+  --gtile-accent: rgba(236, 240, 244, 0.12);
+  --gtile-accent-soft: rgba(255, 255, 255, 0.02);
 }
 
 .gtile--quiet {
-  --gtile-bg: rgba(12, 15, 20, 0.96);
-  --gtile-bg-hover: rgba(18, 22, 28, 0.98);
-  --gtile-border: rgba(198, 255, 74, 0.1);
-  --gtile-border-hover: rgba(198, 255, 74, 0.2);
-  --gtile-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --gtile-bg: rgba(12, 15, 20, 0.98);
+  --gtile-bg-hover: rgba(18, 22, 28, 0.99);
+  --gtile-border: rgba(198, 255, 74, 0.18);
+  --gtile-border-hover: rgba(198, 255, 74, 0.28);
+  --gtile-shadow: 0 12px 26px rgba(0, 0, 0, 0.36);
+  --gtile-accent: rgba(198, 255, 74, 0.58);
+  --gtile-accent-soft: rgba(198, 255, 74, 0.08);
 }

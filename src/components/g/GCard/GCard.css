@@ -1,0 +1,155 @@
+.gcard {
+  --gcard-padding: 1rem;
+  --gcard-gap: 0.875rem;
+  --gcard-radius: 0.375rem;
+  --gcard-accent: rgba(198, 255, 74, 0.34);
+  --gcard-accent-soft: rgba(198, 255, 74, 0.1);
+
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: var(--gcard-gap);
+  min-width: 0;
+  padding: var(--gcard-padding);
+  border: 1px solid var(--gcard-border, rgba(255, 255, 255, 0.14));
+  background:
+    linear-gradient(180deg, var(--gcard-accent-soft), rgba(255, 255, 255, 0) 34%),
+    var(--gcard-bg, rgba(255, 255, 255, 0.06));
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.22) inset,
+    0 12px 26px rgba(0, 0, 0, 0.32);
+}
+
+.gcard::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 0.1875rem;
+  background: linear-gradient(90deg, transparent, var(--gcard-accent), transparent);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.gcard--full {
+  width: 100%;
+}
+
+.gcard__header,
+.gcard__media,
+.gcard__body,
+.gcard__footer {
+  min-width: 0;
+}
+
+.gcard__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.gcard__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.gcard__title,
+.gcard__subtitle,
+.gcard__meta {
+  margin: 0;
+  min-width: 0;
+}
+
+.gcard__body {
+  min-width: 0;
+}
+
+.gcard__media {
+  overflow: hidden;
+  border-radius: 0.3125rem;
+}
+
+.gcard__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.gcard--sm {
+  --gcard-padding: 0.75rem;
+  --gcard-gap: 0.625rem;
+}
+
+.gcard--md {
+  --gcard-padding: 1rem;
+  --gcard-gap: 0.875rem;
+}
+
+.gcard--lg {
+  --gcard-padding: 1.25rem;
+  --gcard-gap: 1rem;
+}
+
+.gcard--strong {
+  --gcard-bg: rgba(14, 18, 16, 0.96);
+  --gcard-border: rgba(198, 255, 74, 0.22);
+  --gcard-accent-soft: rgba(198, 255, 74, 0.14);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.3) inset,
+    0 14px 30px rgba(0, 0, 0, 0.38);
+}
+
+.gcard--surface {
+  --gcard-bg: rgba(255, 255, 255, 0.06);
+  --gcard-border: rgba(255, 255, 255, 0.14);
+  --gcard-accent: rgba(236, 240, 244, 0.18);
+  --gcard-accent-soft: rgba(236, 240, 244, 0.06);
+}
+
+.gcard--accent {
+  --gcard-bg: rgba(198, 255, 74, 0.14);
+  --gcard-border: rgba(198, 255, 74, 0.32);
+  --gcard-accent: rgba(198, 255, 74, 0.8);
+  --gcard-accent-soft: rgba(198, 255, 74, 0.18);
+}
+
+.gcard--danger {
+  --gcard-bg: rgba(255, 59, 48, 0.14);
+  --gcard-border: rgba(255, 59, 48, 0.34);
+  --gcard-accent: rgba(255, 144, 136, 0.88);
+  --gcard-accent-soft: rgba(255, 59, 48, 0.16);
+}
+
+.gcard--warning {
+  --gcard-bg: rgba(255, 176, 0, 0.14);
+  --gcard-border: rgba(255, 176, 0, 0.34);
+  --gcard-accent: rgba(255, 210, 107, 0.88);
+  --gcard-accent-soft: rgba(255, 176, 0, 0.16);
+}
+
+.gcard--purple {
+  --gcard-bg: rgba(139, 68, 255, 0.14);
+  --gcard-border: rgba(139, 68, 255, 0.34);
+  --gcard-accent: rgba(219, 196, 255, 0.9);
+  --gcard-accent-soft: rgba(139, 68, 255, 0.16);
+}
+
+.gcard--ghost {
+  --gcard-bg: transparent;
+  --gcard-border: rgba(255, 255, 255, 0.1);
+  --gcard-accent: rgba(236, 240, 244, 0.12);
+  --gcard-accent-soft: rgba(255, 255, 255, 0.02);
+  box-shadow: none;
+}
+
+.gcard--quiet {
+  --gcard-bg: rgba(10, 13, 17, 0.98);
+  --gcard-border: rgba(198, 255, 74, 0.18);
+  --gcard-accent: rgba(198, 255, 74, 0.55);
+  --gcard-accent-soft: rgba(198, 255, 74, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.34) inset,
+    0 16px 32px rgba(0, 0, 0, 0.4);
+}
