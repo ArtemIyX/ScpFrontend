@@ -1,0 +1,268 @@
+.gkeybindinput {
+  --gkeybindinput-bg: rgba(255, 255, 255, 0.04);
+  --gkeybindinput-bg-hover: rgba(255, 255, 255, 0.06);
+  --gkeybindinput-bg-focus: rgba(255, 255, 255, 0.08);
+  --gkeybindinput-border: rgba(255, 255, 255, 0.1);
+  --gkeybindinput-border-hover: rgba(255, 255, 255, 0.16);
+  --gkeybindinput-border-focus: rgba(198, 255, 74, 0.34);
+  --gkeybindinput-text: var(--ui-text-main);
+  --gkeybindinput-placeholder: rgba(236, 240, 244, 0.42);
+  --gkeybindinput-helper: var(--ui-text-muted);
+  --gkeybindinput-error-text: #ffb8b3;
+  --gkeybindinput-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gkeybindinput-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gkeybindinput-padding-x: 1rem;
+  --gkeybindinput-padding-y: 0.75rem;
+  --gkeybindinput-min-height: 2.75rem;
+  --gkeybindinput-radius: 0.375rem;
+  --gkeybindinput-label-color: var(--ui-text-muted);
+  --gkeybindinput-ring: rgba(198, 255, 74, 0.24);
+  --gkeybindinput-chip-bg: rgba(255, 255, 255, 0.03);
+  --gkeybindinput-chip-border: rgba(255, 255, 255, 0.08);
+  --gkeybindinput-chip-hover: rgba(255, 255, 255, 0.06);
+
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.gkeybindinput--full {
+  width: 100%;
+}
+
+.gkeybindinput__label {
+  margin: 0;
+  font-family: var(--ui-header-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gkeybindinput-label-color);
+}
+
+.gkeybindinput__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--gkeybindinput-min-height);
+  padding: var(--gkeybindinput-padding-y) var(--gkeybindinput-padding-x);
+  border: 1px solid var(--gkeybindinput-border);
+  border-radius: var(--gkeybindinput-radius);
+  background: var(--gkeybindinput-bg);
+  box-shadow: var(--gkeybindinput-shadow);
+  color: var(--gkeybindinput-text);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gkeybindinput:hover .gkeybindinput__trigger {
+  background: var(--gkeybindinput-bg-hover);
+  border-color: var(--gkeybindinput-border-hover);
+}
+
+.gkeybindinput__trigger:focus-visible {
+  outline: none;
+  background: var(--gkeybindinput-bg-focus);
+  border-color: var(--gkeybindinput-border-focus);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gkeybindinput-ring),
+    var(--gkeybindinput-shadow-focus);
+}
+
+.gkeybindinput--capturing .gkeybindinput__trigger {
+  background: var(--gkeybindinput-bg-focus);
+  border-color: var(--gkeybindinput-border-focus);
+}
+
+.gkeybindinput--disabled,
+.gkeybindinput--readonly {
+  opacity: 0.72;
+}
+
+.gkeybindinput__value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--ui-technical-font);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
+.gkeybindinput__value--placeholder {
+  color: var(--gkeybindinput-placeholder);
+}
+
+.gkeybindinput__state {
+  flex: 0 0 auto;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid var(--gkeybindinput-chip-border);
+  border-radius: 999px;
+  background: var(--gkeybindinput-chip-bg);
+  color: var(--ui-text-muted);
+  font-family: var(--ui-technical-font);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gkeybindinput--capturing .gkeybindinput__state {
+  color: var(--ui-accent);
+  border-color: rgba(198, 255, 74, 0.24);
+}
+
+.gkeybindinput__meta {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.gkeybindinput__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gkeybindinput-helper);
+}
+
+.gkeybindinput__helper--error {
+  color: var(--gkeybindinput-error-text);
+}
+
+.gkeybindinput__actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.gkeybindinput__clear {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.3125rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ui-text-main);
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+
+.gkeybindinput__clear:hover:not(:disabled) {
+  border-color: rgba(198, 255, 74, 0.24);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.gkeybindinput__clear:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.gkeybindinput--sm {
+  --gkeybindinput-padding-x: 0.875rem;
+  --gkeybindinput-padding-y: 0.625rem;
+  --gkeybindinput-min-height: 2.25rem;
+}
+
+.gkeybindinput--md {
+  --gkeybindinput-padding-x: 1rem;
+  --gkeybindinput-padding-y: 0.75rem;
+  --gkeybindinput-min-height: 2.75rem;
+}
+
+.gkeybindinput--lg {
+  --gkeybindinput-padding-x: 1.125rem;
+  --gkeybindinput-padding-y: 0.875rem;
+  --gkeybindinput-min-height: 3.25rem;
+}
+
+.gkeybindinput--surface {
+  --gkeybindinput-bg: rgba(255, 255, 255, 0.04);
+  --gkeybindinput-bg-hover: rgba(255, 255, 255, 0.06);
+  --gkeybindinput-bg-focus: rgba(255, 255, 255, 0.08);
+  --gkeybindinput-border: rgba(255, 255, 255, 0.1);
+  --gkeybindinput-border-hover: rgba(255, 255, 255, 0.16);
+  --gkeybindinput-border-focus: rgba(198, 255, 74, 0.34);
+}
+
+.gkeybindinput--accent {
+  --gkeybindinput-bg: rgba(198, 255, 74, 0.08);
+  --gkeybindinput-bg-hover: rgba(198, 255, 74, 0.12);
+  --gkeybindinput-bg-focus: rgba(198, 255, 74, 0.14);
+  --gkeybindinput-border: rgba(198, 255, 74, 0.16);
+  --gkeybindinput-border-hover: rgba(198, 255, 74, 0.28);
+  --gkeybindinput-border-focus: rgba(198, 255, 74, 0.48);
+  --gkeybindinput-ring: rgba(198, 255, 74, 0.3);
+}
+
+.gkeybindinput--danger {
+  --gkeybindinput-bg: rgba(255, 59, 48, 0.08);
+  --gkeybindinput-bg-hover: rgba(255, 59, 48, 0.12);
+  --gkeybindinput-bg-focus: rgba(255, 59, 48, 0.14);
+  --gkeybindinput-border: rgba(255, 59, 48, 0.18);
+  --gkeybindinput-border-hover: rgba(255, 59, 48, 0.28);
+  --gkeybindinput-border-focus: rgba(255, 59, 48, 0.42);
+  --gkeybindinput-ring: rgba(255, 59, 48, 0.26);
+}
+
+.gkeybindinput--warning {
+  --gkeybindinput-bg: rgba(255, 176, 0, 0.08);
+  --gkeybindinput-bg-hover: rgba(255, 176, 0, 0.12);
+  --gkeybindinput-bg-focus: rgba(255, 176, 0, 0.14);
+  --gkeybindinput-border: rgba(255, 176, 0, 0.18);
+  --gkeybindinput-border-hover: rgba(255, 176, 0, 0.28);
+  --gkeybindinput-border-focus: rgba(255, 176, 0, 0.44);
+  --gkeybindinput-ring: rgba(255, 176, 0, 0.24);
+}
+
+.gkeybindinput--purple {
+  --gkeybindinput-bg: rgba(139, 68, 255, 0.08);
+  --gkeybindinput-bg-hover: rgba(139, 68, 255, 0.12);
+  --gkeybindinput-bg-focus: rgba(139, 68, 255, 0.14);
+  --gkeybindinput-border: rgba(139, 68, 255, 0.18);
+  --gkeybindinput-border-hover: rgba(139, 68, 255, 0.28);
+  --gkeybindinput-border-focus: rgba(139, 68, 255, 0.44);
+  --gkeybindinput-ring: rgba(139, 68, 255, 0.24);
+}
+
+.gkeybindinput--ghost {
+  --gkeybindinput-bg: transparent;
+  --gkeybindinput-bg-hover: rgba(255, 255, 255, 0.03);
+  --gkeybindinput-bg-focus: rgba(255, 255, 255, 0.05);
+  --gkeybindinput-border: rgba(255, 255, 255, 0.08);
+  --gkeybindinput-border-hover: rgba(198, 255, 74, 0.18);
+  --gkeybindinput-border-focus: rgba(198, 255, 74, 0.28);
+  --gkeybindinput-shadow: none;
+  --gkeybindinput-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.gkeybindinput--quiet {
+  --gkeybindinput-bg: rgba(12, 15, 20, 0.96);
+  --gkeybindinput-bg-hover: rgba(18, 22, 28, 0.98);
+  --gkeybindinput-bg-focus: rgba(10, 12, 16, 0.98);
+  --gkeybindinput-border: rgba(198, 255, 74, 0.1);
+  --gkeybindinput-border-hover: rgba(198, 255, 74, 0.2);
+  --gkeybindinput-border-focus: rgba(198, 255, 74, 0.3);
+  --gkeybindinput-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --gkeybindinput-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+}
+
+.gkeybindinput--background {
+  --gkeybindinput-bg: rgba(4, 6, 8, 0.7);
+  --gkeybindinput-bg-hover: rgba(8, 10, 12, 0.82);
+  --gkeybindinput-bg-focus: rgba(2, 3, 4, 0.88);
+  --gkeybindinput-border: rgba(198, 255, 74, 0.2);
+  --gkeybindinput-border-hover: rgba(198, 255, 74, 0.34);
+  --gkeybindinput-border-focus: rgba(198, 255, 74, 0.52);
+  --gkeybindinput-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --gkeybindinput-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+}

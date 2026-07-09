@@ -15,6 +15,8 @@ const progressScan = ref(31)
 const progressRing = ref(88)
 const itemCount = ref(12)
 const splitAmount = ref(2.5)
+const interactKeybind = ref('E')
+const chatKeybind = ref('Ctrl+K')
 const soundEnabled = ref(true)
 const subtitlesEnabled = ref(true)
 const playerNamesEnabled = ref(false)
@@ -697,6 +699,37 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GKeybindInput</p>
+              <p class="debug-meta">
+                Click to listen for a key combo, then press the binding you want to store.
+              </p>
+            </div>
+          </div>
+
+          <div class="keybind-stack">
+            <GKeybindInput
+              v-model="interactKeybind"
+              label="Interact"
+              helper="Simple single-key bind for doors, items, and prompts."
+              preset="surface"
+              width="full"
+              clearable
+            />
+
+            <GKeybindInput
+              v-model="chatKeybind"
+              label="Push to Talk"
+              helper="Modifier combo for voice communication."
+              preset="purple"
+              width="full"
+              clearable
+            />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GCheckbox</p>
               <p class="debug-meta">
                 Boolean settings for audio, readability, and gameplay convenience.
@@ -1366,6 +1399,11 @@ function closeModalFromFooter(message: string): void {
 
 .number-status {
   margin-top: 1rem;
+}
+
+.keybind-stack {
+  display: grid;
+  gap: 1rem;
 }
 
 .checkbox-stack {

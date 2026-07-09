@@ -7,6 +7,7 @@ import GField from './g/GField/GField.vue'
 import GSection from './g/GSection/GSection.vue'
 import GDivider from './g/GDivider/GDivider.vue'
 import GTooltip from './g/GTooltip/GTooltip.vue'
+import GKeybindInput from './g/GKeybindInput/GKeybindInput.vue'
 import GRail from './g/GRail/GRail.vue'
 import GCombo from './g/GCombo/GCombo.vue'
 import GCheckbox from './g/GCheckbox/GCheckbox.vue'
@@ -42,6 +43,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gdivider', GDivider)
   app.component('GTooltip', GTooltip)
   app.component('gtooltip', GTooltip)
+  app.component('GKeybindInput', GKeybindInput)
+  app.component('gkeybindinput', GKeybindInput)
   app.component('GRail', GRail)
   app.component('grail', GRail)
   app.component('GCombo', GCombo)
