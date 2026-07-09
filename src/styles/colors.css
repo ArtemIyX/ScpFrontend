@@ -1,0 +1,133 @@
+:root {
+  --ui-black: #000000;
+  --ui-white: #ffffff;
+
+  --ui-neutral-0: #050607;
+  --ui-neutral-50: #0a0d10;
+  --ui-neutral-100: #101419;
+  --ui-neutral-200: #171c22;
+  --ui-neutral-300: #202730;
+  --ui-neutral-400: #2d3641;
+  --ui-neutral-500: #3d4956;
+  --ui-neutral-600: #536170;
+  --ui-neutral-700: #6a7887;
+  --ui-neutral-800: #8f9aA7;
+  --ui-neutral-900: #c0c7cf;
+  --ui-neutral-950: #e7eaee;
+
+  --ui-surface-0: rgba(5, 6, 7, 0.0);
+  --ui-surface-1: rgba(10, 13, 16, 0.45);
+  --ui-surface-2: rgba(16, 20, 25, 0.68);
+  --ui-surface-3: rgba(23, 28, 34, 0.84);
+  --ui-surface-4: rgba(32, 39, 48, 0.96);
+
+  --ui-accent-lime-50: #f4ffd6;
+  --ui-accent-lime-100: #e4ff9f;
+  --ui-accent-lime-200: #d4ff68;
+  --ui-accent-lime-300: #c6ff4a;
+  --ui-accent-lime-400: #a8ea2c;
+  --ui-accent-lime-500: #84c91d;
+  --ui-accent-lime-600: #5f9d17;
+  --ui-accent-lime-700: #477614;
+  --ui-accent-lime-800: #355712;
+  --ui-accent-lime-900: #233710;
+
+  --ui-accent-cyan-50: #dcfbff;
+  --ui-accent-cyan-100: #b3f5ff;
+  --ui-accent-cyan-200: #78ebff;
+  --ui-accent-cyan-300: #2bdcff;
+  --ui-accent-cyan-400: #00c4eb;
+  --ui-accent-cyan-500: #0097bf;
+  --ui-accent-cyan-600: #0f7391;
+  --ui-accent-cyan-700: #14566f;
+  --ui-accent-cyan-800: #153e52;
+  --ui-accent-cyan-900: #122a37;
+
+  --ui-accent-blue-50: #e0f0ff;
+  --ui-accent-blue-100: #bfdcff;
+  --ui-accent-blue-200: #8fc0ff;
+  --ui-accent-blue-300: #5ea3ff;
+  --ui-accent-blue-400: #3d85ff;
+  --ui-accent-blue-500: #2464eb;
+  --ui-accent-blue-600: #1f4fb4;
+  --ui-accent-blue-700: #1d3f8c;
+  --ui-accent-blue-800: #1a3168;
+  --ui-accent-blue-900: #152244;
+
+  --ui-accent-violet-50: #f0e5ff;
+  --ui-accent-violet-100: #dcc7ff;
+  --ui-accent-violet-200: #c19cff;
+  --ui-accent-violet-300: #a66eff;
+  --ui-accent-violet-400: #8b44ff;
+  --ui-accent-violet-500: #6f22eb;
+  --ui-accent-violet-600: #551ab7;
+  --ui-accent-violet-700: #42178f;
+  --ui-accent-violet-800: #30136a;
+  --ui-accent-violet-900: #201047;
+
+  --ui-accent-pink-50: #ffe2f0;
+  --ui-accent-pink-100: #ffbad8;
+  --ui-accent-pink-200: #ff87bf;
+  --ui-accent-pink-300: #ff4fa3;
+  --ui-accent-pink-400: #ef2b8b;
+  --ui-accent-pink-500: #c51873;
+  --ui-accent-pink-600: #981258;
+  --ui-accent-pink-700: #721041;
+  --ui-accent-pink-800: #540c30;
+  --ui-accent-pink-900: #360820;
+
+  --ui-status-success-50: #e0ffe9;
+  --ui-status-success-100: #bcffd0;
+  --ui-status-success-200: #83ffab;
+  --ui-status-success-300: #53f686;
+  --ui-status-success-400: #2dd265;
+  --ui-status-success-500: #1da24d;
+  --ui-status-success-600: #157a3a;
+  --ui-status-success-700: #125d2d;
+  --ui-status-success-800: #0f4522;
+  --ui-status-success-900: #0d3018;
+
+  --ui-status-warning-50: #fff7db;
+  --ui-status-warning-100: #ffe9a9;
+  --ui-status-warning-200: #ffd86b;
+  --ui-status-warning-300: #ffc53a;
+  --ui-status-warning-400: #ffb000;
+  --ui-status-warning-500: #cc8600;
+  --ui-status-warning-600: #9e6500;
+  --ui-status-warning-700: #7a4c00;
+  --ui-status-warning-800: #593700;
+  --ui-status-warning-900: #3d2600;
+
+  --ui-status-danger-50: #ffe1df;
+  --ui-status-danger-100: #ffb9b6;
+  --ui-status-danger-200: #ff8a84;
+  --ui-status-danger-300: #ff6158;
+  --ui-status-danger-400: #ff3b30;
+  --ui-status-danger-500: #d52119;
+  --ui-status-danger-600: #a81a14;
+  --ui-status-danger-700: #7f1713;
+  --ui-status-danger-800: #5a1210;
+  --ui-status-danger-900: #3d0d0c;
+
+  --ui-shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.24);
+  --ui-shadow-medium: 0 16px 38px rgba(0, 0, 0, 0.34);
+  --ui-shadow-strong: 0 24px 60px rgba(0, 0, 0, 0.46);
+
+  --ui-text-strong: var(--ui-neutral-950);
+  --ui-text-main: rgba(236, 240, 244, 0.96);
+  --ui-text-soft: rgba(236, 240, 244, 0.72);
+  --ui-text-muted: rgba(236, 240, 244, 0.56);
+
+  --ui-border-soft: rgba(255, 255, 255, 0.08);
+  --ui-border-main: rgba(198, 255, 74, 0.18);
+  --ui-border-strong: rgba(198, 255, 74, 0.34);
+  --ui-border-danger: rgba(255, 59, 48, 0.4);
+  --ui-border-info: rgba(43, 220, 255, 0.34);
+
+  --ui-fill-accent: rgba(198, 255, 74, 0.12);
+  --ui-fill-accent-strong: rgba(198, 255, 74, 0.24);
+  --ui-fill-danger: rgba(255, 59, 48, 0.16);
+  --ui-fill-warning: rgba(255, 176, 0, 0.16);
+  --ui-fill-info: rgba(43, 220, 255, 0.16);
+  --ui-fill-success: rgba(45, 210, 101, 0.16);
+}
