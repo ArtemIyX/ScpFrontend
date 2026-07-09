@@ -1,0 +1,240 @@
+.gswitch {
+  --gswitch-track-bg: rgba(255, 255, 255, 0.06);
+  --gswitch-track-border: rgba(255, 255, 255, 0.1);
+  --gswitch-track-fill: rgba(198, 255, 74, 0.12);
+  --gswitch-thumb-bg: #ecf0f4;
+  --gswitch-thumb-border: rgba(198, 255, 74, 0.42);
+  --gswitch-text: var(--ui-text-main);
+  --gswitch-helper: var(--ui-text-muted);
+  --gswitch-error: #ffb8b3;
+  --gswitch-ring: rgba(198, 255, 74, 0.24);
+  --gswitch-gap: 0.5rem;
+  --gswitch-size: 2.75rem;
+  --gswitch-thumb-size: 1rem;
+  --gswitch-radius: 999px;
+  --gswitch-min-height: 2.5rem;
+
+  display: grid;
+  gap: var(--gswitch-gap);
+  min-width: 0;
+  color: var(--gswitch-text);
+}
+
+.gswitch--full {
+  width: 100%;
+}
+
+.gswitch__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gswitch__label {
+  margin: 0;
+}
+
+.gswitch__state {
+  flex: 0 0 auto;
+  min-width: 0;
+  color: var(--ui-accent);
+}
+
+.gswitch__state-text {
+  color: inherit;
+}
+
+.gswitch__field {
+  min-width: 0;
+}
+
+.gswitch__control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: var(--gswitch-size);
+  height: calc(var(--gswitch-thumb-size) + 0.5rem);
+}
+
+.gswitch__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.gswitch__track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--gswitch-track-border);
+  border-radius: var(--gswitch-radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.14)),
+    var(--gswitch-track-bg);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gswitch__thumb {
+  position: absolute;
+  top: 50%;
+  left: 0.18rem;
+  width: var(--gswitch-thumb-size);
+  height: var(--gswitch-thumb-size);
+  border: 1px solid var(--gswitch-thumb-border);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 45%),
+    var(--gswitch-thumb-bg);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(0, 0, 0, 0.12);
+  transform: translateY(-50%);
+  transition:
+    transform 160ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gswitch__input:checked + .gswitch__track {
+  border-color: var(--gswitch-track-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.12)),
+    var(--gswitch-track-fill);
+}
+
+.gswitch__input:checked + .gswitch__track .gswitch__thumb {
+  transform: translate(calc(var(--gswitch-size) - var(--gswitch-thumb-size) - 0.36rem), -50%);
+}
+
+.gswitch__input:focus-visible + .gswitch__track,
+.gswitch__track--focused {
+  border-color: var(--gswitch-ring);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gswitch-ring),
+    inset 0 1px 1px rgba(255, 255, 255, 0.03);
+}
+
+.gswitch:hover .gswitch__track {
+  transform: translateY(-1px);
+  border-color: rgba(198, 255, 74, 0.24);
+}
+
+.gswitch__input:active + .gswitch__track {
+  transform: translateY(1px);
+}
+
+.gswitch__input:disabled {
+  cursor: not-allowed;
+}
+
+.gswitch--disabled {
+  opacity: 0.68;
+}
+
+.gswitch__meta {
+  display: grid;
+  gap: 0.25rem;
+  min-height: var(--gswitch-min-height);
+}
+
+.gswitch__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gswitch-helper);
+}
+
+.gswitch__helper--error {
+  color: var(--gswitch-error);
+}
+
+.gswitch--sm {
+  --gswitch-gap: 0.375rem;
+  --gswitch-size: 2.375rem;
+  --gswitch-thumb-size: 0.875rem;
+  --gswitch-min-height: 2.25rem;
+}
+
+.gswitch--md {
+  --gswitch-gap: 0.5rem;
+  --gswitch-size: 2.75rem;
+  --gswitch-thumb-size: 1rem;
+  --gswitch-min-height: 2.5rem;
+}
+
+.gswitch--lg {
+  --gswitch-gap: 0.625rem;
+  --gswitch-size: 3.125rem;
+  --gswitch-thumb-size: 1.125rem;
+  --gswitch-min-height: 2.75rem;
+}
+
+.gswitch--surface {
+  --gswitch-track-bg: rgba(255, 255, 255, 0.06);
+  --gswitch-track-border: rgba(255, 255, 255, 0.1);
+  --gswitch-track-fill: rgba(198, 255, 74, 0.12);
+}
+
+.gswitch--accent {
+  --gswitch-track-bg: rgba(198, 255, 74, 0.08);
+  --gswitch-track-border: rgba(198, 255, 74, 0.16);
+  --gswitch-track-fill: rgba(198, 255, 74, 0.22);
+  --gswitch-thumb-border: rgba(198, 255, 74, 0.5);
+}
+
+.gswitch--danger {
+  --gswitch-track-bg: rgba(255, 59, 48, 0.08);
+  --gswitch-track-border: rgba(255, 59, 48, 0.16);
+  --gswitch-track-fill: rgba(255, 59, 48, 0.18);
+  --gswitch-thumb-border: rgba(255, 59, 48, 0.5);
+}
+
+.gswitch--warning {
+  --gswitch-track-bg: rgba(255, 176, 0, 0.08);
+  --gswitch-track-border: rgba(255, 176, 0, 0.16);
+  --gswitch-track-fill: rgba(255, 176, 0, 0.18);
+  --gswitch-thumb-border: rgba(255, 176, 0, 0.5);
+}
+
+.gswitch--purple {
+  --gswitch-track-bg: rgba(139, 68, 255, 0.08);
+  --gswitch-track-border: rgba(139, 68, 255, 0.16);
+  --gswitch-track-fill: rgba(139, 68, 255, 0.18);
+  --gswitch-thumb-border: rgba(139, 68, 255, 0.5);
+}
+
+.gswitch--ghost {
+  --gswitch-track-bg: rgba(255, 255, 255, 0.03);
+  --gswitch-track-border: rgba(255, 255, 255, 0.08);
+  --gswitch-track-fill: rgba(236, 240, 244, 0.12);
+  --gswitch-thumb-bg: rgba(236, 240, 244, 0.9);
+  --gswitch-thumb-border: rgba(255, 255, 255, 0.16);
+}
+
+.gswitch--quiet {
+  --gswitch-track-bg: rgba(12, 15, 20, 0.96);
+  --gswitch-track-border: rgba(198, 255, 74, 0.1);
+  --gswitch-track-fill: rgba(198, 255, 74, 0.14);
+}
+
+.gswitch--background {
+  --gswitch-track-bg: rgba(4, 6, 8, 0.72);
+  --gswitch-track-border: rgba(198, 255, 74, 0.16);
+}
+
+.gswitch--error .gswitch__track {
+  border-color: rgba(255, 59, 48, 0.38);
+}

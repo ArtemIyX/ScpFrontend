@@ -14,6 +14,9 @@ const soundEnabled = ref(true)
 const subtitlesEnabled = ref(true)
 const playerNamesEnabled = ref(false)
 const motionBlurEnabled = ref(false)
+const nightVisionEnabled = ref(true)
+const autoLootEnabled = ref(false)
+const voiceChatEnabled = ref(true)
 const missionStyle = ref<'stealth' | 'assault' | 'panic'>('stealth')
 const feedStyle = ref<'circle' | 'square' | 'lever'>('square')
 const powerState = ref<'on' | 'off'>('on')
@@ -210,6 +213,11 @@ const numberSummary = computed(
 const checkboxSummary = computed(() => {
   const enabledCount = [soundEnabled.value, subtitlesEnabled.value, playerNamesEnabled.value, motionBlurEnabled.value].filter(Boolean).length
   return `${enabledCount} settings enabled`
+})
+
+const switchSummary = computed(() => {
+  const enabledCount = [nightVisionEnabled.value, autoLootEnabled.value, voiceChatEnabled.value].filter(Boolean).length
+  return `${enabledCount} switches on`
 })
 
 const radioSummary = computed(
@@ -594,6 +602,45 @@ function closeModalFromFooter(message: string): void {
           </div>
 
           <GText preset="muted" class="checkbox-status" :text="checkboxSummary" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GSwitch</p>
+              <p class="debug-meta">
+                Toggle-style control for gameplay features and live settings.
+              </p>
+            </div>
+          </div>
+
+          <div class="switch-stack">
+            <GSwitch
+              v-model="nightVisionEnabled"
+              label="Night Vision"
+              helper="Useful for darker containment rooms."
+              preset="accent"
+              width="full"
+            />
+
+            <GSwitch
+              v-model="autoLootEnabled"
+              label="Auto Loot"
+              helper="Turns pickup assistance on or off."
+              preset="purple"
+              width="full"
+            />
+
+            <GSwitch
+              v-model="voiceChatEnabled"
+              label="Voice Chat"
+              helper="Keeps squad comms open."
+              preset="warning"
+              width="full"
+            />
+          </div>
+
+          <GText preset="muted" class="switch-status" :text="switchSummary" />
         </section>
 
         <section class="font-card ui-panel">
@@ -1081,6 +1128,15 @@ function closeModalFromFooter(message: string): void {
 }
 
 .checkbox-status {
+  margin-top: 1rem;
+}
+
+.switch-stack {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.switch-status {
   margin-top: 1rem;
 }
 

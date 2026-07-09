@@ -5,6 +5,7 @@ import GBadge from './g/GBadge/GBadge.vue'
 import GCombo from './g/GCombo/GCombo.vue'
 import GCheckbox from './g/GCheckbox/GCheckbox.vue'
 import GNumberInput from './g/GNumberInput/GNumberInput.vue'
+import GSwitch from './g/GSwitch/GSwitch.vue'
 import GRadio from './g/GRadio/GRadio.vue'
 import GInput from './g/GInput/GInput.vue'
 import GSlider from './g/GSlider/GSlider.vue'
@@ -29,6 +30,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gcheckbox', GCheckbox)
   app.component('GNumberInput', GNumberInput)
   app.component('gnumberinput', GNumberInput)
+  app.component('GSwitch', GSwitch)
+  app.component('gswitch', GSwitch)
   app.component('GRadio', GRadio)
   app.component('gradio', GRadio)
   app.component('GInput', GInput)
