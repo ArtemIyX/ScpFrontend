@@ -191,6 +191,11 @@
   overflow: auto;
 }
 
+.gcombo__menu--up {
+  top: auto;
+  bottom: calc(100% + 0.5rem);
+}
+
 .gcombo--end .gcombo__menu {
   left: auto;
 }

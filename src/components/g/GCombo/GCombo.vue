@@ -22,9 +22,11 @@ const props = withDefaults(defineProps<GComboProps>(), {
 const attrs = useAttrs()
 const emit = defineEmits<GComboEmits>()
 const rootRef = ref<HTMLElement | null>(null)
+const triggerRef = ref<HTMLButtonElement | null>(null)
 const listboxId = `gcombo-listbox-${Math.random().toString(36).slice(2, 10)}`
 const isOpen = ref(false)
 const activeIndex = ref(-1)
+const openDirection = ref<'down' | 'up'>('down')
 
 const hasValue = computed(() => props.modelValue !== null && props.modelValue !== undefined)
 
@@ -59,6 +61,25 @@ function setActiveByValue(value: string | number | null | undefined): void {
   activeIndex.value = index >= 0 ? index : Math.max(props.options.findIndex((option) => !option.disabled), 0)
 }
 
+function updateOpenDirection(): void {
+  const trigger = triggerRef.value
+  if (!trigger) {
+    openDirection.value = 'down'
+    return
+  }
+
+  const rect = trigger.getBoundingClientRect()
+  const estimatedMenuHeight = Math.min(
+    288,
+    Math.max(144, props.options.length * 64 + 16),
+  )
+  const spaceBelow = window.innerHeight - rect.bottom
+  const spaceAbove = rect.top
+
+  openDirection.value =
+    spaceBelow < estimatedMenuHeight && spaceAbove > spaceBelow ? 'up' : 'down'
+}
+
 function openMenu(): void {
   if (props.disabled || props.readonly || props.options.length === 0) {
     return
@@ -70,6 +91,7 @@ function openMenu(): void {
 
   isOpen.value = true
   setActiveByValue(props.modelValue)
+  updateOpenDirection()
 
   nextTick(() => {
     const option = rootRef.value?.querySelector<HTMLElement>(`[data-gcombo-option-index="${activeIndex.value}"]`)
@@ -212,10 +234,14 @@ function onPointerDownOutside(event: MouseEvent): void {
 
 onMounted(() => {
   document.addEventListener('mousedown', onPointerDownOutside)
+  window.addEventListener('resize', updateOpenDirection)
+  window.addEventListener('scroll', updateOpenDirection, true)
 })
 
 onBeforeUnmount(() => {
   document.removeEventListener('mousedown', onPointerDownOutside)
+  window.removeEventListener('resize', updateOpenDirection)
+  window.removeEventListener('scroll', updateOpenDirection, true)
 })
 
 watch(
@@ -235,6 +261,7 @@ watch(
 
     <div class="gcombo__shell">
       <button
+        ref="triggerRef"
         v-bind="attrs"
         :id="id"
         :name="name"
@@ -273,7 +300,13 @@ watch(
       </button>
 
       <transition name="gcombo-pop">
-        <div v-if="isOpen" :id="listboxId" class="gcombo__menu" role="listbox">
+        <div
+          v-if="isOpen"
+          :id="listboxId"
+          class="gcombo__menu"
+          :class="{ 'gcombo__menu--up': openDirection === 'up' }"
+          role="listbox"
+        >
           <button
             v-for="(option, index) in options"
             :key="option.value"
