@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import GameUiView from '@/views/GameUiView.vue'
+import MainMenuView from '@/views/MainMenuView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/game-ui' },
-    { path: '/game-ui', name: 'game-ui', component: GameUiView },
+    { path: '/', redirect: '/main-menu' },
+    { path: '/main-menu', name: 'main-menu', component: MainMenuView },
+    { path: '/game-ui', redirect: '/main-menu' },
   ],
 })
 
