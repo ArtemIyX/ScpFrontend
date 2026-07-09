@@ -8,6 +8,7 @@ const clearanceCode = ref('')
 const region = ref('eu-west')
 const role = ref('medic')
 const difficulty = ref('standard')
+const activeTab = ref('menu')
 
 const presetButtons = [
   { preset: 'surface', label: 'Surface' },
@@ -48,6 +49,13 @@ const difficultyOptions = [
   { value: 'standard', label: 'Standard' },
   { value: 'hard', label: 'Hard' },
   { value: 'nightmare', label: 'Nightmare', description: 'Locked behind the scary stories.' },
+] as const
+
+const screenTabs = [
+  { value: 'menu', label: 'Menu', description: 'Main navigation and quick actions.' },
+  { value: 'lobby', label: 'Lobby', description: 'Players, settings, and ready state.' },
+  { value: 'hud', label: 'HUD', description: 'Live in-game overlays and signals.' },
+  { value: 'pause', label: 'Pause', description: 'Mid-session controls and resume.' },
 ] as const
 
 const disabledLabel = computed(() => (isActionDisabled.value ? 'Disabled' : 'Enabled'))
@@ -308,6 +316,42 @@ function toggleDisabled(): void {
             />
           </div>
         </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GTabs</p>
+              <p class="debug-meta">
+                Page switching for menu, lobby, HUD, and pause screens inside the game UI.
+              </p>
+            </div>
+          </div>
+
+          <GTabs v-model="activeTab" :tabs="screenTabs" preset="quiet" width="full">
+            <template #default="{ activeTab: currentTab }">
+              <div class="tabs-panel">
+                <GText preset="header">
+                  {{ currentTab?.label }}
+                </GText>
+                <GText preset="body">
+                  {{ currentTab?.description }}
+                </GText>
+
+                <div class="tabs-grid">
+                  <GButton preset="surface" background>
+                    {{ currentTab?.value === 'menu' ? 'Start Session' : 'Return to Menu' }}
+                  </GButton>
+                  <GButton preset="ghost">
+                    {{ currentTab?.value === 'pause' ? 'Resume Game' : 'Open Pause' }}
+                  </GButton>
+                  <GButton preset="purple" width="full">
+                    {{ currentTab?.value === 'hud' ? 'HUD Live' : 'HUD Preview' }}
+                  </GButton>
+                </div>
+              </div>
+            </template>
+          </GTabs>
+        </section>
       </GScroller>
     </div>
   </div>
@@ -344,6 +388,17 @@ function toggleDisabled(): void {
 
 .input-status {
   margin-top: 1rem;
+}
+
+.tabs-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tabs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
 }
 
 .demo-icon {

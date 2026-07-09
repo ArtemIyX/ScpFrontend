@@ -1,0 +1,230 @@
+.gtabs {
+  --gtabs-bg: rgba(255, 255, 255, 0.04);
+  --gtabs-bg-hover: rgba(255, 255, 255, 0.06);
+  --gtabs-bg-active: rgba(255, 255, 255, 0.08);
+  --gtabs-border: rgba(255, 255, 255, 0.1);
+  --gtabs-border-hover: rgba(255, 255, 255, 0.16);
+  --gtabs-border-active: rgba(198, 255, 74, 0.32);
+  --gtabs-text: var(--ui-text-main);
+  --gtabs-muted: var(--ui-text-muted);
+  --gtabs-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gtabs-shadow-active: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gtabs-radius: 0.375rem;
+  --gtabs-gap: 0.5rem;
+  --gtabs-padding: 0.375rem;
+  --gtabs-tab-min-height: 3rem;
+  --gtabs-tab-padding-x: 1rem;
+  --gtabs-tab-padding-y: 0.75rem;
+  --gtabs-tab-radius: 0.3125rem;
+  --gtabs-panel-padding: 0.75rem 0 0;
+  --gtabs-ring: rgba(198, 255, 74, 0.28);
+
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gtabs--full {
+  width: 100%;
+}
+
+.gtabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gtabs-gap);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.gtabs--center .gtabs__list {
+  justify-content: center;
+}
+
+.gtabs--end .gtabs__list {
+  justify-content: flex-end;
+}
+
+.gtabs__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+  min-height: var(--gtabs-tab-min-height);
+  padding: var(--gtabs-tab-padding-y) var(--gtabs-tab-padding-x);
+  border: 1px solid var(--gtabs-border);
+  border-radius: var(--gtabs-tab-radius);
+  background: var(--gtabs-bg);
+  box-shadow: var(--gtabs-shadow);
+  color: var(--gtabs-text);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gtabs__tab:hover {
+  background: var(--gtabs-bg-hover);
+  border-color: var(--gtabs-border-hover);
+  transform: translateY(-1px);
+}
+
+.gtabs__tab:focus-visible {
+  outline: none;
+  border-color: var(--gtabs-border-active);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gtabs-ring),
+    var(--gtabs-shadow-active);
+}
+
+.gtabs__tab--active {
+  background: var(--gtabs-bg-active);
+  border-color: var(--gtabs-border-active);
+  box-shadow: var(--gtabs-shadow-active);
+}
+
+.gtabs__tab--disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.gtabs__tab-body {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.gtabs__label {
+  font-size: 0.9375rem;
+  line-height: 1.1;
+  color: var(--gtabs-text);
+}
+
+.gtabs__description {
+  font-family: var(--ui-body-font);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--gtabs-muted);
+}
+
+.gtabs__count {
+  flex: 0 0 auto;
+  min-width: 1.75rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  font-family: var(--ui-technical-font);
+  font-size: 0.75rem;
+  line-height: 1;
+  text-align: center;
+  color: var(--gtabs-muted);
+}
+
+.gtabs__panel {
+  min-width: 0;
+  padding: var(--gtabs-panel-padding);
+}
+
+.gtabs--sm {
+  --gtabs-tab-min-height: 2.5rem;
+  --gtabs-tab-padding-x: 0.875rem;
+  --gtabs-tab-padding-y: 0.625rem;
+}
+
+.gtabs--lg {
+  --gtabs-tab-min-height: 3.5rem;
+  --gtabs-tab-padding-x: 1.125rem;
+  --gtabs-tab-padding-y: 0.875rem;
+}
+
+.gtabs--surface {
+  --gtabs-bg: rgba(255, 255, 255, 0.04);
+  --gtabs-bg-hover: rgba(255, 255, 255, 0.06);
+  --gtabs-bg-active: rgba(255, 255, 255, 0.08);
+  --gtabs-border: rgba(255, 255, 255, 0.1);
+  --gtabs-border-hover: rgba(255, 255, 255, 0.16);
+  --gtabs-border-active: rgba(198, 255, 74, 0.32);
+}
+
+.gtabs--accent {
+  --gtabs-bg: rgba(198, 255, 74, 0.08);
+  --gtabs-bg-hover: rgba(198, 255, 74, 0.12);
+  --gtabs-bg-active: rgba(198, 255, 74, 0.14);
+  --gtabs-border: rgba(198, 255, 74, 0.16);
+  --gtabs-border-hover: rgba(198, 255, 74, 0.28);
+  --gtabs-border-active: rgba(198, 255, 74, 0.48);
+  --gtabs-ring: rgba(198, 255, 74, 0.3);
+}
+
+.gtabs--danger {
+  --gtabs-bg: rgba(255, 59, 48, 0.08);
+  --gtabs-bg-hover: rgba(255, 59, 48, 0.12);
+  --gtabs-bg-active: rgba(255, 59, 48, 0.14);
+  --gtabs-border: rgba(255, 59, 48, 0.18);
+  --gtabs-border-hover: rgba(255, 59, 48, 0.28);
+  --gtabs-border-active: rgba(255, 59, 48, 0.42);
+  --gtabs-ring: rgba(255, 59, 48, 0.24);
+}
+
+.gtabs--warning {
+  --gtabs-bg: rgba(255, 176, 0, 0.08);
+  --gtabs-bg-hover: rgba(255, 176, 0, 0.12);
+  --gtabs-bg-active: rgba(255, 176, 0, 0.14);
+  --gtabs-border: rgba(255, 176, 0, 0.18);
+  --gtabs-border-hover: rgba(255, 176, 0, 0.28);
+  --gtabs-border-active: rgba(255, 176, 0, 0.44);
+  --gtabs-ring: rgba(255, 176, 0, 0.24);
+}
+
+.gtabs--purple {
+  --gtabs-bg: rgba(139, 68, 255, 0.08);
+  --gtabs-bg-hover: rgba(139, 68, 255, 0.12);
+  --gtabs-bg-active: rgba(139, 68, 255, 0.14);
+  --gtabs-border: rgba(139, 68, 255, 0.18);
+  --gtabs-border-hover: rgba(139, 68, 255, 0.28);
+  --gtabs-border-active: rgba(139, 68, 255, 0.44);
+  --gtabs-ring: rgba(139, 68, 255, 0.24);
+}
+
+.gtabs--ghost {
+  --gtabs-bg: transparent;
+  --gtabs-bg-hover: rgba(255, 255, 255, 0.03);
+  --gtabs-bg-active: rgba(255, 255, 255, 0.05);
+  --gtabs-border: rgba(255, 255, 255, 0.08);
+  --gtabs-border-hover: rgba(198, 255, 74, 0.18);
+  --gtabs-border-active: rgba(198, 255, 74, 0.28);
+  --gtabs-shadow: none;
+  --gtabs-shadow-active: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.gtabs--quiet {
+  --gtabs-bg: rgba(12, 15, 20, 0.96);
+  --gtabs-bg-hover: rgba(18, 22, 28, 0.98);
+  --gtabs-bg-active: rgba(10, 12, 16, 0.98);
+  --gtabs-border: rgba(198, 255, 74, 0.1);
+  --gtabs-border-hover: rgba(198, 255, 74, 0.2);
+  --gtabs-border-active: rgba(198, 255, 74, 0.3);
+  --gtabs-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --gtabs-shadow-active: 0 16px 30px rgba(0, 0, 0, 0.42);
+}
+
+.gtabs--background {
+  --gtabs-bg: rgba(4, 6, 8, 0.7);
+  --gtabs-bg-hover: rgba(8, 10, 12, 0.82);
+  --gtabs-bg-active: rgba(2, 3, 4, 0.88);
+  --gtabs-border: rgba(198, 255, 74, 0.2);
+  --gtabs-border-hover: rgba(198, 255, 74, 0.34);
+  --gtabs-border-active: rgba(198, 255, 74, 0.52);
+  --gtabs-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --gtabs-shadow-active: 0 18px 34px rgba(0, 0, 0, 0.48);
+}
+
+.gtabs--disabled {
+  opacity: 0.72;
+}
