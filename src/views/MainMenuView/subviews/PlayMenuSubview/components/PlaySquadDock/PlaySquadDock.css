@@ -1,0 +1,193 @@
+.play-squad-dock {
+  display: grid;
+  justify-items: end;
+  gap: 1rem;
+  width: min(100%, 24rem);
+  padding: 1rem 0 0;
+}
+
+.play-squad-dock__invite-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.play-squad-dock__invite-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.875rem;
+  padding: 0.75rem 1.05rem;
+  border: none;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(198, 255, 74, 0.22), rgba(198, 255, 74, 0.08)),
+    linear-gradient(90deg, rgba(16, 24, 19, 0.86), rgba(8, 12, 10, 0.72));
+  color: rgba(245, 249, 243, 0.96);
+  font-family: var(--ui-body-font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow:
+    0 0.9rem 1.8rem rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+}
+
+.play-squad-dock__invite-button:hover {
+  transform: translateY(-0.12rem);
+  filter: brightness(1.04);
+  box-shadow:
+    0 1.1rem 2.1rem rgba(0, 0, 0, 0.24),
+    0 0 1.2rem rgba(198, 255, 74, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.play-squad-dock__invite-icon {
+  position: relative;
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+}
+
+.play-squad-dock__invite-icon::before,
+.play-squad-dock__invite-icon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: currentColor;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+}
+
+.play-squad-dock__invite-icon::before {
+  width: 0.95rem;
+  height: 0.12rem;
+}
+
+.play-squad-dock__invite-icon::after {
+  width: 0.12rem;
+  height: 0.95rem;
+}
+
+.play-squad-dock__slots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.play-squad-dock__slot {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 0.75rem;
+  min-width: 0;
+  border-radius: 1.15rem;
+  background:
+    linear-gradient(180deg, rgba(18, 24, 22, 0.56), rgba(8, 11, 9, 0.26)),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 65%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0.8rem 1.6rem rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.play-squad-dock__slot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(198, 255, 74, 0.08), transparent 55%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.play-squad-dock__slot--filled::before {
+  opacity: 0.95;
+}
+
+.play-squad-dock__avatar {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 4.2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.07), transparent 38%),
+    linear-gradient(180deg, rgba(14, 17, 16, 0.86), rgba(9, 11, 11, 0.68));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.play-squad-dock__avatar--filled {
+  background:
+    radial-gradient(circle at 35% 30%, rgba(198, 255, 74, 0.26), transparent 38%),
+    linear-gradient(180deg, rgba(26, 38, 30, 0.94), rgba(10, 16, 13, 0.8));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 1.2rem rgba(198, 255, 74, 0.14);
+}
+
+.play-squad-dock__avatar-text,
+.play-squad-dock__avatar-plus {
+  color: rgba(244, 248, 242, 0.95);
+  font-family: var(--ui-technical-font);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.play-squad-dock__avatar-plus {
+  color: rgba(198, 255, 74, 0.74);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.play-squad-dock__meta {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  min-width: 0;
+}
+
+.play-squad-dock__label {
+  color: rgba(198, 255, 74, 0.7);
+  font-family: var(--ui-technical-font);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.play-squad-dock__name {
+  color: rgba(231, 236, 233, 0.86);
+  font-family: var(--ui-body-font);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (max-width: 48rem) {
+  .play-squad-dock {
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  .play-squad-dock__invite-row {
+    justify-content: stretch;
+  }
+
+  .play-squad-dock__invite-button {
+    justify-content: center;
+    width: 100%;
+  }
+}

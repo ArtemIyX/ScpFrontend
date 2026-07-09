@@ -42,6 +42,7 @@ export default defineComponent({
   },
   setup() {
     const activeTab = ref<MainMenuTabValue>('play')
+    const isPlayTab = computed(() => activeTab.value === 'play')
 
     const currentTab = computed(
       () => menuTabs.find((tab) => tab.value === activeTab.value) ?? menuTabs[0],
@@ -59,6 +60,7 @@ export default defineComponent({
       activeTab,
       currentSubview,
       currentTab,
+      isPlayTab,
       menuTabs,
     }
   },
