@@ -418,6 +418,27 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GLabel</p>
+              <p class="debug-meta">
+                Small text labels for fields, sections, captions, and tiny status marks.
+              </p>
+            </div>
+          </div>
+
+          <div class="label-grid">
+            <GLabel kind="section" preset="quiet" text="Containment field" />
+            <GLabel kind="field" as="label">Nickname</GLabel>
+            <GLabel kind="caption" text="Optional squad note" />
+            <GLabel kind="tag" preset="accent">Live</GLabel>
+            <GLabel kind="tag" preset="warning">Locked</GLabel>
+            <GLabel kind="tag" preset="purple">Purple signal</GLabel>
+            <GLabel kind="tag" preset="danger">Hazard</GLabel>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GInput</p>
               <p class="debug-meta">
                 Model binding, helper/error states, clear button, and prefix slots for in-game
@@ -1199,6 +1220,12 @@ function closeModalFromFooter(message: string): void {
 
 .input-status {
   margin-top: 1rem;
+}
+
+.label-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .textarea-stack {

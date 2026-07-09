@@ -1,0 +1,100 @@
+.glabel {
+  --glabel-text: var(--ui-text-muted);
+  --glabel-border: transparent;
+  --glabel-bg: transparent;
+  --glabel-radius: 0.3125rem;
+  --glabel-padding-x: 0;
+  --glabel-padding-y: 0;
+  --glabel-font-size: 0.8125rem;
+  --glabel-letter-spacing: 0.08em;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: var(--glabel-padding-y) var(--glabel-padding-x);
+  border: 1px solid var(--glabel-border);
+  border-radius: var(--glabel-radius);
+  background: var(--glabel-bg);
+  color: var(--glabel-text);
+  font-family: var(--ui-header-font);
+  font-size: var(--glabel-font-size);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: var(--glabel-letter-spacing);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.glabel--field {
+  --glabel-padding-x: 0;
+  --glabel-padding-y: 0;
+}
+
+.glabel--section {
+  --glabel-padding-x: 0.65rem;
+  --glabel-padding-y: 0.32rem;
+  --glabel-bg: rgba(255, 255, 255, 0.04);
+  --glabel-border: rgba(255, 255, 255, 0.08);
+  --glabel-radius: 999px;
+}
+
+.glabel--caption {
+  --glabel-padding-x: 0;
+  --glabel-padding-y: 0;
+  --glabel-font-size: 0.75rem;
+  --glabel-letter-spacing: 0.1em;
+  color: var(--ui-text-muted);
+}
+
+.glabel--tag {
+  --glabel-padding-x: 0.625rem;
+  --glabel-padding-y: 0.3rem;
+  --glabel-bg: rgba(255, 255, 255, 0.04);
+  --glabel-border: rgba(255, 255, 255, 0.08);
+  --glabel-radius: 999px;
+}
+
+.glabel--sm {
+  --glabel-font-size: 0.75rem;
+  --glabel-padding-x: 0.5rem;
+  --glabel-padding-y: 0.25rem;
+}
+
+.glabel--md {
+  --glabel-font-size: 0.8125rem;
+}
+
+.glabel--lg {
+  --glabel-font-size: 0.875rem;
+  --glabel-padding-x: 0.75rem;
+  --glabel-padding-y: 0.35rem;
+}
+
+.glabel--neutral {
+  --glabel-text: var(--ui-text-muted);
+}
+
+.glabel--accent {
+  --glabel-text: var(--ui-accent);
+}
+
+.glabel--danger {
+  --glabel-text: #ffb8b3;
+}
+
+.glabel--warning {
+  --glabel-text: #ffd26b;
+}
+
+.glabel--purple {
+  --glabel-text: #dbc4ff;
+}
+
+.glabel--ghost {
+  --glabel-text: rgba(236, 240, 244, 0.7);
+}
+
+.glabel--quiet {
+  --glabel-text: var(--ui-text-main);
+}
