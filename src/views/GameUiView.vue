@@ -34,6 +34,7 @@ const graphicsQuality = ref<'low' | 'medium' | 'high' | 'epic' | 'cinematic'>('h
 const menuAction = ref('resume')
 const menuRules = ref(['Stay with your squad.', 'Check the door status before moving.', 'Keep the radio line clear.'])
 const profileLoaded = ref(false)
+const rosterEmpty = ref(true)
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -329,6 +330,7 @@ const menuSelectionLabel = computed(
 
 const menuSummary = computed(() => `Selected menu action: ${menuSelectionLabel.value}.`)
 const profileSkeletonLabel = computed(() => (profileLoaded.value ? 'Show skeleton' : 'Show content'))
+const rosterToggleLabel = computed(() => (rosterEmpty.value ? 'Show roster' : 'Show empty'))
 
 function toggleDisabled(): void {
   isActionDisabled.value = !isActionDisabled.value
@@ -1327,6 +1329,75 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GEmptyState</p>
+              <p class="debug-meta">
+                Empty content frame for filtered views, lobby states, inventories, and first-run
+                panels.
+              </p>
+            </div>
+          </div>
+
+          <div class="empty-stack">
+            <GButton preset="accent" @click="rosterEmpty = !rosterEmpty">
+              {{ rosterToggleLabel }}
+            </GButton>
+
+            <GEmptyState
+              v-if="rosterEmpty"
+              title="No squad members"
+              description="The lobby is waiting for players to join this session."
+              helper="Try refreshing the roster or inviting a teammate."
+              icon="search"
+              preset="quiet"
+              width="full"
+              background
+              size="lg"
+            >
+              <template #footer>
+                <GButton preset="accent">Refresh roster</GButton>
+                <GButton preset="ghost">Invite player</GButton>
+              </template>
+            </GEmptyState>
+
+            <GCard
+              v-else
+              title="Squad roster"
+              subtitle="Live lobby state"
+              meta="3 connected"
+              preset="surface"
+              width="full"
+              strong
+            >
+              <div class="roster-grid">
+                <div class="roster-row">
+                  <GAvatar :src="avatarSvgSrc" name="Operative 17" alt="Operative 17 portrait" preset="accent" status="online" />
+                  <div class="roster-row__body">
+                    <GText preset="header">Operative 17</GText>
+                    <GText preset="muted">Medic - Ready</GText>
+                  </div>
+                </div>
+                <div class="roster-row">
+                  <GAvatar name="Elena V." initials="EV" preset="purple" status="away" />
+                  <div class="roster-row__body">
+                    <GText preset="header">Elena V.</GText>
+                    <GText preset="muted">Researcher - Away</GText>
+                  </div>
+                </div>
+                <div class="roster-row">
+                  <GAvatar name="Marek T." initials="MT" preset="warning" status="busy" />
+                  <div class="roster-row__body">
+                    <GText preset="header">Marek T.</GText>
+                    <GText preset="muted">Guard - Busy</GText>
+                  </div>
+                </div>
+              </div>
+            </GCard>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GSkeleton</p>
               <p class="debug-meta">
                 Content placeholder for panels, cards, and HUD blocks while data is still
@@ -1848,6 +1919,33 @@ function closeModalFromFooter(message: string): void {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.3125rem;
   background: rgba(255, 255, 255, 0.02);
+}
+
+.empty-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.roster-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.roster-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.3125rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.roster-row__body {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
 }
 
 .icon-stack {

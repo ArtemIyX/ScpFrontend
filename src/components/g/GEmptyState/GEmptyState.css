@@ -1,0 +1,123 @@
+.gemptystate {
+  --gemptystate-accent: var(--ui-accent);
+  --gemptystate-border: rgba(198, 255, 74, 0.18);
+  --gemptystate-bg: rgba(8, 11, 13, 0.9);
+  --gemptystate-text: rgba(236, 240, 244, 0.96);
+  --gemptystate-muted: rgba(188, 196, 204, 0.76);
+  --gemptystate-icon-bg: rgba(255, 255, 255, 0.04);
+
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--gemptystate-border);
+  border-radius: 0.3125rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+    var(--gemptystate-bg);
+  color: var(--gemptystate-text);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.22) inset,
+    0 12px 26px rgba(0, 0, 0, 0.28);
+}
+
+.gemptystate--full {
+  width: 100%;
+}
+
+.gemptystate--centered {
+  justify-items: center;
+  text-align: center;
+}
+
+.gemptystate__icon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.1), transparent 45%),
+    var(--gemptystate-icon-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--gemptystate-accent);
+}
+
+.gemptystate__body {
+  display: grid;
+  gap: 0.875rem;
+  min-width: 0;
+}
+
+.gemptystate__copy {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.gemptystate__title,
+.gemptystate__description,
+.gemptystate__helper {
+  min-width: 0;
+}
+
+.gemptystate__title {
+  color: var(--gemptystate-text);
+}
+
+.gemptystate__description {
+  color: var(--gemptystate-text);
+}
+
+.gemptystate__helper {
+  color: var(--gemptystate-muted);
+}
+
+.gemptystate__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  justify-content: center;
+}
+
+.gemptystate--sm {
+  padding: 1rem;
+  gap: 0.875rem;
+}
+
+.gemptystate--lg {
+  padding: 1.5rem;
+  gap: 1.125rem;
+}
+
+.gemptystate--accent {
+  --gemptystate-border: rgba(198, 255, 74, 0.24);
+  --gemptystate-accent: #c6ff4a;
+}
+
+.gemptystate--warning {
+  --gemptystate-border: rgba(255, 208, 106, 0.24);
+  --gemptystate-accent: #ffd26b;
+}
+
+.gemptystate--danger {
+  --gemptystate-border: rgba(255, 108, 102, 0.24);
+  --gemptystate-accent: #ff8b82;
+}
+
+.gemptystate--purple {
+  --gemptystate-border: rgba(192, 140, 255, 0.24);
+  --gemptystate-accent: #cfa9ff;
+}
+
+.gemptystate--ghost,
+.gemptystate--quiet {
+  --gemptystate-bg: rgba(7, 9, 11, 0.78);
+  --gemptystate-border: rgba(255, 255, 255, 0.08);
+}
+
+.gemptystate--background {
+  background:
+    linear-gradient(180deg, rgba(198, 255, 74, 0.04), rgba(255, 255, 255, 0)),
+    rgba(8, 11, 13, 0.92);
+}

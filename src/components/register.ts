@@ -14,6 +14,7 @@ import GTile from './g/GTile/GTile.vue'
 import GRail from './g/GRail/GRail.vue'
 import GCombo from './g/GCombo/GCombo.vue'
 import GLoading from './g/GLoading/GLoading.vue'
+import GEmptyState from './g/GEmptyState/GEmptyState.vue'
 import GSkeleton from './g/GSkeleton/GSkeleton.vue'
 import GList from './g/GList/GList.vue'
 import GListItem from './g/GListItem/GListItem.vue'
@@ -66,6 +67,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gcombo', GCombo)
   app.component('GLoading', GLoading)
   app.component('gloading', GLoading)
+  app.component('GEmptyState', GEmptyState)
+  app.component('gemptystate', GEmptyState)
   app.component('GSkeleton', GSkeleton)
   app.component('gskeleton', GSkeleton)
   app.component('GList', GList)
