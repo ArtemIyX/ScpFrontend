@@ -58,6 +58,17 @@ const screenTabs = [
   { value: 'pause', label: 'Pause', description: 'Mid-session controls and resume.' },
 ] as const
 
+const panelStats = [
+  { label: 'Players Ready', value: '6 / 8' },
+  { label: 'Containment', value: 'Stable' },
+  { label: 'Protocol', value: 'Live' },
+] as const
+
+const windowActions = [
+  { label: 'Apply', preset: 'accent' },
+  { label: 'Back', preset: 'ghost' },
+] as const
+
 const disabledLabel = computed(() => (isActionDisabled.value ? 'Disabled' : 'Enabled'))
 const queryStatus = computed(() =>
   query.value.trim().length > 0
@@ -352,6 +363,90 @@ function toggleDisabled(): void {
             </template>
           </GTabs>
         </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GPanel</p>
+              <p class="debug-meta">
+                Shared framed container for menu blocks, HUD widgets, and modal content.
+              </p>
+            </div>
+          </div>
+
+          <div class="panel-grid">
+            <GPanel
+              title="Containment Briefing"
+              subtitle="This panel uses header, body, and footer slots."
+              strong
+              width="full"
+            >
+              <div class="panel-stats">
+                <div v-for="stat in panelStats" :key="stat.label" class="panel-stat">
+                  <GText preset="caps">{{ stat.label }}</GText>
+                  <GText preset="header">{{ stat.value }}</GText>
+                </div>
+              </div>
+
+              <template #footer>
+                <GButton preset="accent">Open Briefing</GButton>
+                <GButton preset="ghost">Dismiss</GButton>
+              </template>
+            </GPanel>
+
+            <GPanel
+              title="HUD Frame"
+              subtitle="A lighter shell for status strips and live overlays."
+              width="full"
+            >
+              <GText preset="body">
+                This is the kind of reusable container we can keep using for lobby cards, pause
+                menus, and microgame surfaces.
+              </GText>
+            </GPanel>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GWindow</p>
+              <p class="debug-meta">
+                Larger framed surface for settings, inventory, and pause-style overlays.
+              </p>
+            </div>
+          </div>
+
+          <GWindow
+            title="Settings Window"
+            subtitle="A full UI shell with header, body, and footer actions."
+            status="Paused"
+            strong
+            width="full"
+            height="full"
+            closable
+            @close="toggleDisabled"
+          >
+            <div class="window-grid">
+              <GPanel title="Graphics" subtitle="Shared container inside the window." width="full">
+                <GText preset="body">
+                  We can slot `GPanel` inside `GWindow` for nested sections like graphics, audio,
+                  and controls.
+                </GText>
+              </GPanel>
+
+              <GPanel title="Connection" subtitle="Runtime state from game to UI." width="full">
+                <GText preset="technical" text="ws://127.0.0.1:7777 | protobuf: enabled | images: http" />
+              </GPanel>
+            </div>
+
+            <template #footer>
+              <GButton v-for="action in windowActions" :key="action.label" :preset="action.preset">
+                {{ action.label }}
+              </GButton>
+            </template>
+          </GWindow>
+        </section>
       </GScroller>
     </div>
   </div>
@@ -399,6 +494,31 @@ function toggleDisabled(): void {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 0.75rem;
+}
+
+.panel-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
+}
+
+.panel-stat {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.window-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.window-grid :deep(.gpanel) {
+  min-width: 0;
 }
 
 .demo-icon {

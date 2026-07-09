@@ -1,0 +1,110 @@
+.gwindow {
+  --gwindow-padding: 1rem;
+  --gwindow-gap: 0.875rem;
+
+  display: grid;
+  gap: var(--gwindow-gap);
+  min-width: 0;
+  padding: var(--gwindow-padding);
+}
+
+.gwindow--width-full {
+  width: 100%;
+}
+
+.gwindow--height-full {
+  height: 100%;
+}
+
+.gwindow__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.gwindow__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.gwindow__title {
+  min-width: 0;
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.gwindow__subtitle {
+  min-width: 0;
+}
+
+.gwindow__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.gwindow__status {
+  white-space: nowrap;
+}
+
+.gwindow__body {
+  min-width: 0;
+  min-height: 0;
+}
+
+.gwindow__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.gwindow__close-icon {
+  position: relative;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.gwindow__close-icon::before,
+.gwindow__close-icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.gwindow__close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gwindow__close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.gwindow--sm {
+  --gwindow-padding: 0.75rem;
+  --gwindow-gap: 0.625rem;
+}
+
+.gwindow--md {
+  --gwindow-padding: 1rem;
+  --gwindow-gap: 0.875rem;
+}
+
+.gwindow--lg {
+  --gwindow-padding: 1.25rem;
+  --gwindow-gap: 1rem;
+}
+
+.gwindow--strong {
+  background: var(--ui-surface-strong);
+  border-color: var(--ui-border-strong);
+}

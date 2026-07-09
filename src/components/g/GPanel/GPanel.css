@@ -1,0 +1,69 @@
+.gpanel {
+  --gpanel-padding: 1rem;
+  --gpanel-gap: 0.875rem;
+
+  display: grid;
+  gap: var(--gpanel-gap);
+  min-width: 0;
+  padding: var(--gpanel-padding);
+}
+
+.gpanel--full {
+  width: 100%;
+}
+
+.gpanel__header,
+.gpanel__footer,
+.gpanel__body {
+  min-width: 0;
+}
+
+.gpanel__header {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.gpanel__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.gpanel__title {
+  min-width: 0;
+}
+
+.gpanel__subtitle {
+  min-width: 0;
+}
+
+.gpanel__body {
+  min-width: 0;
+}
+
+.gpanel__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.gpanel--sm {
+  --gpanel-padding: 0.75rem;
+  --gpanel-gap: 0.625rem;
+}
+
+.gpanel--md {
+  --gpanel-padding: 1rem;
+  --gpanel-gap: 0.875rem;
+}
+
+.gpanel--lg {
+  --gpanel-padding: 1.25rem;
+  --gpanel-gap: 1rem;
+}
+
+.gpanel--strong {
+  background: var(--ui-surface-strong);
+  border-color: var(--ui-border-strong);
+}
