@@ -1,0 +1,308 @@
+.gnumberinput {
+  --gnumberinput-bg: rgba(255, 255, 255, 0.04);
+  --gnumberinput-bg-hover: rgba(255, 255, 255, 0.06);
+  --gnumberinput-bg-focus: rgba(255, 255, 255, 0.08);
+  --gnumberinput-border: rgba(255, 255, 255, 0.1);
+  --gnumberinput-border-hover: rgba(255, 255, 255, 0.16);
+  --gnumberinput-border-focus: rgba(198, 255, 74, 0.34);
+  --gnumberinput-text: var(--ui-text-main);
+  --gnumberinput-placeholder: rgba(236, 240, 244, 0.42);
+  --gnumberinput-helper: var(--ui-text-muted);
+  --gnumberinput-error-text: #ffb8b3;
+  --gnumberinput-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gnumberinput-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gnumberinput-padding-x: 1rem;
+  --gnumberinput-padding-y: 0.75rem;
+  --gnumberinput-min-height: 2.75rem;
+  --gnumberinput-radius: 0.375rem;
+  --gnumberinput-font-size: 0.9375rem;
+  --gnumberinput-gap: 0.625rem;
+  --gnumberinput-label-color: var(--ui-text-muted);
+  --gnumberinput-ring: rgba(198, 255, 74, 0.24);
+  --gnumberinput-step-bg: rgba(255, 255, 255, 0.04);
+  --gnumberinput-step-border: rgba(255, 255, 255, 0.1);
+  --gnumberinput-step-hover: rgba(255, 255, 255, 0.08);
+
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.gnumberinput--full {
+  width: 100%;
+}
+
+.gnumberinput__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gnumberinput__label {
+  margin: 0;
+  font-family: var(--ui-header-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gnumberinput-label-color);
+}
+
+.gnumberinput__value {
+  flex: 0 0 auto;
+  min-width: 0;
+  color: var(--ui-accent);
+}
+
+.gnumberinput__value-text {
+  color: inherit;
+}
+
+.gnumberinput__field {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--gnumberinput-gap);
+  min-height: var(--gnumberinput-min-height);
+  padding: var(--gnumberinput-padding-y) var(--gnumberinput-padding-x);
+  border: 1px solid var(--gnumberinput-border);
+  border-radius: var(--gnumberinput-radius);
+  background: var(--gnumberinput-bg);
+  box-shadow: var(--gnumberinput-shadow);
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    filter 140ms ease;
+  overflow: hidden;
+}
+
+.gnumberinput:hover .gnumberinput__field {
+  background: var(--gnumberinput-bg-hover);
+  border-color: var(--gnumberinput-border-hover);
+}
+
+.gnumberinput--focused .gnumberinput__field {
+  background: var(--gnumberinput-bg-focus);
+  border-color: var(--gnumberinput-border-focus);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gnumberinput-ring),
+    var(--gnumberinput-shadow-focus);
+}
+
+.gnumberinput--disabled,
+.gnumberinput--readonly {
+  opacity: 0.72;
+}
+
+.gnumberinput--error .gnumberinput__field {
+  border-color: rgba(255, 59, 48, 0.42);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px rgba(255, 59, 48, 0.18),
+    var(--gnumberinput-shadow);
+}
+
+.gnumberinput__prefix,
+.gnumberinput__suffix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: rgba(236, 240, 244, 0.72);
+}
+
+.gnumberinput__input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--gnumberinput-text);
+  font-family: var(--ui-body-font);
+  font-size: var(--gnumberinput-font-size);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  caret-color: var(--ui-accent);
+  text-align: right;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.gnumberinput__input::-webkit-outer-spin-button,
+.gnumberinput__input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.gnumberinput__input::placeholder {
+  color: var(--gnumberinput-placeholder);
+}
+
+.gnumberinput__input:disabled {
+  cursor: not-allowed;
+}
+
+.gnumberinput__steps {
+  display: inline-grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  padding-left: 0.125rem;
+}
+
+.gnumberinput__step {
+  width: 2rem;
+  min-width: 2rem;
+  border: 1px solid var(--gnumberinput-step-border);
+  border-radius: 0.3125rem;
+  background: var(--gnumberinput-step-bg);
+  color: var(--ui-text-main);
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+
+.gnumberinput__step:hover {
+  border-color: rgba(198, 255, 74, 0.24);
+  background: var(--gnumberinput-step-hover);
+}
+
+.gnumberinput__step:active {
+  transform: translateY(1px);
+}
+
+.gnumberinput__step:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.gnumberinput__meta {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.gnumberinput__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gnumberinput-helper);
+}
+
+.gnumberinput__helper--error {
+  color: var(--gnumberinput-error-text);
+}
+
+.gnumberinput--sm {
+  --gnumberinput-padding-x: 0.875rem;
+  --gnumberinput-padding-y: 0.625rem;
+  --gnumberinput-min-height: 2.25rem;
+  --gnumberinput-font-size: 0.875rem;
+  --gnumberinput-radius: 0.3125rem;
+}
+
+.gnumberinput--md {
+  --gnumberinput-padding-x: 1rem;
+  --gnumberinput-padding-y: 0.75rem;
+  --gnumberinput-min-height: 2.75rem;
+  --gnumberinput-font-size: 0.9375rem;
+  --gnumberinput-radius: 0.375rem;
+}
+
+.gnumberinput--lg {
+  --gnumberinput-padding-x: 1.125rem;
+  --gnumberinput-padding-y: 0.875rem;
+  --gnumberinput-min-height: 3.25rem;
+  --gnumberinput-font-size: 1rem;
+  --gnumberinput-radius: 0.4375rem;
+}
+
+.gnumberinput--surface {
+  --gnumberinput-bg: rgba(255, 255, 255, 0.04);
+  --gnumberinput-bg-hover: rgba(255, 255, 255, 0.06);
+  --gnumberinput-bg-focus: rgba(255, 255, 255, 0.08);
+  --gnumberinput-border: rgba(255, 255, 255, 0.1);
+  --gnumberinput-border-hover: rgba(255, 255, 255, 0.16);
+  --gnumberinput-border-focus: rgba(198, 255, 74, 0.34);
+}
+
+.gnumberinput--accent {
+  --gnumberinput-bg: rgba(198, 255, 74, 0.08);
+  --gnumberinput-bg-hover: rgba(198, 255, 74, 0.12);
+  --gnumberinput-bg-focus: rgba(198, 255, 74, 0.14);
+  --gnumberinput-border: rgba(198, 255, 74, 0.16);
+  --gnumberinput-border-hover: rgba(198, 255, 74, 0.28);
+  --gnumberinput-border-focus: rgba(198, 255, 74, 0.48);
+  --gnumberinput-ring: rgba(198, 255, 74, 0.3);
+}
+
+.gnumberinput--danger {
+  --gnumberinput-bg: rgba(255, 59, 48, 0.08);
+  --gnumberinput-bg-hover: rgba(255, 59, 48, 0.12);
+  --gnumberinput-bg-focus: rgba(255, 59, 48, 0.14);
+  --gnumberinput-border: rgba(255, 59, 48, 0.18);
+  --gnumberinput-border-hover: rgba(255, 59, 48, 0.28);
+  --gnumberinput-border-focus: rgba(255, 59, 48, 0.42);
+  --gnumberinput-ring: rgba(255, 59, 48, 0.26);
+}
+
+.gnumberinput--warning {
+  --gnumberinput-bg: rgba(255, 176, 0, 0.08);
+  --gnumberinput-bg-hover: rgba(255, 176, 0, 0.12);
+  --gnumberinput-bg-focus: rgba(255, 176, 0, 0.14);
+  --gnumberinput-border: rgba(255, 176, 0, 0.18);
+  --gnumberinput-border-hover: rgba(255, 176, 0, 0.28);
+  --gnumberinput-border-focus: rgba(255, 176, 0, 0.44);
+  --gnumberinput-ring: rgba(255, 176, 0, 0.24);
+}
+
+.gnumberinput--purple {
+  --gnumberinput-bg: rgba(139, 68, 255, 0.08);
+  --gnumberinput-bg-hover: rgba(139, 68, 255, 0.12);
+  --gnumberinput-bg-focus: rgba(139, 68, 255, 0.14);
+  --gnumberinput-border: rgba(139, 68, 255, 0.18);
+  --gnumberinput-border-hover: rgba(139, 68, 255, 0.28);
+  --gnumberinput-border-focus: rgba(139, 68, 255, 0.44);
+  --gnumberinput-ring: rgba(139, 68, 255, 0.24);
+}
+
+.gnumberinput--ghost {
+  --gnumberinput-bg: transparent;
+  --gnumberinput-bg-hover: rgba(255, 255, 255, 0.03);
+  --gnumberinput-bg-focus: rgba(255, 255, 255, 0.05);
+  --gnumberinput-border: rgba(255, 255, 255, 0.08);
+  --gnumberinput-border-hover: rgba(198, 255, 74, 0.18);
+  --gnumberinput-border-focus: rgba(198, 255, 74, 0.28);
+  --gnumberinput-shadow: none;
+  --gnumberinput-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.gnumberinput--quiet {
+  --gnumberinput-bg: rgba(12, 15, 20, 0.96);
+  --gnumberinput-bg-hover: rgba(18, 22, 28, 0.98);
+  --gnumberinput-bg-focus: rgba(10, 12, 16, 0.98);
+  --gnumberinput-border: rgba(198, 255, 74, 0.1);
+  --gnumberinput-border-hover: rgba(198, 255, 74, 0.2);
+  --gnumberinput-border-focus: rgba(198, 255, 74, 0.3);
+  --gnumberinput-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+  --gnumberinput-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+}
+
+.gnumberinput--background {
+  --gnumberinput-bg: rgba(4, 6, 8, 0.7);
+  --gnumberinput-bg-hover: rgba(8, 10, 12, 0.82);
+  --gnumberinput-bg-focus: rgba(2, 3, 4, 0.88);
+  --gnumberinput-border: rgba(198, 255, 74, 0.2);
+  --gnumberinput-border-hover: rgba(198, 255, 74, 0.34);
+  --gnumberinput-border-focus: rgba(198, 255, 74, 0.52);
+  --gnumberinput-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --gnumberinput-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+}

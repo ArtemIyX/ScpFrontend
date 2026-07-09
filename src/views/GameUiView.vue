@@ -8,6 +8,8 @@ const clearanceCode = ref('')
 const masterVolume = ref(72)
 const sensitivity = ref(42)
 const threatLevel = ref(18)
+const itemCount = ref(12)
+const splitAmount = ref(2.5)
 const soundEnabled = ref(true)
 const subtitlesEnabled = ref(true)
 const playerNamesEnabled = ref(false)
@@ -199,6 +201,10 @@ const queryStatus = computed(() =>
 
 const sliderSummary = computed(
   () => `Volume ${masterVolume.value} / Sensitivity ${sensitivity.value} / Threat ${threatLevel.value}`,
+)
+
+const numberSummary = computed(
+  () => `Items ${itemCount.value} / Split ${splitAmount.value.toFixed(1)}`,
 )
 
 const checkboxSummary = computed(() => {
@@ -497,6 +503,48 @@ function closeModalFromFooter(message: string): void {
           </div>
 
           <GText preset="muted" class="slider-status" :text="sliderSummary" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GNumberInput</p>
+              <p class="debug-meta">
+                Numeric input for item counts, split amounts, and other integer/float values.
+              </p>
+            </div>
+          </div>
+
+          <div class="number-stack">
+            <GNumberInput
+              v-model="itemCount"
+              label="Item Count"
+              helper="Integer-only quantity with step buttons."
+              preset="accent"
+              width="full"
+              mode="integer"
+              :min="0"
+              :max="99"
+              :step="1"
+              value-suffix=" pcs"
+            />
+
+            <GNumberInput
+              v-model="splitAmount"
+              label="Split Amount"
+              helper="Float input for portions, fractions, and tuning values."
+              preset="purple"
+              width="full"
+              mode="float"
+              :min="0"
+              :max="10"
+              :step="0.5"
+              :precision="1"
+              value-suffix="x"
+            />
+          </div>
+
+          <GText preset="muted" class="number-status" :text="numberSummary" />
         </section>
 
         <section class="font-card ui-panel">
@@ -1015,6 +1063,15 @@ function closeModalFromFooter(message: string): void {
 }
 
 .slider-status {
+  margin-top: 1rem;
+}
+
+.number-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.number-status {
   margin-top: 1rem;
 }
 
