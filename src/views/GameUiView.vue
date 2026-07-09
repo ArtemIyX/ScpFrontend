@@ -50,6 +50,12 @@ const paginationEvent = ref('No pagination events yet.')
 const paginationPageCount = 12
 const chipSelection = ref('all')
 const chipEvent = ref('No chip events yet.')
+const statItems = [
+  { label: 'Players', value: '6 / 8', detail: 'Lobby fill state', icon: 'menu', preset: 'accent' },
+  { label: 'Ping', value: '42 ms', detail: 'Current socket latency', icon: 'info', preset: 'quiet' },
+  { label: 'Threat', value: 'Low', detail: 'Containment status', icon: 'warning', preset: 'warning' },
+  { label: 'Objective', value: 'Open', detail: 'Next task in queue', icon: 'chevron-right', preset: 'purple' },
+] as const
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -1939,6 +1945,31 @@ function onChipRemove(value: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GStat</p>
+              <p class="debug-meta">
+                Compact runtime readouts for one label and one value, with optional detail.
+              </p>
+            </div>
+          </div>
+
+          <div class="stat-grid">
+            <GStat
+              v-for="item in statItems"
+              :key="item.label"
+              :label="item.label"
+              :value="item.value"
+              :detail="item.detail"
+              :icon="item.icon"
+              :preset="item.preset"
+              width="full"
+              background
+            />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GPanel</p>
               <p class="debug-meta">
                 Shared framed container for menu blocks, HUD widgets, and modal content.
@@ -2582,6 +2613,12 @@ function onChipRemove(value: string): void {
 .pagination-event,
 .pagination-summary {
   margin-top: 0;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.875rem;
 }
 
 .panel-grid {

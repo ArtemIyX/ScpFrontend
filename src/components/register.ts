@@ -11,6 +11,7 @@ import GDivider from './g/GDivider/GDivider.vue'
 import GTooltip from './g/GTooltip/GTooltip.vue'
 import GAccordion from './g/GAccordion/GAccordion.vue'
 import GPagination from './g/GPagination/GPagination.vue'
+import GStat from './g/GStat/GStat.vue'
 import GPopover from './g/GPopover/GPopover.vue'
 import GAvatar from './g/GAvatar/GAvatar.vue'
 import GIcon from './g/GIcon/GIcon.vue'
@@ -68,6 +69,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gaccordion', GAccordion)
   app.component('GPagination', GPagination)
   app.component('gpagination', GPagination)
+  app.component('GStat', GStat)
+  app.component('gstat', GStat)
   app.component('GPopover', GPopover)
   app.component('gpopover', GPopover)
   app.component('GAvatar', GAvatar)
