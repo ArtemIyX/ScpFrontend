@@ -4,11 +4,13 @@ import { mount } from '@vue/test-utils'
 import App from '../App.vue'
 
 describe('App', () => {
-  it('renders the debug palette shell', () => {
+  it('renders the font debug shell', () => {
     const wrapper = mount(App)
 
-    expect(wrapper.text()).toContain('Debug palette')
-    expect(wrapper.text()).toContain('ui-accent-lime-300')
-    expect(wrapper.find('.debug-grid').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Font debug')
+    expect(wrapper.text()).toContain('font-title')
+    expect(wrapper.text()).toContain('font-handwrite')
+    expect(wrapper.text()).toContain('font-technical')
+    expect(wrapper.find('.font-grid').exists()).toBe(true)
   })
 })

@@ -1,192 +1,107 @@
 <script setup lang="ts">
-const groups = [
+const typeRoles = [
   {
-    title: 'Neutral',
-    items: [
-      'ui-black',
-      'ui-white',
-      'ui-neutral-0',
-      'ui-neutral-50',
-      'ui-neutral-100',
-      'ui-neutral-200',
-      'ui-neutral-300',
-      'ui-neutral-400',
-      'ui-neutral-500',
-      'ui-neutral-600',
-      'ui-neutral-700',
-      'ui-neutral-800',
-      'ui-neutral-900',
-      'ui-neutral-950',
-    ],
+    name: 'font-title',
+    label: 'Title',
+    className: 'type-title',
+    sample: 'Containment Archive / Архив изоляции / Архів ізоляції',
+    note: 'Used for big section titles, key screens, and dramatic headers.',
   },
   {
-    title: 'Surface',
-    items: ['ui-surface-0', 'ui-surface-1', 'ui-surface-2', 'ui-surface-3', 'ui-surface-4'],
+    name: 'font-header',
+    label: 'Header',
+    className: 'type-header',
+    sample: 'Facility status, squad list, lobby name, pause heading',
+    note: 'Used for page headings, panels, and readable game UI labels.',
   },
   {
-    title: 'Lime',
-    items: [
-      'ui-accent-lime-50',
-      'ui-accent-lime-100',
-      'ui-accent-lime-200',
-      'ui-accent-lime-300',
-      'ui-accent-lime-400',
-      'ui-accent-lime-500',
-      'ui-accent-lime-600',
-      'ui-accent-lime-700',
-      'ui-accent-lime-800',
-      'ui-accent-lime-900',
-    ],
+    name: 'font-body',
+    label: 'Body',
+    className: 'type-body',
+    sample:
+      'Body text stays plain and calm for descriptions, notes, and system messages. Это текст для описаний и заметок. Це текст для описів і нотаток.',
+    note: 'Used for descriptions, helper copy, and readable content blocks.',
   },
   {
-    title: 'Cyan',
-    items: [
-      'ui-accent-cyan-50',
-      'ui-accent-cyan-100',
-      'ui-accent-cyan-200',
-      'ui-accent-cyan-300',
-      'ui-accent-cyan-400',
-      'ui-accent-cyan-500',
-      'ui-accent-cyan-600',
-      'ui-accent-cyan-700',
-      'ui-accent-cyan-800',
-      'ui-accent-cyan-900',
-    ],
+    name: 'font-caps',
+    label: 'CAPS',
+    className: 'type-caps',
+    sample: 'WARNING / SECURITY BREACH / ALERT / НАСЛЕДИЕ / ПОЖАР / ТРИВОГА',
+    note: 'Used for warnings, alerts, danger states, and loud system labels.',
   },
   {
-    title: 'Blue',
-    items: [
-      'ui-accent-blue-50',
-      'ui-accent-blue-100',
-      'ui-accent-blue-200',
-      'ui-accent-blue-300',
-      'ui-accent-blue-400',
-      'ui-accent-blue-500',
-      'ui-accent-blue-600',
-      'ui-accent-blue-700',
-      'ui-accent-blue-800',
-      'ui-accent-blue-900',
-    ],
+    name: 'font-handwrite',
+    label: 'Handwrite',
+    className: 'type-handwrite',
+    sample: 'I left a note near the door. Не входить без допуска. Не заходити без доступу.',
+    note: 'Used for diary lines, scribbles, clues, and personal notes.',
   },
   {
-    title: 'Violet',
-    items: [
-      'ui-accent-violet-50',
-      'ui-accent-violet-100',
-      'ui-accent-violet-200',
-      'ui-accent-violet-300',
-      'ui-accent-violet-400',
-      'ui-accent-violet-500',
-      'ui-accent-violet-600',
-      'ui-accent-violet-700',
-      'ui-accent-violet-800',
-      'ui-accent-violet-900',
-    ],
+    name: 'font-doc',
+    label: 'Document',
+    className: 'type-doc',
+    sample:
+      'Document text for logs, reports, and terminal readouts can lean serif when we want a more archival tone.',
+    note: 'Good for documents, reports, intel sheets, and narrative surfaces.',
   },
   {
-    title: 'Pink',
-    items: [
-      'ui-accent-pink-50',
-      'ui-accent-pink-100',
-      'ui-accent-pink-200',
-      'ui-accent-pink-300',
-      'ui-accent-pink-400',
-      'ui-accent-pink-500',
-      'ui-accent-pink-600',
-      'ui-accent-pink-700',
-      'ui-accent-pink-800',
-      'ui-accent-pink-900',
-    ],
+    name: 'font-technical',
+    label: 'Technical / Code',
+    className: 'type-technical',
+    sample:
+      'message UiEvent {\n  string localized_text_id = 1;\n  string websocket_state = 2;\n  uint32 protocol_version = 3;\n}\n\n// DEBUG: connected | payload_ready | ru-RU',
+    note: 'Used for code-like text, protocol payloads, IDs, and debug output.',
   },
-  {
-    title: 'Success',
-    items: [
-      'ui-status-success-50',
-      'ui-status-success-100',
-      'ui-status-success-200',
-      'ui-status-success-300',
-      'ui-status-success-400',
-      'ui-status-success-500',
-      'ui-status-success-600',
-      'ui-status-success-700',
-      'ui-status-success-800',
-      'ui-status-success-900',
-    ],
-  },
-  {
-    title: 'Warning',
-    items: [
-      'ui-status-warning-50',
-      'ui-status-warning-100',
-      'ui-status-warning-200',
-      'ui-status-warning-300',
-      'ui-status-warning-400',
-      'ui-status-warning-500',
-      'ui-status-warning-600',
-      'ui-status-warning-700',
-      'ui-status-warning-800',
-      'ui-status-warning-900',
-    ],
-  },
-  {
-    title: 'Danger',
-    items: [
-      'ui-status-danger-50',
-      'ui-status-danger-100',
-      'ui-status-danger-200',
-      'ui-status-danger-300',
-      'ui-status-danger-400',
-      'ui-status-danger-500',
-      'ui-status-danger-600',
-      'ui-status-danger-700',
-      'ui-status-danger-800',
-      'ui-status-danger-900',
-    ],
-  },
+] as const
+
+const cyrillicSamples = [
+  'НАДЗОРНЫЙ ОТЧЁТ / SURVEILLANCE REPORT / ЗВІТ НАГЛЯДУ',
+  'Запрос на эвакуацию / Запит на евакуацію / Evacuation request',
+  'Комната 04 закрыта / Кімната 04 зачинена / Room 04 locked',
 ] as const
 </script>
 
 <template>
   <div class="ui-shell debug-shell">
-    <div class="debug-frame">
+    <div class="debug-frame debug-frame--fonts">
       <header class="debug-header ui-panel ui-panel--strong">
-        <p class="ui-heading">Debug palette</p>
+        <p class="ui-heading">Font debug</p>
         <p class="ui-copy">
-          Transparent by default. This screen exists to expose every core CSS variable and shade.
+          Typography roles for an SCP horror UI: title, header, body, handwriting, CAPS warnings,
+          and code-like technical text.
         </p>
       </header>
 
-      <main class="debug-grid ui-scroll">
-        <section class="debug-card ui-panel" v-for="group in groups" :key="group.title">
+      <main class="font-grid ui-scroll">
+        <section v-for="role in typeRoles" :key="role.name" class="font-card ui-panel">
           <div class="debug-card-head">
-            <p class="ui-heading">{{ group.title }}</p>
-            <p class="debug-meta">{{ group.items.length }} shades</p>
-          </div>
-          <div class="debug-swatch-grid">
-            <div v-for="name in group.items" :key="name" class="debug-swatch">
-              <div class="debug-color" :style="{ backgroundColor: `var(--${name})` }"></div>
-              <div class="debug-labels">
-                <span class="debug-var">{{ name }}</span>
-                <span class="debug-token">var(--{{ name }})</span>
-              </div>
+            <div>
+              <p class="ui-heading">{{ role.label }}</p>
+              <p class="debug-meta">{{ role.note }}</p>
             </div>
+            <span class="debug-token">var(--{{ role.name }})</span>
+          </div>
+
+          <div class="font-specimen" :class="role.className">
+            <p class="font-sample">{{ role.sample }}</p>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel ui-panel--strong">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">Cyrillic sample</p>
+              <p class="debug-meta">This should help us catch fallback problems at a glance.</p>
+            </div>
+          </div>
+
+          <div class="cyrillic-grid">
+            <p v-for="line in cyrillicSamples" :key="line" class="cyrillic-line">
+              {{ line }}
+            </p>
           </div>
         </section>
       </main>
-
-      <footer class="debug-footer ui-panel">
-        <div>
-          <p class="ui-heading">Global tokens</p>
-          <p class="ui-copy">Background stays transparent. All other surfaces come from token CSS.</p>
-        </div>
-        <div class="debug-footer-samples">
-          <span class="debug-chip" style="--chip-color: var(--ui-fill-accent)">accent fill</span>
-          <span class="debug-chip" style="--chip-color: var(--ui-fill-warning)">warning fill</span>
-          <span class="debug-chip" style="--chip-color: var(--ui-fill-danger)">danger fill</span>
-          <span class="debug-chip" style="--chip-color: var(--ui-fill-info)">info fill</span>
-          <span class="debug-chip" style="--chip-color: var(--ui-fill-success)">success fill</span>
-        </div>
-      </footer>
     </div>
   </div>
 </template>
