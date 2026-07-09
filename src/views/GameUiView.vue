@@ -41,6 +41,8 @@ const alertEvent = ref('No alert events yet.')
 const bannerEvent = ref('No banner events yet.')
 const popoverOpen = ref(false)
 const popoverEvent = ref('No popover events yet.')
+const accordionValue = ref<'security' | 'briefing' | 'anomaly'>('security')
+const accordionEvent = ref('No accordion events yet.')
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -93,6 +95,33 @@ const graphicsQualityOptions = [
   { value: 'high', title: 'High', subtitle: 'Recommended preset', meta: 'Recommended', recommended: true, preset: 'accent' },
   { value: 'epic', title: 'Epic', subtitle: 'Sharper lighting and textures', meta: 'Heavy', preset: 'purple' },
   { value: 'cinematic', title: 'Cinematic', subtitle: 'Maximum visual quality', meta: 'Largest load', preset: 'warning' },
+] as const
+
+const accordionItems = [
+  {
+    value: 'security',
+    title: 'Security Door State',
+    subtitle: 'Live lock and seal information.',
+    note: 'The door is sealed and the alarm line is armed.',
+    icon: 'warning',
+    badge: 'Live',
+  },
+  {
+    value: 'briefing',
+    title: 'Squad Briefing',
+    subtitle: 'Short mission context for the lobby.',
+    note: 'Review the radio channel, then move toward the lower corridor.',
+    icon: 'info',
+    badge: 'Notes',
+  },
+  {
+    value: 'anomaly',
+    title: 'Anomaly Log',
+    subtitle: 'Optional custom slot content.',
+    note: 'The layout accepts richer body content for special cases.',
+    icon: 'search',
+    badge: 'Custom',
+  },
 ] as const
 
 const iconSamples = [
@@ -387,6 +416,19 @@ function closePopover(): void {
 function openPopover(): void {
   popoverOpen.value = true
   popoverEvent.value = 'Popover opened.'
+}
+
+function onAccordionChange(value: 'security' | 'briefing' | 'anomaly' | ('security' | 'briefing' | 'anomaly')[] | null): void {
+  const label = Array.isArray(value) ? value.join(', ') : value ?? 'none'
+  accordionEvent.value = `Accordion selection: ${label}.`
+}
+
+function onAccordionOpen(item: { value: 'security' | 'briefing' | 'anomaly' }): void {
+  accordionEvent.value = `Opened ${item.value}.`
+}
+
+function onAccordionClose(item: { value: 'security' | 'briefing' | 'anomaly' }): void {
+  accordionEvent.value = `Closed ${item.value}.`
 }
 </script>
 
@@ -1678,6 +1720,45 @@ function openPopover(): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GAccordion</p>
+              <p class="debug-meta">
+                Collapsible groups for lore snippets, settings clusters, and compact mission
+                notes.
+              </p>
+            </div>
+          </div>
+
+          <div class="accordion-stack">
+            <GAccordion
+              v-model="accordionValue"
+              :items="accordionItems"
+              preset="quiet"
+              variant="soft"
+              width="full"
+              background
+              @change="onAccordionChange"
+              @open="onAccordionOpen"
+              @close="onAccordionClose"
+            >
+              <template #content="{ item, close }">
+                <GText preset="body">
+                  {{ item.note }}
+                </GText>
+
+                <div v-if="item.value === 'anomaly'" class="accordion-actions">
+                  <GButton preset="accent" size="sm">Investigate</GButton>
+                  <GButton preset="ghost" size="sm" @click="close()">Collapse</GButton>
+                </div>
+              </template>
+            </GAccordion>
+
+            <GText preset="muted" class="accordion-event" :text="accordionEvent" />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GDivider</p>
               <p class="debug-meta">
                 Simple separator for splitting settings groups and denser menu blocks.
@@ -2095,6 +2176,21 @@ function openPopover(): void {
 }
 
 .popover-event {
+  margin-top: 0;
+}
+
+.accordion-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.accordion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.accordion-event {
   margin-top: 0;
 }
 

@@ -1,0 +1,201 @@
+.gaccordion {
+  --gaccordion-bg: rgba(10, 14, 17, 0.92);
+  --gaccordion-border: rgba(198, 255, 74, 0.16);
+  --gaccordion-border-open: rgba(198, 255, 74, 0.28);
+  --gaccordion-text: var(--ui-text-main);
+  --gaccordion-muted: var(--ui-text-muted);
+  --gaccordion-accent: var(--ui-accent);
+  --gaccordion-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+  --gaccordion-radius: 0.375rem;
+  --gaccordion-gap: 0.75rem;
+  --gaccordion-padding-x: 0.875rem;
+  --gaccordion-padding-y: 0.875rem;
+
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+  color: var(--gaccordion-text);
+}
+
+.gaccordion--full {
+  width: 100%;
+}
+
+.gaccordion--background .gaccordion__item {
+  background: var(--gaccordion-bg);
+  border-color: var(--gaccordion-border);
+  box-shadow: var(--gaccordion-shadow);
+}
+
+.gaccordion--flush {
+  gap: 0.25rem;
+}
+
+.gaccordion__list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.gaccordion__item {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--gaccordion-border);
+  border-radius: var(--gaccordion-radius);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.gaccordion__item--open {
+  border-color: var(--gaccordion-border-open);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: var(--gaccordion-shadow);
+}
+
+.gaccordion__item--disabled {
+  opacity: 0.54;
+}
+
+.gaccordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gaccordion-gap);
+  width: 100%;
+  min-width: 0;
+  padding: var(--gaccordion-padding-y) var(--gaccordion-padding-x);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gaccordion__trigger-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gaccordion__icon {
+  display: grid;
+  place-items: center;
+  color: var(--gaccordion-accent);
+  flex: 0 0 auto;
+}
+
+.gaccordion__trigger-text {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.gaccordion__title {
+  color: inherit;
+}
+
+.gaccordion__subtitle {
+  color: var(--gaccordion-muted);
+}
+
+.gaccordion__trigger-aside {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.gaccordion__chevron {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-right: 0.125rem solid currentColor;
+  border-bottom: 0.125rem solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 140ms ease;
+}
+
+.gaccordion__item--open .gaccordion__chevron {
+  transform: rotate(225deg);
+}
+
+.gaccordion__panel {
+  display: grid;
+  min-width: 0;
+  padding: 0 0.875rem 0.875rem;
+}
+
+.gaccordion__body {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.875rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0.3125rem;
+}
+
+.gaccordion-fade-enter-active,
+.gaccordion-fade-leave-active {
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.gaccordion-fade-enter-from,
+.gaccordion-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-0.25rem);
+}
+
+.gaccordion--surface {
+  --gaccordion-border: rgba(255, 255, 255, 0.08);
+}
+
+.gaccordion--accent {
+  --gaccordion-border: rgba(198, 255, 74, 0.2);
+  --gaccordion-border-open: rgba(198, 255, 74, 0.34);
+}
+
+.gaccordion--danger {
+  --gaccordion-border: rgba(255, 59, 48, 0.2);
+  --gaccordion-border-open: rgba(255, 59, 48, 0.34);
+}
+
+.gaccordion--warning {
+  --gaccordion-border: rgba(255, 176, 0, 0.2);
+  --gaccordion-border-open: rgba(255, 176, 0, 0.34);
+}
+
+.gaccordion--purple {
+  --gaccordion-border: rgba(139, 68, 255, 0.2);
+  --gaccordion-border-open: rgba(139, 68, 255, 0.34);
+}
+
+.gaccordion--ghost {
+  --gaccordion-bg: transparent;
+  --gaccordion-border: rgba(255, 255, 255, 0.08);
+  --gaccordion-border-open: rgba(198, 255, 74, 0.18);
+  --gaccordion-shadow: none;
+}
+
+.gaccordion--quiet {
+  --gaccordion-bg: rgba(8, 10, 12, 0.96);
+  --gaccordion-border: rgba(198, 255, 74, 0.12);
+  --gaccordion-border-open: rgba(198, 255, 74, 0.24);
+}
+
+.gaccordion--sm {
+  --gaccordion-padding-x: 0.75rem;
+  --gaccordion-padding-y: 0.75rem;
+  --gaccordion-gap: 0.625rem;
+}
+
+.gaccordion--lg {
+  --gaccordion-padding-x: 1rem;
+  --gaccordion-padding-y: 1rem;
+  --gaccordion-gap: 0.875rem;
+}
