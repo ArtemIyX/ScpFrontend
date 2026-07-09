@@ -9,7 +9,6 @@
     <section class="main-menu__stage">
       <GWindow
         class="main-menu__window"
-        title="Main Menu"
         status="Online"
         width="full"
         height="auto"
@@ -130,8 +129,12 @@
 }
 
 .main-menu__title {
+  font-family: var(--ui-body-font);
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.05;
   text-align: center;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-shadow: 0 0 1.5rem rgba(198, 255, 74, 0.18);
 }
