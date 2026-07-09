@@ -1,0 +1,266 @@
+.gpopover {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.gpopover__trigger {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.gpopover__panel {
+  --gpopover-bg: rgba(10, 14, 17, 0.96);
+  --gpopover-border: rgba(198, 255, 74, 0.16);
+  --gpopover-text: var(--ui-text-main);
+  --gpopover-muted: var(--ui-text-muted);
+  --gpopover-accent: var(--ui-accent);
+  --gpopover-shadow: 0 18px 42px rgba(0, 0, 0, 0.42);
+  --gpopover-radius: 0.375rem;
+  --gpopover-padding-x: 0.875rem;
+  --gpopover-padding-y: 0.875rem;
+  --gpopover-gap: 0.75rem;
+  --gpopover-width: min(24rem, calc(100vw - 1.5rem));
+
+  position: absolute;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  width: var(--gpopover-width);
+  min-width: 0;
+  border: 1px solid var(--gpopover-border);
+  border-radius: var(--gpopover-radius);
+  background: var(--gpopover-bg);
+  color: var(--gpopover-text);
+  box-shadow: var(--gpopover-shadow);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gpopover__accent {
+  width: 0.25rem;
+  background: linear-gradient(180deg, var(--gpopover-accent), rgba(255, 255, 255, 0.08));
+}
+
+.gpopover__shell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--gpopover-gap);
+  min-width: 0;
+  padding: var(--gpopover-padding-y) var(--gpopover-padding-x);
+}
+
+.gpopover__icon {
+  display: grid;
+  place-items: start center;
+  padding-top: 0.125rem;
+  color: var(--gpopover-accent);
+}
+
+.gpopover__content {
+  display: grid;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.gpopover__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gpopover__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.gpopover__title {
+  color: inherit;
+}
+
+.gpopover__chrome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.gpopover__message {
+  min-width: 0;
+  color: var(--gpopover-muted);
+  font-family: var(--ui-body-font);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.gpopover__message :deep(p) {
+  margin: 0;
+}
+
+.gpopover__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.gpopover__close-icon {
+  position: relative;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.gpopover__close-icon::before,
+.gpopover__close-icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1rem;
+  height: 0.125rem;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.gpopover__close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gpopover__close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.gpopover--sm .gpopover__panel {
+  --gpopover-padding-x: 0.75rem;
+  --gpopover-padding-y: 0.75rem;
+  --gpopover-gap: 0.625rem;
+  --gpopover-width: min(20rem, calc(100vw - 1.5rem));
+}
+
+.gpopover--md .gpopover__panel {
+  --gpopover-width: min(24rem, calc(100vw - 1.5rem));
+}
+
+.gpopover--lg .gpopover__panel {
+  --gpopover-padding-x: 1rem;
+  --gpopover-padding-y: 1rem;
+  --gpopover-gap: 0.875rem;
+  --gpopover-width: min(28rem, calc(100vw - 1.5rem));
+}
+
+.gpopover--top .gpopover__panel {
+  bottom: calc(100% + 0.625rem);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gpopover--bottom .gpopover__panel {
+  top: calc(100% + 0.625rem);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gpopover--left .gpopover__panel {
+  right: calc(100% + 0.625rem);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gpopover--right .gpopover__panel {
+  left: calc(100% + 0.625rem);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gpopover--soft .gpopover__panel {
+  --gpopover-bg: rgba(10, 14, 17, 0.96);
+  --gpopover-border: rgba(198, 255, 74, 0.16);
+}
+
+.gpopover--solid .gpopover__panel {
+  --gpopover-bg: rgba(198, 255, 74, 0.12);
+  --gpopover-border: rgba(198, 255, 74, 0.3);
+  --gpopover-text: #eff7d0;
+  --gpopover-muted: rgba(239, 247, 208, 0.84);
+}
+
+.gpopover--outline .gpopover__panel {
+  --gpopover-bg: rgba(8, 10, 12, 0.72);
+  --gpopover-border: rgba(255, 255, 255, 0.12);
+}
+
+.gpopover--accent .gpopover__panel {
+  --gpopover-border: rgba(198, 255, 74, 0.3);
+  --gpopover-accent: var(--ui-accent);
+}
+
+.gpopover--danger .gpopover__panel {
+  --gpopover-bg: rgba(255, 59, 48, 0.12);
+  --gpopover-border: rgba(255, 59, 48, 0.28);
+  --gpopover-text: #ffe2df;
+  --gpopover-muted: rgba(255, 226, 223, 0.84);
+  --gpopover-accent: #ff8b82;
+}
+
+.gpopover--warning .gpopover__panel {
+  --gpopover-bg: rgba(255, 176, 0, 0.12);
+  --gpopover-border: rgba(255, 176, 0, 0.28);
+  --gpopover-text: #fff0c8;
+  --gpopover-muted: rgba(255, 240, 200, 0.84);
+  --gpopover-accent: #ffd26b;
+}
+
+.gpopover--purple .gpopover__panel {
+  --gpopover-bg: rgba(139, 68, 255, 0.12);
+  --gpopover-border: rgba(139, 68, 255, 0.28);
+  --gpopover-text: #eadcff;
+  --gpopover-muted: rgba(234, 220, 255, 0.84);
+  --gpopover-accent: #cfa9ff;
+}
+
+.gpopover--ghost .gpopover__panel {
+  --gpopover-bg: rgba(255, 255, 255, 0.02);
+  --gpopover-border: rgba(255, 255, 255, 0.08);
+  --gpopover-text: rgba(236, 240, 244, 0.88);
+  --gpopover-muted: rgba(236, 240, 244, 0.72);
+}
+
+.gpopover--quiet .gpopover__panel {
+  --gpopover-bg: rgba(8, 10, 12, 0.98);
+  --gpopover-border: rgba(198, 255, 74, 0.12);
+}
+
+.gpopover-fade-enter-active,
+.gpopover-fade-leave-active {
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.gpopover-fade-enter-from,
+.gpopover-fade-leave-to {
+  opacity: 0;
+}
+
+.gpopover--top .gpopover-fade-enter-from,
+.gpopover--top .gpopover-fade-leave-to {
+  transform: translateX(-50%) translateY(0.25rem);
+}
+
+.gpopover--bottom .gpopover-fade-enter-from,
+.gpopover--bottom .gpopover-fade-leave-to {
+  transform: translateX(-50%) translateY(-0.25rem);
+}
+
+.gpopover--left .gpopover-fade-enter-from,
+.gpopover--left .gpopover-fade-leave-to {
+  transform: translateY(-50%) translateX(0.25rem);
+}
+
+.gpopover--right .gpopover-fade-enter-from,
+.gpopover--right .gpopover-fade-leave-to {
+  transform: translateY(-50%) translateX(-0.25rem);
+}

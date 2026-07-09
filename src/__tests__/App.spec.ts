@@ -26,6 +26,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('GText')
     expect(wrapper.text()).toContain('GButton')
     expect(wrapper.text()).toContain('GTooltip')
+    expect(wrapper.text()).toContain('GPopover')
     expect(wrapper.text()).toContain('GAvatar')
     expect(wrapper.text()).toContain('GIcon')
     expect(wrapper.text()).toContain('GInput')
@@ -46,6 +47,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('GEmptyState')
     expect(wrapper.text()).toContain('GAlert')
     expect(wrapper.text()).toContain('GBanner')
+    expect(wrapper.text()).toContain('Show popover')
     expect(wrapper.text()).toContain('GSkeleton')
     expect(wrapper.text()).toContain('GList')
     expect(wrapper.text()).toContain('GSection')
@@ -99,6 +101,7 @@ describe('App', () => {
     expect(wrapper.find('.gscroller').exists()).toBe(true)
     expect(wrapper.find('.gbutton').exists()).toBe(true)
     expect(wrapper.find('.gtooltip__anchor').exists()).toBe(true)
+    expect(wrapper.find('.gpopover').exists()).toBe(true)
     expect(wrapper.find('.gavatar').exists()).toBe(true)
     expect(wrapper.find('.gicon').exists()).toBe(true)
     expect(wrapper.find('.gicon__image').exists()).toBe(true)
@@ -143,5 +146,15 @@ describe('App', () => {
 
     expect(wrapper.find('.gmodal').exists()).toBe(true)
     expect(wrapper.text()).toContain('Standard Modal')
+
+    const popoverButton = wrapper
+      .findAll('button')
+      .find((button) => button.text().includes('Show popover'))
+
+    expect(popoverButton).toBeTruthy()
+    await popoverButton!.trigger('click')
+
+    expect(wrapper.find('.gpopover__panel').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Containment note')
   })
 })

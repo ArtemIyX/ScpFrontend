@@ -7,6 +7,7 @@ import GField from './g/GField/GField.vue'
 import GSection from './g/GSection/GSection.vue'
 import GDivider from './g/GDivider/GDivider.vue'
 import GTooltip from './g/GTooltip/GTooltip.vue'
+import GPopover from './g/GPopover/GPopover.vue'
 import GAvatar from './g/GAvatar/GAvatar.vue'
 import GIcon from './g/GIcon/GIcon.vue'
 import GKeybindInput from './g/GKeybindInput/GKeybindInput.vue'
@@ -55,6 +56,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gdivider', GDivider)
   app.component('GTooltip', GTooltip)
   app.component('gtooltip', GTooltip)
+  app.component('GPopover', GPopover)
+  app.component('gpopover', GPopover)
   app.component('GAvatar', GAvatar)
   app.component('gavatar', GAvatar)
   app.component('GIcon', GIcon)

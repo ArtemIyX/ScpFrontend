@@ -39,6 +39,8 @@ const alertVisible = ref(true)
 const bannerVisible = ref(true)
 const alertEvent = ref('No alert events yet.')
 const bannerEvent = ref('No banner events yet.')
+const popoverOpen = ref(false)
+const popoverEvent = ref('No popover events yet.')
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -376,6 +378,16 @@ function closeBanner(): void {
   bannerVisible.value = false
   bannerEvent.value = 'Banner closed.'
 }
+
+function closePopover(): void {
+  popoverOpen.value = false
+  popoverEvent.value = 'Popover closed.'
+}
+
+function openPopover(): void {
+  popoverOpen.value = true
+  popoverEvent.value = 'Popover opened.'
+}
 </script>
 
 <template>
@@ -485,6 +497,47 @@ function closeBanner(): void {
 
               <GButton preset="danger" width="full" disabled>Unavailable</GButton>
             </div>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GPopover</p>
+              <p class="debug-meta">
+                Anchored floating panel for quick details, actions, and compact contextual menus.
+              </p>
+            </div>
+          </div>
+
+          <div class="popover-stack">
+            <GPopover
+              v-model="popoverOpen"
+              title="Containment note"
+              message="This panel can hold short runtime details, status text, or a small action group."
+              icon="info"
+              preset="quiet"
+              variant="soft"
+              placement="bottom"
+              closable
+              show-close-button
+              close-label="Dismiss popover"
+              @open="openPopover"
+              @close="closePopover"
+            >
+              <template #trigger="{ isOpen }">
+                <GButton preset="accent">
+                  {{ isOpen ? 'Hide popover' : 'Show popover' }}
+                </GButton>
+              </template>
+
+              <template #footer="{ close }">
+                <GButton preset="purple" size="sm">Take note</GButton>
+                <GButton preset="ghost" size="sm" @click="close('button')">Close</GButton>
+              </template>
+            </GPopover>
+
+            <GText preset="muted" class="popover-event" :text="popoverEvent" />
           </div>
         </section>
 
@@ -2033,6 +2086,15 @@ function closeBanner(): void {
 
 .alert-event,
 .banner-event {
+  margin-top: 0;
+}
+
+.popover-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.popover-event {
   margin-top: 0;
 }
 
