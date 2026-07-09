@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 
 import GButton from './g/GButton/GButton.vue'
+import GBadge from './g/GBadge/GBadge.vue'
 import GCombo from './g/GCombo/GCombo.vue'
 import GInput from './g/GInput/GInput.vue'
 import GPanel from './g/GPanel/GPanel.vue'
@@ -15,6 +16,8 @@ export function registerCustomComponents(app: App): void {
   app.component('gtext', GText)
   app.component('GButton', GButton)
   app.component('gbutton', GButton)
+  app.component('GBadge', GBadge)
+  app.component('gbadge', GBadge)
   app.component('GCombo', GCombo)
   app.component('gcombo', GCombo)
   app.component('GInput', GInput)

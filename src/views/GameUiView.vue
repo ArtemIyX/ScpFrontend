@@ -67,6 +67,22 @@ const panelStats = [
   { label: 'Protocol', value: 'Live' },
 ] as const
 
+type BadgeItem = {
+  text: string
+  preset: 'neutral' | 'accent' | 'danger' | 'warning' | 'purple' | 'ghost' | 'quiet'
+  variant?: 'solid' | 'soft' | 'outline'
+  dot?: boolean
+}
+
+const badgeItems: BadgeItem[] = [
+  { text: 'Ready', preset: 'accent', dot: true },
+  { text: 'Alert', preset: 'warning', dot: true },
+  { text: 'Danger', preset: 'danger', dot: true },
+  { text: 'Paused', preset: 'purple', variant: 'outline' },
+  { text: 'Offline', preset: 'ghost', variant: 'outline' },
+  { text: 'Live', preset: 'neutral', variant: 'solid' },
+] as const
+
 const windowActions = [
   { label: 'Apply', preset: 'accent' },
   { label: 'Back', preset: 'ghost' },
@@ -493,6 +509,33 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GBadge</p>
+              <p class="debug-meta">
+                Small status tags for players, alerts, counts, and runtime conditions.
+              </p>
+            </div>
+          </div>
+
+          <div class="badge-grid">
+            <GBadge
+              v-for="item in badgeItems"
+              :key="item.text"
+              :preset="item.preset"
+              :variant="item.variant || 'soft'"
+              :dot="item.dot || false"
+            >
+              {{ item.text }}
+            </GBadge>
+
+            <GBadge preset="accent" variant="outline" interactive title="Clickable badge">
+              Clickable
+            </GBadge>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GWindow</p>
               <p class="debug-meta">
                 Larger framed surface for settings, inventory, and pause-style overlays.
@@ -670,6 +713,12 @@ function closeModalFromFooter(message: string): void {
 .panel-grid {
   display: grid;
   gap: 1rem;
+}
+
+.badge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .panel-stats {

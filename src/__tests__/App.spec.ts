@@ -29,6 +29,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('GCombo')
     expect(wrapper.text()).toContain('GTabs')
     expect(wrapper.text()).toContain('GPanel')
+    expect(wrapper.text()).toContain('GBadge')
     expect(wrapper.text()).toContain('GWindow')
     expect(wrapper.text()).toContain('GModal')
     expect(wrapper.text()).toContain('Standard modal')
@@ -44,6 +45,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('Menu')
     expect(wrapper.text()).toContain('Lobby')
     expect(wrapper.text()).toContain('Containment Briefing')
+    expect(wrapper.text()).toContain('Ready')
     expect(wrapper.text()).toContain('Settings Window')
     expect(wrapper.text()).toContain('Modal')
     expect(wrapper.find('button[disabled]').exists()).toBe(true)
@@ -54,6 +56,7 @@ describe('App', () => {
     expect(wrapper.find('.gcombo').exists()).toBe(true)
     expect(wrapper.find('.gtabs').exists()).toBe(true)
     expect(wrapper.find('.gpanel').exists()).toBe(true)
+    expect(wrapper.find('.gbadge').exists()).toBe(true)
     expect(wrapper.find('.gwindow').exists()).toBe(true)
 
     const openButton = wrapper

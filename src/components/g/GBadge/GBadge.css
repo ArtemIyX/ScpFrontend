@@ -1,0 +1,172 @@
+.gbadge {
+  --gbadge-bg: rgba(255, 255, 255, 0.05);
+  --gbadge-bg-hover: rgba(255, 255, 255, 0.08);
+  --gbadge-border: rgba(255, 255, 255, 0.1);
+  --gbadge-text: var(--ui-text-main);
+  --gbadge-shadow: none;
+  --gbadge-padding-x: 0.625rem;
+  --gbadge-padding-y: 0.35rem;
+  --gbadge-font-size: 0.6875rem;
+  --gbadge-gap: 0.35rem;
+  --gbadge-radius: 999px;
+  --gbadge-ring: rgba(198, 255, 74, 0.28);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gbadge-gap);
+  min-width: 0;
+  padding: var(--gbadge-padding-y) var(--gbadge-padding-x);
+  border: 1px solid var(--gbadge-border);
+  border-radius: var(--gbadge-radius);
+  background: var(--gbadge-bg);
+  box-shadow: var(--gbadge-shadow);
+  color: var(--gbadge-text);
+  font-family: var(--ui-technical-font);
+  font-size: var(--gbadge-font-size);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.gbadge--interactive {
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    color 140ms ease;
+}
+
+.gbadge--interactive:hover {
+  background: var(--gbadge-bg-hover);
+  border-color: rgba(198, 255, 74, 0.22);
+  transform: translateY(-1px);
+}
+
+.gbadge--interactive:focus-visible {
+  outline: none;
+  border-color: var(--gbadge-ring);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.48),
+    0 0 0 4px var(--gbadge-ring);
+}
+
+.gbadge--interactive:active {
+  transform: translateY(1px);
+}
+
+.gbadge--disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.gbadge__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.08);
+  flex: 0 0 auto;
+}
+
+.gbadge__text {
+  color: inherit;
+}
+
+.gbadge--sm {
+  --gbadge-padding-x: 0.5rem;
+  --gbadge-padding-y: 0.25rem;
+  --gbadge-font-size: 0.625rem;
+  --gbadge-gap: 0.25rem;
+}
+
+.gbadge--md {
+  --gbadge-padding-x: 0.625rem;
+  --gbadge-padding-y: 0.35rem;
+  --gbadge-font-size: 0.6875rem;
+  --gbadge-gap: 0.35rem;
+}
+
+.gbadge--lg {
+  --gbadge-padding-x: 0.75rem;
+  --gbadge-padding-y: 0.425rem;
+  --gbadge-font-size: 0.75rem;
+  --gbadge-gap: 0.4rem;
+}
+
+.gbadge--solid {
+  --gbadge-text: #09110a;
+  --gbadge-bg: var(--ui-accent);
+  --gbadge-bg-hover: #dcff7e;
+  --gbadge-border: rgba(198, 255, 74, 0.52);
+  --gbadge-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+}
+
+.gbadge--soft {
+  --gbadge-bg: rgba(198, 255, 74, 0.12);
+  --gbadge-bg-hover: rgba(198, 255, 74, 0.18);
+  --gbadge-border: rgba(198, 255, 74, 0.24);
+  --gbadge-text: var(--ui-accent);
+}
+
+.gbadge--outline {
+  --gbadge-bg: transparent;
+  --gbadge-bg-hover: rgba(255, 255, 255, 0.04);
+  --gbadge-border: rgba(255, 255, 255, 0.16);
+  --gbadge-text: var(--ui-text-main);
+}
+
+.gbadge--neutral {
+  --gbadge-bg: rgba(255, 255, 255, 0.05);
+  --gbadge-bg-hover: rgba(255, 255, 255, 0.08);
+  --gbadge-border: rgba(255, 255, 255, 0.1);
+}
+
+.gbadge--accent {
+  --gbadge-bg: rgba(198, 255, 74, 0.12);
+  --gbadge-bg-hover: rgba(198, 255, 74, 0.18);
+  --gbadge-border: rgba(198, 255, 74, 0.24);
+  --gbadge-text: var(--ui-accent);
+}
+
+.gbadge--danger {
+  --gbadge-bg: rgba(255, 59, 48, 0.12);
+  --gbadge-bg-hover: rgba(255, 59, 48, 0.18);
+  --gbadge-border: rgba(255, 59, 48, 0.24);
+  --gbadge-text: #ffb8b3;
+}
+
+.gbadge--warning {
+  --gbadge-bg: rgba(255, 176, 0, 0.12);
+  --gbadge-bg-hover: rgba(255, 176, 0, 0.18);
+  --gbadge-border: rgba(255, 176, 0, 0.24);
+  --gbadge-text: #ffd26b;
+}
+
+.gbadge--purple {
+  --gbadge-bg: rgba(139, 68, 255, 0.12);
+  --gbadge-bg-hover: rgba(139, 68, 255, 0.18);
+  --gbadge-border: rgba(139, 68, 255, 0.24);
+  --gbadge-text: #dbc4ff;
+}
+
+.gbadge--ghost {
+  --gbadge-bg: transparent;
+  --gbadge-bg-hover: rgba(255, 255, 255, 0.03);
+  --gbadge-border: rgba(255, 255, 255, 0.08);
+  --gbadge-text: rgba(236, 240, 244, 0.72);
+}
+
+.gbadge--quiet {
+  --gbadge-bg: rgba(12, 15, 20, 0.96);
+  --gbadge-bg-hover: rgba(18, 22, 28, 0.98);
+  --gbadge-border: rgba(198, 255, 74, 0.1);
+  --gbadge-text: var(--ui-text-main);
+}
