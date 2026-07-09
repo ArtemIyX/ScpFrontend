@@ -1,0 +1,313 @@
+.gradio {
+  --gradio-box-bg: rgba(255, 255, 255, 0.05);
+  --gradio-box-border: rgba(255, 255, 255, 0.12);
+  --gradio-box-fill: rgba(198, 255, 74, 0.12);
+  --gradio-mark: var(--ui-accent);
+  --gradio-text: var(--ui-text-main);
+  --gradio-helper: var(--ui-text-muted);
+  --gradio-error: #ffb8b3;
+  --gradio-ring: rgba(198, 255, 74, 0.28);
+  --gradio-gap: 0.75rem;
+  --gradio-size: 1.125rem;
+  --gradio-radius: 999px;
+  --gradio-min-height: 2.5rem;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--gradio-gap);
+  align-items: start;
+  min-width: 0;
+  color: var(--gradio-text);
+}
+
+.gradio--full {
+  width: 100%;
+}
+
+.gradio__control {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--gradio-size);
+  height: var(--gradio-size);
+  margin-top: 0.2rem;
+  flex: 0 0 auto;
+}
+
+.gradio__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.gradio__box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--gradio-size);
+  height: var(--gradio-size);
+  border: 1px solid var(--gradio-box-border);
+  border-radius: var(--gradio-radius);
+  background: var(--gradio-box-bg);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gradio__mark {
+  transition:
+    transform 140ms ease,
+    opacity 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease;
+}
+
+.gradio__content {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  min-height: var(--gradio-min-height);
+  padding-top: 0.1rem;
+}
+
+.gradio__label {
+  margin: 0;
+  color: inherit;
+}
+
+.gradio__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gradio-helper);
+}
+
+.gradio__helper--error {
+  color: var(--gradio-error);
+}
+
+.gradio:hover .gradio__box {
+  transform: translateY(-1px);
+  border-color: rgba(198, 255, 74, 0.24);
+}
+
+.gradio__input:focus-visible + .gradio__box {
+  border-color: var(--gradio-ring);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gradio-ring);
+}
+
+.gradio__input:active + .gradio__box {
+  transform: translateY(1px);
+}
+
+.gradio__input:disabled {
+  cursor: not-allowed;
+}
+
+.gradio--disabled {
+  opacity: 0.68;
+}
+
+.gradio--sm {
+  --gradio-gap: 0.625rem;
+  --gradio-size: 1rem;
+  --gradio-min-height: 2.25rem;
+}
+
+.gradio--md {
+  --gradio-gap: 0.75rem;
+  --gradio-size: 1.125rem;
+  --gradio-min-height: 2.5rem;
+}
+
+.gradio--lg {
+  --gradio-gap: 0.875rem;
+  --gradio-size: 1.25rem;
+  --gradio-min-height: 2.75rem;
+}
+
+.gradio--surface {
+  --gradio-box-bg: rgba(255, 255, 255, 0.05);
+  --gradio-box-border: rgba(255, 255, 255, 0.12);
+  --gradio-box-fill: rgba(198, 255, 74, 0.14);
+}
+
+.gradio--accent {
+  --gradio-box-bg: rgba(198, 255, 74, 0.08);
+  --gradio-box-border: rgba(198, 255, 74, 0.18);
+  --gradio-box-fill: rgba(198, 255, 74, 0.18);
+}
+
+.gradio--danger {
+  --gradio-box-bg: rgba(255, 59, 48, 0.08);
+  --gradio-box-border: rgba(255, 59, 48, 0.18);
+  --gradio-box-fill: rgba(255, 59, 48, 0.18);
+  --gradio-mark: #ff8b82;
+  --gradio-ring: rgba(255, 59, 48, 0.28);
+}
+
+.gradio--warning {
+  --gradio-box-bg: rgba(255, 176, 0, 0.08);
+  --gradio-box-border: rgba(255, 176, 0, 0.18);
+  --gradio-box-fill: rgba(255, 176, 0, 0.18);
+  --gradio-mark: #ffd26b;
+  --gradio-ring: rgba(255, 176, 0, 0.28);
+}
+
+.gradio--purple {
+  --gradio-box-bg: rgba(139, 68, 255, 0.08);
+  --gradio-box-border: rgba(139, 68, 255, 0.18);
+  --gradio-box-fill: rgba(139, 68, 255, 0.18);
+  --gradio-mark: #cfa9ff;
+  --gradio-ring: rgba(139, 68, 255, 0.28);
+}
+
+.gradio--ghost {
+  --gradio-box-bg: rgba(255, 255, 255, 0.03);
+  --gradio-box-border: rgba(255, 255, 255, 0.08);
+  --gradio-box-fill: rgba(236, 240, 244, 0.12);
+  --gradio-mark: rgba(236, 240, 244, 0.82);
+}
+
+.gradio--quiet {
+  --gradio-box-bg: rgba(12, 15, 20, 0.96);
+  --gradio-box-border: rgba(198, 255, 74, 0.1);
+  --gradio-box-fill: rgba(198, 255, 74, 0.12);
+}
+
+.gradio--background {
+  --gradio-box-bg: rgba(4, 6, 8, 0.72);
+  --gradio-box-border: rgba(198, 255, 74, 0.16);
+}
+
+.gradio--error .gradio__box {
+  border-color: rgba(255, 59, 48, 0.38);
+}
+
+.gradio--circle .gradio__box {
+  border-radius: 999px;
+}
+
+.gradio--circle .gradio__mark {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: transparent;
+  transform: scale(0);
+}
+
+.gradio--circle .gradio__input:checked + .gradio__box {
+  background: var(--gradio-box-fill);
+}
+
+.gradio--circle .gradio__input:checked + .gradio__box .gradio__mark {
+  transform: scale(1);
+  background: var(--gradio-mark);
+}
+
+.gradio--square .gradio__box {
+  border-radius: 0.3125rem;
+}
+
+.gradio--square .gradio__mark {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 0.125rem;
+  background: transparent;
+  transform: scale(0.2);
+  opacity: 0;
+}
+
+.gradio--square .gradio__input:checked + .gradio__box {
+  background: var(--gradio-box-fill);
+}
+
+.gradio--square .gradio__input:checked + .gradio__box .gradio__mark {
+  background: var(--gradio-mark);
+  transform: scale(1);
+  opacity: 1;
+}
+
+.gradio--lever {
+  --gradio-gap: 0.875rem;
+  --gradio-size: 2.625rem;
+  --gradio-min-height: 2.75rem;
+}
+
+.gradio--lever .gradio__control {
+  width: 2.625rem;
+  height: 1.5rem;
+  margin-top: 0.125rem;
+}
+
+.gradio--lever .gradio__box {
+  width: 2.625rem;
+  height: 1.5rem;
+  justify-content: flex-start;
+  padding: 0.1875rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.14)),
+    var(--gradio-box-bg);
+}
+
+.gradio--lever .gradio__box::before {
+  content: '';
+  position: absolute;
+  inset: 0.1875rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(0, 0, 0, 0.08);
+  opacity: 0.9;
+}
+
+.gradio--lever .gradio__mark {
+  position: relative;
+  z-index: 1;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 45%),
+    var(--gradio-mark);
+  transform: translateX(-0.65rem);
+  opacity: 0.85;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.gradio--lever .gradio__input:checked + .gradio__box {
+  background: var(--gradio-box-fill);
+}
+
+.gradio--lever .gradio__input:checked + .gradio__box .gradio__mark {
+  transform: translateX(1.15rem);
+  opacity: 1;
+}
+
+.gradio--lever .gradio__input:checked + .gradio__box::before {
+  background:
+    linear-gradient(90deg, rgba(198, 255, 74, 0.14), rgba(198, 255, 74, 0.04)),
+    rgba(0, 0, 0, 0.08);
+}
+
+.gradio--lever:hover .gradio__box {
+  border-color: rgba(198, 255, 74, 0.32);
+}
+
+.gradio--lever .gradio__input:focus-visible + .gradio__box {
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 0 4px var(--gradio-ring),
+    inset 0 1px 1px rgba(255, 255, 255, 0.03);
+}

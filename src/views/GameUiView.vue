@@ -12,6 +12,9 @@ const soundEnabled = ref(true)
 const subtitlesEnabled = ref(true)
 const playerNamesEnabled = ref(false)
 const motionBlurEnabled = ref(false)
+const missionStyle = ref<'stealth' | 'assault' | 'panic'>('stealth')
+const feedStyle = ref<'circle' | 'square' | 'lever'>('square')
+const powerState = ref<'on' | 'off'>('on')
 const region = ref('eu-west')
 const role = ref('medic')
 const difficulty = ref('standard')
@@ -202,6 +205,10 @@ const checkboxSummary = computed(() => {
   const enabledCount = [soundEnabled.value, subtitlesEnabled.value, playerNamesEnabled.value, motionBlurEnabled.value].filter(Boolean).length
   return `${enabledCount} settings enabled`
 })
+
+const radioSummary = computed(
+  () => `Mission ${missionStyle.value} / Feed ${feedStyle.value} / Power ${powerState.value}`,
+)
 
 function toggleDisabled(): void {
   isActionDisabled.value = !isActionDisabled.value
@@ -539,6 +546,113 @@ function closeModalFromFooter(message: string): void {
           </div>
 
           <GText preset="muted" class="checkbox-status" :text="checkboxSummary" />
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
+              <p class="ui-heading">GRadio</p>
+              <p class="debug-meta">
+                Single-choice controls with circle, square, and lever visuals.
+              </p>
+            </div>
+          </div>
+
+          <div class="radio-grid">
+            <div class="radio-group">
+              <GText preset="header">Mission Style</GText>
+              <GRadio
+                v-model="missionStyle"
+                name="mission-style"
+                value="stealth"
+                label="Stealth"
+                helper="Slow, quiet, and methodical."
+                preset="accent"
+                variant="circle"
+                width="full"
+              />
+              <GRadio
+                v-model="missionStyle"
+                name="mission-style"
+                value="assault"
+                label="Assault"
+                helper="Direct, fast, and loud."
+                preset="warning"
+                variant="circle"
+                width="full"
+              />
+              <GRadio
+                v-model="missionStyle"
+                name="mission-style"
+                value="panic"
+                label="Panic"
+                helper="For testing emergency states."
+                preset="danger"
+                variant="circle"
+                width="full"
+              />
+            </div>
+
+            <div class="radio-group">
+              <GText preset="header">Feed Style</GText>
+              <GRadio
+                v-model="feedStyle"
+                name="feed-style"
+                value="circle"
+                label="Circle"
+                helper="Classic radio look."
+                preset="purple"
+                variant="circle"
+                width="full"
+              />
+              <GRadio
+                v-model="feedStyle"
+                name="feed-style"
+                value="square"
+                label="Square"
+                helper="Sharper, more terminal-like."
+                preset="ghost"
+                variant="square"
+                width="full"
+              />
+              <GRadio
+                v-model="feedStyle"
+                name="feed-style"
+                value="lever"
+                label="Lever"
+                helper="A switch-like indicator."
+                preset="accent"
+                variant="lever"
+                width="full"
+              />
+            </div>
+
+            <div class="radio-group">
+              <GText preset="header">Power State</GText>
+              <GRadio
+                v-model="powerState"
+                name="power-state"
+                value="on"
+                label="Power On"
+                helper="Subsystems active."
+                preset="accent"
+                variant="lever"
+                width="full"
+              />
+              <GRadio
+                v-model="powerState"
+                name="power-state"
+                value="off"
+                label="Power Off"
+                helper="Subsystems idle."
+                preset="quiet"
+                variant="lever"
+                width="full"
+              />
+            </div>
+          </div>
+
+          <GText preset="muted" class="radio-status" :text="radioSummary" />
         </section>
 
         <section class="font-card ui-panel">
@@ -910,6 +1024,21 @@ function closeModalFromFooter(message: string): void {
 }
 
 .checkbox-status {
+  margin-top: 1rem;
+}
+
+.radio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+
+.radio-group {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.radio-status {
   margin-top: 1rem;
 }
 
