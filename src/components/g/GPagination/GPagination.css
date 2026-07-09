@@ -1,0 +1,175 @@
+.gpagination {
+  --gpagination-bg: rgba(10, 14, 17, 0.92);
+  --gpagination-border: rgba(198, 255, 74, 0.14);
+  --gpagination-text: var(--ui-text-main);
+  --gpagination-muted: var(--ui-text-muted);
+  --gpagination-accent: var(--ui-accent);
+  --gpagination-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+  --gpagination-radius: 0.375rem;
+  --gpagination-gap: 0.5rem;
+  --gpagination-pad-x: 0.75rem;
+  --gpagination-pad-y: 0.625rem;
+  --gpagination-page-min: 2.25rem;
+
+  display: block;
+  min-width: 0;
+  color: var(--gpagination-text);
+}
+
+.gpagination--full {
+  width: 100%;
+}
+
+.gpagination--background {
+  padding: var(--gpagination-pad-y) var(--gpagination-pad-x);
+  border: 1px solid var(--gpagination-border);
+  border-radius: var(--gpagination-radius);
+  background: var(--gpagination-bg);
+  box-shadow: var(--gpagination-shadow);
+}
+
+.gpagination__shell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gpagination-gap);
+  min-width: 0;
+}
+
+.gpagination__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gpagination__item {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.gpagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--gpagination-page-min);
+  padding: 0 0.25rem;
+  color: var(--gpagination-muted);
+  font-size: 0.9375rem;
+}
+
+.gpagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--gpagination-page-min);
+  height: var(--gpagination-page-min);
+  padding: 0 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.gpagination__page:hover:not(:disabled),
+.gpagination__page:focus-visible {
+  outline: none;
+  transform: translateY(-0.0625rem);
+  border-color: rgba(198, 255, 74, 0.24);
+  background: rgba(198, 255, 74, 0.08);
+}
+
+.gpagination__page--active {
+  border-color: rgba(198, 255, 74, 0.34);
+  background: rgba(198, 255, 74, 0.14);
+  box-shadow: 0 0 0 1px rgba(198, 255, 74, 0.14) inset;
+}
+
+.gpagination__page:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.gpagination__label {
+  color: inherit;
+  font-size: 0.875rem;
+}
+
+.gpagination__chevron {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 0.125rem solid currentColor;
+  border-bottom: 0.125rem solid currentColor;
+}
+
+.gpagination__chevron--prev,
+.gpagination__chevron--first {
+  transform: rotate(135deg);
+}
+
+.gpagination__chevron--next,
+.gpagination__chevron--last {
+  transform: rotate(-45deg);
+}
+
+.gpagination--sm {
+  --gpagination-gap: 0.375rem;
+  --gpagination-page-min: 2rem;
+}
+
+.gpagination--lg {
+  --gpagination-gap: 0.625rem;
+  --gpagination-page-min: 2.5rem;
+}
+
+.gpagination--surface {
+  --gpagination-bg: rgba(255, 255, 255, 0.04);
+  --gpagination-border: rgba(255, 255, 255, 0.1);
+}
+
+.gpagination--accent {
+  --gpagination-bg: rgba(198, 255, 74, 0.08);
+  --gpagination-border: rgba(198, 255, 74, 0.18);
+}
+
+.gpagination--danger {
+  --gpagination-bg: rgba(255, 59, 48, 0.08);
+  --gpagination-border: rgba(255, 59, 48, 0.18);
+}
+
+.gpagination--warning {
+  --gpagination-bg: rgba(255, 176, 0, 0.08);
+  --gpagination-border: rgba(255, 176, 0, 0.18);
+}
+
+.gpagination--purple {
+  --gpagination-bg: rgba(139, 68, 255, 0.08);
+  --gpagination-border: rgba(139, 68, 255, 0.18);
+}
+
+.gpagination--ghost {
+  --gpagination-bg: transparent;
+  --gpagination-border: rgba(255, 255, 255, 0.08);
+  --gpagination-shadow: none;
+}
+
+.gpagination--quiet {
+  --gpagination-bg: rgba(8, 10, 12, 0.96);
+  --gpagination-border: rgba(198, 255, 74, 0.12);
+}
+
+.gpagination--disabled {
+  opacity: 0.72;
+}

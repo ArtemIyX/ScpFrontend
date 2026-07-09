@@ -44,6 +44,10 @@ const popoverEvent = ref('No popover events yet.')
 const accordionValue = ref<'security' | 'briefing' | 'anomaly'>('security')
 const accordionEvent = ref('No accordion events yet.')
 const breadcrumbEvent = ref('No breadcrumb events yet.')
+const paginationPage = ref(4)
+const paginationCompactPage = ref(2)
+const paginationEvent = ref('No pagination events yet.')
+const paginationPageCount = 12
 const activeTab = ref('menu')
 const modalOpen = ref(false)
 const modalMode = ref<'standard' | 'no-button' | 'locked'>('standard')
@@ -150,6 +154,10 @@ const breadcrumbTrail = [
   { label: 'Observation Room A', href: '#obs-a' },
   { label: 'Maintenance Console', current: true },
 ] as const
+
+const paginationSummary = computed(
+  () => `Page ${paginationPage.value} of ${paginationPageCount} / Compact ${paginationCompactPage.value}`,
+)
 
 const iconSvgSrc = '/icons/scp-sigil.svg'
 const avatarSvgSrc = '/avatars/operative-17.svg'
@@ -449,6 +457,16 @@ function onAccordionClose(item: { value: 'security' | 'briefing' | 'anomaly' }):
 
 function onBreadcrumbSelect(item: { label: string }): void {
   breadcrumbEvent.value = `Selected breadcrumb: ${item.label}.`
+}
+
+function onPaginationChange(value: number): void {
+  paginationPage.value = value
+  paginationEvent.value = `Pagination moved to page ${value}.`
+}
+
+function onCompactPaginationChange(value: number): void {
+  paginationCompactPage.value = value
+  paginationEvent.value = `Compact pagination moved to page ${value}.`
 }
 </script>
 
@@ -1869,6 +1887,47 @@ function onBreadcrumbSelect(item: { label: string }): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GPagination</p>
+              <p class="debug-meta">
+                Page navigation for logs, inventories, and multi-screen tables.
+              </p>
+            </div>
+          </div>
+
+          <div class="pagination-stack">
+            <GPagination
+              v-model="paginationPage"
+              :page-count="paginationPageCount"
+              preset="quiet"
+              width="full"
+              background
+              aria-label="Mission log pages"
+              @change="onPaginationChange"
+            />
+
+            <GPagination
+              v-model="paginationCompactPage"
+              :page-count="6"
+              :boundary-count="1"
+              :sibling-count="0"
+              :show-first-last="false"
+              :show-prev-next="true"
+              preset="purple"
+              size="sm"
+              width="full"
+              background
+              aria-label="Compact mission pages"
+              @change="onCompactPaginationChange"
+            />
+
+            <GText preset="muted" class="pagination-event" :text="paginationEvent" />
+            <GText preset="muted" class="pagination-summary" :text="paginationSummary" />
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GPanel</p>
               <p class="debug-meta">
                 Shared framed container for menu blocks, HUD widgets, and modal content.
@@ -2466,6 +2525,16 @@ function onBreadcrumbSelect(item: { label: string }): void {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 0.75rem;
+}
+
+.pagination-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.pagination-event,
+.pagination-summary {
+  margin-top: 0;
 }
 
 .panel-grid {

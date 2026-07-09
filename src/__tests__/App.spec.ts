@@ -55,6 +55,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('GAccordion')
     expect(wrapper.text()).toContain('GDivider')
     expect(wrapper.text()).toContain('GTabs')
+    expect(wrapper.text()).toContain('GPagination')
     expect(wrapper.text()).toContain('GPanel')
     expect(wrapper.text()).toContain('GBadge')
     expect(wrapper.text()).toContain('GToast')
@@ -92,6 +93,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('Without marker')
     expect(wrapper.text()).toContain('Audio')
     expect(wrapper.text()).toContain('Security Door State')
+    expect(wrapper.text()).toContain('Page 4 of 12')
     expect(wrapper.text()).toContain('Interact')
     expect(wrapper.text()).toContain('Health')
     expect(wrapper.text()).toContain('Player Card')
@@ -138,6 +140,7 @@ describe('App', () => {
     expect(wrapper.find('.gdivider').exists()).toBe(true)
     expect(wrapper.find('.grail').exists()).toBe(true)
     expect(wrapper.find('.gtabs').exists()).toBe(true)
+    expect(wrapper.find('.gpagination').exists()).toBe(true)
     expect(wrapper.find('.gpanel').exists()).toBe(true)
     expect(wrapper.find('.gbadge').exists()).toBe(true)
     expect(wrapper.find('.gtoast').exists()).toBe(true)
@@ -153,6 +156,11 @@ describe('App', () => {
 
     expect(wrapper.find('.gmodal').exists()).toBe(true)
     expect(wrapper.text()).toContain('Standard Modal')
+
+    const nextPageButton = wrapper.find('.gpagination button[aria-label="Next page"]')
+    expect(nextPageButton.exists()).toBe(true)
+    await nextPageButton.trigger('click')
+    expect(wrapper.text()).toContain('Pagination moved to page 5.')
 
     const breadcrumbButton = wrapper
       .findAll('a')
