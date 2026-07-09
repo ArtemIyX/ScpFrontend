@@ -971,6 +971,26 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GDivider</p>
+              <p class="debug-meta">
+                Simple separator for splitting settings groups and denser menu blocks.
+              </p>
+            </div>
+          </div>
+
+          <div class="divider-stack">
+            <GDivider label="Audio" preset="quiet" />
+            <div class="divider-demo">
+              <GText preset="body">Left block</GText>
+              <GDivider orientation="vertical" inset preset="accent" aria-label="Split blocks" />
+              <GText preset="body">Right block</GText>
+            </div>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GTabs</p>
               <p class="debug-meta">
                 Page switching for menu, lobby, HUD, and pause screens inside the game UI.
@@ -1293,6 +1313,18 @@ function closeModalFromFooter(message: string): void {
 
 .field-status {
   margin-top: 0;
+}
+
+.divider-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.divider-demo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
 }
 
 .textarea-stack {

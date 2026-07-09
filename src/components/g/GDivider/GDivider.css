@@ -1,0 +1,85 @@
+.gdivider {
+  --gdivider-line: rgba(255, 255, 255, 0.12);
+  --gdivider-label: var(--ui-text-muted);
+  --gdivider-gap: 0.75rem;
+
+  display: flex;
+  align-items: center;
+  gap: var(--gdivider-gap);
+  min-width: 0;
+}
+
+.gdivider--horizontal {
+  width: 100%;
+}
+
+.gdivider--vertical {
+  flex-direction: column;
+  width: auto;
+  min-height: 100%;
+}
+
+.gdivider__line {
+  flex: 1 1 auto;
+  min-width: 0;
+  border-top: 1px solid var(--gdivider-line);
+}
+
+.gdivider--vertical .gdivider__line {
+  width: 1px;
+  min-height: 1.25rem;
+  border-top: 0;
+  border-left: 1px solid var(--gdivider-line);
+}
+
+.gdivider__label {
+  flex: 0 0 auto;
+  color: var(--gdivider-label);
+  white-space: nowrap;
+}
+
+.gdivider--inset {
+  padding-inline: 0.5rem;
+}
+
+.gdivider--sm {
+  --gdivider-gap: 0.5rem;
+}
+
+.gdivider--lg {
+  --gdivider-gap: 1rem;
+}
+
+.gdivider--surface {
+  --gdivider-line: rgba(255, 255, 255, 0.12);
+}
+
+.gdivider--accent {
+  --gdivider-line: rgba(198, 255, 74, 0.36);
+  --gdivider-label: var(--ui-accent);
+}
+
+.gdivider--danger {
+  --gdivider-line: rgba(255, 59, 48, 0.32);
+  --gdivider-label: #ffb8b3;
+}
+
+.gdivider--warning {
+  --gdivider-line: rgba(255, 176, 0, 0.34);
+  --gdivider-label: #ffd26b;
+}
+
+.gdivider--purple {
+  --gdivider-line: rgba(139, 68, 255, 0.34);
+  --gdivider-label: #dbc4ff;
+}
+
+.gdivider--ghost {
+  --gdivider-line: rgba(255, 255, 255, 0.08);
+  --gdivider-label: rgba(236, 240, 244, 0.7);
+}
+
+.gdivider--quiet {
+  --gdivider-line: rgba(198, 255, 74, 0.16);
+  --gdivider-label: rgba(236, 240, 244, 0.72);
+}
