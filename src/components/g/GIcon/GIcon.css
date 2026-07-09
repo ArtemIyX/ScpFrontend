@@ -1,0 +1,276 @@
+.gicon {
+  --gicon-size: 1rem;
+  --gicon-stroke: 0.125rem;
+  --gicon-color: currentColor;
+  --gicon-color-muted: rgba(236, 240, 244, 0.72);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--gicon-size);
+  height: var(--gicon-size);
+  min-width: 0;
+  min-height: 0;
+  color: var(--gicon-color);
+  flex: 0 0 auto;
+}
+
+.gicon__slot,
+.gicon__glyph,
+.gicon__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.gicon__image {
+  object-fit: contain;
+}
+
+.gicon__slot :deep(svg) {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gicon__glyph {
+  position: relative;
+}
+
+.gicon__glyph::before,
+.gicon__glyph::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.gicon--sm {
+  --gicon-size: 0.875rem;
+}
+
+.gicon--md {
+  --gicon-size: 1rem;
+}
+
+.gicon--lg {
+  --gicon-size: 1.25rem;
+}
+
+.gicon--accent {
+  --gicon-color: var(--ui-accent);
+}
+
+.gicon--danger {
+  --gicon-color: #ff8b82;
+}
+
+.gicon--warning {
+  --gicon-color: #ffd26b;
+}
+
+.gicon--purple {
+  --gicon-color: #cfa9ff;
+}
+
+.gicon--ghost {
+  --gicon-color: rgba(236, 240, 244, 0.62);
+}
+
+.gicon--quiet {
+  --gicon-color: rgba(236, 240, 244, 0.82);
+}
+
+.gicon--spin {
+  animation: gicon-spin 1s linear infinite;
+}
+
+.gicon--src .gicon__glyph {
+  display: none;
+}
+
+.gicon--plus .gicon__glyph::before,
+.gicon--minus .gicon__glyph::before,
+.gicon--close .gicon__glyph::before,
+.gicon--close .gicon__glyph::after,
+.gicon--menu .gicon__glyph::before,
+.gicon--menu .gicon__glyph::after,
+.gicon--menu .gicon__glyph,
+.gicon--check .gicon__glyph::before,
+.gicon--check .gicon__glyph::after,
+.gicon--chevron-up .gicon__glyph::before,
+.gicon--chevron-down .gicon__glyph::before,
+.gicon--chevron-left .gicon__glyph::before,
+.gicon--chevron-right .gicon__glyph::before,
+.gicon--info .gicon__glyph::before,
+.gicon--warning .gicon__glyph::before,
+.gicon--search .gicon__glyph::before,
+.gicon--search .gicon__glyph::after {
+  display: block;
+}
+
+.gicon--plus .gicon__glyph::before,
+.gicon--minus .gicon__glyph::before {
+  width: 100%;
+  height: var(--gicon-stroke);
+  margin-top: calc(var(--gicon-stroke) / -2);
+  margin-left: calc(var(--gicon-size) / -2);
+}
+
+.gicon--plus .gicon__glyph::after {
+  width: var(--gicon-stroke);
+  height: 100%;
+  margin-top: calc(var(--gicon-size) / -2);
+  margin-left: calc(var(--gicon-stroke) / -2);
+}
+
+.gicon--minus .gicon__glyph::after {
+  display: none;
+}
+
+.gicon--close .gicon__glyph::before,
+.gicon--close .gicon__glyph::after {
+  width: 100%;
+  height: var(--gicon-stroke);
+  margin-top: calc(var(--gicon-stroke) / -2);
+  margin-left: calc(var(--gicon-size) / -2);
+}
+
+.gicon--close .gicon__glyph::before {
+  transform: rotate(45deg);
+}
+
+.gicon--close .gicon__glyph::after {
+  transform: rotate(-45deg);
+}
+
+.gicon--menu .gicon__glyph::before,
+.gicon--menu .gicon__glyph::after,
+.gicon--menu .gicon__glyph {
+  width: 100%;
+  height: var(--gicon-stroke);
+  margin-left: calc(var(--gicon-size) / -2);
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.gicon--menu .gicon__glyph {
+  margin-top: calc(var(--gicon-stroke) / -2);
+}
+
+.gicon--menu .gicon__glyph::before {
+  margin-top: calc(var(--gicon-size) / -2 - 0.25rem);
+}
+
+.gicon--menu .gicon__glyph::after {
+  margin-top: calc(var(--gicon-size) / -2 + 0.25rem);
+}
+
+.gicon--check .gicon__glyph::before {
+  width: 38%;
+  height: var(--gicon-stroke);
+  margin-top: calc(var(--gicon-stroke) / -2);
+  margin-left: calc(var(--gicon-size) / -2 - 0.06rem);
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.gicon--check .gicon__glyph::after {
+  width: 64%;
+  height: var(--gicon-stroke);
+  margin-top: calc(var(--gicon-stroke) / -2);
+  margin-left: calc(var(--gicon-size) / -2 + 0.04rem);
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+
+.gicon--chevron-up .gicon__glyph::before,
+.gicon--chevron-down .gicon__glyph::before,
+.gicon--chevron-left .gicon__glyph::before,
+.gicon--chevron-right .gicon__glyph::before {
+  width: 42%;
+  height: 42%;
+  background: transparent;
+  border-right: var(--gicon-stroke) solid currentColor;
+  border-bottom: var(--gicon-stroke) solid currentColor;
+  margin-top: calc(var(--gicon-size) / -2);
+  margin-left: calc(var(--gicon-size) / -2);
+}
+
+.gicon--chevron-up .gicon__glyph::before {
+  transform: rotate(225deg);
+}
+
+.gicon--chevron-down .gicon__glyph::before {
+  transform: rotate(45deg);
+}
+
+.gicon--chevron-left .gicon__glyph::before {
+  transform: rotate(135deg);
+}
+
+.gicon--chevron-right .gicon__glyph::before {
+  transform: rotate(-45deg);
+}
+
+.gicon--search .gicon__glyph::before {
+  width: 56%;
+  height: 56%;
+  margin-top: calc(var(--gicon-size) / -2 - 0.08rem);
+  margin-left: calc(var(--gicon-size) / -2 - 0.08rem);
+  border: var(--gicon-stroke) solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.gicon--search .gicon__glyph::after {
+  width: 34%;
+  height: var(--gicon-stroke);
+  margin-top: calc(var(--gicon-size) / 4);
+  margin-left: calc(var(--gicon-size) / 4);
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.gicon--info .gicon__glyph::before {
+  width: 18%;
+  height: 18%;
+  margin-top: calc(var(--gicon-size) / 2 - 0.04rem);
+  margin-left: calc(var(--gicon-size) / -2 - 0.01rem);
+  border-radius: 999px;
+}
+
+.gicon--info .gicon__glyph::after {
+  width: var(--gicon-stroke);
+  height: 42%;
+  margin-top: calc(var(--gicon-size) / -2 + 0.08rem);
+  margin-left: calc(var(--gicon-stroke) / -2);
+  border-radius: 999px;
+}
+
+.gicon--warning .gicon__glyph::before {
+  width: 0;
+  height: 0;
+  margin-top: calc(var(--gicon-size) / -2);
+  margin-left: calc(var(--gicon-size) / -2);
+  border-left: calc(var(--gicon-size) / 2) solid transparent;
+  border-right: calc(var(--gicon-size) / 2) solid transparent;
+  border-bottom: calc(var(--gicon-size) * 0.88) solid currentColor;
+  background: transparent;
+}
+
+.gicon--warning .gicon__glyph::after {
+  width: var(--gicon-stroke);
+  height: 30%;
+  margin-top: calc(var(--gicon-size) / -2 + 0.08rem);
+  margin-left: calc(var(--gicon-stroke) / -2);
+  border-radius: 999px;
+  background: var(--gicon-color-muted);
+}
+
+@keyframes gicon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

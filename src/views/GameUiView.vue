@@ -88,6 +88,19 @@ const graphicsQualityOptions = [
   { value: 'cinematic', title: 'Cinematic', subtitle: 'Maximum visual quality', meta: 'Largest load', preset: 'warning' },
 ] as const
 
+const iconSamples = [
+  { name: 'search', label: 'Search' },
+  { name: 'close', label: 'Close' },
+  { name: 'plus', label: 'Plus' },
+  { name: 'minus', label: 'Minus' },
+  { name: 'check', label: 'Check' },
+  { name: 'info', label: 'Info' },
+  { name: 'menu', label: 'Menu' },
+  { name: 'chevron-down', label: 'Chevron' },
+] as const
+
+const iconSvgSrc = '/icons/scp-sigil.svg'
+
 const menuItems = [
   {
     value: 'resume',
@@ -1216,6 +1229,46 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GIcon</p>
+              <p class="debug-meta">
+                Shared icon primitive for buttons, badges, toolbars, and compact HUD markers.
+              </p>
+            </div>
+          </div>
+
+          <div class="icon-stack">
+            <div class="button-row">
+              <GButton preset="accent">
+                <template #icon-left>
+                  <GIcon name="search" preset="accent" />
+                </template>
+                Search logs
+              </GButton>
+
+              <GButton preset="ghost" icon-only aria-label="Close panel">
+                <template #icon>
+                  <GIcon name="close" />
+                </template>
+              </GButton>
+            </div>
+
+            <div class="icon-grid">
+              <div v-for="icon in iconSamples" :key="icon.name" class="icon-demo">
+                <GIcon :name="icon.name" preset="quiet" size="1.35rem" />
+                <GText preset="caps">{{ icon.label }}</GText>
+              </div>
+
+              <div class="icon-demo icon-demo--svg">
+                <GIcon :src="iconSvgSrc" preset="accent" size="2rem" />
+                <GText preset="caps">SVG src</GText>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GSkeleton</p>
               <p class="debug-meta">
                 Content placeholder for panels, cards, and HUD blocks while data is still
@@ -1720,6 +1773,27 @@ function closeModalFromFooter(message: string): void {
   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 1rem;
   align-items: start;
+}
+
+.icon-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.75rem;
+}
+
+.icon-demo {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.3125rem;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .skeleton-stack {
