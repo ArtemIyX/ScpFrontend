@@ -4,7 +4,7 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 import { mount } from '@vue/test-utils'
 import App from '../App.vue'
 import { customComponentsPlugin } from '../components/register'
-import MainMenuView from '../views/MainMenuView.vue'
+import MainMenuView from '../views/MainMenuView'
 
 describe('App', () => {
   it('renders the routed main menu view', async () => {
