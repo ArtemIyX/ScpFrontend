@@ -11,6 +11,7 @@ import GKeybindInput from './g/GKeybindInput/GKeybindInput.vue'
 import GTile from './g/GTile/GTile.vue'
 import GRail from './g/GRail/GRail.vue'
 import GCombo from './g/GCombo/GCombo.vue'
+import GLoading from './g/GLoading/GLoading.vue'
 import GList from './g/GList/GList.vue'
 import GListItem from './g/GListItem/GListItem.vue'
 import GMenuList from './g/GMenuList/GMenuList.vue'
@@ -56,6 +57,8 @@ export function registerCustomComponents(app: App): void {
   app.component('grail', GRail)
   app.component('GCombo', GCombo)
   app.component('gcombo', GCombo)
+  app.component('GLoading', GLoading)
+  app.component('gloading', GLoading)
   app.component('GList', GList)
   app.component('glist', GList)
   app.component('GListItem', GListItem)

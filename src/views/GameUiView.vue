@@ -1176,6 +1176,44 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
+              <p class="ui-heading">GLoading</p>
+              <p class="debug-meta">
+                Circular loading placeholder for cards, panels, and content that has not arrived
+                yet.
+              </p>
+            </div>
+          </div>
+
+          <div class="loading-grid">
+            <GLoading
+              label="Loading mission data"
+              helper="Receiving localized text and runtime payloads from the game."
+              preset="accent"
+              width="full"
+              background
+            />
+
+            <GCard
+              title="Profile Cache"
+              subtitle="Placeholder content"
+              meta="Waiting for player sync"
+              preset="quiet"
+              width="full"
+            >
+              <GLoading
+                label="Loading profile"
+                helper="Nickname, HUD tag, and lobby status are still syncing."
+                preset="purple"
+                width="full"
+                centered
+              />
+            </GCard>
+          </div>
+        </section>
+
+        <section class="font-card ui-panel">
+          <div class="debug-card-head">
+            <div>
               <p class="ui-heading">GList</p>
               <p class="debug-meta">
                 Default content lists for notes, objectives, briefings, and simple numbered steps.
@@ -1627,6 +1665,13 @@ function closeModalFromFooter(message: string): void {
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 1rem;
   align-items: start;
 }
