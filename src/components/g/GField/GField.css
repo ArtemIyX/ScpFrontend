@@ -1,0 +1,170 @@
+.gfield {
+  --gfield-bg: rgba(255, 255, 255, 0.04);
+  --gfield-bg-hover: rgba(255, 255, 255, 0.06);
+  --gfield-border: rgba(255, 255, 255, 0.1);
+  --gfield-border-hover: rgba(255, 255, 255, 0.16);
+  --gfield-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gfield-radius: 0.375rem;
+  --gfield-padding-x: 0.875rem;
+  --gfield-padding-y: 0.875rem;
+  --gfield-gap: 0.625rem;
+  --gfield-label-color: var(--ui-text-muted);
+  --gfield-helper: var(--ui-text-muted);
+
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: var(--gfield-padding-y) var(--gfield-padding-x);
+  border: 1px solid var(--gfield-border);
+  border-radius: var(--gfield-radius);
+  background: var(--gfield-bg);
+  box-shadow: var(--gfield-shadow);
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.gfield:hover {
+  background: var(--gfield-bg-hover);
+  border-color: var(--gfield-border-hover);
+}
+
+.gfield--full {
+  width: 100%;
+}
+
+.gfield--row {
+  grid-template-columns: minmax(11rem, 18rem) minmax(0, 1fr);
+  align-items: start;
+}
+
+.gfield--row .gfield__head {
+  padding-top: 0.125rem;
+}
+
+.gfield__head,
+.gfield__body,
+.gfield__meta {
+  min-width: 0;
+}
+
+.gfield__head {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.gfield__label {
+  margin: 0;
+  font-family: var(--ui-header-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gfield-label-color);
+}
+
+.gfield__body {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.gfield__meta {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.gfield__helper {
+  margin: 0;
+  font-family: var(--ui-body-font);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gfield-helper);
+}
+
+.gfield__helper--error {
+  color: #ffb8b3;
+}
+
+.gfield--sm {
+  --gfield-padding-x: 0.75rem;
+  --gfield-padding-y: 0.75rem;
+}
+
+.gfield--lg {
+  --gfield-padding-x: 1rem;
+  --gfield-padding-y: 1rem;
+}
+
+.gfield--center {
+  align-items: center;
+}
+
+.gfield--end {
+  align-items: end;
+}
+
+.gfield--surface {
+  --gfield-bg: rgba(255, 255, 255, 0.04);
+  --gfield-bg-hover: rgba(255, 255, 255, 0.06);
+  --gfield-border: rgba(255, 255, 255, 0.1);
+  --gfield-border-hover: rgba(255, 255, 255, 0.16);
+}
+
+.gfield--accent {
+  --gfield-bg: rgba(198, 255, 74, 0.08);
+  --gfield-bg-hover: rgba(198, 255, 74, 0.12);
+  --gfield-border: rgba(198, 255, 74, 0.16);
+  --gfield-border-hover: rgba(198, 255, 74, 0.28);
+}
+
+.gfield--danger {
+  --gfield-bg: rgba(255, 59, 48, 0.08);
+  --gfield-bg-hover: rgba(255, 59, 48, 0.12);
+  --gfield-border: rgba(255, 59, 48, 0.18);
+  --gfield-border-hover: rgba(255, 59, 48, 0.28);
+}
+
+.gfield--warning {
+  --gfield-bg: rgba(255, 176, 0, 0.08);
+  --gfield-bg-hover: rgba(255, 176, 0, 0.12);
+  --gfield-border: rgba(255, 176, 0, 0.18);
+  --gfield-border-hover: rgba(255, 176, 0, 0.28);
+}
+
+.gfield--purple {
+  --gfield-bg: rgba(139, 68, 255, 0.08);
+  --gfield-bg-hover: rgba(139, 68, 255, 0.12);
+  --gfield-border: rgba(139, 68, 255, 0.18);
+  --gfield-border-hover: rgba(139, 68, 255, 0.28);
+}
+
+.gfield--ghost {
+  --gfield-bg: transparent;
+  --gfield-bg-hover: rgba(255, 255, 255, 0.03);
+  --gfield-border: rgba(255, 255, 255, 0.08);
+  --gfield-border-hover: rgba(198, 255, 74, 0.18);
+  --gfield-shadow: none;
+}
+
+.gfield--quiet {
+  --gfield-bg: rgba(12, 15, 20, 0.96);
+  --gfield-bg-hover: rgba(18, 22, 28, 0.98);
+  --gfield-border: rgba(198, 255, 74, 0.1);
+  --gfield-border-hover: rgba(198, 255, 74, 0.2);
+  --gfield-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
+}
+
+.gfield--background {
+  --gfield-bg: rgba(4, 6, 8, 0.7);
+  --gfield-bg-hover: rgba(8, 10, 12, 0.82);
+  --gfield-border: rgba(198, 255, 74, 0.2);
+  --gfield-border-hover: rgba(198, 255, 74, 0.34);
+  --gfield-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+}
+
+.gfield--error {
+  --gfield-border: rgba(255, 59, 48, 0.42);
+  --gfield-border-hover: rgba(255, 59, 48, 0.52);
+}

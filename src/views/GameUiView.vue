@@ -530,7 +530,7 @@ function closeModalFromFooter(message: string): void {
               preset="surface"
               width="full"
               :rows="4"
-              maxlength="160"
+              :maxlength="160"
               placeholder="Write briefing text"
             />
 
@@ -930,26 +930,32 @@ function closeModalFromFooter(message: string): void {
         <section class="font-card ui-panel">
           <div class="debug-card-head">
             <div>
-              <p class="ui-heading">GRail</p>
+              <p class="ui-heading">GField</p>
               <p class="debug-meta">
-                Direct preset selector for graphics quality, game settings, and other one-choice
-                options.
+                Generic settings row for labels, controls, helper text, and future custom layouts.
               </p>
             </div>
           </div>
 
-          <div class="rail-stack">
-            <GRail
-              v-model="graphicsQuality"
+          <div class="field-stack">
+            <GField
               label="Graphics Quality"
-              helper="One click jumps straight to the preset, with text large enough for first-time users."
-              :items="graphicsQualityOptions"
-              preset="quiet"
+              helper="One wrapper, any control inside it. This one holds the direct preset rail."
+              layout="row"
               width="full"
               background
-            />
+              preset="quiet"
+            >
+              <GRail
+                v-model="graphicsQuality"
+                :items="graphicsQualityOptions"
+                preset="quiet"
+                width="full"
+                background
+              />
+            </GField>
 
-            <GText preset="muted" class="rail-status" :text="graphicsQualitySummary" />
+            <GText preset="muted" class="field-status" :text="graphicsQualitySummary" />
           </div>
         </section>
 
@@ -1271,12 +1277,12 @@ function closeModalFromFooter(message: string): void {
   gap: 0.75rem;
 }
 
-.rail-stack {
+.field-stack {
   display: grid;
   gap: 1rem;
 }
 
-.rail-status {
+.field-status {
   margin-top: 0;
 }
 
