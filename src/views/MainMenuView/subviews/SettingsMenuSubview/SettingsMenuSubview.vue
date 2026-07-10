@@ -27,7 +27,8 @@
 <style scoped>
 .settings-menu {
   display: grid;
-  place-items: center;
+  justify-items: center;
+  align-content: start;
   min-width: 0;
   min-height: 100%;
   padding: 1.5rem 0 2rem;
@@ -36,6 +37,7 @@
 .settings-menu__window {
   width: min(100%, 76rem);
   height: min(100%, calc(100vh - 9.5rem));
+  margin: 0 auto;
   border: 1px solid rgba(198, 255, 74, 0.16);
   background:
     linear-gradient(180deg, rgba(8, 12, 11, 0.94), rgba(4, 6, 6, 0.92)),

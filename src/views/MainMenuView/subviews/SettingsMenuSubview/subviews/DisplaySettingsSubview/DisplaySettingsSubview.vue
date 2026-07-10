@@ -1,17 +1,267 @@
+<script lang="ts" src="./DisplaySettingsSubview.ts"></script>
+
 <template>
-  <section class="settings-tab-view" aria-label="Display settings">
-    <h1 class="settings-tab-view__title">Display</h1>
+  <section class="display-settings" aria-label="Display settings">
+    <header class="display-settings__header">
+      <GText as="h1" preset="title" class="display-settings__title">Display</GText>
+      <GText as="p" preset="muted" class="display-settings__summary">
+        Control presentation mode, runtime sync, HDR output, and camera comfort settings.
+      </GText>
+    </header>
+
+    <GSection
+      class="display-settings__section"
+      title="Display Output"
+      subtitle="Shape how the game is presented on the monitor before we wire these values into UE."
+      width="full"
+      preset="quiet"
+      background
+    >
+      <div class="display-settings__stack">
+        <GField
+          label="Fullscreen Mode"
+          helper="Windowed Fullscreen locks to the desktop output path."
+          layout="stack"
+          width="full"
+          class="display-settings__field"
+        >
+          <div class="display-settings__mode-grid">
+            <GButton
+              v-for="mode in fullscreenModes"
+              :key="mode.value"
+              :pressed="fullscreenMode === mode.value"
+              :preset="fullscreenMode === mode.value ? 'accent' : 'quiet'"
+              shape="block"
+              size="lg"
+              class="display-settings__mode-button"
+              @click="fullscreenMode = mode.value"
+            >
+              {{ mode.label }}
+            </GButton>
+          </div>
+        </GField>
+
+        <div class="display-settings__grid display-settings__grid--duo">
+          <GField label="Resolution" helper="Disabled while using desktop-sized borderless mode." width="full">
+            <GCombo
+              v-model="resolution"
+              :options="resolutionOptions"
+              :disabled="resolutionDisabled"
+              width="full"
+              preset="quiet"
+              placeholder="Select resolution"
+            />
+          </GField>
+
+          <div class="display-settings__toggle-column">
+            <GCheckbox v-model="vsync" preset="quiet">VSync</GCheckbox>
+            <GCheckbox v-model="limitFps" preset="quiet">Limit FPS</GCheckbox>
+          </div>
+        </div>
+
+        <GField
+          label="Max FPS"
+          helper="Use the slider for broad tuning or the numeric input for exact caps."
+          width="full"
+          class="display-settings__field"
+        >
+          <div class="display-settings__fps-row" :class="{ 'display-settings__fps-row--disabled': fpsControlsDisabled }">
+            <GSlider
+              v-model="maxFps"
+              :disabled="fpsControlsDisabled"
+              :min="30"
+              :max="360"
+              :step="1"
+              :show-value="false"
+              value-suffix=" FPS"
+              width="full"
+              preset="quiet"
+              aria-label="Maximum frames per second"
+            />
+            <GNumberInput
+              v-model="maxFps"
+              :disabled="fpsControlsDisabled"
+              :min="30"
+              :max="360"
+              :step="1"
+              :step-buttons="false"
+              :show-value="false"
+              width="full"
+              preset="quiet"
+              aria-label="Maximum FPS input"
+            >
+              <template #suffix>
+                <span class="display-settings__unit">FPS</span>
+              </template>
+            </GNumberInput>
+          </div>
+        </GField>
+
+        <div class="display-settings__hdr-shell">
+          <GCheckbox v-model="hdrEnabled" preset="quiet">HDR Enable</GCheckbox>
+
+          <div class="display-settings__grid display-settings__grid--duo">
+            <GField
+              label="Output Device"
+              helper="UE5 `r.HDR.Display.OutputDevice` mapping."
+              width="full"
+            >
+              <GCombo
+                v-model="hdrOutputDevice"
+                :options="hdrOutputDeviceOptions"
+                :disabled="hdrControlsDisabled"
+                width="full"
+                preset="quiet"
+                placeholder="Select output device"
+              />
+            </GField>
+
+            <GField
+              label="Color Gamut"
+              helper="UE5 `r.HDR.Display.ColorGamut` mapping."
+              width="full"
+            >
+              <GCombo
+                v-model="hdrColorGamut"
+                :options="hdrColorGamutOptions"
+                :disabled="hdrControlsDisabled"
+                width="full"
+                preset="quiet"
+                placeholder="Select color gamut"
+              />
+            </GField>
+          </div>
+        </div>
+      </div>
+    </GSection>
+
+    <GDivider label="Accessibility" preset="quiet" class="display-settings__divider" />
+
+    <GSection
+      class="display-settings__section"
+      subtitle="Screen comfort and readability controls."
+      width="full"
+      preset="quiet"
+      background
+    >
+      <div class="display-settings__triple">
+        <GField label="Brightness" width="full">
+          <GSlider
+            v-model="brightness"
+            :min="0"
+            :max="100"
+            :step="1"
+            width="full"
+            preset="quiet"
+            aria-label="Brightness"
+          />
+        </GField>
+
+        <GField label="Gamma" width="full">
+          <GSlider
+            v-model="gamma"
+            :min="0"
+            :max="100"
+            :step="1"
+            width="full"
+            preset="quiet"
+            aria-label="Gamma"
+          />
+        </GField>
+
+        <GField label="Contrast" width="full">
+          <GSlider
+            v-model="contrast"
+            :min="0"
+            :max="100"
+            :step="1"
+            width="full"
+            preset="quiet"
+            aria-label="Contrast"
+          />
+        </GField>
+      </div>
+    </GSection>
+
+    <GDivider label="Camera" preset="quiet" class="display-settings__divider" />
+
+    <GSection
+      class="display-settings__section"
+      subtitle="Visual comfort tuning for movement-heavy first-person play."
+      width="full"
+      preset="quiet"
+      background
+    >
+      <div class="display-settings__stack">
+        <GField label="Field Of View" width="full">
+          <GSlider
+            v-model="fov"
+            :min="70"
+            :max="120"
+            :step="1"
+            value-suffix="°"
+            width="full"
+            preset="quiet"
+            aria-label="Field of view"
+          />
+        </GField>
+
+        <div class="display-settings__grid display-settings__grid--camera">
+          <GField label="Camera Smoothing" width="full">
+            <GSlider
+              v-model="cameraSmoothing"
+              :min="0"
+              :max="100"
+              :step="1"
+              width="full"
+              preset="quiet"
+              aria-label="Camera smoothing"
+            />
+          </GField>
+
+          <GField label="Screen Shake Intensity" width="full">
+            <GSlider
+              v-model="screenShakeIntensity"
+              :min="0"
+              :max="100"
+              :step="1"
+              width="full"
+              preset="quiet"
+              aria-label="Screen shake intensity"
+            />
+          </GField>
+
+          <GField label="Head Bobbing Intensity" width="full">
+            <GSlider
+              v-model="headBobbingIntensity"
+              :min="0"
+              :max="100"
+              :step="1"
+              width="full"
+              preset="quiet"
+              aria-label="Head bobbing intensity"
+            />
+          </GField>
+        </div>
+      </div>
+    </GSection>
   </section>
 </template>
 
 <style scoped>
-.settings-tab-view {
+.display-settings {
   display: grid;
   align-content: start;
+  gap: 1rem;
   min-height: 100%;
 }
 
-.settings-tab-view__title {
+.display-settings__header {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.display-settings__title {
   margin: 0;
   color: rgba(240, 244, 238, 0.96);
   font-family: var(--ui-body-font);
@@ -21,5 +271,119 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-shadow: 0 0 1.2rem rgba(198, 255, 74, 0.12);
+}
+
+.display-settings__summary {
+  max-width: 42rem;
+  margin: 0;
+}
+
+.display-settings__section {
+  border: 1px solid rgba(198, 255, 74, 0.12);
+  background:
+    linear-gradient(180deg, rgba(198, 255, 74, 0.03), transparent 16%),
+    linear-gradient(180deg, rgba(12, 16, 15, 0.74), rgba(8, 11, 11, 0.88));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 1rem 2rem rgba(0, 0, 0, 0.18);
+}
+
+.display-settings__stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.display-settings__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.display-settings__grid--duo {
+  grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+}
+
+.display-settings__grid--camera {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.display-settings__triple {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.display-settings__mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.display-settings__mode-button {
+  min-width: 0;
+}
+
+.display-settings__toggle-column {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding-top: 0.15rem;
+}
+
+.display-settings__fps-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(7.5rem, 9rem);
+  gap: 1rem;
+  align-items: end;
+}
+
+.display-settings__fps-row--disabled {
+  opacity: 0.5;
+}
+
+.display-settings__hdr-shell {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(198, 255, 74, 0.09);
+  background:
+    linear-gradient(180deg, rgba(255, 176, 0, 0.04), transparent 30%),
+    rgba(5, 8, 8, 0.36);
+}
+
+.display-settings__divider {
+  margin-top: 0.35rem;
+}
+
+.display-settings__unit {
+  color: rgba(236, 240, 244, 0.62);
+  font-family: var(--ui-technical-font);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 64rem) {
+  .display-settings__grid--duo,
+  .display-settings__grid--camera,
+  .display-settings__triple {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .display-settings__fps-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 48rem) {
+  .display-settings__mode-grid,
+  .display-settings__grid--duo,
+  .display-settings__grid--camera,
+  .display-settings__triple {
+    grid-template-columns: 1fr;
+  }
+
+  .display-settings__toggle-column {
+    padding-top: 0;
+  }
 }
 </style>
