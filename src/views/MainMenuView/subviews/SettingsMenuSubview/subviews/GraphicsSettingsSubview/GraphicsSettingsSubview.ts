@@ -1,6 +1,8 @@
 import { computed, defineComponent, reactive, ref } from 'vue'
 
 import type { GRailItem } from '@/components/g/GRail/GRail'
+import GraphicsNumberOverrideRow from './components/GraphicsNumberOverrideRow.vue'
+import GraphicsPresetField from './components/GraphicsPresetField.vue'
 
 type QualityValue = 'low' | 'medium' | 'high' | 'epic' | 'cinematic'
 type MaterialQualityValue = 'low' | 'high'
@@ -53,6 +55,19 @@ type EffectsSettings = {
   detailMode: number | null
   translucencyVolumeBlur: number | null
   effectsMaterialQualityLevel: number | null
+}
+
+type OverrideRowConfig<Settings> = {
+  key: keyof Settings
+  label: string
+  cvar: string
+  presetValues: string
+  ariaLabel: string
+  min: number
+  max: number
+  step: number
+  mode?: 'float'
+  precision?: number
 }
 
 const scalabilityItems: GRailItem[] = [
@@ -296,6 +311,49 @@ const effectsPresetMap: Record<Exclude<EffectsPresetValue, 'custom'>, EffectsSet
   },
 }
 
+const postProcessOverrideRows: OverrideRowConfig<PostProcessSettings>[] = [
+  { key: 'motionBlurQuality', label: 'Motion Blur Quality', cvar: 'r.MotionBlurQuality', presetValues: '0/3/3/4', ariaLabel: 'Motion blur quality', min: 0, max: 4, step: 1 },
+  { key: 'blurGBuffer', label: 'Blur GBuffer', cvar: 'r.BlurGBuffer', presetValues: '0/0/-1/-1', ariaLabel: 'Blur GBuffer', min: -1, max: 1, step: 1 },
+  { key: 'ambientOcclusionLevels', label: 'Ambient Occlusion Levels', cvar: 'r.AmbientOcclusionLevels', presetValues: '0/1/2/3', ariaLabel: 'Ambient occlusion levels', min: 0, max: 3, step: 1 },
+  { key: 'ambientOcclusionRadiusScale', label: 'AO Radius Scale', cvar: 'r.AmbientOcclusionRadiusScale', presetValues: '1.7/1.7/1.5/1.0', ariaLabel: 'Ambient occlusion radius scale', min: 0.5, max: 2, step: 0.1, mode: 'float', precision: 1 },
+  { key: 'depthOfFieldQuality', label: 'Depth Of Field Quality', cvar: 'r.DepthOfFieldQuality', presetValues: '0/1/2/2', ariaLabel: 'Depth of field quality', min: 0, max: 2, step: 1 },
+  { key: 'renderTargetPoolMin', label: 'Render Target Pool Min', cvar: 'r.RenderTargetPoolMin', presetValues: '300/350/400/400', ariaLabel: 'Render target pool minimum', min: 300, max: 500, step: 10 },
+  { key: 'lensFlareQuality', label: 'Lens Flare Quality', cvar: 'r.LensFlareQuality', presetValues: '0/0/2/2', ariaLabel: 'Lens flare quality', min: 0, max: 2, step: 1 },
+  { key: 'sceneColorFringeQuality', label: 'Scene Color Fringe Quality', cvar: 'r.SceneColorFringeQuality', presetValues: '0/0/1/1', ariaLabel: 'Scene color fringe quality', min: 0, max: 1, step: 1 },
+  { key: 'eyeAdaptationQuality', label: 'Eye Adaptation Quality', cvar: 'r.EyeAdaptationQuality', presetValues: '0/0/2/2', ariaLabel: 'Eye adaptation quality', min: 0, max: 2, step: 1 },
+  { key: 'bloomQuality', label: 'Bloom Quality', cvar: 'r.BloomQuality', presetValues: '4/4/5/5', ariaLabel: 'Bloom quality', min: 4, max: 5, step: 1 },
+  { key: 'fastBlurThreshold', label: 'Fast Blur Threshold', cvar: 'r.FastBlurThreshold', presetValues: '0/2/3/7', ariaLabel: 'Fast blur threshold', min: 0, max: 7, step: 1 },
+  { key: 'upscaleQuality', label: 'Upscale Quality', cvar: 'r.Upscale.Quality', presetValues: '1/2/2/3', ariaLabel: 'Upscale quality', min: 1, max: 3, step: 1 },
+  { key: 'tonemapperGrainQuantization', label: 'Grain Quantization', cvar: 'r.Tonemapper.GrainQuantization', presetValues: '0/0/1/1', ariaLabel: 'Tonemapper grain quantization', min: 0, max: 1, step: 1 },
+]
+
+const shadowOverrideRows: OverrideRowConfig<ShadowSettings>[] = [
+  { key: 'lightFunctionQuality', label: 'Light Function Quality', cvar: 'r.LightFunctionQuality', presetValues: '0/1/1/1', ariaLabel: 'Light function quality', min: 0, max: 1, step: 1 },
+  { key: 'shadowQuality', label: 'Shadow Quality', cvar: 'r.ShadowQuality', presetValues: '0/2/5/5', ariaLabel: 'Shadow quality override', min: 0, max: 5, step: 1 },
+  { key: 'shadowCsmMaxCascades', label: 'CSM Max Cascades', cvar: 'r.Shadow.CSM.MaxCascades', presetValues: '1/1/2/4', ariaLabel: 'Shadow CSM max cascades', min: 1, max: 4, step: 1 },
+  { key: 'shadowMaxResolution', label: 'Max Resolution', cvar: 'r.Shadow.MaxResolution', presetValues: '512/1024/1024/1024', ariaLabel: 'Shadow max resolution', min: 512, max: 2048, step: 128 },
+  { key: 'shadowRadiusThreshold', label: 'Radius Threshold', cvar: 'r.Shadow.RadiusThreshold', presetValues: '0.06/0.05/0.04/0.03', ariaLabel: 'Shadow radius threshold', min: 0.01, max: 0.1, step: 0.01, mode: 'float', precision: 2 },
+  { key: 'shadowDistanceScale', label: 'Distance Scale', cvar: 'r.Shadow.DistanceScale', presetValues: '0.6/0.7/0.85/1.0', ariaLabel: 'Shadow distance scale', min: 0.5, max: 1.5, step: 0.05, mode: 'float', precision: 2 },
+  { key: 'shadowCsmTransitionScale', label: 'CSM Transition Scale', cvar: 'r.Shadow.CSM.TransitionScale', presetValues: '0/0.25/0.8/1.0', ariaLabel: 'Shadow CSM transition scale', min: 0, max: 1.5, step: 0.05, mode: 'float', precision: 2 },
+]
+
+const textureOverrideRows: OverrideRowConfig<TextureSettings>[] = [
+  { key: 'streamingMipBias', label: 'Mip Bias', cvar: 'r.Streaming.MipBias', presetValues: '2.5/1/0/0', ariaLabel: 'Texture streaming mip bias', min: 0, max: 3, step: 0.1, mode: 'float', precision: 1 },
+  { key: 'maxAnisotropy', label: 'Max Anisotropy', cvar: 'r.MaxAnisotropy', presetValues: '0/2/4/8', ariaLabel: 'Texture max anisotropy', min: 0, max: 16, step: 1 },
+  { key: 'streamingPoolSize', label: 'Streaming Pool Size', cvar: 'r.Streaming.PoolSize', presetValues: '200/400/700/1000', ariaLabel: 'Texture streaming pool size', min: 200, max: 2000, step: 50 },
+]
+
+const effectsOverrideRows: OverrideRowConfig<EffectsSettings>[] = [
+  { key: 'translucencyLightingVolumeDim', label: 'Translucency Volume Dim', cvar: 'r.TranslucencyLightingVolumeDim', presetValues: '24/32/48/64', ariaLabel: 'Translucency lighting volume dimension', min: 16, max: 96, step: 8 },
+  { key: 'refractionQuality', label: 'Refraction Quality', cvar: 'r.RefractionQuality', presetValues: '0/0/2/2', ariaLabel: 'Refraction quality', min: 0, max: 2, step: 1 },
+  { key: 'ssr', label: 'Screen Space Reflections', cvar: 'r.SSR', presetValues: '0/0/0/1', ariaLabel: 'Screen space reflections enable', min: 0, max: 1, step: 1 },
+  { key: 'ssrQuality', label: 'SSR Quality', cvar: 'r.SSR.Quality', presetValues: '0/0/0/1', ariaLabel: 'Screen space reflections quality', min: 0, max: 4, step: 1 },
+  { key: 'sceneColorFormat', label: 'Scene Color Format', cvar: 'r.SceneColorFormat', presetValues: '3/3/3/4', ariaLabel: 'Scene color format', min: 3, max: 5, step: 1 },
+  { key: 'detailMode', label: 'Detail Mode', cvar: 'r.DetailMode', presetValues: '0/1/1/2', ariaLabel: 'Detail mode', min: 0, max: 2, step: 1 },
+  { key: 'translucencyVolumeBlur', label: 'Translucency Blur', cvar: 'r.TranslucencyVolumeBlur', presetValues: '0/0/1/1', ariaLabel: 'Translucency volume blur', min: 0, max: 1, step: 1 },
+  { key: 'effectsMaterialQualityLevel', label: 'Material Quality Level', cvar: 'r.MaterialQualityLevel', presetValues: '0/1/1/1', ariaLabel: 'Effects material quality level', min: 0, max: 1, step: 1 },
+]
+
 function clonePostProcessSettings(settings: PostProcessSettings): PostProcessSettings {
   return {
     motionBlurQuality: settings.motionBlurQuality,
@@ -403,6 +461,10 @@ function matchesEffectsPreset(current: EffectsSettings, preset: EffectsSettings)
 
 export default defineComponent({
   name: 'GraphicsSettingsSubview',
+  components: {
+    GraphicsNumberOverrideRow,
+    GraphicsPresetField,
+  },
   setup() {
     const resolutionScale = ref<number | null>(100)
     const viewDistanceQuality = ref<QualityValue>('high')
@@ -613,6 +675,7 @@ export default defineComponent({
       effectsPreset,
       effectsPresetItems,
       effectsSettings,
+      effectsOverrideRows,
       materialQualityItems,
       materialQualityLevel,
       onEffectsPresetChange,
@@ -623,16 +686,19 @@ export default defineComponent({
       postProcessPreset,
       postProcessPresetItems,
       postProcessSettings,
+      postProcessOverrideRows,
       resolutionScale,
       scalabilityItems,
       shadowCustomOpen,
       shadowPreset,
       shadowPresetItems,
       shadowSettings,
+      shadowOverrideRows,
       textureCustomOpen,
       texturePreset,
       texturePresetItems,
       textureSettings,
+      textureOverrideRows,
       toggleEffectsCustomOpen,
       togglePostProcessCustomOpen,
       toggleShadowCustomOpen,
