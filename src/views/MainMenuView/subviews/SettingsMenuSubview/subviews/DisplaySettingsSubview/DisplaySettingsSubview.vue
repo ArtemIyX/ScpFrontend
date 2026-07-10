@@ -329,7 +329,6 @@
 .display-settings__feature-field :deep(.gfield__head) {
   gap: 0.35rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(198, 255, 74, 0.1);
 }
 
 .display-settings__feature-field :deep(.gfield__label) {

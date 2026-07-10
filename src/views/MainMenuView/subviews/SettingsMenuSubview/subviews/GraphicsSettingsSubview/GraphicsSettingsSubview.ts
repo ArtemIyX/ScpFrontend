@@ -34,6 +34,14 @@ type ShadowSettings = {
   shadowCsmTransitionScale: number | null
 }
 
+type TexturePresetValue = 'texture0' | 'texture1' | 'texture2' | 'texture3' | 'custom'
+
+type TextureSettings = {
+  streamingMipBias: number | null
+  maxAnisotropy: number | null
+  streamingPoolSize: number | null
+}
+
 const scalabilityItems: GRailItem[] = [
   {
     value: 'low',
@@ -193,6 +201,37 @@ const shadowPresetMap: Record<Exclude<ShadowPresetValue, 'custom'>, ShadowSettin
   },
 }
 
+const texturePresetItems: GRailItem[] = [
+  { value: 'texture0', title: 'Low', meta: 'Aggressive streaming' },
+  { value: 'texture1', title: 'Medium', meta: 'Budget clarity' },
+  { value: 'texture2', title: 'High', meta: 'Sharp balance' },
+  { value: 'texture3', title: 'Ultra', meta: 'Full pool detail' },
+  { value: 'custom', title: 'Custom', meta: 'Manual tuning' },
+] as const
+
+const texturePresetMap: Record<Exclude<TexturePresetValue, 'custom'>, TextureSettings> = {
+  texture0: {
+    streamingMipBias: 2.5,
+    maxAnisotropy: 0,
+    streamingPoolSize: 200,
+  },
+  texture1: {
+    streamingMipBias: 1,
+    maxAnisotropy: 2,
+    streamingPoolSize: 400,
+  },
+  texture2: {
+    streamingMipBias: 0,
+    maxAnisotropy: 4,
+    streamingPoolSize: 700,
+  },
+  texture3: {
+    streamingMipBias: 0,
+    maxAnisotropy: 8,
+    streamingPoolSize: 1000,
+  },
+}
+
 function clonePostProcessSettings(settings: PostProcessSettings): PostProcessSettings {
   return {
     motionBlurQuality: settings.motionBlurQuality,
@@ -220,6 +259,14 @@ function cloneShadowSettings(settings: ShadowSettings): ShadowSettings {
     shadowRadiusThreshold: settings.shadowRadiusThreshold,
     shadowDistanceScale: settings.shadowDistanceScale,
     shadowCsmTransitionScale: settings.shadowCsmTransitionScale,
+  }
+}
+
+function cloneTextureSettings(settings: TextureSettings): TextureSettings {
+  return {
+    streamingMipBias: settings.streamingMipBias,
+    maxAnisotropy: settings.maxAnisotropy,
+    streamingPoolSize: settings.streamingPoolSize,
   }
 }
 
@@ -256,6 +303,14 @@ function matchesShadowPreset(current: ShadowSettings, preset: ShadowSettings): b
   )
 }
 
+function matchesTexturePreset(current: TextureSettings, preset: TextureSettings): boolean {
+  return (
+    current.streamingMipBias === preset.streamingMipBias &&
+    current.maxAnisotropy === preset.maxAnisotropy &&
+    current.streamingPoolSize === preset.streamingPoolSize
+  )
+}
+
 export default defineComponent({
   name: 'GraphicsSettingsSubview',
   setup() {
@@ -267,15 +322,12 @@ export default defineComponent({
     const postProcessSettings = reactive<PostProcessSettings>(clonePostProcessSettings(postProcessPresetMap.pp2))
     const postProcessPreset = ref<PostProcessPresetValue>('pp2')
     const postProcessCustomOpen = ref(false)
-    const postProcessCustomizeButtonLabel = computed(() =>
-      postProcessCustomOpen.value ? 'Hide Customize' : 'Open Customize'
-    )
     const shadowSettings = reactive<ShadowSettings>(cloneShadowSettings(shadowPresetMap.shadow2))
     const shadowPreset = ref<ShadowPresetValue>('shadow2')
     const shadowCustomOpen = ref(false)
-    const shadowCustomizeButtonLabel = computed(() =>
-      shadowCustomOpen.value ? 'Hide Customize' : 'Open Customize'
-    )
+    const textureSettings = reactive<TextureSettings>(cloneTextureSettings(texturePresetMap.texture2))
+    const texturePreset = ref<TexturePresetValue>('texture2')
+    const textureCustomOpen = ref(false)
 
     const derivedPostProcessPreset = computed<PostProcessPresetValue>(() => {
       const matchedPreset = (Object.entries(postProcessPresetMap) as Array<
@@ -291,6 +343,13 @@ export default defineComponent({
 
       return matchedPreset?.[0] ?? 'custom'
     })
+    const derivedTexturePreset = computed<TexturePresetValue>(() => {
+      const matchedPreset = (Object.entries(texturePresetMap) as Array<
+        [Exclude<TexturePresetValue, 'custom'>, TextureSettings]
+      >).find(([, preset]) => matchesTexturePreset(textureSettings, preset))
+
+      return matchedPreset?.[0] ?? 'custom'
+    })
 
     function syncPostProcessPreset(): void {
       postProcessPreset.value = derivedPostProcessPreset.value
@@ -298,6 +357,10 @@ export default defineComponent({
 
     function syncShadowPreset(): void {
       shadowPreset.value = derivedShadowPreset.value
+    }
+
+    function syncTexturePreset(): void {
+      texturePreset.value = derivedTexturePreset.value
     }
 
     function applyPostProcessPreset(nextPreset: PostProcessPresetValue): void {
@@ -318,6 +381,16 @@ export default defineComponent({
 
       Object.assign(shadowSettings, cloneShadowSettings(shadowPresetMap[nextPreset]))
       shadowPreset.value = nextPreset
+    }
+
+    function applyTexturePreset(nextPreset: TexturePresetValue): void {
+      if (nextPreset === 'custom') {
+        textureCustomOpen.value = true
+        return
+      }
+
+      Object.assign(textureSettings, cloneTextureSettings(texturePresetMap[nextPreset]))
+      texturePreset.value = nextPreset
     }
 
     function onPostProcessPresetChange(value: string | number | boolean | null): void {
@@ -344,6 +417,18 @@ export default defineComponent({
       }
     }
 
+    function onTexturePresetChange(value: string | number | boolean | null): void {
+      if (
+        value === 'texture0' ||
+        value === 'texture1' ||
+        value === 'texture2' ||
+        value === 'texture3' ||
+        value === 'custom'
+      ) {
+        applyTexturePreset(value)
+      }
+    }
+
     function updatePostProcessSetting<Key extends keyof PostProcessSettings>(
       key: Key,
       value: PostProcessSettings[Key],
@@ -360,6 +445,14 @@ export default defineComponent({
       syncShadowPreset()
     }
 
+    function updateTextureSetting<Key extends keyof TextureSettings>(
+      key: Key,
+      value: TextureSettings[Key],
+    ): void {
+      textureSettings[key] = value
+      syncTexturePreset()
+    }
+
     function togglePostProcessCustomOpen(): void {
       postProcessCustomOpen.value = !postProcessCustomOpen.value
     }
@@ -368,30 +461,40 @@ export default defineComponent({
       shadowCustomOpen.value = !shadowCustomOpen.value
     }
 
+    function toggleTextureCustomOpen(): void {
+      textureCustomOpen.value = !textureCustomOpen.value
+    }
+
     return {
       antiAliasingQuality,
       applyPostProcessPreset,
       applyShadowPreset,
+      applyTexturePreset,
       materialQualityItems,
       materialQualityLevel,
       onPostProcessPresetChange,
       onShadowPresetChange,
+      onTexturePresetChange,
       postProcessCustomOpen,
-      postProcessCustomizeButtonLabel,
       postProcessPreset,
       postProcessPresetItems,
       postProcessSettings,
       resolutionScale,
       scalabilityItems,
       shadowCustomOpen,
-      shadowCustomizeButtonLabel,
       shadowPreset,
       shadowPresetItems,
       shadowSettings,
+      textureCustomOpen,
+      texturePreset,
+      texturePresetItems,
+      textureSettings,
       togglePostProcessCustomOpen,
       toggleShadowCustomOpen,
+      toggleTextureCustomOpen,
       updatePostProcessSetting,
       updateShadowSetting,
+      updateTextureSetting,
       viewDistanceQuality,
     }
   },

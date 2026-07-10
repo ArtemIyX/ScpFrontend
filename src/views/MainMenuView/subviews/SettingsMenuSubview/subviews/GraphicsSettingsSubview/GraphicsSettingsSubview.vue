@@ -82,6 +82,32 @@
         width="full"
         class="graphics-settings__feature-field"
       >
+        <template #head>
+          <GButton
+            size="sm"
+            shape="chip"
+            icon-only
+            :preset="postProcessCustomOpen ? 'accent' : 'ghost'"
+            :pressed="postProcessCustomOpen"
+            :aria-label="postProcessCustomOpen ? 'Hide post process customization' : 'Open post process customization'"
+            :title="postProcessCustomOpen ? 'Hide customization' : 'Open customization'"
+            class="graphics-settings__feature-action"
+            @click="togglePostProcessCustomOpen"
+          >
+            <template #icon>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M3 4.25h10M5.25 8h5.5M7 11.75h2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="1.4"
+                />
+              </svg>
+            </template>
+          </GButton>
+        </template>
+
         <div class="graphics-settings__postprocess-stack">
           <GRail
             :model-value="postProcessPreset"
@@ -91,17 +117,6 @@
             aria-label="Post process quality"
             @update:model-value="onPostProcessPresetChange"
           />
-
-          <div class="graphics-settings__postprocess-toolbar">
-            <GButton
-              size="sm"
-              shape="chip"
-              :preset="postProcessCustomOpen ? 'accent' : 'ghost'"
-              @click="togglePostProcessCustomOpen"
-            >
-              {{ postProcessCustomizeButtonLabel }}
-            </GButton>
-          </div>
 
           <div v-if="postProcessCustomOpen" class="graphics-settings__custom-panel">
 
@@ -420,6 +435,32 @@
         width="full"
         class="graphics-settings__feature-field"
       >
+        <template #head>
+          <GButton
+            size="sm"
+            shape="chip"
+            icon-only
+            :preset="shadowCustomOpen ? 'accent' : 'ghost'"
+            :pressed="shadowCustomOpen"
+            :aria-label="shadowCustomOpen ? 'Hide shadow customization' : 'Open shadow customization'"
+            :title="shadowCustomOpen ? 'Hide customization' : 'Open customization'"
+            class="graphics-settings__feature-action"
+            @click="toggleShadowCustomOpen"
+          >
+            <template #icon>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M3 4.25h10M5.25 8h5.5M7 11.75h2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="1.4"
+                />
+              </svg>
+            </template>
+          </GButton>
+        </template>
+
         <div class="graphics-settings__postprocess-stack">
           <GRail
             :model-value="shadowPreset"
@@ -429,17 +470,6 @@
             aria-label="Shadow quality"
             @update:model-value="onShadowPresetChange"
           />
-
-          <div class="graphics-settings__postprocess-toolbar">
-            <GButton
-              size="sm"
-              shape="chip"
-              :preset="shadowCustomOpen ? 'accent' : 'ghost'"
-              @click="toggleShadowCustomOpen"
-            >
-              {{ shadowCustomizeButtonLabel }}
-            </GButton>
-          </div>
 
           <div v-if="shadowCustomOpen" class="graphics-settings__custom-panel">
             <GText as="p" preset="muted" class="graphics-settings__custom-summary">
@@ -618,6 +648,127 @@
         </div>
       </GField>
     </section>
+
+    <section class="graphics-settings__group" aria-label="Texture settings">
+      <GField
+        label="Texture Quality"
+        helper="Controls mip bias, anisotropy, and streaming pool budget."
+        width="full"
+        class="graphics-settings__feature-field"
+      >
+        <template #head>
+          <GButton
+            size="sm"
+            shape="chip"
+            icon-only
+            :preset="textureCustomOpen ? 'accent' : 'ghost'"
+            :pressed="textureCustomOpen"
+            :aria-label="textureCustomOpen ? 'Hide texture customization' : 'Open texture customization'"
+            :title="textureCustomOpen ? 'Hide customization' : 'Open customization'"
+            class="graphics-settings__feature-action"
+            @click="toggleTextureCustomOpen"
+          >
+            <template #icon>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M3 4.25h10M5.25 8h5.5M7 11.75h2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="1.4"
+                />
+              </svg>
+            </template>
+          </GButton>
+        </template>
+
+        <div class="graphics-settings__postprocess-stack">
+          <GRail
+            :model-value="texturePreset"
+            :items="texturePresetItems"
+            width="full"
+            preset="quiet"
+            aria-label="Texture quality"
+            @update:model-value="onTexturePresetChange"
+          />
+
+          <div v-if="textureCustomOpen" class="graphics-settings__custom-panel">
+            <div class="graphics-settings__custom-grid">
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Mip Bias</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.Streaming.MipBias</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">2.5/1/0/0</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="textureSettings.streamingMipBias"
+                  mode="float"
+                  :min="0"
+                  :max="3"
+                  :step="0.1"
+                  :precision="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Texture streaming mip bias"
+                  @update:model-value="updateTextureSetting('streamingMipBias', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Max Anisotropy</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.MaxAnisotropy</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/2/4/8</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="textureSettings.maxAnisotropy"
+                  :min="0"
+                  :max="16"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Texture max anisotropy"
+                  @update:model-value="updateTextureSetting('maxAnisotropy', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Streaming Pool Size</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.Streaming.PoolSize</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">200/400/700/1000</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="textureSettings.streamingPoolSize"
+                  :min="200"
+                  :max="2000"
+                  :step="50"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Texture streaming pool size"
+                  @update:model-value="updateTextureSetting('streamingPoolSize', $event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </GField>
+    </section>
   </section>
 </template>
 
@@ -659,29 +810,35 @@
 }
 
 .graphics-settings__feature-field :deep(.gfield__head) {
-  gap: 0.35rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(198, 255, 74, 0.1);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.22rem;
+  padding-bottom: 0.45rem;
 }
 
 .graphics-settings__feature-field :deep(.gfield__label) {
   color: rgba(244, 248, 236, 0.98);
-  font-size: 1rem;
+  font-size: 1.08rem;
   letter-spacing: 0.16em;
   text-shadow: 0 0 1rem rgba(198, 255, 74, 0.12);
 }
 
 .graphics-settings__feature-field :deep(.gfield__helper) {
   max-width: 44rem;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   line-height: 1.5;
   color: rgba(216, 225, 214, 0.74);
 }
 
-.graphics-settings__postprocess-toolbar {
-  display: flex;
-  justify-content: flex-end;
+.graphics-settings__feature-action {
+  margin-top: -0.05rem;
+}
+
+.graphics-settings__feature-action :deep(svg) {
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .graphics-settings__custom-panel {
