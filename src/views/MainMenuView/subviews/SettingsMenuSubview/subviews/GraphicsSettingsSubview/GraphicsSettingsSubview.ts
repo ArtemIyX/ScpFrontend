@@ -97,11 +97,11 @@ const materialQualityItems: GRailItem[] = [
 ] as const
 
 const postProcessPresetItems: GRailItem[] = [
-  { value: 'pp0', title: 'Low', meta: 'Preset 0' },
-  { value: 'pp1', title: 'Medium', meta: 'Preset 1' },
-  { value: 'pp2', title: 'High', meta: 'Preset 2' },
-  { value: 'pp3', title: 'Ultra', meta: 'Preset 3' },
-  { value: 'custom', title: 'Custom', meta: 'Manual' },
+  { value: 'pp0', title: 'Low', meta: 'Minimal effects' },
+  { value: 'pp1', title: 'Medium', meta: 'Balanced cleanup' },
+  { value: 'pp2', title: 'High', meta: 'Full atmosphere' },
+  { value: 'pp3', title: 'Ultra', meta: 'Showcase image' },
+  { value: 'custom', title: 'Custom', meta: 'Manual tuning' },
 ] as const
 
 const postProcessPresetMap: Record<Exclude<PostProcessPresetValue, 'custom'>, PostProcessSettings> = {
@@ -168,11 +168,11 @@ const postProcessPresetMap: Record<Exclude<PostProcessPresetValue, 'custom'>, Po
 }
 
 const shadowPresetItems: GRailItem[] = [
-  { value: 'shadow0', title: 'Low', meta: 'Preset 0' },
-  { value: 'shadow1', title: 'Medium', meta: 'Preset 1' },
-  { value: 'shadow2', title: 'High', meta: 'Preset 2' },
-  { value: 'shadow3', title: 'Ultra', meta: 'Preset 3' },
-  { value: 'custom', title: 'Custom', meta: 'Manual' },
+  { value: 'shadow0', title: 'Low', meta: 'Near-field only' },
+  { value: 'shadow1', title: 'Medium', meta: 'Stable basics' },
+  { value: 'shadow2', title: 'High', meta: 'Deeper coverage' },
+  { value: 'shadow3', title: 'Ultra', meta: 'Full-range detail' },
+  { value: 'custom', title: 'Custom', meta: 'Manual tuning' },
 ] as const
 
 const shadowPresetMap: Record<Exclude<ShadowPresetValue, 'custom'>, ShadowSettings> = {
