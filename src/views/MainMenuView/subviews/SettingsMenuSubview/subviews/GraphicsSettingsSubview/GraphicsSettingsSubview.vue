@@ -8,6 +8,7 @@
           label="Resolution Scale"
           helper="Controls internal rendering scale before final output."
           width="full"
+          class="graphics-settings__feature-field"
         >
           <GSlider
             v-model="resolutionScale"
@@ -26,6 +27,7 @@
             label="View Distance Quality"
             helper="Affects how far geometry and scene detail remain fully resolved."
             width="full"
+            class="graphics-settings__feature-field"
           >
             <GRail
               v-model="viewDistanceQuality"
@@ -40,6 +42,7 @@
             label="Anti-Aliasing Quality"
             helper="Controls edge smoothing quality and related resolve cost."
             width="full"
+            class="graphics-settings__feature-field"
           >
             <GRail
               v-model="antiAliasingQuality"
@@ -55,6 +58,7 @@
           label="Material Quality Level"
           helper="Switches between reduced and full material feature paths."
           width="full"
+          class="graphics-settings__feature-field"
         >
           <GRail
             v-model="materialQualityLevel"
@@ -67,17 +71,16 @@
       </div>
     </section>
 
-    <GDivider label="Post Process" preset="quiet" class="graphics-settings__divider" />
+
 
     <section class="graphics-settings__group" aria-label="Post process settings">
-      <GText as="p" preset="muted" class="graphics-settings__group-summary">
-        Use a preset for fast setup, or open detailed tuning to override individual post-process variables.
-      </GText>
+
 
       <GField
         label="Post Process Quality"
         helper="Changing any detailed override flips this profile to Custom."
         width="full"
+        class="graphics-settings__feature-field"
       >
         <div class="graphics-settings__postprocess-stack">
           <GRail
@@ -101,9 +104,6 @@
           </div>
 
           <div v-if="postProcessCustomOpen" class="graphics-settings__custom-panel">
-            <GText as="p" preset="muted" class="graphics-settings__custom-summary">
-              Manual overrides map directly to the underlying UE post-process variables.
-            </GText>
 
             <div class="graphics-settings__custom-grid">
               <div class="graphics-settings__custom-row">
@@ -412,17 +412,13 @@
       </GField>
     </section>
 
-    <GDivider label="Shadows" preset="quiet" class="graphics-settings__divider" />
 
     <section class="graphics-settings__group" aria-label="Shadow settings">
-      <GText as="p" preset="muted" class="graphics-settings__group-summary">
-        Shadow presets tune cascade count, resolution, distance, and transition behavior together.
-      </GText>
-
       <GField
         label="Shadow Quality"
         helper="Changing any detailed override flips this profile to Custom."
         width="full"
+        class="graphics-settings__feature-field"
       >
         <div class="graphics-settings__postprocess-stack">
           <GRail
@@ -638,11 +634,6 @@
   gap: 1rem;
 }
 
-.graphics-settings__group-summary {
-  max-width: 42rem;
-  margin: 0;
-}
-
 .graphics-settings__stack {
   display: grid;
   gap: 1rem;
@@ -661,6 +652,31 @@
 .graphics-settings__postprocess-stack {
   display: grid;
   gap: 0.9rem;
+}
+
+.graphics-settings__feature-field {
+  position: relative;
+}
+
+.graphics-settings__feature-field :deep(.gfield__head) {
+  gap: 0.35rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(198, 255, 74, 0.1);
+}
+
+.graphics-settings__feature-field :deep(.gfield__label) {
+  color: rgba(244, 248, 236, 0.98);
+  font-size: 1rem;
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 1rem rgba(198, 255, 74, 0.12);
+}
+
+.graphics-settings__feature-field :deep(.gfield__helper) {
+  max-width: 44rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: rgba(216, 225, 214, 0.74);
 }
 
 .graphics-settings__postprocess-toolbar {

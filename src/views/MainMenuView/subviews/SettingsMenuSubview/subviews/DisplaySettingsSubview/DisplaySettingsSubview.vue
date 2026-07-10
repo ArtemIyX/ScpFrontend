@@ -12,7 +12,7 @@
           helper="Windowed Fullscreen locks to the desktop output path."
           layout="stack"
           width="full"
-          class="display-settings__field"
+          class="display-settings__field display-settings__feature-field"
         >
           <div class="display-settings__mode-grid">
             <GButton
@@ -58,7 +58,7 @@
           label="Frame Rate Limit"
           helper="Enable the cap, then tune it with the slider or exact numeric input."
           width="full"
-          class="display-settings__field"
+          class="display-settings__field display-settings__feature-field"
         >
           <div class="display-settings__fps-group">
             <GCheckbox v-model="limitFps" preset="quiet">Limit FPS</GCheckbox>
@@ -288,11 +288,6 @@
   gap: 1rem;
 }
 
-.display-settings__group-summary {
-  max-width: 42rem;
-  margin: 0;
-}
-
 .display-settings__stack {
   display: grid;
   gap: 1rem;
@@ -325,6 +320,31 @@
 
 .display-settings__mode-button {
   min-width: 0;
+}
+
+.display-settings__feature-field {
+  position: relative;
+}
+
+.display-settings__feature-field :deep(.gfield__head) {
+  gap: 0.35rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(198, 255, 74, 0.1);
+}
+
+.display-settings__feature-field :deep(.gfield__label) {
+  color: rgba(244, 248, 236, 0.98);
+  font-size: 1rem;
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 1rem rgba(198, 255, 74, 0.12);
+}
+
+.display-settings__feature-field :deep(.gfield__helper) {
+  max-width: 44rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: rgba(216, 225, 214, 0.74);
 }
 
 .display-settings__toggle-column {
