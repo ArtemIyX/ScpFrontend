@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
 
@@ -37,6 +37,14 @@ const hdrColorGamutOptions: GComboOption[] = [
   { value: 4, label: 'ACEScg, D60' },
 ]
 
+export const displaySettingsRuntime = reactive({
+  showHdrUnsupportedBadge: true,
+})
+
+export function setDisplayHdrUnsupportedBadgeVisible(visible: boolean): void {
+  displaySettingsRuntime.showHdrUnsupportedBadge = visible
+}
+
 export default defineComponent({
   name: 'DisplaySettingsSubview',
   setup() {
@@ -66,6 +74,7 @@ export default defineComponent({
       brightness,
       cameraSmoothing,
       contrast,
+      displaySettingsRuntime,
       fpsControlsDisabled,
       fov,
       fullscreenMode,

@@ -97,12 +97,22 @@
         </GField>
 
         <div class="display-settings__hdr-shell">
-          <GCheckbox v-model="hdrEnabled" preset="quiet">HDR Enable</GCheckbox>
+          <div class="display-settings__hdr-head">
+            <GCheckbox v-model="hdrEnabled" preset="quiet">HDR Enable</GCheckbox>
+            <GBadge
+              v-if="displaySettingsRuntime.showHdrUnsupportedBadge"
+              preset="warning"
+              variant="soft"
+              size="sm"
+            >
+              Not Supported
+            </GBadge>
+          </div>
 
           <div class="display-settings__grid display-settings__grid--duo">
             <GField
               label="Output Device"
-              helper="UE5 `r.HDR.Display.OutputDevice` mapping."
+              helper="`r.HDR.Display.OutputDevice` mapping"
               width="full"
             >
               <GCombo
@@ -117,7 +127,7 @@
 
             <GField
               label="Color Gamut"
-              helper="UE5 `r.HDR.Display.ColorGamut` mapping."
+              helper="`r.HDR.Display.ColorGamut` mapping"
               width="full"
             >
               <GCombo
@@ -360,6 +370,30 @@
   background:
     linear-gradient(180deg, rgba(255, 176, 0, 0.04), transparent 30%),
     rgba(5, 8, 8, 0.36);
+}
+
+.display-settings__hdr-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.display-settings__hdr-head :deep(.gcheckbox) {
+  align-items: center;
+}
+
+.display-settings__hdr-head :deep(.gcheckbox__control) {
+  margin-top: 0;
+}
+
+.display-settings__hdr-head :deep(.gcheckbox__content) {
+  min-height: auto;
+  padding-top: 0;
+}
+
+.display-settings__hdr-head :deep(.gbadge) {
+  align-self: center;
 }
 
 .display-settings__divider {
