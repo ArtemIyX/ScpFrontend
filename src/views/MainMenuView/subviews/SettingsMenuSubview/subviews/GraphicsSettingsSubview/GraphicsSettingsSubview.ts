@@ -22,6 +22,18 @@ type PostProcessSettings = {
   tonemapperGrainQuantization: number | null
 }
 
+type ShadowPresetValue = 'shadow0' | 'shadow1' | 'shadow2' | 'shadow3' | 'custom'
+
+type ShadowSettings = {
+  lightFunctionQuality: number | null
+  shadowQuality: number | null
+  shadowCsmMaxCascades: number | null
+  shadowMaxResolution: number | null
+  shadowRadiusThreshold: number | null
+  shadowDistanceScale: number | null
+  shadowCsmTransitionScale: number | null
+}
+
 const scalabilityItems: GRailItem[] = [
   {
     value: 'low',
@@ -134,6 +146,53 @@ const postProcessPresetMap: Record<Exclude<PostProcessPresetValue, 'custom'>, Po
   },
 }
 
+const shadowPresetItems: GRailItem[] = [
+  { value: 'shadow0', title: 'Low', meta: 'Preset 0' },
+  { value: 'shadow1', title: 'Medium', meta: 'Preset 1' },
+  { value: 'shadow2', title: 'High', meta: 'Preset 2' },
+  { value: 'shadow3', title: 'Ultra', meta: 'Preset 3' },
+  { value: 'custom', title: 'Custom', meta: 'Manual' },
+] as const
+
+const shadowPresetMap: Record<Exclude<ShadowPresetValue, 'custom'>, ShadowSettings> = {
+  shadow0: {
+    lightFunctionQuality: 0,
+    shadowQuality: 0,
+    shadowCsmMaxCascades: 1,
+    shadowMaxResolution: 512,
+    shadowRadiusThreshold: 0.06,
+    shadowDistanceScale: 0.6,
+    shadowCsmTransitionScale: 0,
+  },
+  shadow1: {
+    lightFunctionQuality: 1,
+    shadowQuality: 2,
+    shadowCsmMaxCascades: 1,
+    shadowMaxResolution: 1024,
+    shadowRadiusThreshold: 0.05,
+    shadowDistanceScale: 0.7,
+    shadowCsmTransitionScale: 0.25,
+  },
+  shadow2: {
+    lightFunctionQuality: 1,
+    shadowQuality: 5,
+    shadowCsmMaxCascades: 2,
+    shadowMaxResolution: 1024,
+    shadowRadiusThreshold: 0.04,
+    shadowDistanceScale: 0.85,
+    shadowCsmTransitionScale: 0.8,
+  },
+  shadow3: {
+    lightFunctionQuality: 1,
+    shadowQuality: 5,
+    shadowCsmMaxCascades: 4,
+    shadowMaxResolution: 1024,
+    shadowRadiusThreshold: 0.03,
+    shadowDistanceScale: 1.0,
+    shadowCsmTransitionScale: 1.0,
+  },
+}
+
 function clonePostProcessSettings(settings: PostProcessSettings): PostProcessSettings {
   return {
     motionBlurQuality: settings.motionBlurQuality,
@@ -149,6 +208,18 @@ function clonePostProcessSettings(settings: PostProcessSettings): PostProcessSet
     fastBlurThreshold: settings.fastBlurThreshold,
     upscaleQuality: settings.upscaleQuality,
     tonemapperGrainQuantization: settings.tonemapperGrainQuantization,
+  }
+}
+
+function cloneShadowSettings(settings: ShadowSettings): ShadowSettings {
+  return {
+    lightFunctionQuality: settings.lightFunctionQuality,
+    shadowQuality: settings.shadowQuality,
+    shadowCsmMaxCascades: settings.shadowCsmMaxCascades,
+    shadowMaxResolution: settings.shadowMaxResolution,
+    shadowRadiusThreshold: settings.shadowRadiusThreshold,
+    shadowDistanceScale: settings.shadowDistanceScale,
+    shadowCsmTransitionScale: settings.shadowCsmTransitionScale,
   }
 }
 
@@ -173,6 +244,18 @@ function matchesPostProcessPreset(
   )
 }
 
+function matchesShadowPreset(current: ShadowSettings, preset: ShadowSettings): boolean {
+  return (
+    current.lightFunctionQuality === preset.lightFunctionQuality &&
+    current.shadowQuality === preset.shadowQuality &&
+    current.shadowCsmMaxCascades === preset.shadowCsmMaxCascades &&
+    current.shadowMaxResolution === preset.shadowMaxResolution &&
+    current.shadowRadiusThreshold === preset.shadowRadiusThreshold &&
+    current.shadowDistanceScale === preset.shadowDistanceScale &&
+    current.shadowCsmTransitionScale === preset.shadowCsmTransitionScale
+  )
+}
+
 export default defineComponent({
   name: 'GraphicsSettingsSubview',
   setup() {
@@ -183,7 +266,16 @@ export default defineComponent({
 
     const postProcessSettings = reactive<PostProcessSettings>(clonePostProcessSettings(postProcessPresetMap.pp2))
     const postProcessPreset = ref<PostProcessPresetValue>('pp2')
-    const postProcessCustomOpen = computed(() => postProcessPreset.value === 'custom')
+    const postProcessCustomOpen = ref(false)
+    const postProcessCustomizeButtonLabel = computed(() =>
+      postProcessCustomOpen.value ? 'Hide Customize' : 'Open Customize'
+    )
+    const shadowSettings = reactive<ShadowSettings>(cloneShadowSettings(shadowPresetMap.shadow2))
+    const shadowPreset = ref<ShadowPresetValue>('shadow2')
+    const shadowCustomOpen = ref(false)
+    const shadowCustomizeButtonLabel = computed(() =>
+      shadowCustomOpen.value ? 'Hide Customize' : 'Open Customize'
+    )
 
     const derivedPostProcessPreset = computed<PostProcessPresetValue>(() => {
       const matchedPreset = (Object.entries(postProcessPresetMap) as Array<
@@ -192,19 +284,40 @@ export default defineComponent({
 
       return matchedPreset?.[0] ?? 'custom'
     })
+    const derivedShadowPreset = computed<ShadowPresetValue>(() => {
+      const matchedPreset = (Object.entries(shadowPresetMap) as Array<
+        [Exclude<ShadowPresetValue, 'custom'>, ShadowSettings]
+      >).find(([, preset]) => matchesShadowPreset(shadowSettings, preset))
+
+      return matchedPreset?.[0] ?? 'custom'
+    })
 
     function syncPostProcessPreset(): void {
       postProcessPreset.value = derivedPostProcessPreset.value
     }
 
+    function syncShadowPreset(): void {
+      shadowPreset.value = derivedShadowPreset.value
+    }
+
     function applyPostProcessPreset(nextPreset: PostProcessPresetValue): void {
       if (nextPreset === 'custom') {
-        postProcessPreset.value = 'custom'
+        postProcessCustomOpen.value = true
         return
       }
 
       Object.assign(postProcessSettings, clonePostProcessSettings(postProcessPresetMap[nextPreset]))
       postProcessPreset.value = nextPreset
+    }
+
+    function applyShadowPreset(nextPreset: ShadowPresetValue): void {
+      if (nextPreset === 'custom') {
+        shadowCustomOpen.value = true
+        return
+      }
+
+      Object.assign(shadowSettings, cloneShadowSettings(shadowPresetMap[nextPreset]))
+      shadowPreset.value = nextPreset
     }
 
     function onPostProcessPresetChange(value: string | number | boolean | null): void {
@@ -219,6 +332,18 @@ export default defineComponent({
       }
     }
 
+    function onShadowPresetChange(value: string | number | boolean | null): void {
+      if (
+        value === 'shadow0' ||
+        value === 'shadow1' ||
+        value === 'shadow2' ||
+        value === 'shadow3' ||
+        value === 'custom'
+      ) {
+        applyShadowPreset(value)
+      }
+    }
+
     function updatePostProcessSetting<Key extends keyof PostProcessSettings>(
       key: Key,
       value: PostProcessSettings[Key],
@@ -227,19 +352,46 @@ export default defineComponent({
       syncPostProcessPreset()
     }
 
+    function updateShadowSetting<Key extends keyof ShadowSettings>(
+      key: Key,
+      value: ShadowSettings[Key],
+    ): void {
+      shadowSettings[key] = value
+      syncShadowPreset()
+    }
+
+    function togglePostProcessCustomOpen(): void {
+      postProcessCustomOpen.value = !postProcessCustomOpen.value
+    }
+
+    function toggleShadowCustomOpen(): void {
+      shadowCustomOpen.value = !shadowCustomOpen.value
+    }
+
     return {
       antiAliasingQuality,
       applyPostProcessPreset,
+      applyShadowPreset,
       materialQualityItems,
       materialQualityLevel,
       onPostProcessPresetChange,
+      onShadowPresetChange,
       postProcessCustomOpen,
+      postProcessCustomizeButtonLabel,
       postProcessPreset,
       postProcessPresetItems,
       postProcessSettings,
       resolutionScale,
       scalabilityItems,
+      shadowCustomOpen,
+      shadowCustomizeButtonLabel,
+      shadowPreset,
+      shadowPresetItems,
+      shadowSettings,
+      togglePostProcessCustomOpen,
+      toggleShadowCustomOpen,
       updatePostProcessSetting,
+      updateShadowSetting,
       viewDistanceQuality,
     }
   },

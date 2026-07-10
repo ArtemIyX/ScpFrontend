@@ -89,6 +89,17 @@
             @update:model-value="onPostProcessPresetChange"
           />
 
+          <div class="graphics-settings__postprocess-toolbar">
+            <GButton
+              size="sm"
+              shape="chip"
+              :preset="postProcessCustomOpen ? 'accent' : 'ghost'"
+              @click="togglePostProcessCustomOpen"
+            >
+              {{ postProcessCustomizeButtonLabel }}
+            </GButton>
+          </div>
+
           <div v-if="postProcessCustomOpen" class="graphics-settings__custom-panel">
             <GText as="p" preset="muted" class="graphics-settings__custom-summary">
               Manual overrides map directly to the underlying UE post-process variables.
@@ -400,6 +411,217 @@
         </div>
       </GField>
     </section>
+
+    <GDivider label="Shadows" preset="quiet" class="graphics-settings__divider" />
+
+    <section class="graphics-settings__group" aria-label="Shadow settings">
+      <GText as="p" preset="muted" class="graphics-settings__group-summary">
+        Shadow presets tune cascade count, resolution, distance, and transition behavior together.
+      </GText>
+
+      <GField
+        label="Shadow Quality"
+        helper="Changing any detailed override flips this profile to Custom."
+        width="full"
+      >
+        <div class="graphics-settings__postprocess-stack">
+          <GRail
+            :model-value="shadowPreset"
+            :items="shadowPresetItems"
+            width="full"
+            preset="quiet"
+            aria-label="Shadow quality"
+            @update:model-value="onShadowPresetChange"
+          />
+
+          <div class="graphics-settings__postprocess-toolbar">
+            <GButton
+              size="sm"
+              shape="chip"
+              :preset="shadowCustomOpen ? 'accent' : 'ghost'"
+              @click="toggleShadowCustomOpen"
+            >
+              {{ shadowCustomizeButtonLabel }}
+            </GButton>
+          </div>
+
+          <div v-if="shadowCustomOpen" class="graphics-settings__custom-panel">
+            <GText as="p" preset="muted" class="graphics-settings__custom-summary">
+              Manual overrides map directly to the underlying UE shadow console variables.
+            </GText>
+
+            <div class="graphics-settings__custom-grid">
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Light Function Quality</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.LightFunctionQuality</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/1/1/1</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="shadowSettings.lightFunctionQuality"
+                  :min="0"
+                  :max="1"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Light function quality"
+                  @update:model-value="updateShadowSetting('lightFunctionQuality', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Shadow Quality</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.ShadowQuality</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/2/5/5</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="shadowSettings.shadowQuality"
+                  :min="0"
+                  :max="5"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Shadow quality override"
+                  @update:model-value="updateShadowSetting('shadowQuality', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">CSM Max Cascades</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.Shadow.CSM.MaxCascades</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">1/1/2/4</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="shadowSettings.shadowCsmMaxCascades"
+                  :min="1"
+                  :max="4"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Shadow CSM max cascades"
+                  @update:model-value="updateShadowSetting('shadowCsmMaxCascades', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Max Resolution</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.Shadow.MaxResolution</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">512/1024/1024/1024</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="shadowSettings.shadowMaxResolution"
+                  :min="512"
+                  :max="2048"
+                  :step="128"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Shadow max resolution"
+                  @update:model-value="updateShadowSetting('shadowMaxResolution', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Radius Threshold</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.Shadow.RadiusThreshold</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0.06/0.05/0.04/0.03</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="shadowSettings.shadowRadiusThreshold"
+                  mode="float"
+                  :min="0.01"
+                  :max="0.1"
+                  :step="0.01"
+                  :precision="2"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Shadow radius threshold"
+                  @update:model-value="updateShadowSetting('shadowRadiusThreshold', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Distance Scale</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.Shadow.DistanceScale</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0.6/0.7/0.85/1.0</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="shadowSettings.shadowDistanceScale"
+                  mode="float"
+                  :min="0.5"
+                  :max="1.5"
+                  :step="0.05"
+                  :precision="2"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Shadow distance scale"
+                  @update:model-value="updateShadowSetting('shadowDistanceScale', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">CSM Transition Scale</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.Shadow.CSM.TransitionScale</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/0.25/0.8/1.0</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="shadowSettings.shadowCsmTransitionScale"
+                  mode="float"
+                  :min="0"
+                  :max="1.5"
+                  :step="0.05"
+                  :precision="2"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Shadow CSM transition scale"
+                  @update:model-value="updateShadowSetting('shadowCsmTransitionScale', $event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </GField>
+    </section>
   </section>
 </template>
 
@@ -439,6 +661,11 @@
 .graphics-settings__postprocess-stack {
   display: grid;
   gap: 0.9rem;
+}
+
+.graphics-settings__postprocess-toolbar {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .graphics-settings__custom-panel {
