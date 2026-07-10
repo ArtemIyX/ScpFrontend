@@ -20,10 +20,13 @@ const props = withDefaults(defineProps<GTabsProps>(), {
 const attrs = useAttrs()
 const emit = defineEmits<GTabsEmits>()
 const tablistRef = ref<HTMLElement | null>(null)
-const activeIndex = ref(-1)
+const focusIndex = ref(-1)
 
-const hasActive = computed(() => activeIndex.value >= 0 && activeIndex.value < props.tabs.length)
-const activeTab = computed<GTabsItem | null>(() => props.tabs[activeIndex.value] ?? null)
+const selectedIndex = computed(() =>
+  props.tabs.findIndex((tab) => tab.value === props.modelValue && !tab.disabled),
+)
+const hasActive = computed(() => focusIndex.value >= 0 && focusIndex.value < props.tabs.length)
+const activeTab = computed<GTabsItem | null>(() => props.tabs[selectedIndex.value] ?? null)
 
 const classes = computed(() =>
   buildGTabsClasses({
@@ -42,7 +45,7 @@ function firstEnabledIndex(): number {
 
 function setActiveByValue(value: string | number | null | undefined): void {
   const index = props.tabs.findIndex((tab) => tab.value === value && !tab.disabled)
-  activeIndex.value = index >= 0 ? index : firstEnabledIndex()
+  focusIndex.value = index >= 0 ? index : firstEnabledIndex()
 }
 
 function setActive(index: number): void {
@@ -51,7 +54,7 @@ function setActive(index: number): void {
     return
   }
 
-  activeIndex.value = index
+  focusIndex.value = index
   emit('update:modelValue', tab.value)
   emit('change', tab.value, tab)
   emit('select', tab)
@@ -62,7 +65,7 @@ function moveActive(direction: 1 | -1): void {
     return
   }
 
-  let index = activeIndex.value
+  let index = focusIndex.value
   if (index < 0) {
     index = firstEnabledIndex()
   }
@@ -71,7 +74,7 @@ function moveActive(direction: 1 | -1): void {
     index = (index + direction + props.tabs.length) % props.tabs.length
     const tab = props.tabs[index]
     if (tab && !tab.disabled) {
-      activeIndex.value = index
+      focusIndex.value = index
       emit('update:modelValue', tab.value)
       emit('change', tab.value, tab)
       emit('select', tab)
@@ -81,7 +84,7 @@ function moveActive(direction: 1 | -1): void {
 }
 
 function focusActiveTab(): void {
-  const button = tablistRef.value?.querySelector<HTMLButtonElement>(`[data-gtabs-index="${activeIndex.value}"]`)
+  const button = tablistRef.value?.querySelector<HTMLButtonElement>(`[data-gtabs-index="${focusIndex.value}"]`)
   button?.focus()
 }
 
@@ -106,14 +109,14 @@ function onKeydown(event: KeyboardEvent): void {
       break
     case 'Home':
       event.preventDefault()
-      activeIndex.value = firstEnabledIndex()
+      focusIndex.value = firstEnabledIndex()
       focusActiveTab()
       break
     case 'End':
       event.preventDefault()
       for (let index = props.tabs.length - 1; index >= 0; index -= 1) {
         if (!props.tabs[index]?.disabled) {
-          activeIndex.value = index
+          focusIndex.value = index
           focusActiveTab()
           break
         }
@@ -123,7 +126,7 @@ function onKeydown(event: KeyboardEvent): void {
     case ' ':
       event.preventDefault()
       if (hasActive.value) {
-        const tab = props.tabs[activeIndex.value]
+        const tab = props.tabs[focusIndex.value]
         if (tab && !tab.disabled) {
           emit('update:modelValue', tab.value)
           emit('change', tab.value, tab)
@@ -159,7 +162,7 @@ watch(
         type="button"
         class="gtabs__tab"
         :class="{
-          'gtabs__tab--active': tab.value === modelValue || index === activeIndex,
+          'gtabs__tab--active': tab.value === modelValue,
           'gtabs__tab--disabled': tab.disabled,
         }"
         :data-gtabs-index="index"
@@ -168,7 +171,7 @@ watch(
         :aria-disabled="tab.disabled ? 'true' : undefined"
         :disabled="disabled || tab.disabled"
         @click="setActive(index)"
-        @focus="activeIndex = index"
+        @focus="focusIndex = index"
       >
         <span class="gtabs__tab-body">
           <GText as="span" preset="header" class="gtabs__label">{{ tab.label }}</GText>
@@ -182,7 +185,7 @@ watch(
     </div>
 
     <div class="gtabs__panel" role="tabpanel">
-      <slot :active-tab="activeTab" :active-index="activeIndex" />
+      <slot :active-tab="activeTab" :active-index="selectedIndex" />
     </div>
   </div>
 </template>
