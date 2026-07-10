@@ -8,7 +8,13 @@
       <div class="main-menu__grid"></div>
     </div>
 
-    <section class="main-menu__stage" :class="{ 'main-menu__stage--play': isPlayTab }">
+    <section
+      class="main-menu__stage"
+      :class="{
+        'main-menu__stage--play': isPlayTab,
+        'main-menu__stage--settings': isSettingsTab,
+      }"
+    >
       <div class="main-menu__topbar">
         <div class="main-menu__tabs-frame" aria-hidden="true">
           <span class="main-menu__tabs-line main-menu__tabs-line--left"></span>
@@ -28,14 +34,27 @@
 
       <GWindow
         class="main-menu__window"
-        :class="{ 'main-menu__window--play': isPlayTab }"
-        :status="currentTab.status"
+        :class="{
+          'main-menu__window--play': isPlayTab,
+          'main-menu__window--settings': isSettingsTab,
+        }"
+        :status="showTabIntro ? currentTab.status : undefined"
         width="full"
-        :height="isPlayTab ? 'full' : 'auto'"
+        :height="isPlayTab || isSettingsTab ? 'full' : 'auto'"
         strong
       >
-        <div class="main-menu__body" :class="{ 'main-menu__body--play': isPlayTab }">
-          <div class="main-menu__title-wrap" :class="{ 'main-menu__title-wrap--play': isPlayTab }">
+        <div
+          class="main-menu__body"
+          :class="{
+            'main-menu__body--play': isPlayTab,
+            'main-menu__body--settings': isSettingsTab,
+          }"
+        >
+          <div
+            v-if="showTabIntro"
+            class="main-menu__title-wrap"
+            :class="{ 'main-menu__title-wrap--play': isPlayTab }"
+          >
             <div class="main-menu__sigil" aria-hidden="true"></div>
             <div class="main-menu__copy" :class="{ 'main-menu__copy--play': isPlayTab }">
               <GText as="p" preset="caps" class="main-menu__eyebrow">
@@ -54,7 +73,10 @@
             :is="currentSubview"
             v-if="currentSubview"
             class="main-menu__subview"
-            :class="{ 'main-menu__subview--play': isPlayTab }"
+            :class="{
+              'main-menu__subview--play': isPlayTab,
+              'main-menu__subview--settings': isSettingsTab,
+            }"
           />
         </div>
       </GWindow>

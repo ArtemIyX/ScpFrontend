@@ -1,6 +1,7 @@
 import { computed, defineComponent, ref } from 'vue'
 
 import PlayMenuSubview from './subviews/PlayMenuSubview'
+import SettingsMenuSubview from './subviews/SettingsMenuSubview'
 
 export const menuTabs = [
   {
@@ -39,10 +40,13 @@ export default defineComponent({
   name: 'MainMenuView',
   components: {
     PlayMenuSubview,
+    SettingsMenuSubview,
   },
   setup() {
     const activeTab = ref<MainMenuTabValue>('play')
     const isPlayTab = computed(() => activeTab.value === 'play')
+    const isSettingsTab = computed(() => activeTab.value === 'settings')
+    const showTabIntro = computed(() => !isSettingsTab.value)
 
     const currentTab = computed(
       () => menuTabs.find((tab) => tab.value === activeTab.value) ?? menuTabs[0],
@@ -53,6 +57,10 @@ export default defineComponent({
         return PlayMenuSubview
       }
 
+      if (activeTab.value === 'settings') {
+        return SettingsMenuSubview
+      }
+
       return null
     })
 
@@ -61,7 +69,9 @@ export default defineComponent({
       currentSubview,
       currentTab,
       isPlayTab,
+      isSettingsTab,
       menuTabs,
+      showTabIntro,
     }
   },
 })
