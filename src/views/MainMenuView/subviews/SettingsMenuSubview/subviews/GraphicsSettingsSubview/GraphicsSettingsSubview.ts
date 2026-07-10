@@ -42,6 +42,19 @@ type TextureSettings = {
   streamingPoolSize: number | null
 }
 
+type EffectsPresetValue = 'effects0' | 'effects1' | 'effects2' | 'effects3' | 'custom'
+
+type EffectsSettings = {
+  translucencyLightingVolumeDim: number | null
+  refractionQuality: number | null
+  ssr: number | null
+  ssrQuality: number | null
+  sceneColorFormat: number | null
+  detailMode: number | null
+  translucencyVolumeBlur: number | null
+  effectsMaterialQualityLevel: number | null
+}
+
 const scalabilityItems: GRailItem[] = [
   {
     value: 'low',
@@ -232,6 +245,57 @@ const texturePresetMap: Record<Exclude<TexturePresetValue, 'custom'>, TextureSet
   },
 }
 
+const effectsPresetItems: GRailItem[] = [
+  { value: 'effects0', title: 'Low', meta: 'Cut-back effects' },
+  { value: 'effects1', title: 'Medium', meta: 'Core reactions' },
+  { value: 'effects2', title: 'High', meta: 'Full volume pass' },
+  { value: 'effects3', title: 'Ultra', meta: 'Expanded response' },
+  { value: 'custom', title: 'Custom', meta: 'Manual tuning' },
+] as const
+
+const effectsPresetMap: Record<Exclude<EffectsPresetValue, 'custom'>, EffectsSettings> = {
+  effects0: {
+    translucencyLightingVolumeDim: 24,
+    refractionQuality: 0,
+    ssr: 0,
+    ssrQuality: 0,
+    sceneColorFormat: 3,
+    detailMode: 0,
+    translucencyVolumeBlur: 0,
+    effectsMaterialQualityLevel: 0,
+  },
+  effects1: {
+    translucencyLightingVolumeDim: 32,
+    refractionQuality: 0,
+    ssr: 0,
+    ssrQuality: 0,
+    sceneColorFormat: 3,
+    detailMode: 1,
+    translucencyVolumeBlur: 0,
+    effectsMaterialQualityLevel: 1,
+  },
+  effects2: {
+    translucencyLightingVolumeDim: 48,
+    refractionQuality: 2,
+    ssr: 0,
+    ssrQuality: 0,
+    sceneColorFormat: 3,
+    detailMode: 1,
+    translucencyVolumeBlur: 1,
+    effectsMaterialQualityLevel: 1,
+  },
+  effects3: {
+    translucencyLightingVolumeDim: 64,
+    refractionQuality: 2,
+    ssr: 1,
+    ssrQuality: 1,
+    sceneColorFormat: 4,
+    detailMode: 2,
+    translucencyVolumeBlur: 1,
+    effectsMaterialQualityLevel: 1,
+  },
+}
+
 function clonePostProcessSettings(settings: PostProcessSettings): PostProcessSettings {
   return {
     motionBlurQuality: settings.motionBlurQuality,
@@ -267,6 +331,19 @@ function cloneTextureSettings(settings: TextureSettings): TextureSettings {
     streamingMipBias: settings.streamingMipBias,
     maxAnisotropy: settings.maxAnisotropy,
     streamingPoolSize: settings.streamingPoolSize,
+  }
+}
+
+function cloneEffectsSettings(settings: EffectsSettings): EffectsSettings {
+  return {
+    translucencyLightingVolumeDim: settings.translucencyLightingVolumeDim,
+    refractionQuality: settings.refractionQuality,
+    ssr: settings.ssr,
+    ssrQuality: settings.ssrQuality,
+    sceneColorFormat: settings.sceneColorFormat,
+    detailMode: settings.detailMode,
+    translucencyVolumeBlur: settings.translucencyVolumeBlur,
+    effectsMaterialQualityLevel: settings.effectsMaterialQualityLevel,
   }
 }
 
@@ -311,6 +388,19 @@ function matchesTexturePreset(current: TextureSettings, preset: TextureSettings)
   )
 }
 
+function matchesEffectsPreset(current: EffectsSettings, preset: EffectsSettings): boolean {
+  return (
+    current.translucencyLightingVolumeDim === preset.translucencyLightingVolumeDim &&
+    current.refractionQuality === preset.refractionQuality &&
+    current.ssr === preset.ssr &&
+    current.ssrQuality === preset.ssrQuality &&
+    current.sceneColorFormat === preset.sceneColorFormat &&
+    current.detailMode === preset.detailMode &&
+    current.translucencyVolumeBlur === preset.translucencyVolumeBlur &&
+    current.effectsMaterialQualityLevel === preset.effectsMaterialQualityLevel
+  )
+}
+
 export default defineComponent({
   name: 'GraphicsSettingsSubview',
   setup() {
@@ -328,6 +418,9 @@ export default defineComponent({
     const textureSettings = reactive<TextureSettings>(cloneTextureSettings(texturePresetMap.texture2))
     const texturePreset = ref<TexturePresetValue>('texture2')
     const textureCustomOpen = ref(false)
+    const effectsSettings = reactive<EffectsSettings>(cloneEffectsSettings(effectsPresetMap.effects2))
+    const effectsPreset = ref<EffectsPresetValue>('effects2')
+    const effectsCustomOpen = ref(false)
 
     const derivedPostProcessPreset = computed<PostProcessPresetValue>(() => {
       const matchedPreset = (Object.entries(postProcessPresetMap) as Array<
@@ -350,6 +443,13 @@ export default defineComponent({
 
       return matchedPreset?.[0] ?? 'custom'
     })
+    const derivedEffectsPreset = computed<EffectsPresetValue>(() => {
+      const matchedPreset = (Object.entries(effectsPresetMap) as Array<
+        [Exclude<EffectsPresetValue, 'custom'>, EffectsSettings]
+      >).find(([, preset]) => matchesEffectsPreset(effectsSettings, preset))
+
+      return matchedPreset?.[0] ?? 'custom'
+    })
 
     function syncPostProcessPreset(): void {
       postProcessPreset.value = derivedPostProcessPreset.value
@@ -361,6 +461,10 @@ export default defineComponent({
 
     function syncTexturePreset(): void {
       texturePreset.value = derivedTexturePreset.value
+    }
+
+    function syncEffectsPreset(): void {
+      effectsPreset.value = derivedEffectsPreset.value
     }
 
     function applyPostProcessPreset(nextPreset: PostProcessPresetValue): void {
@@ -391,6 +495,16 @@ export default defineComponent({
 
       Object.assign(textureSettings, cloneTextureSettings(texturePresetMap[nextPreset]))
       texturePreset.value = nextPreset
+    }
+
+    function applyEffectsPreset(nextPreset: EffectsPresetValue): void {
+      if (nextPreset === 'custom') {
+        effectsCustomOpen.value = true
+        return
+      }
+
+      Object.assign(effectsSettings, cloneEffectsSettings(effectsPresetMap[nextPreset]))
+      effectsPreset.value = nextPreset
     }
 
     function onPostProcessPresetChange(value: string | number | boolean | null): void {
@@ -429,6 +543,18 @@ export default defineComponent({
       }
     }
 
+    function onEffectsPresetChange(value: string | number | boolean | null): void {
+      if (
+        value === 'effects0' ||
+        value === 'effects1' ||
+        value === 'effects2' ||
+        value === 'effects3' ||
+        value === 'custom'
+      ) {
+        applyEffectsPreset(value)
+      }
+    }
+
     function updatePostProcessSetting<Key extends keyof PostProcessSettings>(
       key: Key,
       value: PostProcessSettings[Key],
@@ -453,6 +579,14 @@ export default defineComponent({
       syncTexturePreset()
     }
 
+    function updateEffectsSetting<Key extends keyof EffectsSettings>(
+      key: Key,
+      value: EffectsSettings[Key],
+    ): void {
+      effectsSettings[key] = value
+      syncEffectsPreset()
+    }
+
     function togglePostProcessCustomOpen(): void {
       postProcessCustomOpen.value = !postProcessCustomOpen.value
     }
@@ -465,13 +599,23 @@ export default defineComponent({
       textureCustomOpen.value = !textureCustomOpen.value
     }
 
+    function toggleEffectsCustomOpen(): void {
+      effectsCustomOpen.value = !effectsCustomOpen.value
+    }
+
     return {
       antiAliasingQuality,
       applyPostProcessPreset,
       applyShadowPreset,
       applyTexturePreset,
+      applyEffectsPreset,
+      effectsCustomOpen,
+      effectsPreset,
+      effectsPresetItems,
+      effectsSettings,
       materialQualityItems,
       materialQualityLevel,
+      onEffectsPresetChange,
       onPostProcessPresetChange,
       onShadowPresetChange,
       onTexturePresetChange,
@@ -489,9 +633,11 @@ export default defineComponent({
       texturePreset,
       texturePresetItems,
       textureSettings,
+      toggleEffectsCustomOpen,
       togglePostProcessCustomOpen,
       toggleShadowCustomOpen,
       toggleTextureCustomOpen,
+      updateEffectsSetting,
       updatePostProcessSetting,
       updateShadowSetting,
       updateTextureSetting,

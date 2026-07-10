@@ -54,20 +54,7 @@
           </GField>
         </div>
 
-        <GField
-          label="Material Quality Level"
-          helper="Switches between reduced and full material feature paths."
-          width="full"
-          class="graphics-settings__feature-field"
-        >
-          <GRail
-            v-model="materialQualityLevel"
-            :items="materialQualityItems"
-            width="full"
-            preset="quiet"
-            aria-label="Material quality level"
-          />
-        </GField>
+
       </div>
     </section>
 
@@ -762,6 +749,240 @@
                   preset="quiet"
                   aria-label="Texture streaming pool size"
                   @update:model-value="updateTextureSetting('streamingPoolSize', $event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </GField>
+    </section>
+
+    <section class="graphics-settings__group" aria-label="Effects settings">
+      <GField
+        label="Effects Quality"
+        helper="Controls translucency volume detail, refraction, scene color format, and detail response."
+        width="full"
+        class="graphics-settings__feature-field"
+      >
+        <template #head>
+          <GButton
+            size="sm"
+            shape="chip"
+            icon-only
+            :preset="effectsCustomOpen ? 'accent' : 'ghost'"
+            :pressed="effectsCustomOpen"
+            :aria-label="effectsCustomOpen ? 'Hide effects customization' : 'Open effects customization'"
+            :title="effectsCustomOpen ? 'Hide customization' : 'Open customization'"
+            class="graphics-settings__feature-action"
+            @click="toggleEffectsCustomOpen"
+          >
+            <template #icon>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M3 4.25h10M5.25 8h5.5M7 11.75h2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="1.4"
+                />
+              </svg>
+            </template>
+          </GButton>
+        </template>
+
+        <div class="graphics-settings__postprocess-stack">
+          <GRail
+            :model-value="effectsPreset"
+            :items="effectsPresetItems"
+            width="full"
+            preset="quiet"
+            aria-label="Effects quality"
+            @update:model-value="onEffectsPresetChange"
+          />
+
+          <div v-if="effectsCustomOpen" class="graphics-settings__custom-panel">
+            <div class="graphics-settings__custom-grid">
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Translucency Volume Dim</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.TranslucencyLightingVolumeDim</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">24/32/48/64</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.translucencyLightingVolumeDim"
+                  :min="16"
+                  :max="96"
+                  :step="8"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Translucency lighting volume dimension"
+                  @update:model-value="updateEffectsSetting('translucencyLightingVolumeDim', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Refraction Quality</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.RefractionQuality</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/0/2/2</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.refractionQuality"
+                  :min="0"
+                  :max="2"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Refraction quality"
+                  @update:model-value="updateEffectsSetting('refractionQuality', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Screen Space Reflections</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.SSR</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/0/0/1</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.ssr"
+                  :min="0"
+                  :max="1"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Screen space reflections enable"
+                  @update:model-value="updateEffectsSetting('ssr', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">SSR Quality</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.SSR.Quality</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/0/0/1</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.ssrQuality"
+                  :min="0"
+                  :max="4"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Screen space reflections quality"
+                  @update:model-value="updateEffectsSetting('ssrQuality', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Scene Color Format</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.SceneColorFormat</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">3/3/3/4</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.sceneColorFormat"
+                  :min="3"
+                  :max="5"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Scene color format"
+                  @update:model-value="updateEffectsSetting('sceneColorFormat', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Detail Mode</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.DetailMode</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/1/1/2</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.detailMode"
+                  :min="0"
+                  :max="2"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Detail mode"
+                  @update:model-value="updateEffectsSetting('detailMode', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Translucency Blur</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.TranslucencyVolumeBlur</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/0/1/1</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.translucencyVolumeBlur"
+                  :min="0"
+                  :max="1"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Translucency volume blur"
+                  @update:model-value="updateEffectsSetting('translucencyVolumeBlur', $event)"
+                />
+              </div>
+
+              <div class="graphics-settings__custom-row">
+                <div class="graphics-settings__custom-copy">
+                  <GText as="span" class="graphics-settings__custom-label">Material Quality Level</GText>
+                  <div class="graphics-settings__custom-meta-row">
+                    <GText as="span" preset="muted" class="graphics-settings__custom-meta">r.MaterialQualityLevel</GText>
+                    <GText as="span" preset="muted" class="graphics-settings__custom-preset-values">0/1/1/1</GText>
+                  </div>
+                </div>
+                <GNumberInput
+                  class="graphics-settings__custom-input"
+                  :model-value="effectsSettings.effectsMaterialQualityLevel"
+                  :min="0"
+                  :max="1"
+                  :step="1"
+                  :step-buttons="false"
+                  :show-value="false"
+                  width="full"
+                  preset="quiet"
+                  aria-label="Effects material quality level"
+                  @update:model-value="updateEffectsSetting('effectsMaterialQualityLevel', $event)"
                 />
               </div>
             </div>
