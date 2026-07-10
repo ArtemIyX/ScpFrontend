@@ -27,6 +27,7 @@ const listboxId = `gcombo-listbox-${Math.random().toString(36).slice(2, 10)}`
 const isOpen = ref(false)
 const activeIndex = ref(-1)
 const openDirection = ref<'down' | 'up'>('down')
+const suppressBlurClose = ref(false)
 
 const hasValue = computed(() => props.modelValue !== null && props.modelValue !== undefined)
 
@@ -214,6 +215,10 @@ function onFocus(event: FocusEvent): void {
 
 function onBlur(event: FocusEvent): void {
   window.setTimeout(() => {
+    if (suppressBlurClose.value) {
+      return
+    }
+
     const active = document.activeElement as Node | null
     if (!rootRef.value?.contains(active)) {
       closeMenu()
@@ -234,14 +239,30 @@ function onPointerDownOutside(event: MouseEvent): void {
   }
 }
 
+function onMenuPointerDown(): void {
+  suppressBlurClose.value = true
+}
+
+function releaseMenuInteraction(): void {
+  window.setTimeout(() => {
+    suppressBlurClose.value = false
+  }, 0)
+}
+
+function onMenuWheel(event: WheelEvent): void {
+  event.stopPropagation()
+}
+
 onMounted(() => {
   document.addEventListener('mousedown', onPointerDownOutside)
+  document.addEventListener('mouseup', releaseMenuInteraction)
   window.addEventListener('resize', updateOpenDirection)
   window.addEventListener('scroll', updateOpenDirection, true)
 })
 
 onBeforeUnmount(() => {
   document.removeEventListener('mousedown', onPointerDownOutside)
+  document.removeEventListener('mouseup', releaseMenuInteraction)
   window.removeEventListener('resize', updateOpenDirection)
   window.removeEventListener('scroll', updateOpenDirection, true)
 })
@@ -308,6 +329,8 @@ watch(
           class="gcombo__menu"
           :class="{ 'gcombo__menu--up': openDirection === 'up' }"
           role="listbox"
+          @pointerdown="onMenuPointerDown"
+          @wheel="onMenuWheel"
         >
           <button
             v-for="(option, index) in options"

@@ -189,6 +189,7 @@
   background: var(--gcombo-menu-bg);
   box-shadow: var(--gcombo-menu-shadow);
   overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .gcombo__menu--up {
