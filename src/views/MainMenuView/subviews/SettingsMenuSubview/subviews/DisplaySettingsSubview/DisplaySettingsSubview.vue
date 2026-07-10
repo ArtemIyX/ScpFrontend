@@ -2,21 +2,10 @@
 
 <template>
   <section class="display-settings" aria-label="Display settings">
-    <header class="display-settings__header">
-      <GText as="h1" preset="title" class="display-settings__title">Display</GText>
-      <GText as="p" preset="muted" class="display-settings__summary">
-        Control presentation mode, runtime sync, HDR output, and camera comfort settings.
-      </GText>
-    </header>
 
-    <GSection
-      class="display-settings__section"
-      title="Display Output"
-      subtitle="Shape how the game is presented on the monitor before we wire these values into UE."
-      width="full"
-      preset="quiet"
-      background
-    >
+
+
+    <section class="display-settings__group" aria-label="Display output settings">
       <div class="display-settings__stack">
         <GField
           label="Fullscreen Mode"
@@ -133,17 +122,15 @@
           </div>
         </div>
       </div>
-    </GSection>
+    </section>
 
     <GDivider label="Accessibility" preset="quiet" class="display-settings__divider" />
 
-    <GSection
-      class="display-settings__section"
-      subtitle="Screen comfort and readability controls."
-      width="full"
-      preset="quiet"
-      background
-    >
+    <section class="display-settings__group" aria-label="Accessibility settings">
+      <GText as="p" preset="muted" class="display-settings__group-summary">
+        Screen comfort and readability controls.
+      </GText>
+
       <div class="display-settings__triple">
         <GField label="Brightness" width="full">
           <GSlider
@@ -181,17 +168,15 @@
           />
         </GField>
       </div>
-    </GSection>
+    </section>
 
     <GDivider label="Camera" preset="quiet" class="display-settings__divider" />
 
-    <GSection
-      class="display-settings__section"
-      subtitle="Visual comfort tuning for movement-heavy first-person play."
-      width="full"
-      preset="quiet"
-      background
-    >
+    <section class="display-settings__group" aria-label="Camera settings">
+      <GText as="p" preset="muted" class="display-settings__group-summary">
+        Visual comfort tuning for movement-heavy first-person play.
+      </GText>
+
       <div class="display-settings__stack">
         <GField label="Field Of View" width="full">
           <GSlider
@@ -199,7 +184,7 @@
             :min="70"
             :max="120"
             :step="1"
-            value-suffix="°"
+            value-suffix="deg"
             width="full"
             preset="quiet"
             aria-label="Field of view"
@@ -244,7 +229,7 @@
           </GField>
         </div>
       </div>
-    </GSection>
+    </section>
   </section>
 </template>
 
@@ -278,14 +263,14 @@
   margin: 0;
 }
 
-.display-settings__section {
-  border: 1px solid rgba(198, 255, 74, 0.12);
-  background:
-    linear-gradient(180deg, rgba(198, 255, 74, 0.03), transparent 16%),
-    linear-gradient(180deg, rgba(12, 16, 15, 0.74), rgba(8, 11, 11, 0.88));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 1rem 2rem rgba(0, 0, 0, 0.18);
+.display-settings__group {
+  display: grid;
+  gap: 1rem;
+}
+
+.display-settings__group-summary {
+  max-width: 42rem;
+  margin: 0;
 }
 
 .display-settings__stack {
