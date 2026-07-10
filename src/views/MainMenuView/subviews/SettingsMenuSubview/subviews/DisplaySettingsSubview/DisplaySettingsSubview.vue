@@ -42,47 +42,57 @@
             />
           </GField>
 
-          <div class="display-settings__toggle-column">
-            <GCheckbox v-model="vsync" preset="quiet">VSync</GCheckbox>
-            <GCheckbox v-model="limitFps" preset="quiet">Limit FPS</GCheckbox>
-          </div>
+          <GField
+            label="Sync"
+            helper="Presentation pacing and tear control."
+            width="full"
+            class="display-settings__field"
+          >
+            <div class="display-settings__toggle-column">
+              <GCheckbox v-model="vsync" preset="quiet">VSync</GCheckbox>
+            </div>
+          </GField>
         </div>
 
         <GField
-          label="Max FPS"
-          helper="Use the slider for broad tuning or the numeric input for exact caps."
+          label="Frame Rate Limit"
+          helper="Enable the cap, then tune it with the slider or exact numeric input."
           width="full"
           class="display-settings__field"
         >
-          <div class="display-settings__fps-row" :class="{ 'display-settings__fps-row--disabled': fpsControlsDisabled }">
-            <GSlider
-              v-model="maxFps"
-              :disabled="fpsControlsDisabled"
-              :min="30"
-              :max="360"
-              :step="1"
-              :show-value="false"
-              value-suffix=" FPS"
-              width="full"
-              preset="quiet"
-              aria-label="Maximum frames per second"
-            />
-            <GNumberInput
-              v-model="maxFps"
-              :disabled="fpsControlsDisabled"
-              :min="30"
-              :max="360"
-              :step="1"
-              :step-buttons="false"
-              :show-value="false"
-              width="full"
-              preset="quiet"
-              aria-label="Maximum FPS input"
-            >
-              <template #suffix>
-                <span class="display-settings__unit">FPS</span>
-              </template>
-            </GNumberInput>
+          <div class="display-settings__fps-group">
+            <GCheckbox v-model="limitFps" preset="quiet">Limit FPS</GCheckbox>
+
+            <div class="display-settings__fps-row" :class="{ 'display-settings__fps-row--disabled': fpsControlsDisabled }">
+              <GSlider
+                v-model="maxFps"
+                :disabled="fpsControlsDisabled"
+                :min="30"
+                :max="360"
+                :step="1"
+                :show-value="false"
+                value-suffix=" FPS"
+                width="full"
+                preset="quiet"
+                aria-label="Maximum frames per second"
+              />
+              <GNumberInput
+                v-model="maxFps"
+                :disabled="fpsControlsDisabled"
+                :min="30"
+                :max="360"
+                :step="1"
+                :step-buttons="false"
+                :show-value="false"
+                width="full"
+                preset="quiet"
+                aria-label="Maximum FPS input"
+              >
+                <template #suffix>
+                  <span class="display-settings__unit">FPS</span>
+                </template>
+              </GNumberInput>
+            </div>
           </div>
         </GField>
 
@@ -321,8 +331,25 @@
   align-items: end;
 }
 
+.display-settings__fps-group {
+  display: grid;
+  gap: 0.25rem;
+}
+
 .display-settings__fps-row--disabled {
   opacity: 0.5;
+}
+
+.display-settings__fps-row :deep(.gslider),
+.display-settings__fps-row :deep(.gnumberinput) {
+  gap: 0;
+}
+
+.display-settings__fps-row :deep(.gslider__head),
+.display-settings__fps-row :deep(.gslider__meta),
+.display-settings__fps-row :deep(.gnumberinput__head),
+.display-settings__fps-row :deep(.gnumberinput__meta) {
+  display: none;
 }
 
 .display-settings__hdr-shell {
