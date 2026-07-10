@@ -1,9 +1,11 @@
 import { computed, defineComponent, reactive, ref } from 'vue'
 
+import type { GComboOption } from '@/components/g/GCombo/GCombo'
 import type { GRailItem } from '@/components/g/GRail/GRail'
 import GraphicsNumberOverrideRow from './components/GraphicsNumberOverrideRow.vue'
 import GraphicsPresetField from './components/GraphicsPresetField.vue'
 
+type AntiAliasingMethodValue = 'none' | 'fxaa' | 'taa' | 'msaa' | 'tsr' | 'smaa'
 type QualityValue = 'low' | 'medium' | 'high' | 'epic' | 'cinematic'
 type MaterialQualityValue = 'low' | 'high'
 type PostProcessPresetValue = 'pp0' | 'pp1' | 'pp2' | 'pp3' | 'custom'
@@ -110,6 +112,15 @@ const materialQualityItems: GRailItem[] = [
     meta: 'Full',
   },
 ] as const
+
+const antiAliasingMethodOptions: GComboOption[] = [
+  { value: 'none', label: 'None' },
+  { value: 'fxaa', label: 'FXAA' },
+  { value: 'taa', label: 'TAA' },
+  { value: 'msaa', label: 'MSAA', disabled: true, description: 'Unavailable in this renderer path.' },
+  { value: 'tsr', label: 'TSR' },
+  { value: 'smaa', label: 'SMAA' },
+]
 
 const postProcessPresetItems: GRailItem[] = [
   { value: 'pp0', title: 'Low', meta: 'Minimal effects' },
@@ -466,6 +477,7 @@ export default defineComponent({
     GraphicsPresetField,
   },
   setup() {
+    const antiAliasingMethod = ref<AntiAliasingMethodValue>('tsr')
     const resolutionScale = ref<number | null>(100)
     const viewDistanceQuality = ref<QualityValue>('high')
     const antiAliasingQuality = ref<QualityValue>('high')
@@ -666,6 +678,8 @@ export default defineComponent({
     }
 
     return {
+      antiAliasingMethod,
+      antiAliasingMethodOptions,
       antiAliasingQuality,
       applyPostProcessPreset,
       applyShadowPreset,

@@ -22,6 +22,21 @@
           />
         </GField>
 
+        <GField
+          label="Anti-Aliasing Method"
+          helper="Selects the reconstruction or edge-smoothing technique before quality tuning."
+          width="full"
+          class="graphics-settings__feature-field"
+        >
+          <GCombo
+            v-model="antiAliasingMethod"
+            :options="antiAliasingMethodOptions"
+            width="full"
+            preset="quiet"
+            placeholder="Select anti-aliasing method"
+          />
+        </GField>
+
         <div class="graphics-settings__quality-grid">
           <GField
             label="View Distance Quality"
