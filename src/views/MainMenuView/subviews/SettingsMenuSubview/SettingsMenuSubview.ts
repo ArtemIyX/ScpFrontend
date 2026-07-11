@@ -120,11 +120,13 @@ export default defineComponent({
         return
       }
 
+      isKeyBindingsDirty.value = false
       proceedToPendingTab()
     }
 
     function discardAndLeave(): void {
       currentSubviewRef.value?.discardChanges?.()
+      isKeyBindingsDirty.value = false
       proceedToPendingTab()
     }
 
