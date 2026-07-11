@@ -69,7 +69,7 @@
 .settings-menu__tabs:deep(.gtabs__list) {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.6rem;
   padding: 0.5rem;
   border: 0.0625rem solid rgba(198, 255, 74, 0.12);

@@ -3,6 +3,7 @@ import { computed, defineComponent, ref } from 'vue'
 import type { GTabsItem } from '@/components/g/GTabs/GTabs'
 
 import AudioSettingsSubview from './subviews/AudioSettingsSubview'
+import ControlsSettingsSubview from './subviews/ControlsSettingsSubview'
 import DisplaySettingsSubview from './subviews/DisplaySettingsSubview'
 import GameplaySettingsSubview from './subviews/GameplaySettingsSubview'
 import GraphicsSettingsSubview from './subviews/GraphicsSettingsSubview'
@@ -26,6 +27,10 @@ export const settingsTabs = [
     label: 'Audio',
   },
   {
+    value: 'controls',
+    label: 'Controls',
+  },
+  {
     value: 'key-bindings',
     label: 'Key-bindings',
   },
@@ -37,6 +42,7 @@ export default defineComponent({
   name: 'SettingsMenuSubview',
   components: {
     AudioSettingsSubview,
+    ControlsSettingsSubview,
     DisplaySettingsSubview,
     GameplaySettingsSubview,
     GraphicsSettingsSubview,
@@ -55,6 +61,8 @@ export default defineComponent({
           return GameplaySettingsSubview
         case 'audio':
           return AudioSettingsSubview
+        case 'controls':
+          return ControlsSettingsSubview
         case 'key-bindings':
           return KeyBindingsSettingsSubview
         default:
