@@ -38,6 +38,12 @@ export const settingsTabs = [
 
 export type SettingsTabValue = (typeof settingsTabs)[number]['value']
 
+interface DirtyGuardSubview {
+  isDirty?: () => boolean
+  saveChanges?: () => boolean
+  discardChanges?: () => void
+}
+
 export default defineComponent({
   name: 'SettingsMenuSubview',
   components: {
@@ -50,6 +56,10 @@ export default defineComponent({
   },
   setup() {
     const activeTab = ref<SettingsTabValue>('display')
+    const currentSubviewRef = ref<DirtyGuardSubview | null>(null)
+    const pendingTab = ref<SettingsTabValue | null>(null)
+    const showLeaveModal = ref(false)
+    const isKeyBindingsDirty = ref(false)
 
     const currentSubview = computed(() => {
       switch (activeTab.value) {
@@ -70,10 +80,69 @@ export default defineComponent({
       }
     })
 
+    const decoratedTabs = computed(() =>
+      settingsTabs.map((tab) =>
+        tab.value === 'key-bindings' && isKeyBindingsDirty.value
+          ? { ...tab, label: `${tab.label} *` }
+          : tab,
+      ),
+    )
+
+    function requestTabChange(nextTab: string | number | null | undefined): void {
+      if (typeof nextTab !== 'string' || nextTab === activeTab.value) {
+        return
+      }
+
+      const resolvedTab = nextTab as SettingsTabValue
+      if (activeTab.value === 'key-bindings' && currentSubviewRef.value?.isDirty?.()) {
+        pendingTab.value = resolvedTab
+        showLeaveModal.value = true
+        return
+      }
+
+      activeTab.value = resolvedTab
+    }
+
+    function closeLeaveModal(): void {
+      pendingTab.value = null
+      showLeaveModal.value = false
+    }
+
+    function proceedToPendingTab(): void {
+      if (pendingTab.value) {
+        activeTab.value = pendingTab.value
+      }
+      closeLeaveModal()
+    }
+
+    function saveAndLeave(): void {
+      if (currentSubviewRef.value?.saveChanges?.() === false) {
+        return
+      }
+
+      proceedToPendingTab()
+    }
+
+    function discardAndLeave(): void {
+      currentSubviewRef.value?.discardChanges?.()
+      proceedToPendingTab()
+    }
+
+    function onKeyBindingsDirtyChange(dirty: boolean): void {
+      isKeyBindingsDirty.value = dirty
+    }
+
     return {
       activeTab,
+      closeLeaveModal,
       currentSubview,
-      settingsTabs,
+      currentSubviewRef,
+      decoratedTabs,
+      discardAndLeave,
+      onKeyBindingsDirtyChange,
+      requestTabChange,
+      saveAndLeave,
+      showLeaveModal,
     }
   },
 })

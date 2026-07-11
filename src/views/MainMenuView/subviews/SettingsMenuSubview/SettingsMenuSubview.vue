@@ -5,22 +5,53 @@
     <GWindow class="settings-menu__window" padding="lg" width="full" strong>
       <div class="settings-menu__layout">
         <GTabs
-          v-model="activeTab"
+          :model-value="activeTab"
           class="settings-menu__tabs"
-          :tabs="settingsTabs"
+          :tabs="decoratedTabs"
           preset="quiet"
           size="md"
           width="full"
           aria-label="Settings navigation"
+          @update:model-value="requestTabChange"
         />
 
         <div class="settings-menu__content-frame">
           <GScroller class="settings-menu__scroller">
-            <component :is="currentSubview" class="settings-menu__tab-view" />
+            <component
+              :is="currentSubview"
+              ref="currentSubviewRef"
+              class="settings-menu__tab-view"
+              @dirty-change="onKeyBindingsDirtyChange"
+            />
           </GScroller>
         </div>
       </div>
     </GWindow>
+
+    <GModal
+      v-model="showLeaveModal"
+      width="md"
+      title="Unsaved key bindings"
+      subtitle="Choose what to do before leaving the key-bindings tab."
+      status="Pending"
+      aria-label="Unsaved key bindings confirmation"
+      @close="closeLeaveModal"
+    >
+      <div class="settings-menu__leave-copy">
+        <GText as="p" preset="muted">
+          Save keeps your latest draft, Cancel reverts the unsaved edits, and Stay returns to the
+          current tab.
+        </GText>
+      </div>
+
+      <template #footer>
+        <div class="settings-menu__leave-actions">
+          <GButton preset="ghost" shape="soft" @click="closeLeaveModal">Stay here</GButton>
+          <GButton preset="surface" shape="soft" @click="discardAndLeave">Cancel changes</GButton>
+          <GButton preset="accent" shape="soft" @click="saveAndLeave">Save and leave</GButton>
+        </div>
+      </template>
+    </GModal>
   </section>
 </template>
 
@@ -40,8 +71,7 @@
   margin: 0 auto;
   border: 0.0625rem solid rgba(198, 255, 74, 0.16);
   background:
-    linear-gradient(180deg, rgba(8, 12, 11, 0.94), rgba(4, 6, 6, 0.92)),
-    rgba(0, 0, 0, 0.56);
+    linear-gradient(180deg, rgba(8, 12, 11, 0.94), rgba(4, 6, 6, 0.92)), rgba(0, 0, 0, 0.56);
   box-shadow:
     inset 0 0.0625rem 0 rgba(255, 255, 255, 0.04),
     0 1.75rem 4rem rgba(0, 0, 0, 0.42),
@@ -158,12 +188,7 @@
   border-color: rgba(84, 201, 29, 0.3);
   background:
     linear-gradient(180deg, rgba(34, 52, 18, 0.94), rgba(13, 20, 11, 0.96)),
-    linear-gradient(
-      135deg,
-      rgba(84, 201, 29, 0.16),
-      rgba(45, 210, 101, 0.07) 68%,
-      transparent
-    );
+    linear-gradient(135deg, rgba(84, 201, 29, 0.16), rgba(45, 210, 101, 0.07) 68%, transparent);
   box-shadow:
     inset 0 0.0625rem 0 rgba(255, 255, 255, 0.07),
     inset 0 0 0.85rem rgba(84, 201, 29, 0.05),
@@ -270,6 +295,16 @@
   min-height: 100%;
 }
 
+.settings-menu__leave-copy :deep(p) {
+  margin: 0;
+}
+
+.settings-menu__leave-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
 @media (max-width: 64rem) {
   .settings-menu__tabs:deep(.gtabs__list) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -293,6 +328,10 @@
 
   .settings-menu__scroller:deep(.gscroller__content) {
     padding: 1.125rem 1rem 1.5rem;
+  }
+
+  .settings-menu__leave-actions {
+    flex-direction: column;
   }
 }
 </style>

@@ -26,6 +26,13 @@
   min-width: 0;
 }
 
+.gkeybindinput__control {
+  display: flex;
+  align-items: stretch;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
 .gkeybindinput--full {
   width: 100%;
 }
@@ -46,6 +53,7 @@
   justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
+  flex: 1 1 auto;
   min-width: 0;
   min-height: var(--gkeybindinput-min-height);
   padding: var(--gkeybindinput-padding-y) var(--gkeybindinput-padding-x);
@@ -104,13 +112,13 @@
 
 .gkeybindinput__state {
   flex: 0 0 auto;
-  padding: 0.18rem 0.5rem;
+  padding: 0.16rem 0.42rem;
   border: 0.0625rem solid var(--gkeybindinput-chip-border);
   border-radius: 62.4375rem;
   background: var(--gkeybindinput-chip-bg);
   color: var(--ui-text-muted);
   font-family: var(--ui-technical-font);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   line-height: 1;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -138,45 +146,48 @@
   color: var(--gkeybindinput-error-text);
 }
 
-.gkeybindinput__actions {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.gkeybindinput__clear {
-  padding: 0.4rem 0.75rem;
-  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
-  border-radius: 0.3125rem;
-  background: rgba(255, 255, 255, 0.03);
+.gkeybindinput__clear-inline {
+  width: var(--gkeybindinput-min-height);
+  min-width: var(--gkeybindinput-min-height);
+  min-height: var(--gkeybindinput-min-height);
+  padding: 0;
+  border: 0.0625rem solid var(--gkeybindinput-border);
+  border-radius: var(--gkeybindinput-radius);
+  background: var(--gkeybindinput-bg);
   color: var(--ui-text-main);
   cursor: pointer;
+  font-family: var(--ui-header-font);
+  font-size: 1rem;
+  line-height: 1;
   transition:
     transform 140ms ease,
     border-color 140ms ease,
-    background-color 140ms ease;
+    background-color 140ms ease,
+    box-shadow 140ms ease;
 }
 
-.gkeybindinput__clear:hover:not(:disabled) {
-  border-color: rgba(198, 255, 74, 0.24);
-  background: rgba(255, 255, 255, 0.06);
+.gkeybindinput__clear-inline:hover:not(:disabled) {
+  border-color: var(--gkeybindinput-border-hover);
+  background: var(--gkeybindinput-bg-hover);
   transform: translateY(-0.0625rem);
+  box-shadow: var(--gkeybindinput-shadow);
 }
 
-.gkeybindinput__clear:disabled {
+.gkeybindinput__clear-inline:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
 .gkeybindinput--sm {
-  --gkeybindinput-padding-x: 0.875rem;
-  --gkeybindinput-padding-y: 0.625rem;
-  --gkeybindinput-min-height: 2.25rem;
+  --gkeybindinput-padding-x: 0.75rem;
+  --gkeybindinput-padding-y: 0.5rem;
+  --gkeybindinput-min-height: 2.125rem;
 }
 
 .gkeybindinput--md {
-  --gkeybindinput-padding-x: 1rem;
-  --gkeybindinput-padding-y: 0.75rem;
-  --gkeybindinput-min-height: 2.75rem;
+  --gkeybindinput-padding-x: 0.875rem;
+  --gkeybindinput-padding-y: 0.625rem;
+  --gkeybindinput-min-height: 2.5rem;
 }
 
 .gkeybindinput--lg {

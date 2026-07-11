@@ -174,50 +174,61 @@ watch(
       {{ label }}
     </GText>
 
-    <button
-      ref="triggerRef"
-      v-bind="attrs"
-      type="button"
-      class="gkeybindinput__trigger"
-      :id="id"
-      :name="name"
-      :disabled="disabled"
-      :aria-label="ariaLabel || label"
-      :aria-invalid="error ? 'true' : undefined"
-      :title="title"
-      @click="onTriggerClick"
-      @focus="onFocus"
-      @blur="onBlur"
-      @keydown="onKeydown"
-    >
-      <span class="gkeybindinput__value" :class="{ 'gkeybindinput__value--placeholder': !hasValue }">
-        {{ isCapturing ? prompt : displayValue }}
-      </span>
+    <div class="gkeybindinput__control">
+      <button
+        v-if="clearable && isCapturing"
+        type="button"
+        class="gkeybindinput__clear-inline"
+        :disabled="disabled || readonly || !hasValue"
+        aria-label="Clear binding"
+        title="Clear binding"
+        @mousedown.prevent
+        @click="clearValue"
+      >
+        ×
+      </button>
 
-      <span class="gkeybindinput__state" aria-hidden="true">
-        {{ isCapturing ? 'Listening' : hasValue ? 'Assigned' : 'Empty' }}
-      </span>
-    </button>
+      <button
+        ref="triggerRef"
+        v-bind="attrs"
+        type="button"
+        class="gkeybindinput__trigger"
+        :id="id"
+        :name="name"
+        :disabled="disabled"
+        :aria-label="ariaLabel || label"
+        :aria-invalid="error ? 'true' : undefined"
+        :title="title"
+        @click="onTriggerClick"
+        @focus="onFocus"
+        @blur="onBlur"
+        @keydown="onKeydown"
+      >
+        <span
+          class="gkeybindinput__value"
+          :class="{ 'gkeybindinput__value--placeholder': !hasValue }"
+        >
+          {{ isCapturing ? prompt : displayValue }}
+        </span>
+
+        <span class="gkeybindinput__state" aria-hidden="true">
+          {{ isCapturing ? 'Listen' : hasValue ? 'Set' : 'Empty' }}
+        </span>
+      </button>
+    </div>
 
     <div class="gkeybindinput__meta">
       <GText v-if="helper && !error" as="span" preset="muted" class="gkeybindinput__helper">
         {{ helper }}
       </GText>
-      <GText v-if="error" as="span" preset="muted" class="gkeybindinput__helper gkeybindinput__helper--error">
+      <GText
+        v-if="error"
+        as="span"
+        preset="muted"
+        class="gkeybindinput__helper gkeybindinput__helper--error"
+      >
         {{ error }}
       </GText>
-
-      <div v-if="clearable" class="gkeybindinput__actions">
-        <button
-          type="button"
-          class="gkeybindinput__clear"
-          :disabled="disabled || readonly || !hasValue"
-          @mousedown.prevent
-          @click="clearValue"
-        >
-          Clear
-        </button>
-      </div>
     </div>
   </label>
 </template>
