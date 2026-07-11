@@ -6,44 +6,43 @@
 }
 
 .gtooltip {
-  position: absolute;
-  z-index: 30;
-  display: inline-flex;
-  max-width: min(18rem, 80vw);
-  padding: 0.5rem 0.75rem;
+  position: fixed;
+  z-index: 1200;
+  display: block;
+  width: min(28rem, calc(100vw - 1rem));
+  max-width: min(28rem, calc(100vw - 1rem));
+  padding: 0.65rem 0.85rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0.375rem;
   background: rgba(8, 10, 12, 0.98);
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.38);
   pointer-events: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-height: 1.45;
 }
 
 .gtooltip__text {
+  display: block;
+  width: 100%;
   color: var(--ui-text-main);
 }
 
 .gtooltip--top {
-  bottom: calc(100% + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
+  /* position handled in component */
 }
 
 .gtooltip--bottom {
-  top: calc(100% + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
+  /* position handled in component */
 }
 
 .gtooltip--left {
-  right: calc(100% + 0.5rem);
-  top: 50%;
-  transform: translateY(-50%);
+  /* position handled in component */
 }
 
 .gtooltip--right {
-  left: calc(100% + 0.5rem);
-  top: 50%;
-  transform: translateY(-50%);
+  /* position handled in component */
 }
 
 .gtooltip--sm {
@@ -94,20 +93,20 @@
 
 .gtooltip--top.gtooltip-fade-enter-from,
 .gtooltip--top.gtooltip-fade-leave-to {
-  transform: translateX(-50%) translateY(0.25rem);
+  translate: 0 0.25rem;
 }
 
 .gtooltip--bottom.gtooltip-fade-enter-from,
 .gtooltip--bottom.gtooltip-fade-leave-to {
-  transform: translateX(-50%) translateY(-0.25rem);
+  translate: 0 -0.25rem;
 }
 
 .gtooltip--left.gtooltip-fade-enter-from,
 .gtooltip--left.gtooltip-fade-leave-to {
-  transform: translateY(-50%) translateX(0.25rem);
+  translate: 0.25rem 0;
 }
 
 .gtooltip--right.gtooltip-fade-enter-from,
 .gtooltip--right.gtooltip-fade-leave-to {
-  transform: translateY(-50%) translateX(-0.25rem);
+  translate: -0.25rem 0;
 }

@@ -46,7 +46,7 @@ export default defineComponent({
     const ambientVolume = ref<number | null>(65)
 
     const voiceActivationDisabled = computed(() => talkMode.value !== 'voice-activation')
-    const hoverHelpDelay = 1250
+    const hoverHelpDelay = 600
 
     const audioHelp = {
       playbackDevice:

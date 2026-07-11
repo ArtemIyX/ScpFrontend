@@ -65,7 +65,6 @@
     <section class="audio-settings__group" aria-label="Voice communication settings">
       <GField
         label="Talk Mode"
-        helper="Pick the communication mode the squad uses in-game."
         width="full"
         class="audio-settings__feature-field"
       >
@@ -100,7 +99,6 @@
 
       <GField
         label="Voice Activation Threshold"
-        helper="Only active when voice activation is selected."
         width="full"
         class="audio-settings__feature-field"
       >
@@ -175,6 +173,7 @@
           label="Ambient Volume"
           helper="Controls wind, machinery hum, room tone, and environmental sound beds."
           width="full"
+          class="audio-settings__feature-field"
         >
           <template #head>
             <GTooltip
@@ -205,6 +204,7 @@
           label="UI Volume"
           helper="Controls menu clicks, confirmations, alerts, and interface feedback."
           width="full"
+          class="audio-settings__feature-field"
         >
           <template #head>
             <GTooltip
@@ -235,6 +235,7 @@
           label="Music Volume"
           helper="Controls background music, ambient score, and menu tracks."
           width="full"
+          class="audio-settings__feature-field"
         >
           <template #head>
             <GTooltip
@@ -265,6 +266,7 @@
           label="Voice Volume"
           helper="Controls teammate comms, radio chatter, and spoken lines."
           width="full"
+          class="audio-settings__feature-field"
         >
           <template #head>
             <GTooltip
@@ -295,7 +297,7 @@
           label="SFX Volume"
           helper="Controls footsteps, weapons, impacts, and other world effects."
           width="full"
-          class="audio-settings__volume-wide"
+          class="audio-settings__feature-field audio-settings__volume-wide"
         >
           <template #head>
             <GTooltip
