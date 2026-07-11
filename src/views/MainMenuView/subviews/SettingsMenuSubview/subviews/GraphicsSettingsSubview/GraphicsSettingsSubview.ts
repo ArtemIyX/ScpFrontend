@@ -1,4 +1,4 @@
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref, watch } from 'vue'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
 import type { GRailItem } from '@/components/g/GRail/GRail'
@@ -6,6 +6,9 @@ import GraphicsNumberOverrideRow from './components/GraphicsNumberOverrideRow.vu
 import GraphicsPresetField from './components/GraphicsPresetField.vue'
 
 type AntiAliasingMethodValue = 'none' | 'fxaa' | 'taa' | 'msaa' | 'tsr' | 'smaa'
+type UpscaleModeValue = 'off' | 'dlss' | 'fsr'
+type DlssQualityValue = 'dlaa' | 'ultra-performance' | 'performance' | 'balanced' | 'quality' | 'ultra-quality'
+type FrameGenerationValue = 'off' | '2x' | '3x' | '4x'
 type QualityValue = 'low' | 'medium' | 'high' | 'epic' | 'cinematic'
 type MaterialQualityValue = 'low' | 'high'
 type PostProcessPresetValue = 'pp0' | 'pp1' | 'pp2' | 'pp3' | 'custom'
@@ -120,6 +123,28 @@ const antiAliasingMethodOptions: GComboOption[] = [
   { value: 'msaa', label: 'MSAA', disabled: true, description: 'Unavailable in this renderer path.' },
   { value: 'tsr', label: 'TSR' },
   { value: 'smaa', label: 'SMAA' },
+]
+
+const upscaleModeOptions: GComboOption[] = [
+  { value: 'off', label: 'Off' },
+  { value: 'dlss', label: 'DLSS' },
+  { value: 'fsr', label: 'FSR' },
+]
+
+const dlssQualityOptions: GComboOption[] = [
+  { value: 'dlaa', label: 'DLAA' },
+  { value: 'ultra-quality', label: 'Ultra Quality' },
+  { value: 'quality', label: 'Quality' },
+  { value: 'balanced', label: 'Balanced' },
+  { value: 'performance', label: 'Performance' },
+  { value: 'ultra-performance', label: 'Ultra Performance' },
+]
+
+const frameGenerationOptions: GComboOption[] = [
+  { value: 'off', label: 'Off' },
+  { value: '2x', label: '2x' },
+  { value: '3x', label: '3x' },
+  { value: '4x', label: '4x' },
 ]
 
 const postProcessPresetItems: GRailItem[] = [
@@ -478,6 +503,9 @@ export default defineComponent({
   },
   setup() {
     const antiAliasingMethod = ref<AntiAliasingMethodValue>('tsr')
+    const upscaleMode = ref<UpscaleModeValue>('off')
+    const dlssQuality = ref<DlssQualityValue>('quality')
+    const frameGeneration = ref<FrameGenerationValue>('off')
     const resolutionScale = ref<number | null>(100)
     const viewDistanceQuality = ref<QualityValue>('high')
     const antiAliasingQuality = ref<QualityValue>('high')
@@ -495,6 +523,20 @@ export default defineComponent({
     const effectsSettings = reactive<EffectsSettings>(cloneEffectsSettings(effectsPresetMap.effects2))
     const effectsPreset = ref<EffectsPresetValue>('effects2')
     const effectsCustomOpen = ref(false)
+    const antiAliasingMethodLocked = computed(
+      () => upscaleMode.value !== 'off' || frameGeneration.value !== 'off'
+    )
+    const upscaleQualityDisabled = computed(() => upscaleMode.value === 'off')
+
+    watch(
+      antiAliasingMethodLocked,
+      (locked) => {
+        if (locked) {
+          antiAliasingMethod.value = 'taa'
+        }
+      },
+      { immediate: true },
+    )
 
     const derivedPostProcessPreset = computed<PostProcessPresetValue>(() => {
       const matchedPreset = (Object.entries(postProcessPresetMap) as Array<
@@ -680,7 +722,13 @@ export default defineComponent({
     return {
       antiAliasingMethod,
       antiAliasingMethodOptions,
+      antiAliasingMethodLocked,
       antiAliasingQuality,
+      dlssQuality,
+      upscaleMode,
+      upscaleModeOptions,
+      upscaleQualityDisabled,
+      dlssQualityOptions,
       applyPostProcessPreset,
       applyShadowPreset,
       applyTexturePreset,
@@ -701,6 +749,8 @@ export default defineComponent({
       postProcessPresetItems,
       postProcessSettings,
       postProcessOverrideRows,
+      frameGeneration,
+      frameGenerationOptions,
       resolutionScale,
       scalabilityItems,
       shadowCustomOpen,

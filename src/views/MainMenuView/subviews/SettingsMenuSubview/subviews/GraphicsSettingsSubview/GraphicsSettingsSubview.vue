@@ -28,46 +28,100 @@
           width="full"
           class="graphics-settings__feature-field"
         >
-          <GCombo
-            v-model="antiAliasingMethod"
-            :options="antiAliasingMethodOptions"
+          <div class="graphics-settings__aa-stack">
+            <div class="graphics-settings__aa-top-grid">
+              <GField
+                label="Method"
+                helper="Locked to TAA while upscale or frame generation is active."
+                width="full"
+              >
+                <GCombo
+                  v-model="antiAliasingMethod"
+                  :options="antiAliasingMethodOptions"
+                  :disabled="antiAliasingMethodLocked"
+                  width="full"
+                  preset="quiet"
+                  placeholder="Select anti-aliasing method"
+                />
+              </GField>
+
+              <GField
+                label="Frame Gen"
+                helper="Active multipliers also force anti-aliasing method to TAA."
+                width="full"
+              >
+                <GCombo
+                  v-model="frameGeneration"
+                  :options="frameGenerationOptions"
+                  width="full"
+                  preset="quiet"
+                  placeholder="Select frame generation"
+                />
+              </GField>
+            </div>
+
+            <div class="graphics-settings__upscale-grid">
+              <GField
+                label="Upscale Mode"
+                helper="Any active upscaler forces anti-aliasing method to TAA."
+                width="full"
+              >
+                <GCombo
+                  v-model="upscaleMode"
+                  :options="upscaleModeOptions"
+                  width="full"
+                  preset="quiet"
+                  placeholder="Select upscale mode"
+                />
+              </GField>
+
+              <GField
+                label="Upscale Quality"
+                helper="Enabled only while an upscaler is active."
+                width="full"
+              >
+                <GCombo
+                  v-model="dlssQuality"
+                  :options="dlssQualityOptions"
+                  :disabled="upscaleQualityDisabled"
+                  width="full"
+                  preset="quiet"
+                  placeholder="Select upscale quality"
+                />
+              </GField>
+            </div>
+          </div>
+        </GField>
+
+        <GField
+          label="View Distance Quality"
+          helper="Affects how far geometry and scene detail remain fully resolved."
+          width="full"
+          class="graphics-settings__feature-field"
+        >
+          <GRail
+            v-model="viewDistanceQuality"
+            :items="scalabilityItems"
             width="full"
             preset="quiet"
-            placeholder="Select anti-aliasing method"
+            aria-label="View distance quality"
           />
         </GField>
 
-        <div class="graphics-settings__quality-grid">
-          <GField
-            label="View Distance Quality"
-            helper="Affects how far geometry and scene detail remain fully resolved."
+        <GField
+          label="Anti-Aliasing Quality"
+          helper="Controls edge smoothing quality and related resolve cost."
+          width="full"
+          class="graphics-settings__feature-field"
+        >
+          <GRail
+            v-model="antiAliasingQuality"
+            :items="scalabilityItems"
             width="full"
-            class="graphics-settings__feature-field"
-          >
-            <GRail
-              v-model="viewDistanceQuality"
-              :items="scalabilityItems"
-              width="full"
-              preset="quiet"
-              aria-label="View distance quality"
-            />
-          </GField>
-
-          <GField
-            label="Anti-Aliasing Quality"
-            helper="Controls edge smoothing quality and related resolve cost."
-            width="full"
-            class="graphics-settings__feature-field"
-          >
-            <GRail
-              v-model="antiAliasingQuality"
-              :items="scalabilityItems"
-              width="full"
-              preset="quiet"
-              aria-label="Anti-aliasing quality"
-            />
-          </GField>
-        </div>
+            preset="quiet"
+            aria-label="Anti-aliasing quality"
+          />
+        </GField>
 
         <GField
           label="Material Quality Level"
@@ -236,6 +290,23 @@
   gap: 1rem;
 }
 
+.graphics-settings__aa-stack {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.graphics-settings__aa-top-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1rem;
+}
+
+.graphics-settings__upscale-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1rem;
+}
+
 .graphics-settings__feature-field :deep(.gfield__head) {
   gap: 0.22rem;
   padding-bottom: 0.45rem;
@@ -258,6 +329,14 @@
 
 @media (max-width: 64rem) {
   .graphics-settings__quality-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .graphics-settings__upscale-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .graphics-settings__aa-top-grid {
     grid-template-columns: 1fr;
   }
 }
