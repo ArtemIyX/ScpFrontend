@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import avatarSvgSrc from '@/assets/avatars/operative-17.svg'
+import iconSvgSrc from '@/assets/icons/scp-sigil.svg'
 
 const isActionDisabled = ref(true)
 const nickname = ref('Operative 17')
@@ -167,8 +169,6 @@ const paginationSummary = computed(
   () => `Page ${paginationPage.value} of ${paginationPageCount} / Compact ${paginationCompactPage.value}`,
 )
 
-const iconSvgSrc = '/icons/scp-sigil.svg'
-const avatarSvgSrc = '/avatars/operative-17.svg'
 const avatarFallback = 'O17'
 
 const menuItems = [

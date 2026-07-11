@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:single": "run-p type-check \"build-single-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
+    "build-single-only": "vite build --config vite.singlefile.config.ts",
     "type-check": "vue-tsc --build",
     "lint": "run-s \"lint:*\"",
     "lint:oxlint": "oxlint . --fix",

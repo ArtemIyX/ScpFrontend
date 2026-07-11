@@ -1,4 +1,5 @@
 import { computed, defineComponent, ref } from 'vue'
+import scpSigilUrl from '@/assets/icons/scp-sigil.svg'
 
 import PlayMenuSubview from './subviews/PlayMenuSubview'
 import SettingsMenuSubview from './subviews/SettingsMenuSubview'
@@ -47,6 +48,9 @@ export default defineComponent({
     const isPlayTab = computed(() => activeTab.value === 'play')
     const isSettingsTab = computed(() => activeTab.value === 'settings')
     const showTabIntro = computed(() => !isSettingsTab.value)
+    const sigilStyle = {
+      '--main-menu-sigil-url': `url("${scpSigilUrl}")`,
+    }
 
     const currentTab = computed(
       () => menuTabs.find((tab) => tab.value === activeTab.value) ?? menuTabs[0],
@@ -72,6 +76,7 @@ export default defineComponent({
       isSettingsTab,
       menuTabs,
       showTabIntro,
+      sigilStyle,
     }
   },
 })

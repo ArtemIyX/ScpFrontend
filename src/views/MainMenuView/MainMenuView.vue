@@ -1,7 +1,7 @@
 <script lang="ts" src="./MainMenuView.ts"></script>
 
 <template>
-  <main class="ui-page main-menu">
+  <main class="ui-page main-menu" :style="sigilStyle">
     <div class="main-menu__backdrop" aria-hidden="true">
       <div class="main-menu__glow main-menu__glow--left"></div>
       <div class="main-menu__glow main-menu__glow--right"></div>
