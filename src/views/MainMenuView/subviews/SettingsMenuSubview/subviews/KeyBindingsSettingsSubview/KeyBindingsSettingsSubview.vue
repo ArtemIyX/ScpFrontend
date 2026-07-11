@@ -12,7 +12,7 @@ import {
   areKeyBindingMapsEqual,
   cloneKeyBindingMap,
   countDirtyKeyBindings,
-  createDefaultKeyBindingMap,
+  createKeyBindingMapFromSource,
   createResolvedKeyBindingMap,
   defaultKeyBindingLayout,
   type KeyBindingCategoryDefinition,
@@ -41,11 +41,9 @@ const savedMappings = ref<KeyBindingMap>(
   createResolvedKeyBindingMap(props.layout, props.initialMappings),
 )
 const draftMappings = ref<KeyBindingMap>(cloneKeyBindingMap(savedMappings.value))
-const fallbackDefaults = computed(() => createDefaultKeyBindingMap(props.layout))
-const defaultMappings = computed(() => ({
-  ...fallbackDefaults.value,
-  ...(props.defaultMappings ?? {}),
-}))
+const defaultMappings = computed(() =>
+  createKeyBindingMapFromSource(props.layout, props.defaultMappings),
+)
 const showResetModal = ref(false)
 
 const dirtyCount = computed(() =>
@@ -141,7 +139,7 @@ function closeResetModal(): void {
 }
 
 function resetToDefaults(): void {
-  applyMappings(defaultMappings.value)
+  draftMappings.value = cloneKeyBindingMap(defaultMappings.value)
   closeResetModal()
 }
 
@@ -180,14 +178,6 @@ defineExpose({
 <template>
   <section class="key-bindings-settings" aria-label="Key-bindings settings">
     <header class="key-bindings-settings__header">
-      <div class="key-bindings-settings__heading">
-        <h1 class="key-bindings-settings__title">Key-bindings</h1>
-        <GText as="p" preset="muted" class="key-bindings-settings__summary">
-          Keep every action on its own key, clear bindings you do not want, and save the draft
-          before leaving this section.
-        </GText>
-      </div>
-
       <div class="key-bindings-settings__toolbar">
         <GText
           as="p"
@@ -250,10 +240,20 @@ defineExpose({
             'key-bindings-settings__row--error': Boolean(conflictMap[binding.id]),
           }"
         >
-          <GText as="p" preset="header" class="key-bindings-settings__binding-name">
-            {{ binding.label
-            }}{{ draftMappings[binding.id] !== savedMappings[binding.id] ? ' *' : '' }}
-          </GText>
+          <div class="key-bindings-settings__binding-copy">
+            <GText as="p" preset="header" class="key-bindings-settings__binding-name">
+              {{ binding.label
+              }}{{ draftMappings[binding.id] !== savedMappings[binding.id] ? ' *' : '' }}
+            </GText>
+            <GText
+              v-if="conflictMap[binding.id]"
+              as="p"
+              preset="muted"
+              class="key-bindings-settings__binding-warning"
+            >
+              {{ conflictMap[binding.id] }}
+            </GText>
+          </div>
 
           <GKeybindInput
             :model-value="draftMappings[binding.id]"
@@ -261,8 +261,6 @@ defineExpose({
             size="sm"
             preset="quiet"
             clearable
-            :error="conflictMap[binding.id]"
-            :helper="conflictMap[binding.id]"
             :aria-label="`${binding.label} key binding`"
             @update:model-value="setBinding(binding.id, $event)"
           />
@@ -275,7 +273,6 @@ defineExpose({
       width="md"
       title="Reset key bindings"
       subtitle="This replaces the current draft with the default mapping set."
-      status="Confirm"
       aria-label="Reset key bindings confirmation"
     >
       <div class="key-bindings-settings__modal-copy">
@@ -418,6 +415,18 @@ defineExpose({
   letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 1.2;
+}
+
+.key-bindings-settings__binding-copy {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.key-bindings-settings__binding-warning {
+  margin: 0;
+  color: #ffb8b3;
+  font-size: 0.75rem;
+  line-height: 1.35;
 }
 
 .key-bindings-settings__modal-copy {

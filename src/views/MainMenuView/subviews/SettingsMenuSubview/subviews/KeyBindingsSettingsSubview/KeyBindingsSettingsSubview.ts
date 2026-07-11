@@ -61,6 +61,18 @@ export function createResolvedKeyBindingMap(
   }
 }
 
+export function createKeyBindingMapFromSource(
+  layout: KeyBindingCategoryDefinition[],
+  source?: KeyBindingMap,
+): KeyBindingMap {
+  return Object.fromEntries(
+    flattenKeyBindingLayout(layout).map((binding) => [
+      binding.id,
+      source?.[binding.id] ?? binding.defaultKey ?? null,
+    ]),
+  )
+}
+
 export function cloneKeyBindingMap(mappings: KeyBindingMap): KeyBindingMap {
   return { ...mappings }
 }

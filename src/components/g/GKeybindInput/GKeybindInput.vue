@@ -86,6 +86,7 @@ function clearValue(): void {
   }
 
   emitValue(null)
+  stopCapture(null)
   emit('clear')
   triggerRef.value?.focus()
 }
