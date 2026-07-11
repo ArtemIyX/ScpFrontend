@@ -1,4 +1,11 @@
-export type GKeybindInputPreset = 'surface' | 'accent' | 'danger' | 'warning' | 'purple' | 'ghost' | 'quiet'
+export type GKeybindInputPreset =
+  | 'surface'
+  | 'accent'
+  | 'danger'
+  | 'warning'
+  | 'purple'
+  | 'ghost'
+  | 'quiet'
 export type GKeybindInputSize = 'sm' | 'md' | 'lg'
 export type GKeybindInputWidth = 'auto' | 'full'
 
@@ -65,6 +72,23 @@ export function buildGKeybindInputClasses(props: {
 
 const modifierOrder = ['Ctrl', 'Alt', 'Shift', 'Meta'] as const
 
+function getActiveModifiers(
+  event: Pick<KeyboardEvent, 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'>,
+): string[] {
+  return modifierOrder.filter((modifier) => {
+    if (modifier === 'Ctrl') {
+      return event.ctrlKey
+    }
+    if (modifier === 'Alt') {
+      return event.altKey
+    }
+    if (modifier === 'Shift') {
+      return event.shiftKey
+    }
+    return event.metaKey
+  })
+}
+
 function normalizeModifierKey(key: string): string | null {
   switch (key) {
     case 'Control':
@@ -96,23 +120,14 @@ export function normalizeKeyName(key: string): string {
   return key
 }
 
-export function formatKeybind(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'>): string | null {
-  const modifiers = modifierOrder.filter((modifier) => {
-    if (modifier === 'Ctrl') {
-      return event.ctrlKey
-    }
-    if (modifier === 'Alt') {
-      return event.altKey
-    }
-    if (modifier === 'Shift') {
-      return event.shiftKey
-    }
-    return event.metaKey
-  })
+export function formatKeybind(
+  event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'>,
+): string | null {
+  const modifiers = getActiveModifiers(event)
 
   const modifierKey = normalizeModifierKey(event.key)
   if (modifierKey) {
-    return null
+    return modifiers.join('+') || modifierKey
   }
 
   const key = normalizeKeyName(event.key)
@@ -121,4 +136,33 @@ export function formatKeybind(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'al
   }
 
   return [...modifiers, key].join('+')
+}
+
+function normalizeMouseButton(button: number): string | null {
+  switch (button) {
+    case 0:
+      return 'Mouse Left'
+    case 1:
+      return 'Mouse Middle'
+    case 2:
+      return 'Mouse Right'
+    case 3:
+      return 'Mouse 4'
+    case 4:
+      return 'Mouse 5'
+    default:
+      return null
+  }
+}
+
+export function formatPointerKeybind(
+  event: Pick<PointerEvent, 'button' | 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'>,
+): string | null {
+  const button = normalizeMouseButton(event.button)
+  if (!button) {
+    return null
+  }
+
+  const modifiers = getActiveModifiers(event)
+  return [...modifiers, button].join('+')
 }

@@ -5,6 +5,7 @@ import GText from '../GText/GText.vue'
 import {
   buildGKeybindInputClasses,
   formatKeybind,
+  formatPointerKeybind,
   type GKeybindInputEmits,
   type GKeybindInputProps,
 } from './GKeybindInput'
@@ -27,6 +28,7 @@ const attrs = useAttrs()
 const emit = defineEmits<GKeybindInputEmits>()
 const isFocused = ref(false)
 const isCapturing = ref(false)
+const clearButtonRef = ref<HTMLButtonElement | null>(null)
 const triggerRef = ref<HTMLButtonElement | null>(null)
 
 const hasValue = computed(() => Boolean(props.modelValue && props.modelValue.trim().length > 0))
@@ -145,23 +147,38 @@ function onBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 
-function onWindowPointerDown(event: MouseEvent): void {
+function onWindowPointerDown(event: PointerEvent): void {
   if (!isCapturing.value) {
     return
   }
 
   const target = event.target as Node | null
-  if (target && !triggerRef.value?.contains(target)) {
-    stopCapture(props.modelValue ?? null)
+  if (target && clearButtonRef.value?.contains(target)) {
+    return
   }
+
+  if (target && triggerRef.value?.contains(target) && event.button === 0) {
+    return
+  }
+
+  const pointerBind = formatPointerKeybind(event)
+  if (!pointerBind) {
+    stopCapture(props.modelValue ?? null)
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+  emitValue(pointerBind)
+  stopCapture(pointerBind)
 }
 
 onMounted(() => {
-  window.addEventListener('pointerdown', onWindowPointerDown)
+  window.addEventListener('pointerdown', onWindowPointerDown, true)
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('pointerdown', onWindowPointerDown)
+  window.removeEventListener('pointerdown', onWindowPointerDown, true)
 })
 
 watch(
@@ -187,6 +204,7 @@ watch(
         :class="{ 'gkeybindinput__clear-slot--active': isCapturing }"
       >
         <button
+          ref="clearButtonRef"
           v-show="isCapturing"
           type="button"
           class="gkeybindinput__clear-inline"
