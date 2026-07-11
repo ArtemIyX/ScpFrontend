@@ -9,6 +9,19 @@
         width="full"
         class="audio-settings__feature-field"
       >
+        <template #head>
+          <GTooltip
+            :delay="hoverHelpDelay"
+            placement="top"
+            size="lg"
+            preset="quiet"
+            :text="audioHelp.playbackDevice"
+            aria-label="Playback device help"
+          >
+            <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+          </GTooltip>
+        </template>
+
         <GCombo
           v-model="outputDevice"
           :options="outputDeviceOptions"
@@ -24,6 +37,19 @@
         width="full"
         class="audio-settings__feature-field"
       >
+        <template #head>
+          <GTooltip
+            :delay="hoverHelpDelay"
+            placement="top"
+            size="lg"
+            preset="quiet"
+            :text="audioHelp.captureDevice"
+            aria-label="Capture device help"
+          >
+            <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+          </GTooltip>
+        </template>
+
         <GCombo
           v-model="inputDevice"
           :options="inputDeviceOptions"
@@ -43,6 +69,19 @@
         width="full"
         class="audio-settings__feature-field"
       >
+        <template #head>
+          <GTooltip
+            :delay="hoverHelpDelay"
+            placement="top"
+            size="lg"
+            preset="quiet"
+            :text="audioHelp.talkMode"
+            aria-label="Talk mode help"
+          >
+            <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+          </GTooltip>
+        </template>
+
         <div class="audio-settings__mode-list">
           <GRadio
             v-for="mode in talkModes"
@@ -65,6 +104,19 @@
         width="full"
         class="audio-settings__feature-field"
       >
+        <template #head>
+          <GTooltip
+            :delay="hoverHelpDelay"
+            placement="top"
+            size="lg"
+            preset="quiet"
+            :text="audioHelp.voiceActivationThreshold"
+            aria-label="Voice activation threshold help"
+          >
+            <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+          </GTooltip>
+        </template>
+
         <div class="audio-settings__threshold-row" :class="{ 'audio-settings__threshold-row--disabled': voiceActivationDisabled }">
           <GSlider
             v-model="voiceActivationThreshold"
@@ -93,6 +145,19 @@
         width="full"
         class="audio-settings__feature-field"
       >
+        <template #head>
+          <GTooltip
+            :delay="hoverHelpDelay"
+            placement="top"
+            size="lg"
+            preset="quiet"
+            :text="audioHelp.masterVolume"
+            aria-label="Master volume help"
+          >
+            <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+          </GTooltip>
+        </template>
+
         <GSlider
           v-model="masterVolume"
           :min="0"
@@ -111,6 +176,19 @@
           helper="Controls wind, machinery hum, room tone, and environmental sound beds."
           width="full"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="audioHelp.ambientVolume"
+              aria-label="Ambient volume help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="ambientVolume"
             :min="0"
@@ -128,6 +206,19 @@
           helper="Controls menu clicks, confirmations, alerts, and interface feedback."
           width="full"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="audioHelp.uiVolume"
+              aria-label="Interface volume help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="uiVolume"
             :min="0"
@@ -145,6 +236,19 @@
           helper="Controls background music, ambient score, and menu tracks."
           width="full"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="audioHelp.musicVolume"
+              aria-label="Music volume help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="musicVolume"
             :min="0"
@@ -162,6 +266,19 @@
           helper="Controls teammate comms, radio chatter, and spoken lines."
           width="full"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="audioHelp.voiceVolume"
+              aria-label="Voice volume help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="voiceVolume"
             :min="0"
@@ -180,6 +297,19 @@
           width="full"
           class="audio-settings__volume-wide"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="audioHelp.sfxVolume"
+              aria-label="Sound effects volume help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="audio-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="sfxVolume"
             :min="0"
@@ -273,8 +403,11 @@
 }
 
 .audio-settings__feature-field :deep(.gfield__head) {
+  display: flex;
+  align-items: center;
   gap: 0.22rem;
   padding-bottom: 0.45rem;
+  flex-wrap: wrap;
 }
 
 .audio-settings__feature-field :deep(.gfield__label) {
@@ -290,6 +423,13 @@
   letter-spacing: 0.04em;
   line-height: 1.5;
   color: rgba(216, 225, 214, 0.74);
+}
+
+.audio-settings__help-badge {
+  justify-self: start;
+  min-width: 1.8rem;
+  padding-inline: 0.45rem;
+  cursor: help;
 }
 
 @media (max-width: 64rem) {

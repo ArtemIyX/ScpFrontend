@@ -46,9 +46,35 @@ export default defineComponent({
     const ambientVolume = ref<number | null>(65)
 
     const voiceActivationDisabled = computed(() => talkMode.value !== 'voice-activation')
+    const hoverHelpDelay = 1250
+
+    const audioHelp = {
+      playbackDevice:
+        'Examples: Default Device, Headphones (USB), Speakers (Desktop). Use the output that should play game audio.',
+      captureDevice:
+        'Examples: Default Microphone, Headset Mic, Desk Microphone. Pick the input that hears your voice most clearly.',
+      talkMode:
+        'Push-to-talk sends voice only while held. Voice activation keeps the mic open and listens for speech.',
+      voiceActivationThreshold:
+        'Examples: 40 for a quiet headset, 60 for a normal room, 75 if background noise is loud. Lower is more sensitive.',
+      masterVolume:
+        'Controls the overall loudness of the entire game. Lower this first if the game feels too loud.',
+      sfxVolume:
+        'Affects footsteps, weapons, hits, doors, and other world effects.',
+      uiVolume:
+        'Affects menu clicks, confirmations, alerts, and interface sounds.',
+      musicVolume:
+        'Affects background music, stingers, and menu tracks.',
+      voiceVolume:
+        'Affects teammate comms, radio chatter, and spoken lines.',
+      ambientVolume:
+        'Affects wind, machinery hum, room tone, and environmental beds.',
+    } as const
 
     return {
       ambientVolume,
+      audioHelp,
+      hoverHelpDelay,
       inputDevice,
       inputDeviceOptions,
       masterVolume,
