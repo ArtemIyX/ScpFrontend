@@ -5,7 +5,7 @@
     <section class="audio-settings__group" aria-label="Device routing">
       <GField
         label="Playback Device"
-        helper="Placeholder list for the active runtime audio output target."
+        helper="Select the device the game should use for audio playback."
         width="full"
         class="audio-settings__feature-field"
       >
@@ -20,7 +20,7 @@
 
       <GField
         label="Capture Device"
-        helper="Placeholder list for the current voice input source."
+        helper="Select the microphone or input source used for voice chat."
         width="full"
         class="audio-settings__feature-field"
       >
@@ -51,7 +51,7 @@
             :value="mode.value"
             name="audio-talk-mode"
             preset="quiet"
-            variant="lever"
+            variant="circle"
             width="full"
             :label="mode.label"
             :helper="mode.helper"
@@ -106,7 +106,11 @@
       </GField>
 
       <div class="audio-settings__volume-grid">
-        <GField label="Ambient Volume" width="full">
+        <GField
+          label="Ambient Volume"
+          helper="Controls wind, machinery hum, room tone, and environmental sound beds."
+          width="full"
+        >
           <GSlider
             v-model="ambientVolume"
             :min="0"
@@ -119,7 +123,11 @@
           />
         </GField>
 
-        <GField label="UI Volume" width="full">
+        <GField
+          label="UI Volume"
+          helper="Controls menu clicks, confirmations, alerts, and interface feedback."
+          width="full"
+        >
           <GSlider
             v-model="uiVolume"
             :min="0"
@@ -132,7 +140,11 @@
           />
         </GField>
 
-        <GField label="Music Volume" width="full">
+        <GField
+          label="Music Volume"
+          helper="Controls background music, ambient score, and menu tracks."
+          width="full"
+        >
           <GSlider
             v-model="musicVolume"
             :min="0"
@@ -145,7 +157,11 @@
           />
         </GField>
 
-        <GField label="Voice Volume" width="full">
+        <GField
+          label="Voice Volume"
+          helper="Controls teammate comms, radio chatter, and spoken lines."
+          width="full"
+        >
           <GSlider
             v-model="voiceVolume"
             :min="0"
@@ -158,7 +174,12 @@
           />
         </GField>
 
-        <GField label="SFX Volume" width="full" class="audio-settings__volume-wide">
+        <GField
+          label="SFX Volume"
+          helper="Controls footsteps, weapons, impacts, and other world effects."
+          width="full"
+          class="audio-settings__volume-wide"
+        >
           <GSlider
             v-model="sfxVolume"
             :min="0"
@@ -219,6 +240,7 @@
 
 .audio-settings__mode-list {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.8rem;
 }
 
@@ -279,6 +301,10 @@
 @media (max-width: 48rem) {
   .audio-settings__title-row {
     align-items: flex-start;
+  }
+
+  .audio-settings__mode-list {
+    grid-template-columns: 1fr;
   }
 }
 </style>
