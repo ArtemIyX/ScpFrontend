@@ -47,7 +47,13 @@ const classes = computed(() =>
   }),
 )
 
-const displayValue = computed(() => props.modelValue || props.placeholder || 'Unbound')
+const displayValue = computed(() => {
+  if (isCapturing.value) {
+    return '...'
+  }
+
+  return props.modelValue || ''
+})
 
 function emitValue(value: string | null): void {
   emit('update:modelValue', value)
@@ -190,7 +196,7 @@ watch(
           @mousedown.prevent
           @click="clearValue"
         >
-          ×
+          X
         </button>
       </div>
 
@@ -212,9 +218,9 @@ watch(
       >
         <span
           class="gkeybindinput__value"
-          :class="{ 'gkeybindinput__value--placeholder': !hasValue }"
+          :class="{ 'gkeybindinput__value--placeholder': !displayValue }"
         >
-          {{ isCapturing ? prompt : displayValue }}
+          {{ displayValue }}
         </span>
 
         <span class="gkeybindinput__state" aria-hidden="true">
