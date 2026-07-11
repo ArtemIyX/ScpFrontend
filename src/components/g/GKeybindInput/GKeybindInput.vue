@@ -28,6 +28,7 @@ const attrs = useAttrs()
 const emit = defineEmits<GKeybindInputEmits>()
 const isFocused = ref(false)
 const isCapturing = ref(false)
+const ignoreNextTriggerClick = ref(false)
 const clearButtonRef = ref<HTMLButtonElement | null>(null)
 const triggerRef = ref<HTMLButtonElement | null>(null)
 
@@ -55,6 +56,18 @@ const displayValue = computed(() => {
   }
 
   return props.modelValue || ''
+})
+
+const stateLabel = computed(() => {
+  if (isCapturing.value) {
+    return 'Listen'
+  }
+
+  if (!hasValue.value) {
+    return 'Empty'
+  }
+
+  return ''
 })
 
 function emitValue(value: string | null): void {
@@ -87,12 +100,34 @@ function startCapture(): void {
 }
 
 function onTriggerClick(): void {
+  if (ignoreNextTriggerClick.value) {
+    ignoreNextTriggerClick.value = false
+    return
+  }
+
   if (isCapturing.value) {
     stopCapture(props.modelValue ?? null)
     return
   }
 
   startCapture()
+}
+
+function onTriggerPointerDown(event: PointerEvent): void {
+  if (!isCapturing.value || props.disabled || props.readonly) {
+    return
+  }
+
+  const pointerBind = formatPointerKeybind(event)
+  if (!pointerBind) {
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+  ignoreNextTriggerClick.value = event.button === 0
+  emitValue(pointerBind)
+  stopCapture(pointerBind)
 }
 
 function onKeydown(event: KeyboardEvent): void {
@@ -157,7 +192,7 @@ function onWindowPointerDown(event: PointerEvent): void {
     return
   }
 
-  if (target && triggerRef.value?.contains(target) && event.button === 0) {
+  if (target && triggerRef.value?.contains(target)) {
     return
   }
 
@@ -229,6 +264,7 @@ watch(
         :aria-label="ariaLabel || label"
         :aria-invalid="error ? 'true' : undefined"
         :title="title"
+        @pointerdown="onTriggerPointerDown"
         @click="onTriggerClick"
         @focus="onFocus"
         @blur="onBlur"
@@ -241,8 +277,8 @@ watch(
           {{ displayValue }}
         </span>
 
-        <span class="gkeybindinput__state" aria-hidden="true">
-          {{ isCapturing ? 'Listen' : hasValue ? 'Set' : 'Empty' }}
+        <span v-if="stateLabel" class="gkeybindinput__state" aria-hidden="true">
+          {{ stateLabel }}
         </span>
       </button>
     </div>

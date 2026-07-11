@@ -383,7 +383,7 @@ defineExpose({
 
 .key-bindings-settings__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(8.5rem, 10.5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(10.5rem, 12.75rem);
   gap: 0.75rem;
   align-items: center;
   padding: 0.75rem 0.85rem;

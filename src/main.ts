@@ -8,6 +8,10 @@ import './styles/global.css'
 import './styles/fonts.css'
 import './styles/colors.css'
 
+document.addEventListener('contextmenu', (event) => {
+  event.preventDefault()
+})
+
 const app = createApp(App)
 
 app.use(createPinia())
