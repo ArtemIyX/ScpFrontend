@@ -69,12 +69,45 @@ export default defineComponent({
     const resolutionDisabled = computed(() => fullscreenMode.value === 'borderless')
     const fpsControlsDisabled = computed(() => !limitFps.value)
     const hdrControlsDisabled = computed(() => !hdrEnabled.value)
+    const hoverHelpDelay = 600
+
+    const displayHelp = {
+      fullscreenMode:
+        'Fullscreen mode changes how the game presents on your display. Windowed Fullscreen is usually the safest option for alt-tab and multi-monitor play.',
+      resolution:
+        'Example picks: 1920 x 1080 for a standard 16:9 monitor, 2560 x 1440 for sharper image quality, or 3840 x 2160 for 4K.',
+      sync:
+        'VSync helps prevent tearing, but can add a little input latency. Turn it off if you want the snappiest response.',
+      frameRateLimit:
+        'Use this to cap performance and keep the frame pacing steady. Example caps: 60 for stability, 120 for high refresh, or 144 for a fast monitor.',
+      hdrOutputDevice:
+        'Matches the engine HDR output path. Leave it on the default unless you know your monitor expects a specific output mode.',
+      hdrColorGamut:
+        'Select the color space your display handles best. Most players can leave this on the default recommended gamut.',
+      hdrEnabled:
+        'HDR shifts the output path into high dynamic range when your display supports it.',
+      brightness:
+        'Raises or lowers overall screen luminance. Increase it if dark areas feel crushed; lower it if the scene looks washed out.',
+      gamma:
+        'Adjusts mid-tone visibility. If shadows hide too much detail, raise gamma a little.',
+      contrast:
+        'Controls the separation between dark and bright areas. Higher contrast makes the image punchier, but can hide detail.',
+      fov:
+        'Changes how much of the scene is visible at once. Higher values show more of the world; lower values feel tighter and more focused.',
+      cameraSmoothing:
+        'Softens camera motion and can reduce harsh movement. Lower values feel more direct; higher values feel more floaty.',
+      screenShakeIntensity:
+        'Controls how much the camera reacts to explosions, impacts, and heavy events. Lower it if shake is distracting.',
+      headBobbingIntensity:
+        'Controls how strongly the camera bobs while moving. Lower it for a steadier view during long play sessions.',
+    } as const
 
     return {
       brightness,
       cameraSmoothing,
       contrast,
       displaySettingsRuntime,
+      displayHelp,
       fpsControlsDisabled,
       fov,
       fullscreenMode,
@@ -89,6 +122,7 @@ export default defineComponent({
       headBobbingIntensity,
       limitFps,
       maxFps,
+      hoverHelpDelay,
       resolution,
       resolutionDisabled,
       resolutionOptions,

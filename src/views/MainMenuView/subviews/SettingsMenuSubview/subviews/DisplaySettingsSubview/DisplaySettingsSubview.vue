@@ -2,9 +2,6 @@
 
 <template>
   <section class="display-settings" aria-label="Display settings">
-
-
-
     <section class="display-settings__group" aria-label="Display output settings">
       <div class="display-settings__stack">
         <GField
@@ -14,6 +11,19 @@
           width="full"
           class="display-settings__field display-settings__feature-field"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="displayHelp.fullscreenMode"
+              aria-label="Fullscreen mode help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <div class="display-settings__mode-grid">
             <GButton
               v-for="mode in fullscreenModes"
@@ -31,7 +41,25 @@
         </GField>
 
         <div class="display-settings__grid display-settings__grid--duo">
-          <GField label="Resolution" helper="Disabled while using desktop-sized borderless mode." width="full">
+          <GField
+            label="Resolution"
+            helper="Disabled while using desktop-sized borderless mode."
+            width="full"
+            class="display-settings__feature-field"
+          >
+            <template #head>
+              <GTooltip
+                :delay="hoverHelpDelay"
+                placement="top"
+                size="lg"
+                preset="quiet"
+                :text="displayHelp.resolution"
+                aria-label="Resolution help"
+              >
+                <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+              </GTooltip>
+            </template>
+
             <GCombo
               v-model="resolution"
               :options="resolutionOptions"
@@ -46,8 +74,21 @@
             label="Sync"
             helper="Presentation pacing and tear control."
             width="full"
-            class="display-settings__field"
+            class="display-settings__field display-settings__feature-field"
           >
+            <template #head>
+              <GTooltip
+                :delay="hoverHelpDelay"
+                placement="top"
+                size="lg"
+                preset="quiet"
+                :text="displayHelp.sync"
+                aria-label="VSync help"
+              >
+                <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+              </GTooltip>
+            </template>
+
             <div class="display-settings__toggle-column">
               <GCheckbox v-model="vsync" preset="quiet">VSync</GCheckbox>
             </div>
@@ -60,6 +101,19 @@
           width="full"
           class="display-settings__field display-settings__feature-field"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="displayHelp.frameRateLimit"
+              aria-label="Frame rate limit help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <div class="display-settings__fps-group">
             <GCheckbox v-model="limitFps" preset="quiet">Limit FPS</GCheckbox>
 
@@ -98,6 +152,7 @@
 
         <div class="display-settings__hdr-shell">
           <div class="display-settings__hdr-head">
+
             <GCheckbox v-model="hdrEnabled" preset="quiet">HDR Enable</GCheckbox>
             <GBadge
               v-if="displaySettingsRuntime.showHdrUnsupportedBadge"
@@ -114,7 +169,21 @@
               label="Output Device"
               helper="`r.HDR.Display.OutputDevice` mapping"
               width="full"
+              class="display-settings__feature-field"
             >
+              <template #head>
+                <GTooltip
+                  :delay="hoverHelpDelay"
+                  placement="top"
+                  size="lg"
+                  preset="quiet"
+                  :text="displayHelp.hdrOutputDevice"
+                  aria-label="HDR output device help"
+                >
+                  <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+                </GTooltip>
+              </template>
+
               <GCombo
                 v-model="hdrOutputDevice"
                 :options="hdrOutputDeviceOptions"
@@ -129,7 +198,21 @@
               label="Color Gamut"
               helper="`r.HDR.Display.ColorGamut` mapping"
               width="full"
+              class="display-settings__feature-field"
             >
+              <template #head>
+                <GTooltip
+                  :delay="hoverHelpDelay"
+                  placement="top"
+                  size="lg"
+                  preset="quiet"
+                  :text="displayHelp.hdrColorGamut"
+                  aria-label="HDR color gamut help"
+                >
+                  <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+                </GTooltip>
+              </template>
+
               <GCombo
                 v-model="hdrColorGamut"
                 :options="hdrColorGamutOptions"
@@ -152,7 +235,20 @@
       </GText>
 
       <div class="display-settings__triple">
-        <GField label="Brightness" width="full">
+        <GField label="Brightness" width="full" class="display-settings__feature-field">
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="displayHelp.brightness"
+              aria-label="Brightness help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="brightness"
             :min="0"
@@ -164,7 +260,20 @@
           />
         </GField>
 
-        <GField label="Gamma" width="full">
+        <GField label="Gamma" width="full" class="display-settings__feature-field">
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="displayHelp.gamma"
+              aria-label="Gamma help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="gamma"
             :min="0"
@@ -176,7 +285,20 @@
           />
         </GField>
 
-        <GField label="Contrast" width="full">
+        <GField label="Contrast" width="full" class="display-settings__feature-field">
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="displayHelp.contrast"
+              aria-label="Contrast help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="contrast"
             :min="0"
@@ -198,7 +320,20 @@
       </GText>
 
       <div class="display-settings__stack">
-        <GField label="Field Of View" width="full">
+        <GField label="Field Of View" width="full" class="display-settings__feature-field">
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="displayHelp.fov"
+              aria-label="Field of view help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="fov"
             :min="70"
@@ -212,7 +347,20 @@
         </GField>
 
         <div class="display-settings__grid display-settings__grid--camera">
-          <GField label="Camera Smoothing" width="full">
+          <GField label="Camera Smoothing" width="full" class="display-settings__feature-field">
+            <template #head>
+              <GTooltip
+                :delay="hoverHelpDelay"
+                placement="top"
+                size="lg"
+                preset="quiet"
+                :text="displayHelp.cameraSmoothing"
+                aria-label="Camera smoothing help"
+              >
+                <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+              </GTooltip>
+            </template>
+
             <GSlider
               v-model="cameraSmoothing"
               :min="0"
@@ -224,7 +372,20 @@
             />
           </GField>
 
-          <GField label="Screen Shake Intensity" width="full">
+          <GField label="Screen Shake Intensity" width="full" class="display-settings__feature-field">
+            <template #head>
+              <GTooltip
+                :delay="hoverHelpDelay"
+                placement="top"
+                size="lg"
+                preset="quiet"
+                :text="displayHelp.screenShakeIntensity"
+                aria-label="Screen shake intensity help"
+              >
+                <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+              </GTooltip>
+            </template>
+
             <GSlider
               v-model="screenShakeIntensity"
               :min="0"
@@ -236,7 +397,20 @@
             />
           </GField>
 
-          <GField label="Head Bobbing Intensity" width="full">
+          <GField label="Head Bobbing Intensity" width="full" class="display-settings__feature-field">
+            <template #head>
+              <GTooltip
+                :delay="hoverHelpDelay"
+                placement="top"
+                size="lg"
+                preset="quiet"
+                :text="displayHelp.headBobbingIntensity"
+                aria-label="Head bobbing intensity help"
+              >
+                <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
+              </GTooltip>
+            </template>
+
             <GSlider
               v-model="headBobbingIntensity"
               :min="0"
@@ -327,8 +501,11 @@
 }
 
 .display-settings__feature-field :deep(.gfield__head) {
+  display: flex;
+  align-items: center;
   gap: 0.35rem;
   padding-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .display-settings__feature-field :deep(.gfield__label) {
@@ -417,6 +594,13 @@
 
 .display-settings__divider {
   margin-top: 0.35rem;
+}
+
+.display-settings__help-badge {
+  justify-self: start;
+  min-width: 1.8rem;
+  padding-inline: 0.45rem;
+  cursor: help;
 }
 
 .display-settings__unit {
