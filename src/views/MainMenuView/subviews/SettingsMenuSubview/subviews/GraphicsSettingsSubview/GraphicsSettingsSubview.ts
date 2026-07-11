@@ -527,6 +527,36 @@ export default defineComponent({
       () => upscaleMode.value !== 'off' || frameGeneration.value !== 'off'
     )
     const upscaleQualityDisabled = computed(() => upscaleMode.value === 'off')
+    const hoverHelpDelay = 600
+
+    const graphicsHelp = {
+      resolutionScale:
+        'Example values: 100% for native resolution, 85% for a lighter performance pass, or 67% if you need a strong frame-rate boost.',
+      antiAliasingMethod:
+        'Choose how the image is smoothed. TAA is the safest default, FXAA is lighter, and TSR helps when the game is rendering below native resolution.',
+      method:
+        'If an upscaler or frame generation is active, this is locked to TAA to keep the image stable.',
+      frameGeneration:
+        'Example choices: Off for lowest latency, 2x for a balanced boost, or 3x and 4x on supported hardware if you want higher frame rates.',
+      upscaleMode:
+        'Use an upscaler when you want more performance. Off keeps the image native; DLSS and FSR trade a bit of detail for smoother play.',
+      upscaleQuality:
+        'Higher quality values keep more detail and usually cost more GPU time. Performance and Ultra Performance lean harder toward frame-rate gains.',
+      viewDistanceQuality:
+        'Controls how far the world keeps full detail. Lower values help performance in dense scenes; higher values keep distant geometry clearer.',
+      antiAliasingQuality:
+        'Controls how strongly the renderer smooths edges. Higher values usually look better but may cost a little more performance.',
+      materialQualityLevel:
+        'Controls how many material features the renderer uses. High keeps the full visual path; Low trims material cost for weaker hardware.',
+      postProcessQuality:
+        'Includes motion blur, bloom, ambient occlusion, color grading, and similar finishing effects. Custom opens the fine-tuning rows below.',
+      shadowQuality:
+        'Controls shadow coverage, cascade count, and resolution. Higher levels give deeper, more stable shadows at a higher GPU cost.',
+      textureQuality:
+        'Controls mip bias, anisotropy, and streaming pool budget. Higher values preserve texture sharpness when viewed at an angle or at distance.',
+      effectsQuality:
+        'Controls translucency detail, refraction, reflections, and other surface effects. Higher levels make the scene richer but heavier to render.',
+    } as const
 
     watch(
       antiAliasingMethodLocked,
@@ -724,7 +754,9 @@ export default defineComponent({
       antiAliasingMethodOptions,
       antiAliasingMethodLocked,
       antiAliasingQuality,
+      graphicsHelp,
       dlssQuality,
+      hoverHelpDelay,
       upscaleMode,
       upscaleModeOptions,
       upscaleQualityDisabled,

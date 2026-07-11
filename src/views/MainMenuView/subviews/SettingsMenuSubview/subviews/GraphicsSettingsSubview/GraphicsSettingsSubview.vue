@@ -10,6 +10,19 @@
           width="full"
           class="graphics-settings__feature-field"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="graphicsHelp.resolutionScale"
+              aria-label="Resolution scale help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GSlider
             v-model="resolutionScale"
             :min="50"
@@ -28,13 +41,40 @@
           width="full"
           class="graphics-settings__feature-field"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="graphicsHelp.antiAliasingMethod"
+              aria-label="Anti-aliasing method help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <div class="graphics-settings__aa-stack">
             <div class="graphics-settings__aa-top-grid">
               <GField
                 label="Method"
                 helper="Locked to TAA while upscale or frame generation is active."
                 width="full"
+                class="graphics-settings__feature-field"
               >
+                <template #head>
+                  <GTooltip
+                    :delay="hoverHelpDelay"
+                    placement="top"
+                    size="lg"
+                    preset="quiet"
+                    :text="graphicsHelp.method"
+                    aria-label="Anti-aliasing method lock help"
+                  >
+                    <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+                  </GTooltip>
+                </template>
+
                 <GCombo
                   v-model="antiAliasingMethod"
                   :options="antiAliasingMethodOptions"
@@ -49,7 +89,21 @@
                 label="Frame Gen"
                 helper="Active multipliers also force anti-aliasing method to TAA."
                 width="full"
+                class="graphics-settings__feature-field"
               >
+                <template #head>
+                  <GTooltip
+                    :delay="hoverHelpDelay"
+                    placement="top"
+                    size="lg"
+                    preset="quiet"
+                    :text="graphicsHelp.frameGeneration"
+                    aria-label="Frame generation help"
+                  >
+                    <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+                  </GTooltip>
+                </template>
+
                 <GCombo
                   v-model="frameGeneration"
                   :options="frameGenerationOptions"
@@ -65,7 +119,21 @@
                 label="Upscale Mode"
                 helper="Any active upscaler forces anti-aliasing method to TAA."
                 width="full"
+                class="graphics-settings__feature-field"
               >
+                <template #head>
+                  <GTooltip
+                    :delay="hoverHelpDelay"
+                    placement="top"
+                    size="lg"
+                    preset="quiet"
+                    :text="graphicsHelp.upscaleMode"
+                    aria-label="Upscale mode help"
+                  >
+                    <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+                  </GTooltip>
+                </template>
+
                 <GCombo
                   v-model="upscaleMode"
                   :options="upscaleModeOptions"
@@ -79,7 +147,21 @@
                 label="Upscale Quality"
                 helper="Enabled only while an upscaler is active."
                 width="full"
+                class="graphics-settings__feature-field"
               >
+                <template #head>
+                  <GTooltip
+                    :delay="hoverHelpDelay"
+                    placement="top"
+                    size="lg"
+                    preset="quiet"
+                    :text="graphicsHelp.upscaleQuality"
+                    aria-label="Upscale quality help"
+                  >
+                    <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+                  </GTooltip>
+                </template>
+
                 <GCombo
                   v-model="dlssQuality"
                   :options="dlssQualityOptions"
@@ -99,6 +181,19 @@
           width="full"
           class="graphics-settings__feature-field"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="graphicsHelp.viewDistanceQuality"
+              aria-label="View distance quality help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GRail
             v-model="viewDistanceQuality"
             :items="scalabilityItems"
@@ -114,6 +209,19 @@
           width="full"
           class="graphics-settings__feature-field"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="graphicsHelp.antiAliasingQuality"
+              aria-label="Anti-aliasing quality help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GRail
             v-model="antiAliasingQuality"
             :items="scalabilityItems"
@@ -129,6 +237,19 @@
           width="full"
           class="graphics-settings__feature-field"
         >
+          <template #head>
+            <GTooltip
+              :delay="hoverHelpDelay"
+              placement="top"
+              size="lg"
+              preset="quiet"
+              :text="graphicsHelp.materialQualityLevel"
+              aria-label="Material quality level help"
+            >
+              <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
+            </GTooltip>
+          </template>
+
           <GRail
             v-model="materialQualityLevel"
             :items="materialQualityItems"
@@ -147,6 +268,9 @@
         :model-value="postProcessPreset"
         :items="postProcessPresetItems"
         :customize-open="postProcessCustomOpen"
+        :help-text="graphicsHelp.postProcessQuality"
+        :help-delay="hoverHelpDelay"
+        help-aria-label="Post process quality help"
         rail-aria-label="Post process quality"
         open-customize-label="Open post process customization"
         close-customize-label="Hide post process customization"
@@ -178,6 +302,9 @@
         :model-value="shadowPreset"
         :items="shadowPresetItems"
         :customize-open="shadowCustomOpen"
+        :help-text="graphicsHelp.shadowQuality"
+        :help-delay="hoverHelpDelay"
+        help-aria-label="Shadow quality help"
         rail-aria-label="Shadow quality"
         open-customize-label="Open shadow customization"
         close-customize-label="Hide shadow customization"
@@ -209,6 +336,9 @@
         :model-value="texturePreset"
         :items="texturePresetItems"
         :customize-open="textureCustomOpen"
+        :help-text="graphicsHelp.textureQuality"
+        :help-delay="hoverHelpDelay"
+        help-aria-label="Texture quality help"
         rail-aria-label="Texture quality"
         open-customize-label="Open texture customization"
         close-customize-label="Hide texture customization"
@@ -240,6 +370,9 @@
         :model-value="effectsPreset"
         :items="effectsPresetItems"
         :customize-open="effectsCustomOpen"
+        :help-text="graphicsHelp.effectsQuality"
+        :help-delay="hoverHelpDelay"
+        help-aria-label="Effects quality help"
         rail-aria-label="Effects quality"
         open-customize-label="Open effects customization"
         close-customize-label="Hide effects customization"
@@ -308,8 +441,11 @@
 }
 
 .graphics-settings__feature-field :deep(.gfield__head) {
+  display: flex;
+  align-items: center;
   gap: 0.22rem;
   padding-bottom: 0.45rem;
+  flex-wrap: wrap;
 }
 
 .graphics-settings__feature-field :deep(.gfield__label) {
@@ -325,6 +461,13 @@
   letter-spacing: 0.04em;
   line-height: 1.5;
   color: rgba(216, 225, 214, 0.74);
+}
+
+.graphics-settings__help-badge {
+  justify-self: start;
+  min-width: 1.8rem;
+  padding-inline: 0.45rem;
+  cursor: help;
 }
 
 @media (max-width: 64rem) {

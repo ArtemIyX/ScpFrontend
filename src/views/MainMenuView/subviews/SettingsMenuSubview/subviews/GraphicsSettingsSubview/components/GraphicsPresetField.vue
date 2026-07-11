@@ -10,6 +10,9 @@ defineProps<{
   customizeOpen: boolean
   openCustomizeLabel: string
   closeCustomizeLabel: string
+  helpText?: string
+  helpDelay?: number
+  helpAriaLabel?: string
 }>()
 
 defineEmits<{
@@ -26,29 +29,43 @@ defineEmits<{
     class="graphics-preset-field"
   >
     <template #head>
-      <GButton
-        size="sm"
-        shape="chip"
-        icon-only
-        :preset="customizeOpen ? 'accent' : 'ghost'"
-        :pressed="customizeOpen"
-        :aria-label="customizeOpen ? closeCustomizeLabel : openCustomizeLabel"
-        :title="customizeOpen ? 'Hide customization' : 'Open customization'"
-        class="graphics-preset-field__action"
-        @click="$emit('toggle-customize')"
-      >
-        <template #icon>
-          <svg viewBox="0 0 16 16" aria-hidden="true">
-            <path
-              d="M3 4.25h10M5.25 8h5.5M7 11.75h2"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-width="1.4"
-            />
-          </svg>
-        </template>
-      </GButton>
+      <div class="graphics-preset-field__head-actions">
+        <GTooltip
+          v-if="helpText"
+          :delay="helpDelay ?? 600"
+          placement="top"
+          size="lg"
+          preset="quiet"
+          :text="helpText"
+          :aria-label="helpAriaLabel"
+        >
+          <GBadge preset="quiet" variant="outline" size="sm" class="graphics-preset-field__help-badge">?</GBadge>
+        </GTooltip>
+
+        <GButton
+          size="sm"
+          shape="chip"
+          icon-only
+          :preset="customizeOpen ? 'accent' : 'ghost'"
+          :pressed="customizeOpen"
+          :aria-label="customizeOpen ? closeCustomizeLabel : openCustomizeLabel"
+          :title="customizeOpen ? 'Hide customization' : 'Open customization'"
+          class="graphics-preset-field__action"
+          @click="$emit('toggle-customize')"
+        >
+          <template #icon>
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path
+                d="M3 4.25h10M5.25 8h5.5M7 11.75h2"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.4"
+              />
+            </svg>
+          </template>
+        </GButton>
+      </div>
     </template>
 
     <div class="graphics-preset-field__stack">
@@ -96,6 +113,20 @@ defineEmits<{
   letter-spacing: 0.04em;
   line-height: 1.5;
   color: rgba(216, 225, 214, 0.74);
+}
+
+.graphics-preset-field__head-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.graphics-preset-field__help-badge {
+  min-width: 1.8rem;
+  padding-inline: 0.45rem;
+  cursor: help;
 }
 
 .graphics-preset-field__action {
