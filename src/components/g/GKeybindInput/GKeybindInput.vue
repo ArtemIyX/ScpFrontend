@@ -175,18 +175,24 @@ watch(
     </GText>
 
     <div class="gkeybindinput__control">
-      <button
-        v-if="clearable && isCapturing"
-        type="button"
-        class="gkeybindinput__clear-inline"
-        :disabled="disabled || readonly || !hasValue"
-        aria-label="Clear binding"
-        title="Clear binding"
-        @mousedown.prevent
-        @click="clearValue"
+      <div
+        v-if="clearable"
+        class="gkeybindinput__clear-slot"
+        :class="{ 'gkeybindinput__clear-slot--active': isCapturing }"
       >
-        ×
-      </button>
+        <button
+          v-show="isCapturing"
+          type="button"
+          class="gkeybindinput__clear-inline"
+          :disabled="disabled || readonly || !hasValue"
+          aria-label="Clear binding"
+          title="Clear binding"
+          @mousedown.prevent
+          @click="clearValue"
+        >
+          ×
+        </button>
+      </div>
 
       <button
         ref="triggerRef"

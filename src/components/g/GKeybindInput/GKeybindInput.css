@@ -14,6 +14,7 @@
   --gkeybindinput-padding-x: 1rem;
   --gkeybindinput-padding-y: 0.75rem;
   --gkeybindinput-min-height: 2.75rem;
+  --gkeybindinput-control-height: 2.75rem;
   --gkeybindinput-radius: 0.375rem;
   --gkeybindinput-label-color: var(--ui-text-muted);
   --gkeybindinput-ring: rgba(198, 255, 74, 0.24);
@@ -31,6 +32,21 @@
   align-items: stretch;
   gap: 0.4rem;
   min-width: 0;
+}
+
+.gkeybindinput__clear-slot {
+  display: flex;
+  align-items: stretch;
+  width: var(--gkeybindinput-control-height);
+  min-width: var(--gkeybindinput-control-height);
+  height: var(--gkeybindinput-control-height);
+  min-height: var(--gkeybindinput-control-height);
+  flex: 0 0 var(--gkeybindinput-control-height);
+  visibility: hidden;
+}
+
+.gkeybindinput__clear-slot--active {
+  visibility: visible;
 }
 
 .gkeybindinput--full {
@@ -51,11 +67,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
+  appearance: none;
   gap: 0.75rem;
   width: 100%;
   flex: 1 1 auto;
   min-width: 0;
-  min-height: var(--gkeybindinput-min-height);
+  height: var(--gkeybindinput-control-height);
+  min-height: var(--gkeybindinput-control-height);
   padding: var(--gkeybindinput-padding-y) var(--gkeybindinput-padding-x);
   border: 0.0625rem solid var(--gkeybindinput-border);
   border-radius: var(--gkeybindinput-radius);
@@ -147,9 +166,15 @@
 }
 
 .gkeybindinput__clear-inline {
-  width: var(--gkeybindinput-min-height);
-  min-width: var(--gkeybindinput-min-height);
-  min-height: var(--gkeybindinput-min-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  appearance: none;
+  width: var(--gkeybindinput-control-height);
+  min-width: var(--gkeybindinput-control-height);
+  height: 100%;
+  min-height: var(--gkeybindinput-control-height);
   padding: 0;
   border: 0.0625rem solid var(--gkeybindinput-border);
   border-radius: var(--gkeybindinput-radius);
@@ -182,18 +207,21 @@
   --gkeybindinput-padding-x: 0.75rem;
   --gkeybindinput-padding-y: 0.5rem;
   --gkeybindinput-min-height: 2.125rem;
+  --gkeybindinput-control-height: 2.125rem;
 }
 
 .gkeybindinput--md {
   --gkeybindinput-padding-x: 0.875rem;
   --gkeybindinput-padding-y: 0.625rem;
   --gkeybindinput-min-height: 2.5rem;
+  --gkeybindinput-control-height: 2.5rem;
 }
 
 .gkeybindinput--lg {
   --gkeybindinput-padding-x: 1.125rem;
   --gkeybindinput-padding-y: 0.875rem;
   --gkeybindinput-min-height: 3.25rem;
+  --gkeybindinput-control-height: 3.25rem;
 }
 
 .gkeybindinput--surface {
