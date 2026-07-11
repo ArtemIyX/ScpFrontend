@@ -9,8 +9,8 @@
   --gcombo-placeholder: rgba(236, 240, 244, 0.42);
   --gcombo-helper: var(--ui-text-muted);
   --gcombo-error-text: #ffb8b3;
-  --gcombo-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --gcombo-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gcombo-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+  --gcombo-shadow-focus: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.3);
   --gcombo-padding-x: 1rem;
   --gcombo-padding-y: 0.75rem;
   --gcombo-min-height: 2.75rem;
@@ -21,7 +21,7 @@
   --gcombo-ring: rgba(198, 255, 74, 0.24);
   --gcombo-menu-bg: rgba(7, 9, 12, 0.98);
   --gcombo-menu-border: rgba(198, 255, 74, 0.14);
-  --gcombo-menu-shadow: 0 18px 36px rgba(0, 0, 0, 0.46);
+  --gcombo-menu-shadow: 0 1.125rem 2.25rem rgba(0, 0, 0, 0.46);
   --gcombo-option-hover: rgba(255, 255, 255, 0.05);
   --gcombo-option-selected: rgba(198, 255, 74, 0.12);
   --gcombo-option-active: rgba(198, 255, 74, 0.2);
@@ -60,7 +60,7 @@
   min-height: var(--gcombo-min-height);
   padding: var(--gcombo-padding-y) var(--gcombo-padding-x);
   padding-right: calc(var(--gcombo-padding-x) + 1.75rem);
-  border: 1px solid var(--gcombo-border);
+  border: 0.0625rem solid var(--gcombo-border);
   border-radius: var(--gcombo-radius);
   background: var(--gcombo-bg);
   box-shadow: var(--gcombo-shadow);
@@ -92,8 +92,8 @@
   background: var(--gcombo-bg-focus);
   border-color: var(--gcombo-border-focus);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--gcombo-ring),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--gcombo-ring),
     var(--gcombo-shadow-focus);
 }
 
@@ -110,8 +110,8 @@
 .gcombo--error .gcombo__trigger {
   border-color: rgba(255, 59, 48, 0.42);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px rgba(255, 59, 48, 0.18),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem rgba(255, 59, 48, 0.18),
     var(--gcombo-shadow);
 }
 
@@ -152,7 +152,7 @@
   right: calc(var(--gcombo-padding-x) + 1rem);
   width: 1.75rem;
   height: 1.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-radius: 0.3125rem;
   background: rgba(255, 255, 255, 0.03);
   color: var(--ui-text-main);
@@ -167,11 +167,11 @@
 .gcombo__clear:hover {
   border-color: rgba(198, 255, 74, 0.24);
   background: rgba(255, 255, 255, 0.06);
-  transform: translateY(calc(-50% - 1px));
+  transform: translateY(calc(-50% - 0.0625rem));
 }
 
 .gcombo__clear:active {
-  transform: translateY(calc(-50% + 1px));
+  transform: translateY(calc(-50% + 0.0625rem));
 }
 
 .gcombo__menu {
@@ -184,7 +184,7 @@
   gap: 0.25rem;
   max-height: min(18rem, 40vh);
   padding: 0.5rem;
-  border: 1px solid var(--gcombo-menu-border);
+  border: 0.0625rem solid var(--gcombo-menu-border);
   border-radius: 0.5rem;
   background: var(--gcombo-menu-bg);
   box-shadow: var(--gcombo-menu-shadow);
@@ -348,7 +348,7 @@
   --gcombo-border-hover: rgba(198, 255, 74, 0.18);
   --gcombo-border-focus: rgba(198, 255, 74, 0.28);
   --gcombo-shadow: none;
-  --gcombo-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+  --gcombo-shadow-focus: 0 0.625rem 1.125rem rgba(0, 0, 0, 0.2);
 }
 
 .gcombo--quiet {
@@ -358,8 +358,8 @@
   --gcombo-border: rgba(198, 255, 74, 0.1);
   --gcombo-border-hover: rgba(198, 255, 74, 0.2);
   --gcombo-border-focus: rgba(198, 255, 74, 0.3);
-  --gcombo-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-  --gcombo-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --gcombo-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.34);
+  --gcombo-shadow-focus: 0 1rem 1.875rem rgba(0, 0, 0, 0.42);
 }
 
 .gcombo--background {
@@ -369,8 +369,8 @@
   --gcombo-border: rgba(198, 255, 74, 0.2);
   --gcombo-border-hover: rgba(198, 255, 74, 0.34);
   --gcombo-border-focus: rgba(198, 255, 74, 0.52);
-  --gcombo-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-  --gcombo-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+  --gcombo-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
+  --gcombo-shadow-focus: 0 1.125rem 2.125rem rgba(0, 0, 0, 0.48);
 }
 
 @keyframes gcombo-pop-in {

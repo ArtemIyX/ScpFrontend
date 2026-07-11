@@ -7,8 +7,8 @@
   --gtabs-border-active: rgba(198, 255, 74, 0.32);
   --gtabs-text: var(--ui-text-main);
   --gtabs-muted: var(--ui-text-muted);
-  --gtabs-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --gtabs-shadow-active: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gtabs-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+  --gtabs-shadow-active: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.3);
   --gtabs-radius: 0.375rem;
   --gtabs-gap: 0.5rem;
   --gtabs-padding: 0.375rem;
@@ -53,7 +53,7 @@
   min-width: 0;
   min-height: var(--gtabs-tab-min-height);
   padding: var(--gtabs-tab-padding-y) var(--gtabs-tab-padding-x);
-  border: 1px solid var(--gtabs-border);
+  border: 0.0625rem solid var(--gtabs-border);
   border-radius: var(--gtabs-tab-radius);
   background: var(--gtabs-bg);
   box-shadow: var(--gtabs-shadow);
@@ -70,15 +70,15 @@
 .gtabs__tab:hover {
   background: var(--gtabs-bg-hover);
   border-color: var(--gtabs-border-hover);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
 }
 
 .gtabs__tab:focus-visible {
   outline: none;
   border-color: var(--gtabs-border-active);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--gtabs-ring),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--gtabs-ring),
     var(--gtabs-shadow-active);
 }
 
@@ -117,7 +117,7 @@
   flex: 0 0 auto;
   min-width: 1.75rem;
   padding: 0.2rem 0.45rem;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: rgba(255, 255, 255, 0.06);
   font-family: var(--ui-technical-font);
   font-size: 0.75rem;
@@ -200,7 +200,7 @@
   --gtabs-border-hover: rgba(198, 255, 74, 0.18);
   --gtabs-border-active: rgba(198, 255, 74, 0.28);
   --gtabs-shadow: none;
-  --gtabs-shadow-active: 0 10px 18px rgba(0, 0, 0, 0.2);
+  --gtabs-shadow-active: 0 0.625rem 1.125rem rgba(0, 0, 0, 0.2);
 }
 
 .gtabs--quiet {
@@ -210,8 +210,8 @@
   --gtabs-border: rgba(198, 255, 74, 0.1);
   --gtabs-border-hover: rgba(198, 255, 74, 0.2);
   --gtabs-border-active: rgba(198, 255, 74, 0.3);
-  --gtabs-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-  --gtabs-shadow-active: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --gtabs-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.34);
+  --gtabs-shadow-active: 0 1rem 1.875rem rgba(0, 0, 0, 0.42);
 }
 
 .gtabs--background {
@@ -221,8 +221,8 @@
   --gtabs-border: rgba(198, 255, 74, 0.2);
   --gtabs-border-hover: rgba(198, 255, 74, 0.34);
   --gtabs-border-active: rgba(198, 255, 74, 0.52);
-  --gtabs-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-  --gtabs-shadow-active: 0 18px 34px rgba(0, 0, 0, 0.48);
+  --gtabs-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
+  --gtabs-shadow-active: 0 1.125rem 2.125rem rgba(0, 0, 0, 0.48);
 }
 
 .gtabs--disabled {

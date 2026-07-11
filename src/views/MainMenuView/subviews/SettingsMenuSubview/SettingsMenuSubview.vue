@@ -38,12 +38,12 @@
   width: min(100%, 76rem);
   height: min(100%, calc(100vh - 9.5rem));
   margin: 0 auto;
-  border: 1px solid rgba(198, 255, 74, 0.16);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.16);
   background:
     linear-gradient(180deg, rgba(8, 12, 11, 0.94), rgba(4, 6, 6, 0.92)),
     rgba(0, 0, 0, 0.56);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.04),
     0 1.75rem 4rem rgba(0, 0, 0, 0.42),
     0 0 2.4rem rgba(198, 255, 74, 0.06);
   transform: translateY(0.8rem);
@@ -72,13 +72,13 @@
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.6rem;
   padding: 0.5rem;
-  border: 1px solid rgba(198, 255, 74, 0.12);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.12);
   background:
     linear-gradient(180deg, rgba(198, 255, 74, 0.04), rgba(198, 255, 74, 0.01)),
     linear-gradient(180deg, rgba(11, 15, 14, 0.92), rgba(6, 8, 8, 0.9));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    inset 0 0 0 1px rgba(198, 255, 74, 0.03),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.04),
+    inset 0 0 0 0.0625rem rgba(198, 255, 74, 0.03),
     0 1rem 2.2rem rgba(0, 0, 0, 0.26);
 }
 
@@ -96,12 +96,12 @@
 .settings-menu__tabs:deep(.gtabs__tab) {
   overflow: hidden;
   justify-content: center;
-  border: 1px solid rgba(198, 255, 74, 0.1);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.1);
   background:
     linear-gradient(180deg, rgba(20, 25, 24, 0.92), rgba(9, 12, 12, 0.94)),
     linear-gradient(135deg, rgba(198, 255, 74, 0.02), transparent 58%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.04),
     0 0.9rem 1.8rem rgba(0, 0, 0, 0.26);
   color: rgba(224, 229, 223, 0.82);
   text-align: center;
@@ -138,7 +138,7 @@
   right: 18%;
   bottom: 0.38rem;
   height: 0.16rem;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: linear-gradient(
     90deg,
     transparent,
@@ -165,7 +165,7 @@
       transparent
     );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.07),
     inset 0 0 0.85rem rgba(84, 201, 29, 0.05),
     0 1.1rem 2.1rem rgba(0, 0, 0, 0.32),
     0 0 1.1rem rgba(84, 201, 29, 0.1);
@@ -187,7 +187,7 @@
     linear-gradient(180deg, rgba(82, 63, 10, 0.92), rgba(28, 21, 7, 0.96)),
     linear-gradient(135deg, rgba(255, 197, 58, 0.24), rgba(255, 176, 0, 0.1) 68%, transparent);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.08),
     inset 0 0 1.7rem rgba(255, 197, 58, 0.1),
     0 1.25rem 2.4rem rgba(0, 0, 0, 0.34),
     0 0 1.9rem rgba(255, 197, 58, 0.16);
@@ -220,7 +220,7 @@
   transform: none;
   border-color: rgba(255, 197, 58, 0.52);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.08),
     inset 0 0 1.7rem rgba(255, 197, 58, 0.1),
     0 1.25rem 2.4rem rgba(0, 0, 0, 0.34),
     0 0 1.9rem rgba(255, 197, 58, 0.16);
@@ -249,13 +249,13 @@
 .settings-menu__content-frame {
   min-width: 0;
   min-height: 0;
-  border: 1px solid rgba(198, 255, 74, 0.12);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.12);
   background:
     linear-gradient(180deg, rgba(198, 255, 74, 0.03), transparent 14%),
     linear-gradient(180deg, rgba(12, 16, 15, 0.9), rgba(7, 10, 10, 0.92));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 0 0 1px rgba(198, 255, 74, 0.02);
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.03),
+    inset 0 0 0 0.0625rem rgba(198, 255, 74, 0.02);
 }
 
 .settings-menu__scroller {

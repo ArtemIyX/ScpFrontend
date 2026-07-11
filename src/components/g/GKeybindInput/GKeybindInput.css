@@ -9,8 +9,8 @@
   --gkeybindinput-placeholder: rgba(236, 240, 244, 0.42);
   --gkeybindinput-helper: var(--ui-text-muted);
   --gkeybindinput-error-text: #ffb8b3;
-  --gkeybindinput-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --gkeybindinput-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gkeybindinput-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+  --gkeybindinput-shadow-focus: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.3);
   --gkeybindinput-padding-x: 1rem;
   --gkeybindinput-padding-y: 0.75rem;
   --gkeybindinput-min-height: 2.75rem;
@@ -49,7 +49,7 @@
   min-width: 0;
   min-height: var(--gkeybindinput-min-height);
   padding: var(--gkeybindinput-padding-y) var(--gkeybindinput-padding-x);
-  border: 1px solid var(--gkeybindinput-border);
+  border: 0.0625rem solid var(--gkeybindinput-border);
   border-radius: var(--gkeybindinput-radius);
   background: var(--gkeybindinput-bg);
   box-shadow: var(--gkeybindinput-shadow);
@@ -73,8 +73,8 @@
   background: var(--gkeybindinput-bg-focus);
   border-color: var(--gkeybindinput-border-focus);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--gkeybindinput-ring),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--gkeybindinput-ring),
     var(--gkeybindinput-shadow-focus);
 }
 
@@ -105,8 +105,8 @@
 .gkeybindinput__state {
   flex: 0 0 auto;
   padding: 0.18rem 0.5rem;
-  border: 1px solid var(--gkeybindinput-chip-border);
-  border-radius: 999px;
+  border: 0.0625rem solid var(--gkeybindinput-chip-border);
+  border-radius: 62.4375rem;
   background: var(--gkeybindinput-chip-bg);
   color: var(--ui-text-muted);
   font-family: var(--ui-technical-font);
@@ -145,7 +145,7 @@
 
 .gkeybindinput__clear {
   padding: 0.4rem 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-radius: 0.3125rem;
   background: rgba(255, 255, 255, 0.03);
   color: var(--ui-text-main);
@@ -159,7 +159,7 @@
 .gkeybindinput__clear:hover:not(:disabled) {
   border-color: rgba(198, 255, 74, 0.24);
   background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
 }
 
 .gkeybindinput__clear:disabled {
@@ -242,7 +242,7 @@
   --gkeybindinput-border-hover: rgba(198, 255, 74, 0.18);
   --gkeybindinput-border-focus: rgba(198, 255, 74, 0.28);
   --gkeybindinput-shadow: none;
-  --gkeybindinput-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+  --gkeybindinput-shadow-focus: 0 0.625rem 1.125rem rgba(0, 0, 0, 0.2);
 }
 
 .gkeybindinput--quiet {
@@ -252,8 +252,8 @@
   --gkeybindinput-border: rgba(198, 255, 74, 0.1);
   --gkeybindinput-border-hover: rgba(198, 255, 74, 0.2);
   --gkeybindinput-border-focus: rgba(198, 255, 74, 0.3);
-  --gkeybindinput-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-  --gkeybindinput-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --gkeybindinput-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.34);
+  --gkeybindinput-shadow-focus: 0 1rem 1.875rem rgba(0, 0, 0, 0.42);
 }
 
 .gkeybindinput--background {
@@ -263,6 +263,6 @@
   --gkeybindinput-border: rgba(198, 255, 74, 0.2);
   --gkeybindinput-border-hover: rgba(198, 255, 74, 0.34);
   --gkeybindinput-border-focus: rgba(198, 255, 74, 0.52);
-  --gkeybindinput-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-  --gkeybindinput-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+  --gkeybindinput-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
+  --gkeybindinput-shadow-focus: 0 1.125rem 2.125rem rgba(0, 0, 0, 0.48);
 }

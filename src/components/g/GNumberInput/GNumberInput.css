@@ -9,8 +9,8 @@
   --gnumberinput-placeholder: rgba(236, 240, 244, 0.42);
   --gnumberinput-helper: var(--ui-text-muted);
   --gnumberinput-error-text: #ffb8b3;
-  --gnumberinput-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --gnumberinput-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gnumberinput-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+  --gnumberinput-shadow-focus: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.3);
   --gnumberinput-padding-x: 1rem;
   --gnumberinput-padding-y: 0.75rem;
   --gnumberinput-min-height: 2.75rem;
@@ -67,7 +67,7 @@
   gap: var(--gnumberinput-gap);
   min-height: var(--gnumberinput-min-height);
   padding: var(--gnumberinput-padding-y) var(--gnumberinput-padding-x);
-  border: 1px solid var(--gnumberinput-border);
+  border: 0.0625rem solid var(--gnumberinput-border);
   border-radius: var(--gnumberinput-radius);
   background: var(--gnumberinput-bg);
   box-shadow: var(--gnumberinput-shadow);
@@ -89,8 +89,8 @@
   background: var(--gnumberinput-bg-focus);
   border-color: var(--gnumberinput-border-focus);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--gnumberinput-ring),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--gnumberinput-ring),
     var(--gnumberinput-shadow-focus);
 }
 
@@ -102,8 +102,8 @@
 .gnumberinput--error .gnumberinput__field {
   border-color: rgba(255, 59, 48, 0.42);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px rgba(255, 59, 48, 0.18),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem rgba(255, 59, 48, 0.18),
     var(--gnumberinput-shadow);
 }
 
@@ -159,7 +159,7 @@
 .gnumberinput__step {
   width: 2rem;
   min-width: 2rem;
-  border: 1px solid var(--gnumberinput-step-border);
+  border: 0.0625rem solid var(--gnumberinput-step-border);
   border-radius: 0.3125rem;
   background: var(--gnumberinput-step-bg);
   color: var(--ui-text-main);
@@ -176,7 +176,7 @@
 }
 
 .gnumberinput__step:active {
-  transform: translateY(1px);
+  transform: translateY(0.0625rem);
 }
 
 .gnumberinput__step:disabled {
@@ -282,7 +282,7 @@
   --gnumberinput-border-hover: rgba(198, 255, 74, 0.18);
   --gnumberinput-border-focus: rgba(198, 255, 74, 0.28);
   --gnumberinput-shadow: none;
-  --gnumberinput-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+  --gnumberinput-shadow-focus: 0 0.625rem 1.125rem rgba(0, 0, 0, 0.2);
 }
 
 .gnumberinput--quiet {
@@ -292,8 +292,8 @@
   --gnumberinput-border: rgba(198, 255, 74, 0.1);
   --gnumberinput-border-hover: rgba(198, 255, 74, 0.2);
   --gnumberinput-border-focus: rgba(198, 255, 74, 0.3);
-  --gnumberinput-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-  --gnumberinput-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --gnumberinput-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.34);
+  --gnumberinput-shadow-focus: 0 1rem 1.875rem rgba(0, 0, 0, 0.42);
 }
 
 .gnumberinput--background {
@@ -303,6 +303,6 @@
   --gnumberinput-border: rgba(198, 255, 74, 0.2);
   --gnumberinput-border-hover: rgba(198, 255, 74, 0.34);
   --gnumberinput-border-focus: rgba(198, 255, 74, 0.52);
-  --gnumberinput-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-  --gnumberinput-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+  --gnumberinput-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
+  --gnumberinput-shadow-focus: 0 1.125rem 2.125rem rgba(0, 0, 0, 0.48);
 }

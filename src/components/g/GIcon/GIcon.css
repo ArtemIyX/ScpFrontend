@@ -151,7 +151,7 @@
   width: 100%;
   height: var(--gicon-stroke);
   margin-left: calc(var(--gicon-size) / -2);
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: currentColor;
 }
 
@@ -220,7 +220,7 @@
   margin-top: calc(var(--gicon-size) / -2 - 0.08rem);
   margin-left: calc(var(--gicon-size) / -2 - 0.08rem);
   border: var(--gicon-stroke) solid currentColor;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: transparent;
 }
 
@@ -238,7 +238,7 @@
   height: 18%;
   margin-top: calc(var(--gicon-size) / 2 - 0.04rem);
   margin-left: calc(var(--gicon-size) / -2 - 0.01rem);
-  border-radius: 999px;
+  border-radius: 62.4375rem;
 }
 
 .gicon--info .gicon__glyph::after {
@@ -246,7 +246,7 @@
   height: 42%;
   margin-top: calc(var(--gicon-size) / -2 + 0.08rem);
   margin-left: calc(var(--gicon-stroke) / -2);
-  border-radius: 999px;
+  border-radius: 62.4375rem;
 }
 
 .gicon--warning .gicon__glyph::before {
@@ -265,7 +265,7 @@
   height: 30%;
   margin-top: calc(var(--gicon-size) / -2 + 0.08rem);
   margin-left: calc(var(--gicon-stroke) / -2);
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: var(--gicon-color-muted);
 }
 

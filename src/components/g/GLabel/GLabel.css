@@ -13,7 +13,7 @@
   gap: 0.35rem;
   min-width: 0;
   padding: var(--glabel-padding-y) var(--glabel-padding-x);
-  border: 1px solid var(--glabel-border);
+  border: 0.0625rem solid var(--glabel-border);
   border-radius: var(--glabel-radius);
   background: var(--glabel-bg);
   color: var(--glabel-text);
@@ -36,7 +36,7 @@
   --glabel-padding-y: 0.32rem;
   --glabel-bg: rgba(255, 255, 255, 0.04);
   --glabel-border: rgba(255, 255, 255, 0.08);
-  --glabel-radius: 999px;
+  --glabel-radius: 62.4375rem;
 }
 
 .glabel--caption {
@@ -52,7 +52,7 @@
   --glabel-padding-y: 0.3rem;
   --glabel-bg: rgba(255, 255, 255, 0.04);
   --glabel-border: rgba(255, 255, 255, 0.08);
-  --glabel-radius: 999px;
+  --glabel-radius: 62.4375rem;
 }
 
 .glabel--sm {

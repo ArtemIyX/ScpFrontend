@@ -562,7 +562,7 @@
   display: grid;
   gap: 1rem;
   padding: 1rem;
-  border: 1px solid rgba(198, 255, 74, 0.09);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.09);
   background:
     linear-gradient(180deg, rgba(255, 176, 0, 0.04), transparent 30%),
     rgba(5, 8, 8, 0.36);

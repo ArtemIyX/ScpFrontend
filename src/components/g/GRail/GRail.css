@@ -8,8 +8,8 @@
   --grail-text: var(--ui-text-main);
   --grail-muted: var(--ui-text-muted);
   --grail-helper: var(--ui-text-muted);
-  --grail-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --grail-shadow-active: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --grail-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+  --grail-shadow-active: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.3);
   --grail-padding: 0.375rem;
   --grail-gap: 0.5rem;
   --grail-radius: 0.5rem;
@@ -21,7 +21,7 @@
   --grail-subtitle-size: 0.8125rem;
   --grail-meta-size: 0.75rem;
   --grail-ring: rgba(198, 255, 74, 0.24);
-  --grail-selected-shadow: 0 0 0 1px rgba(198, 255, 74, 0.12) inset;
+  --grail-selected-shadow: 0 0 0 0.0625rem rgba(198, 255, 74, 0.12) inset;
 
   display: grid;
   gap: 0.5rem;
@@ -47,7 +47,7 @@
   flex-wrap: wrap;
   gap: var(--grail-gap);
   padding: var(--grail-padding);
-  border: 1px solid var(--grail-border);
+  border: 0.0625rem solid var(--grail-border);
   border-radius: var(--grail-radius);
   background: var(--grail-bg);
   box-shadow: var(--grail-shadow);
@@ -72,7 +72,7 @@
   min-width: 0;
   min-height: var(--grail-item-min-height);
   padding: var(--grail-item-padding-y) var(--grail-item-padding-x);
-  border: 1px solid var(--grail-border);
+  border: 0.0625rem solid var(--grail-border);
   border-radius: var(--grail-item-radius);
   background: rgba(255, 255, 255, 0.03);
   color: var(--grail-text);
@@ -88,11 +88,11 @@
 .grail__item:hover:not(:disabled) {
   background: var(--grail-bg-hover);
   border-color: var(--grail-border-hover);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
 }
 
 .grail__item:active:not(:disabled) {
-  transform: translateY(1px);
+  transform: translateY(0.0625rem);
 }
 
 .grail__item:focus-visible {
@@ -100,8 +100,8 @@
   background: var(--grail-bg-active);
   border-color: var(--grail-border-active);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--grail-ring),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--grail-ring),
     var(--grail-shadow-active);
 }
 
@@ -150,7 +150,7 @@
 .grail__badge {
   flex: 0 0 auto;
   padding: 0.18rem 0.45rem;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: rgba(198, 255, 74, 0.12);
   color: var(--ui-accent);
   font-family: var(--ui-technical-font);
@@ -264,7 +264,7 @@
   --grail-border-hover: rgba(198, 255, 74, 0.18);
   --grail-border-active: rgba(198, 255, 74, 0.28);
   --grail-shadow: none;
-  --grail-shadow-active: 0 10px 18px rgba(0, 0, 0, 0.2);
+  --grail-shadow-active: 0 0.625rem 1.125rem rgba(0, 0, 0, 0.2);
 }
 
 .grail--quiet {
@@ -274,8 +274,8 @@
   --grail-border: rgba(198, 255, 74, 0.1);
   --grail-border-hover: rgba(198, 255, 74, 0.2);
   --grail-border-active: rgba(198, 255, 74, 0.3);
-  --grail-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-  --grail-shadow-active: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --grail-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.34);
+  --grail-shadow-active: 0 1rem 1.875rem rgba(0, 0, 0, 0.42);
 }
 
 .grail--background {
@@ -285,8 +285,8 @@
   --grail-border: rgba(198, 255, 74, 0.2);
   --grail-border-hover: rgba(198, 255, 74, 0.34);
   --grail-border-active: rgba(198, 255, 74, 0.52);
-  --grail-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-  --grail-shadow-active: 0 18px 34px rgba(0, 0, 0, 0.48);
+  --grail-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
+  --grail-shadow-active: 0 1.125rem 2.125rem rgba(0, 0, 0, 0.48);
 }
 
 .grail--disabled {
@@ -296,7 +296,7 @@
 .grail--error .grail__rail {
   border-color: rgba(255, 59, 48, 0.42);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px rgba(255, 59, 48, 0.18),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem rgba(255, 59, 48, 0.18),
     var(--grail-shadow);
 }

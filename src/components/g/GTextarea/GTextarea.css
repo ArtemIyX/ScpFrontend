@@ -9,8 +9,8 @@
   --gtextarea-placeholder: rgba(236, 240, 244, 0.42);
   --gtextarea-helper: var(--ui-text-muted);
   --gtextarea-error-text: #ffb8b3;
-  --gtextarea-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --gtextarea-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --gtextarea-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+  --gtextarea-shadow-focus: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.3);
   --gtextarea-padding-x: 1rem;
   --gtextarea-padding-y: 0.875rem;
   --gtextarea-min-height: 8rem;
@@ -45,7 +45,7 @@
   gap: var(--gtextarea-gap);
   min-height: var(--gtextarea-min-height);
   padding: var(--gtextarea-padding-y) var(--gtextarea-padding-x);
-  border: 1px solid var(--gtextarea-border);
+  border: 0.0625rem solid var(--gtextarea-border);
   border-radius: var(--gtextarea-radius);
   background: var(--gtextarea-bg);
   box-shadow: var(--gtextarea-shadow);
@@ -67,8 +67,8 @@
   background: var(--gtextarea-bg-focus);
   border-color: var(--gtextarea-border-focus);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--gtextarea-ring),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--gtextarea-ring),
     var(--gtextarea-shadow-focus);
 }
 
@@ -80,8 +80,8 @@
 .gtextarea--error .gtextarea__field {
   border-color: rgba(255, 59, 48, 0.42);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px rgba(255, 59, 48, 0.18),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem rgba(255, 59, 48, 0.18),
     var(--gtextarea-shadow);
 }
 
@@ -217,7 +217,7 @@
   --gtextarea-border-hover: rgba(198, 255, 74, 0.18);
   --gtextarea-border-focus: rgba(198, 255, 74, 0.28);
   --gtextarea-shadow: none;
-  --gtextarea-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+  --gtextarea-shadow-focus: 0 0.625rem 1.125rem rgba(0, 0, 0, 0.2);
 }
 
 .gtextarea--quiet {
@@ -227,8 +227,8 @@
   --gtextarea-border: rgba(198, 255, 74, 0.1);
   --gtextarea-border-hover: rgba(198, 255, 74, 0.2);
   --gtextarea-border-focus: rgba(198, 255, 74, 0.3);
-  --gtextarea-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-  --gtextarea-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --gtextarea-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.34);
+  --gtextarea-shadow-focus: 0 1rem 1.875rem rgba(0, 0, 0, 0.42);
 }
 
 .gtextarea--background {
@@ -238,6 +238,6 @@
   --gtextarea-border: rgba(198, 255, 74, 0.2);
   --gtextarea-border-hover: rgba(198, 255, 74, 0.34);
   --gtextarea-border-focus: rgba(198, 255, 74, 0.52);
-  --gtextarea-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-  --gtextarea-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+  --gtextarea-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
+  --gtextarea-shadow-focus: 0 1.125rem 2.125rem rgba(0, 0, 0, 0.48);
 }

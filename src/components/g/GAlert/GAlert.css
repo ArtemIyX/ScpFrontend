@@ -5,7 +5,7 @@
   --galert-text: var(--ui-text-main);
   --galert-muted: var(--ui-text-muted);
   --galert-accent: var(--ui-accent);
-  --galert-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+  --galert-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.28);
   --galert-radius: 0.3125rem;
   --galert-padding-x: 0.875rem;
   --galert-padding-y: 0.875rem;
@@ -16,7 +16,7 @@
   grid-template-columns: auto 1fr;
   align-items: stretch;
   min-width: 0;
-  border: 1px solid var(--galert-border);
+  border: 0.0625rem solid var(--galert-border);
   border-radius: var(--galert-radius);
   background: var(--galert-bg);
   box-shadow: var(--galert-shadow);

@@ -5,7 +5,7 @@
   --gtoolbar-border-hover: rgba(255, 255, 255, 0.16);
   --gtoolbar-text: var(--ui-text-main);
   --gtoolbar-muted: var(--ui-text-muted);
-  --gtoolbar-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --gtoolbar-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
   --gtoolbar-radius: 0.375rem;
   --gtoolbar-padding-x: 0.875rem;
   --gtoolbar-padding-y: 0.75rem;
@@ -15,7 +15,7 @@
   gap: var(--gtoolbar-gap);
   min-width: 0;
   padding: var(--gtoolbar-padding-y) var(--gtoolbar-padding-x);
-  border: 1px solid var(--gtoolbar-border);
+  border: 0.0625rem solid var(--gtoolbar-border);
   border-radius: var(--gtoolbar-radius);
   background: var(--gtoolbar-bg);
   box-shadow: var(--gtoolbar-shadow);
@@ -134,5 +134,5 @@
 .gtoolbar--background {
   --gtoolbar-bg: rgba(4, 6, 8, 0.7);
   --gtoolbar-border: rgba(198, 255, 74, 0.2);
-  --gtoolbar-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  --gtoolbar-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
 }

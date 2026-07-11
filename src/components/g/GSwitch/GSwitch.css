@@ -11,7 +11,7 @@
   --gswitch-gap: 0.5rem;
   --gswitch-size: 2.75rem;
   --gswitch-thumb-size: 1rem;
-  --gswitch-radius: 999px;
+  --gswitch-radius: 62.4375rem;
   --gswitch-min-height: 2.5rem;
 
   display: grid;
@@ -71,12 +71,12 @@
   display: block;
   width: 100%;
   height: 100%;
-  border: 1px solid var(--gswitch-track-border);
+  border: 0.0625rem solid var(--gswitch-track-border);
   border-radius: var(--gswitch-radius);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.14)),
     var(--gswitch-track-bg);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0.0625rem 0.0625rem rgba(255, 255, 255, 0.03);
   transition:
     transform 140ms ease,
     border-color 140ms ease,
@@ -90,14 +90,14 @@
   left: 0.18rem;
   width: var(--gswitch-thumb-size);
   height: var(--gswitch-thumb-size);
-  border: 1px solid var(--gswitch-thumb-border);
-  border-radius: 999px;
+  border: 0.0625rem solid var(--gswitch-thumb-border);
+  border-radius: 62.4375rem;
   background:
     radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 45%),
     var(--gswitch-thumb-bg);
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.42),
-    0 0 0 1px rgba(0, 0, 0, 0.12);
+    0 0.0625rem 0.125rem rgba(0, 0, 0, 0.42),
+    0 0 0 0.0625rem rgba(0, 0, 0, 0.12);
   transform: translateY(-50%);
   transition:
     transform 160ms ease,
@@ -121,18 +121,18 @@
 .gswitch__track--focused {
   border-color: var(--gswitch-ring);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--gswitch-ring),
-    inset 0 1px 1px rgba(255, 255, 255, 0.03);
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--gswitch-ring),
+    inset 0 0.0625rem 0.0625rem rgba(255, 255, 255, 0.03);
 }
 
 .gswitch:hover .gswitch__track {
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
   border-color: rgba(198, 255, 74, 0.24);
 }
 
 .gswitch__input:active + .gswitch__track {
-  transform: translateY(1px);
+  transform: translateY(0.0625rem);
 }
 
 .gswitch__input:disabled {

@@ -48,10 +48,10 @@
   place-items: center;
   width: var(--gcheckbox-size);
   height: var(--gcheckbox-size);
-  border: 1px solid var(--gcheckbox-box-border);
+  border: 0.0625rem solid var(--gcheckbox-box-border);
   border-radius: var(--gcheckbox-radius);
   background: var(--gcheckbox-box-bg);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0.0625rem 0.0625rem rgba(255, 255, 255, 0.03);
   transition:
     transform 140ms ease,
     border-color 140ms ease,
@@ -96,15 +96,15 @@
 }
 
 .gcheckbox:hover .gcheckbox__box {
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
   border-color: rgba(198, 255, 74, 0.24);
 }
 
 .gcheckbox__input:focus-visible + .gcheckbox__box {
   border-color: var(--gcheckbox-ring);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--gcheckbox-ring);
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--gcheckbox-ring);
 }
 
 .gcheckbox__input:checked + .gcheckbox__box,
@@ -129,7 +129,7 @@
 }
 
 .gcheckbox__input:active + .gcheckbox__box {
-  transform: translateY(1px);
+  transform: translateY(0.0625rem);
 }
 
 .gcheckbox__input:disabled {

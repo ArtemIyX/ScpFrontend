@@ -40,9 +40,14 @@ const classes = computed(() =>
     hasIcon: Boolean(props.icon || props.iconSrc || slots.icon),
   }),
 )
+const PX_PER_REM = 16
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
+}
+
+function toRem(value: number): string {
+  return `${value / PX_PER_REM}rem`
 }
 
 function updatePosition(): void {
@@ -60,24 +65,24 @@ function updatePosition(): void {
     case 'top':
       panelStyle.value = {
         position: 'fixed',
-        top: `${Math.max(viewportPadding, rect.top - gap)}px`,
-        left: `${centerX}px`,
+        top: toRem(Math.max(viewportPadding, rect.top - gap)),
+        left: toRem(centerX),
         transform: 'translate(-50%, -100%)',
       }
       break
     case 'left':
       panelStyle.value = {
         position: 'fixed',
-        top: `${centerY}px`,
-        left: `${Math.max(viewportPadding, rect.left - gap)}px`,
+        top: toRem(centerY),
+        left: toRem(Math.max(viewportPadding, rect.left - gap)),
         transform: 'translate(-100%, -50%)',
       }
       break
     case 'right':
       panelStyle.value = {
         position: 'fixed',
-        top: `${centerY}px`,
-        left: `${Math.min(window.innerWidth - viewportPadding, rect.right + gap)}px`,
+        top: toRem(centerY),
+        left: toRem(Math.min(window.innerWidth - viewportPadding, rect.right + gap)),
         transform: 'translateY(-50%)',
       }
       break
@@ -85,8 +90,8 @@ function updatePosition(): void {
     default:
       panelStyle.value = {
         position: 'fixed',
-        top: `${Math.min(window.innerHeight - viewportPadding, rect.bottom + gap)}px`,
-        left: `${centerX}px`,
+        top: toRem(Math.min(window.innerHeight - viewportPadding, rect.bottom + gap)),
+        left: toRem(centerX),
         transform: 'translateX(-50%)',
       }
       break

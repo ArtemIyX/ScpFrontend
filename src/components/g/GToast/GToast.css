@@ -6,7 +6,7 @@
   --gtoast-text: var(--ui-text);
   --gtoast-muted: var(--ui-text-muted);
   --gtoast-accent: var(--ui-accent);
-  --gtoast-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
+  --gtoast-shadow: 0 1.125rem 2.625rem rgba(0, 0, 0, 0.36);
   --gtoast-radius: 0.75rem;
   --gtoast-padding-x: 0.875rem;
   --gtoast-padding-y: 0.875rem;
@@ -21,14 +21,14 @@
   align-items: stretch;
   gap: 0;
   min-width: 0;
-  border: 1px solid var(--gtoast-border);
+  border: 0.0625rem solid var(--gtoast-border);
   border-radius: var(--gtoast-radius);
   background: var(--gtoast-bg);
   box-shadow: var(--gtoast-shadow);
   color: var(--gtoast-text);
   overflow: hidden;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(0.625rem);
+  -webkit-backdrop-filter: blur(0.625rem);
 }
 
 .gtoast--closable {
@@ -38,7 +38,7 @@
 .gtoast__accent {
   width: 0.25rem;
   background: linear-gradient(180deg, var(--gtoast-accent), rgba(255, 255, 255, 0.08));
-  box-shadow: 0 0 18px color-mix(in srgb, var(--gtoast-accent) 40%, transparent);
+  box-shadow: 0 0 1.125rem color-mix(in srgb, var(--gtoast-accent) 40%, transparent);
 }
 
 .gtoast__shell {

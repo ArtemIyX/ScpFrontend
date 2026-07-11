@@ -53,7 +53,7 @@ defineEmits<{
   gap: 0.75rem;
   min-height: 2.35rem;
   padding: 0.3rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.04);
 }
 
 .graphics-override-row__copy {

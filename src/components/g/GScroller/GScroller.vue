@@ -20,6 +20,7 @@ const dragging = ref(false)
 const dragStartY = ref(0)
 const dragStartScroll = ref(0)
 let resizeObserver: ResizeObserver | null = null
+const PX_PER_REM = 16
 
 const maxScroll = computed(() => Math.max(0, contentHeight.value - viewportHeight.value))
 const thumbHeight = computed(() => {
@@ -47,6 +48,10 @@ const trackHeight = computed(() => {
 
 function clampScroll(value: number): number {
   return Math.min(maxScroll.value, Math.max(0, value))
+}
+
+function toRem(value: number): string {
+  return `${value / PX_PER_REM}rem`
 }
 
 function syncMeasurements(): void {
@@ -204,7 +209,7 @@ onBeforeUnmount(() => {
       <div
         ref="thumbRef"
         class="gscroller__thumb"
-        :style="{ height: `${thumbHeight}px`, transform: `translate3d(0, ${thumbOffset}px, 0)` }"
+        :style="{ height: toRem(thumbHeight), transform: `translate3d(0, ${toRem(thumbOffset)}, 0)` }"
         @pointerdown="startDrag"
         @pointermove="onDrag"
         @pointerup="stopDrag"

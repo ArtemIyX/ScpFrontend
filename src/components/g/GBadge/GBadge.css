@@ -19,7 +19,7 @@
   min-width: 0;
   min-height: 1.25rem;
   padding: var(--gbadge-padding-y) var(--gbadge-padding-x);
-  border: 1px solid var(--gbadge-border);
+  border: 0.0625rem solid var(--gbadge-border);
   border-radius: var(--gbadge-radius);
   background: var(--gbadge-bg);
   box-shadow: var(--gbadge-shadow);
@@ -47,19 +47,19 @@
 .gbadge--interactive:hover {
   background: var(--gbadge-bg-hover);
   border-color: rgba(198, 255, 74, 0.22);
-  transform: translateY(-0.5px);
+  transform: translateY(-0.03125rem);
 }
 
 .gbadge--interactive:focus-visible {
   outline: none;
   border-color: var(--gbadge-ring);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.48),
-    0 0 0 4px var(--gbadge-ring);
+    0 0 0 0.125rem rgba(0, 0, 0, 0.48),
+    0 0 0 0.25rem var(--gbadge-ring);
 }
 
 .gbadge--interactive:active {
-  transform: translateY(0.5px);
+  transform: translateY(0.03125rem);
 }
 
 .gbadge--disabled {
@@ -71,7 +71,7 @@
 .gbadge__dot {
   width: 0.35rem;
   height: 0.35rem;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: currentColor;
   box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0.08);
   flex: 0 0 auto;
@@ -107,7 +107,7 @@
   --gbadge-bg: var(--ui-accent);
   --gbadge-bg-hover: #dcff7e;
   --gbadge-border: rgba(198, 255, 74, 0.5);
-  --gbadge-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+  --gbadge-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.16);
 }
 
 .gbadge--soft {

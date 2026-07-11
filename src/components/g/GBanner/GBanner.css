@@ -4,7 +4,7 @@
   --gbanner-text: var(--ui-text-main);
   --gbanner-muted: var(--ui-text-muted);
   --gbanner-accent: var(--ui-accent);
-  --gbanner-shadow: 0 16px 36px rgba(0, 0, 0, 0.34);
+  --gbanner-shadow: 0 1rem 2.25rem rgba(0, 0, 0, 0.34);
   --gbanner-radius: 0.3125rem;
   --gbanner-padding-x: 1rem;
   --gbanner-padding-y: 1rem;
@@ -16,7 +16,7 @@
   align-items: stretch;
   min-width: 0;
   width: 100%;
-  border: 1px solid var(--gbanner-border);
+  border: 0.0625rem solid var(--gbanner-border);
   border-radius: var(--gbanner-radius);
   background: var(--gbanner-bg);
   box-shadow: var(--gbanner-shadow);

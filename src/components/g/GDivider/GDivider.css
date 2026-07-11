@@ -22,14 +22,14 @@
 .gdivider__line {
   flex: 1 1 auto;
   min-width: 0;
-  border-top: 1px solid var(--gdivider-line);
+  border-top: 0.0625rem solid var(--gdivider-line);
 }
 
 .gdivider--vertical .gdivider__line {
-  width: 1px;
+  width: 0.0625rem;
   min-height: 1.25rem;
   border-top: 0;
-  border-left: 1px solid var(--gdivider-line);
+  border-left: 0.0625rem solid var(--gdivider-line);
 }
 
 .gdivider__label {

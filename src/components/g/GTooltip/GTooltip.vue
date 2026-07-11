@@ -19,6 +19,7 @@ const isVisible = ref(false)
 const timer = ref<number | null>(null)
 const anchorRef = ref<HTMLElement | null>(null)
 const panelStyle = ref<CSSProperties>({})
+const PX_PER_REM = 16
 
 const classes = computed(() =>
   buildGTooltipClasses({
@@ -39,6 +40,10 @@ function clearTimer(): void {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
+}
+
+function toRem(value: number): string {
+  return `${value / PX_PER_REM}rem`
 }
 
 function updatePosition(): void {
@@ -64,8 +69,8 @@ function updatePosition(): void {
     top = anchorRect.top + anchorRect.height / 2
     panelStyle.value = {
       position: 'fixed',
-      top: `${clamp(top, viewportPadding, window.innerHeight - viewportPadding)}px`,
-      left: `${Math.max(viewportPadding, anchorRect.left - gap)}px`,
+      top: toRem(clamp(top, viewportPadding, window.innerHeight - viewportPadding)),
+      left: toRem(Math.max(viewportPadding, anchorRect.left - gap)),
       transform: 'translate(-100%, -50%)',
     }
     return
@@ -73,8 +78,8 @@ function updatePosition(): void {
     top = anchorRect.top + anchorRect.height / 2
     panelStyle.value = {
       position: 'fixed',
-      top: `${clamp(top, viewportPadding, window.innerHeight - viewportPadding)}px`,
-      left: `${Math.min(window.innerWidth - viewportPadding, anchorRect.right + gap)}px`,
+      top: toRem(clamp(top, viewportPadding, window.innerHeight - viewportPadding)),
+      left: toRem(Math.min(window.innerWidth - viewportPadding, anchorRect.right + gap)),
       transform: 'translateY(-50%)',
     }
     return
@@ -101,8 +106,8 @@ function updatePosition(): void {
 
   panelStyle.value = {
     position: 'fixed',
-    top: `${clamp(top, viewportPadding, window.innerHeight - viewportPadding)}px`,
-    left: `${left}px`,
+    top: toRem(clamp(top, viewportPadding, window.innerHeight - viewportPadding)),
+    left: toRem(left),
     transform,
   }
 }

@@ -11,13 +11,13 @@
   gap: var(--gcard-gap);
   min-width: 0;
   padding: var(--gcard-padding);
-  border: 1px solid var(--gcard-border, rgba(255, 255, 255, 0.14));
+  border: 0.0625rem solid var(--gcard-border, rgba(255, 255, 255, 0.14));
   background:
     linear-gradient(180deg, var(--gcard-accent-soft), rgba(255, 255, 255, 0) 34%),
     var(--gcard-bg, rgba(255, 255, 255, 0.06));
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.22) inset,
-    0 12px 26px rgba(0, 0, 0, 0.32);
+    0 0 0 0.0625rem rgba(0, 0, 0, 0.22) inset,
+    0 0.75rem 1.625rem rgba(0, 0, 0, 0.32);
 }
 
 .gcard::before {
@@ -97,8 +97,8 @@
   --gcard-border: rgba(198, 255, 74, 0.22);
   --gcard-accent-soft: rgba(198, 255, 74, 0.14);
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.3) inset,
-    0 14px 30px rgba(0, 0, 0, 0.38);
+    0 0 0 0.0625rem rgba(0, 0, 0, 0.3) inset,
+    0 0.875rem 1.875rem rgba(0, 0, 0, 0.38);
 }
 
 .gcard--surface {
@@ -150,6 +150,6 @@
   --gcard-accent: rgba(198, 255, 74, 0.55);
   --gcard-accent-soft: rgba(198, 255, 74, 0.08);
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.34) inset,
-    0 16px 32px rgba(0, 0, 0, 0.4);
+    0 0 0 0.0625rem rgba(0, 0, 0, 0.34) inset,
+    0 1rem 2rem rgba(0, 0, 0, 0.4);
 }

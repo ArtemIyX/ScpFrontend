@@ -147,7 +147,7 @@ defineEmits<{
   display: grid;
   gap: 0.7rem;
   padding: 0.9rem 1rem 1rem;
-  border: 1px solid rgba(198, 255, 74, 0.1);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.1);
   background:
     linear-gradient(180deg, rgba(198, 255, 74, 0.03), transparent 16%),
     linear-gradient(180deg, rgba(11, 15, 14, 0.74), rgba(7, 9, 9, 0.88));

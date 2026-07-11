@@ -9,8 +9,8 @@
   --ginput-placeholder: rgba(236, 240, 244, 0.42);
   --ginput-helper: var(--ui-text-muted);
   --ginput-error-text: #ffb8b3;
-  --ginput-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --ginput-shadow-focus: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --ginput-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+  --ginput-shadow-focus: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.3);
   --ginput-padding-x: 1rem;
   --ginput-padding-y: 0.75rem;
   --ginput-min-height: 2.75rem;
@@ -46,7 +46,7 @@
   gap: var(--ginput-gap);
   min-height: var(--ginput-min-height);
   padding: var(--ginput-padding-y) var(--ginput-padding-x);
-  border: 1px solid var(--ginput-border);
+  border: 0.0625rem solid var(--ginput-border);
   border-radius: var(--ginput-radius);
   background: var(--ginput-bg);
   box-shadow: var(--ginput-shadow);
@@ -72,8 +72,8 @@
   background: var(--ginput-bg-focus);
   border-color: var(--ginput-border-focus);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px var(--ginput-ring),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem var(--ginput-ring),
     var(--ginput-shadow-focus);
 }
 
@@ -85,8 +85,8 @@
 .ginput--error .ginput__field {
   border-color: rgba(255, 59, 48, 0.42);
   box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.5),
-    0 0 0 4px rgba(255, 59, 48, 0.18),
+    0 0 0 0.125rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.25rem rgba(255, 59, 48, 0.18),
     var(--ginput-shadow);
 }
 
@@ -139,7 +139,7 @@
   right: calc(var(--ginput-padding-x) - 0.125rem);
   width: 2rem;
   height: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-radius: 0.3125rem;
   background: rgba(255, 255, 255, 0.03);
   color: var(--ui-text-main);
@@ -154,11 +154,11 @@
 .ginput__clear:hover {
   border-color: rgba(198, 255, 74, 0.24);
   background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
 }
 
 .ginput__clear:active {
-  transform: translateY(calc(-50% + 1px));
+  transform: translateY(calc(-50% + 0.0625rem));
 }
 
 .ginput__meta {
@@ -259,7 +259,7 @@
   --ginput-border-hover: rgba(198, 255, 74, 0.18);
   --ginput-border-focus: rgba(198, 255, 74, 0.28);
   --ginput-shadow: none;
-  --ginput-shadow-focus: 0 10px 18px rgba(0, 0, 0, 0.2);
+  --ginput-shadow-focus: 0 0.625rem 1.125rem rgba(0, 0, 0, 0.2);
 }
 
 .ginput--quiet {
@@ -269,8 +269,8 @@
   --ginput-border: rgba(198, 255, 74, 0.1);
   --ginput-border-hover: rgba(198, 255, 74, 0.2);
   --ginput-border-focus: rgba(198, 255, 74, 0.3);
-  --ginput-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-  --ginput-shadow-focus: 0 16px 30px rgba(0, 0, 0, 0.42);
+  --ginput-shadow: 0 0.75rem 1.625rem rgba(0, 0, 0, 0.34);
+  --ginput-shadow-focus: 0 1rem 1.875rem rgba(0, 0, 0, 0.42);
 }
 
 .ginput--background {
@@ -280,6 +280,6 @@
   --ginput-border: rgba(198, 255, 74, 0.2);
   --ginput-border-hover: rgba(198, 255, 74, 0.34);
   --ginput-border-focus: rgba(198, 255, 74, 0.52);
-  --ginput-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-  --ginput-shadow-focus: 0 18px 34px rgba(0, 0, 0, 0.48);
+  --ginput-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.4);
+  --ginput-shadow-focus: 0 1.125rem 2.125rem rgba(0, 0, 0, 0.48);
 }

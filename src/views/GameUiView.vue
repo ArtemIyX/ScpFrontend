@@ -2383,7 +2383,7 @@ function onChipRemove(value: string): void {
   justify-items: center;
   gap: 0.5rem;
   padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-radius: 0.3125rem;
   background: rgba(255, 255, 255, 0.02);
 }
@@ -2446,7 +2446,7 @@ function onChipRemove(value: string): void {
   gap: 0.75rem;
   min-width: 0;
   padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-radius: 0.3125rem;
   background: rgba(255, 255, 255, 0.02);
 }
@@ -2473,7 +2473,7 @@ function onChipRemove(value: string): void {
   justify-items: center;
   gap: 0.5rem;
   padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-radius: 0.3125rem;
   background: rgba(255, 255, 255, 0.02);
 }
@@ -2493,11 +2493,11 @@ function onChipRemove(value: string): void {
 .skeleton-demo-card__avatar {
   width: 3rem;
   height: 3rem;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background:
     radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.16), transparent 42%),
     rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(198, 255, 74, 0.18);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.18);
 }
 
 .skeleton-demo-card__body {
@@ -2578,7 +2578,7 @@ function onChipRemove(value: string): void {
   background:
     linear-gradient(180deg, rgba(198, 255, 74, 0.16), rgba(0, 0, 0, 0)),
     linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
 }
 
 .card-media--avatar {
@@ -2702,7 +2702,7 @@ function onChipRemove(value: string): void {
 .toast-icon {
   width: 0.875rem;
   height: 0.875rem;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   border: 0.125rem solid currentColor;
   box-shadow: 0 0 0 0.125rem rgba(0, 0, 0, 0.2);
 }

@@ -8,8 +8,8 @@
   background:
     radial-gradient(circle at top, rgba(198, 255, 74, 0.08), transparent 40%),
     rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(0.625rem);
+  -webkit-backdrop-filter: blur(0.625rem);
 }
 
 .gmodal {
@@ -25,14 +25,14 @@
   min-height: 0;
   padding: 1.25rem;
   border-radius: 0.875rem;
-  border: 1px solid rgba(198, 255, 74, 0.18);
+  border: 0.0625rem solid rgba(198, 255, 74, 0.18);
   background:
     linear-gradient(180deg, rgba(12, 16, 20, 0.98), rgba(8, 10, 14, 0.96)),
     rgba(10, 14, 17, 0.9);
   overflow: hidden;
   box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.62),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 2rem 5rem rgba(0, 0, 0, 0.62),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.04);
 }
 
 .gmodal--height-full {
@@ -143,7 +143,7 @@
   border-color: var(--ui-border-strong);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .gmodal__backdrop {
     padding: 1rem;
   }

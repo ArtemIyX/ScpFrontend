@@ -10,7 +10,7 @@
   --gprogress-head-gap: 0.75rem;
   --gprogress-track-height: 0.5rem;
   --gprogress-ring-size: 4.5rem;
-  --gprogress-radius: 999px;
+  --gprogress-radius: 62.4375rem;
 
   display: grid;
   gap: var(--gprogress-gap);
@@ -48,12 +48,12 @@
   position: relative;
   overflow: hidden;
   min-width: 0;
-  border: 1px solid var(--gprogress-track-border);
+  border: 0.0625rem solid var(--gprogress-track-border);
   border-radius: var(--gprogress-radius);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.14)),
     var(--gprogress-track-bg);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.35);
 }
 
 .gprogress__fill {
@@ -65,7 +65,7 @@
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent),
     var(--gprogress-fill);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--gprogress-fill) 28%, transparent);
+  box-shadow: 0 0 1.125rem color-mix(in srgb, var(--gprogress-fill) 28%, transparent);
   transition: width 180ms ease;
 }
 
@@ -93,7 +93,7 @@
   font-size: 0.8125rem;
   letter-spacing: 0.08em;
   color: var(--ui-text-main);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
 }
 
 .gprogress__meta {
@@ -200,7 +200,7 @@
 .gprogress--ring .gprogress__track {
   width: var(--gprogress-ring-size);
   height: var(--gprogress-ring-size);
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   border-color: rgba(255, 255, 255, 0.1);
   background:
     radial-gradient(circle at center, rgba(0, 0, 0, 0.55) 0 55%, transparent 56%),
@@ -216,9 +216,9 @@
   content: '';
   position: absolute;
   inset: 0.3rem;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: rgba(6, 8, 10, 0.88);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0.0625rem 0.0625rem rgba(255, 255, 255, 0.03);
 }
 
 .gprogress--ring .gprogress__ring-text {

@@ -5,7 +5,7 @@
   --gaccordion-text: var(--ui-text-main);
   --gaccordion-muted: var(--ui-text-muted);
   --gaccordion-accent: var(--ui-accent);
-  --gaccordion-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+  --gaccordion-shadow: 0 1rem 2.125rem rgba(0, 0, 0, 0.3);
   --gaccordion-radius: 0.375rem;
   --gaccordion-gap: 0.75rem;
   --gaccordion-padding-x: 0.875rem;
@@ -39,7 +39,7 @@
 .gaccordion__item {
   display: grid;
   gap: 0;
-  border: 1px solid var(--gaccordion-border);
+  border: 0.0625rem solid var(--gaccordion-border);
   border-radius: var(--gaccordion-radius);
   overflow: hidden;
   background: rgba(255, 255, 255, 0.02);
@@ -135,7 +135,7 @@
   gap: 0.75rem;
   min-width: 0;
   padding: 0.875rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 0.0625rem solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.02);
   border-radius: 0.3125rem;
 }

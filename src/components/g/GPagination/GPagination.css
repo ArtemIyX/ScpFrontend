@@ -4,7 +4,7 @@
   --gpagination-text: var(--ui-text-main);
   --gpagination-muted: var(--ui-text-muted);
   --gpagination-accent: var(--ui-accent);
-  --gpagination-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+  --gpagination-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.28);
   --gpagination-radius: 0.375rem;
   --gpagination-gap: 0.5rem;
   --gpagination-pad-x: 0.75rem;
@@ -22,7 +22,7 @@
 
 .gpagination--background {
   padding: var(--gpagination-pad-y) var(--gpagination-pad-x);
-  border: 1px solid var(--gpagination-border);
+  border: 0.0625rem solid var(--gpagination-border);
   border-radius: var(--gpagination-radius);
   background: var(--gpagination-bg);
   box-shadow: var(--gpagination-shadow);
@@ -70,7 +70,7 @@
   min-width: var(--gpagination-page-min);
   height: var(--gpagination-page-min);
   padding: 0 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-radius: 0.25rem;
   background: rgba(255, 255, 255, 0.03);
   color: inherit;
@@ -93,7 +93,7 @@
 .gpagination__page--active {
   border-color: rgba(198, 255, 74, 0.34);
   background: rgba(198, 255, 74, 0.14);
-  box-shadow: 0 0 0 1px rgba(198, 255, 74, 0.14) inset;
+  box-shadow: 0 0 0 0.0625rem rgba(198, 255, 74, 0.14) inset;
 }
 
 .gpagination__page:disabled {
