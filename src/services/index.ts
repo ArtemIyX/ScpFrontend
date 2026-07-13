@@ -1,1 +1,1 @@
-export * from './gameWebSocketBridge'
+export * from './websocketclient'
