@@ -94,11 +94,6 @@ export class ScpWebSocketClient extends WebSocketClient {
     try {
       const envelope = ScpEnvelope.decode(bytes)
 
-      console.info('[scp-websocket] incoming envelope', {
-        messageType: envelope.messageType,
-        messageBytesLength: envelope.messageBytes.length,
-      })
-
       for (const handler of this.envelopeHandlers) {
         handler(envelope)
       }

@@ -1,3 +1,5 @@
+import { MessageType } from '@/proto/gen/scp_webui'
+
 import { ScpWebSocketClient } from './scpwebsocketclient'
 
 let sharedScpWebSocketClient: ScpWebSocketClient | null = null
@@ -11,6 +13,9 @@ export function createScpWebSocketClient(host: string): ScpWebSocketClient {
   }
 
   sharedScpWebSocketClient = new ScpWebSocketClient({ url })
+  sharedScpWebSocketClient.onTypedMessage(MessageType.MESSAGE_PONG, (message) => {
+    console.log(JSON.stringify(message))
+  })
   sharedScpWebSocketClient.onStateChange((state) => {
     if (!sharedScpWebSocketClient || sharedScpWebSocketClient.socketUrl !== url) {
       return

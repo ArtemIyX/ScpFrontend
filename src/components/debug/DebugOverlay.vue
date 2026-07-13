@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { createScpWebSocketClient, getScpWebSocketClient } from '@/services'
+import { MessageType, PingMessage } from '@/proto/gen/scp_webui'
 
 type DebugLogLevel = 'log' | 'info' | 'warn' | 'error' | 'debug'
 
@@ -21,11 +22,20 @@ const debugWindowWidth = ref(36)
 const debugWindowHeight = ref(28)
 const debugWindowShellRef = ref<HTMLElement | null>(null)
 const debugLogViewportRef = ref<HTMLElement | null>(null)
+const activePacketTab = ref('ping')
+const pingCode = ref('1')
 let nextDebugLogId = 1
 let restoreConsole: (() => void) | null = null
 let debugResizeObserver: ResizeObserver | null = null
 
 const socketStateLabel = computed(() => getScpWebSocketClient()?.connectionState ?? 'idle')
+const packetTabs = [
+  {
+    value: 'ping',
+    label: 'Ping',
+    description: 'Send a heartbeat packet.',
+  },
+] as const
 
 function toggleDebugPanel(): void {
   if (isDebugPanelOpen.value) {
@@ -43,6 +53,30 @@ function toggleDebugPanel(): void {
 
 function connectDebugSocket(): void {
   createScpWebSocketClient(debugHost.value)
+}
+
+function sendPingPacket(): void {
+  const client = getScpWebSocketClient()
+  if (!client) {
+    console.warn('[scp-websocket] cannot send ping before socket creation')
+    return
+  }
+
+  const code = Number.parseInt(pingCode.value, 10)
+
+  client.sendTypedMessage(
+    MessageType.MESSAGE_PING,
+    {
+      clientTimeMs: Date.now().toString(),
+      code: Number.isFinite(code) ? code : 0,
+    },
+    PingMessage,
+  )
+
+  console.info('[scp-websocket] ping sent', {
+    clientTimeMs: Date.now().toString(),
+    code: Number.isFinite(code) ? code : 0,
+  })
 }
 
 function pushDebugLog(level: DebugLogLevel, args: unknown[]): void {
@@ -209,6 +243,40 @@ function onDebugPanelClose(): void {
             </div>
           </div>
 
+          <div class="debug-overlay__packet-frame">
+            <GText preset="caps">Packets</GText>
+
+            <GTabs
+              v-model="activePacketTab"
+              :tabs="packetTabs"
+              preset="quiet"
+              width="full"
+              background
+              aria-label="Debug packet tabs"
+            >
+              <template #default>
+                <div v-if="activePacketTab === 'ping'" class="debug-overlay__packet-panel">
+                  <div class="debug-overlay__packet-fields">
+                    <GInput
+                      v-model="pingCode"
+                      label="Ping Code"
+                      helper="Uint32 test value for MESSAGE_PING."
+                      type="number"
+                      min="0"
+                      width="full"
+                      background
+                    />
+                  </div>
+
+                  <div class="debug-overlay__packet-actions">
+                    <GButton preset="accent" background @click="sendPingPacket">Send Ping</GButton>
+                    <GText preset="technical">message_type = MESSAGE_PING</GText>
+                  </div>
+                </div>
+              </template>
+            </GTabs>
+          </div>
+
           <div class="debug-overlay__log-frame">
             <GText preset="caps">Browser Console</GText>
 
@@ -277,7 +345,7 @@ function onDebugPanelClose(): void {
 
 .debug-overlay__content {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 1rem;
   height: 100%;
   min-height: 0;
@@ -298,6 +366,29 @@ function onDebugPanelClose(): void {
 
 .debug-overlay__status {
   opacity: 0.82;
+}
+
+.debug-overlay__packet-frame {
+  display: grid;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.debug-overlay__packet-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.debug-overlay__packet-fields {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.debug-overlay__packet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .debug-overlay__log-frame {
