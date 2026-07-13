@@ -164,7 +164,7 @@
 
                 <GCombo
                   v-model="dlssQuality"
-                  :options="dlssQualityOptions"
+                  :options="upscaleQualityOptions"
                   :disabled="upscaleQualityDisabled"
                   width="full"
                   preset="quiet"
@@ -173,34 +173,6 @@
               </GField>
             </div>
           </div>
-        </GField>
-
-        <GField
-          label="View Distance Quality"
-          helper="Affects how far geometry and scene detail remain fully resolved."
-          width="full"
-          class="graphics-settings__feature-field"
-        >
-          <template #head>
-            <GTooltip
-              :delay="hoverHelpDelay"
-              placement="top"
-              size="lg"
-              preset="quiet"
-              :text="graphicsHelp.viewDistanceQuality"
-              aria-label="View distance quality help"
-            >
-              <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
-            </GTooltip>
-          </template>
-
-          <GRail
-            v-model="viewDistanceQuality"
-            :items="scalabilityItems"
-            width="full"
-            preset="quiet"
-            aria-label="View distance quality"
-          />
         </GField>
 
         <GField
@@ -232,8 +204,8 @@
         </GField>
 
         <GField
-          label="Material Quality Level"
-          helper="Switches between reduced and full material feature paths."
+          label="View Distance Quality"
+          helper="Affects how far geometry and scene detail remain fully resolved."
           width="full"
           class="graphics-settings__feature-field"
         >
@@ -243,21 +215,25 @@
               placement="top"
               size="lg"
               preset="quiet"
-              :text="graphicsHelp.materialQualityLevel"
-              aria-label="Material quality level help"
+              :text="graphicsHelp.viewDistanceQuality"
+              aria-label="View distance quality help"
             >
               <GBadge preset="quiet" variant="outline" size="sm" class="graphics-settings__help-badge">?</GBadge>
             </GTooltip>
           </template>
 
           <GRail
-            v-model="materialQualityLevel"
-            :items="materialQualityItems"
+            v-model="viewDistanceQuality"
+            :items="scalabilityItems"
             width="full"
             preset="quiet"
-            aria-label="Material quality level"
+            aria-label="View distance quality"
           />
         </GField>
+
+        
+
+        
       </div>
     </section>
 

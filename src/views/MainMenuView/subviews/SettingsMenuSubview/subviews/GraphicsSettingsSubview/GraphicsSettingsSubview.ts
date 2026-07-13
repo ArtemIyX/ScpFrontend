@@ -527,6 +527,11 @@ export default defineComponent({
       () => upscaleMode.value !== 'off' || frameGeneration.value !== 'off'
     )
     const upscaleQualityDisabled = computed(() => upscaleMode.value === 'off')
+    const upscaleQualityOptions = computed(() =>
+      upscaleMode.value === 'fsr'
+        ? dlssQualityOptions.filter((option) => option.value !== 'dlaa')
+        : dlssQualityOptions
+    )
     const hoverHelpDelay = 600
 
     const graphicsHelp = {
@@ -563,6 +568,16 @@ export default defineComponent({
       (locked) => {
         if (locked) {
           antiAliasingMethod.value = 'taa'
+        }
+      },
+      { immediate: true },
+    )
+
+    watch(
+      upscaleMode,
+      (mode) => {
+        if (mode === 'fsr' && dlssQuality.value === 'dlaa') {
+          dlssQuality.value = 'quality'
         }
       },
       { immediate: true },
@@ -760,7 +775,7 @@ export default defineComponent({
       upscaleMode,
       upscaleModeOptions,
       upscaleQualityDisabled,
-      dlssQualityOptions,
+      upscaleQualityOptions,
       applyPostProcessPreset,
       applyShadowPreset,
       applyTexturePreset,
