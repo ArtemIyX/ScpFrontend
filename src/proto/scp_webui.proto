@@ -1,0 +1,32 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+
+
+package scp.webui.v1;
+
+message PingMessage
+{
+  uint64 client_time_ms = 1;
+  uint32 code = 2;
+}
+
+message PongMessage
+{
+  uint64 client_time_ms = 1;
+  uint64 server_time_ms = 2;
+  uint32 code = 3;
+}
+
+message ScpEnvelope
+{
+  MessageType message_type = 1;
+  bytes message_bytes = 2;
+}
+
+enum MessageType
+{
+  MESSAGE_INVALID = 0;
+  MESSAGE_PING = 1;
+  MESSAGE_PONG = 2;
+}
+

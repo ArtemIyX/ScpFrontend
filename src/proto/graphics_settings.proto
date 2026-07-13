@@ -1,0 +1,212 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+
+enum GraphicsSettingRequestType
+{
+  RESOLUTION_SCALE = 0;
+  AA = 1;
+  VIEW_DISTANCE = 2;
+  AA_QUALITY = 3;
+  PP_QUALITY = 4;
+  SHADOWS_QUALITY = 5;
+  TEXTURE_QUALITY = 6;
+  EFFECTS_QUALITY = 7;
+}
+
+message GraphicsSettingsRequest {
+  GraphicsSettingRequestType request_type = 1;
+}
+
+enum GraphicsQuality
+{
+  GRAPHICS_QUALITY_VERY_LOW = 0;
+  GRAPHICS_QUALITY_LOW = 1;
+  GRAPHICS_QUALITY_MEDIUM = 2;
+  GRAPHICS_QUALITY_HIGH = 3;
+  GRAPHICS_QUALITY_ULTRA = 4;
+}
+
+enum GraphicsQualityDetailed
+{
+  GRAPHICS_QUALITY_DETAILED_LOW = 0;
+  GRAPHICS_QUALITY_DETAILED_MEDIUM = 1;
+  GRAPHICS_QUALITY_DETAILED_HIGH = 2;
+  GRAPHICS_QUALITY_DETAILED_ULTRA = 3;
+  GRAPHICS_QUALITY_DETAILED_CUSTOM = 4;
+}
+
+enum AntiAliasingType
+{
+  NONE = 0;
+  FXAA = 1;
+  TAA = 2;
+  MSAA = 3;
+  TSR = 4;
+  SMAA = 5;
+}
+
+enum FrameGenScale
+{
+  GEN_OFF = 0;
+  GEN_2 = 1;
+  GEN_3 = 2;
+  GEN_4 = 3;
+}
+
+enum UpscaleMode
+{
+  OFF = 0;
+  DLSS = 1;
+  FSR = 2;
+}
+
+enum UpscaleQuality
+{
+  DLAA = 0;
+  ULTRA_QUALITY = 1;
+  QUALITY = 2;
+  BALANCED = 3;
+  PERFORMANCE = 4;
+  ULTRA_PERFORMANCE = 5;
+}
+
+message AntiAliasingResponse
+{
+  AntiAliasingType aa_method = 1;
+  FrameGenScale fg = 2;
+  UpscaleMode upscaler = 3;
+  UpscaleQuality quality = 4;
+}
+
+message AntialiasingMethodSetRequest
+{
+  AntiAliasingType aa_method = 1;
+}
+
+message FrameGenSetRequest
+{
+  FrameGenScale fg = 1;
+}
+
+message UpscaleModeSetRequest
+{
+  UpscaleMode upscaler = 1;
+}
+
+message UpscaleQualitySetRequest
+{
+  UpscaleQuality quality = 1;
+}
+
+message AntiAliasingQualitySetRequest
+{
+  GraphicsQuality quality = 1;
+}
+
+message ViewDistanceQualitySetRequest
+{
+  GraphicsQuality quality = 1;
+}
+
+message ShadowQualitySetRequest
+{
+  GraphicsQualityDetailed quality_detailed = 1;
+}
+
+message TextureQualitySetRequest
+{
+  GraphicsQualityDetailed quality_detailed = 1;
+}
+
+message EffectsQualitySetRequest
+{
+  GraphicsQualityDetailed quality_detailed = 1;
+}
+
+message PostProcessQualityResponse
+{
+  GraphicsQualityDetailed quality_detailed = 1;
+  uint32 motion_blur_quality = 2;
+  int32 blur_gbuffer = 3;
+  uint32 ambient_occlusion_levels = 4;
+  float ambient_occlusion_radius_scale = 5;
+  uint32 depth_of_field_quality = 6;
+  uint32 render_target_pool_min = 7;
+  uint32 lens_flare_quality = 8;
+  uint32 scene_color_fringe_quality = 9;
+  uint32 eye_adaptation_quality = 10;
+  uint32 bloom_quality = 11;
+  uint32 fast_blur_threshold = 12;
+  uint32 upscale_quality = 13;
+  uint32 tonemapper_grain_quantization = 14;
+}
+
+message TextureQualityResponse
+{
+  GraphicsQualityDetailed quality_detailed = 1;
+  float streaming_mip_bias = 2;
+  uint32 max_anisotropy = 3;
+  uint32 streaming_pool_size = 4;
+}
+
+message EffectsQualityResponse
+{
+  GraphicsQualityDetailed quality_detailed = 1;
+  uint32 light_function_quality = 2;
+  uint32 shadow_quality = 3;
+  uint32 shadow_csm_max_cascades = 4;
+  uint32 shadow_max_resolution = 5;
+  float shadow_radius_threshold = 6;
+  float shadow_distance_scale = 7;
+  uint32 shadow_csm_transition_scale = 8;
+}
+
+enum SettingType {
+  SETTING_TYPE_UNSPECIFIED = 0;
+
+  SETTING_TYPE_MOTION_BLUR_QUALITY = 1;
+  SETTING_TYPE_BLUR_GBUFFER = 2;
+  SETTING_TYPE_AMBIENT_OCCLUSION_LEVELS = 3;
+  SETTING_TYPE_AMBIENT_OCCLUSION_RADIUS_SCALE = 4;
+  SETTING_TYPE_DEPTH_OF_FIELD_QUALITY = 5;
+  SETTING_TYPE_RENDER_TARGET_POOL_MIN = 6;
+  SETTING_TYPE_LENS_FLARE_QUALITY = 7;
+  SETTING_TYPE_SCENE_COLOR_FRINGE_QUALITY = 8;
+  SETTING_TYPE_EYE_ADAPTATION_QUALITY = 9;
+  SETTING_TYPE_BLOOM_QUALITY = 10;
+  SETTING_TYPE_FAST_BLUR_THRESHOLD = 11;
+  SETTING_TYPE_UPSCALE_QUALITY = 12;
+  SETTING_TYPE_TONEMAPPER_GRAIN_QUANTIZATION = 13;
+
+  SETTING_TYPE_LIGHT_FUNCTION_QUALITY = 14;
+  SETTING_TYPE_SHADOW_QUALITY = 15;
+  SETTING_TYPE_SHADOW_CSM_MAX_CASCADES = 16;
+  SETTING_TYPE_SHADOW_MAX_RESOLUTION = 17;
+  SETTING_TYPE_SHADOW_RADIUS_THRESHOLD = 18;
+  SETTING_TYPE_SHADOW_DISTANCE_SCALE = 19;
+  SETTING_TYPE_SHADOW_CSM_TRANSITION_SCALE = 20;
+
+  SETTING_TYPE_STREAMING_MIP_BIAS = 21;
+  SETTING_TYPE_MAX_ANISOTROPY = 22;
+  SETTING_TYPE_STREAMING_POOL_SIZE = 23;
+}
+
+message GraphicsSettingValue {
+  SettingType type = 1;
+
+  oneof value {
+    uint32 uint32_value = 2;
+    int32 int32_value = 3;
+    float float_value = 4;
+  }
+}
+
+message GraphicsSettingValueSingleRequest
+{
+  GraphicsSettingValue value = 1;
+}
+
+message GraphicsSettingValueMultipleRequest
+{
+  repeated GraphicsSettingValue values = 1;
+}

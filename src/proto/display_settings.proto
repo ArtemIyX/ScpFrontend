@@ -1,0 +1,127 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+
+enum DisplaySettingRequestType
+{
+  FULLSCREEN_MODE = 0;
+  RESOLUTION = 1;
+  VSYNC = 2;
+  FRAME_RATE_LIMIT = 3;
+  HDR = 4;
+  ACCESSIBILITY = 5;
+  FIELD_OF_VIEW = 6;
+  CAMERA = 7;
+}
+
+message DisplaySettingsRequest {
+  DisplaySettingRequestType request_type = 1;
+}
+
+enum FullscreenMode
+{
+  FULLSCREEN = 0;
+  WINDOWED_FULLSCREEN = 1;
+  WINDOWED = 2;
+}
+
+message Resolution
+{
+  uint32 x = 1;
+  uint32 y = 2;
+}
+
+message ResolutionResponse
+{
+  repeated Resolution resolutions = 1;
+}
+
+message VSyncContent
+{
+  bool enabled = 1;
+}
+
+message FrameLimitContent
+{
+  bool flag = 1;
+  uint32 limit = 2;
+}
+
+enum HdrOutput
+{
+  SRGB = 0;
+  REC = 1;
+  LDR = 2;
+  ACES_1000 = 3;
+  ACES_2000 = 4;
+  ACES_1000_ScRGB = 5;
+  ACES_2000_ScRGB = 6;
+}
+
+enum ColorGamut
+{
+  REC_709 = 0;
+  DCI = 1;
+  REC_2020 = 2;
+  ACES = 3;
+  ACESsg = 4;
+}
+
+message HdrResponse
+{
+  bool supported = 1;
+  bool enabled = 2;
+  HdrOutput output_device = 3;
+  ColorGamut color_gamut = 4;
+}
+
+message AccessibilityResponse
+{
+  uint32 brightness = 1;
+  uint32 gamma = 2;
+  uint32 contrast = 3;
+}
+
+message CameraResponse
+{
+  uint32 fov = 1;
+  uint32 smoothing = 2;
+  uint32 shake = 3;
+  uint32 bob = 4;
+}
+
+message ResolutionSetRequest
+{
+  Resolution resolution = 1;
+}
+
+message HdrEnableSetRequest
+{
+  bool flag = 1;
+}
+
+message HdrOutputDeviceSetRequest
+{
+  HdrOutput output_device = 1;
+}
+
+message HdrColorGamutSetRequest
+{
+  ColorGamut color_gamut = 1;
+}
+
+enum DisplaySliderType
+{
+  BRIGHTNESS = 0;
+  GAMMA = 1;
+  CONTRAST = 2;
+  FOV = 3;
+  CAMERA_SMOOTHING = 4;
+  SCREEN_SHAKE_INTENSITY = 5;
+  HEAD_BOBBING_INTENSITY = 6;
+}
+
+message DisplaySliderSetRequest
+{
+  DisplaySliderType slider_type = 1;
+  uint32 value = 2;
+}

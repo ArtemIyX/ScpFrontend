@@ -1,0 +1,50 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+
+enum ControlsSettingRequestType
+{
+  CONTROLS_MOUSE_SENSITIVITY = 0;
+  CONTROLS_MOVEMENT = 1;
+  CONTROLS_CHARACTER = 2;
+}
+
+message ControlsSettingsRequest {
+  ControlsSettingRequestType request_type = 1;
+}
+
+message MouseSensitivityResponse {
+  float sensitivity = 1;
+}
+message MouseSensitivitySetRequest {
+  float sensitivity = 1;
+}
+
+message ControlsMovementResponse {
+  bool invert_y = 1;
+  bool hold_sprint = 2;
+  bool hold_crouch = 3;
+}
+
+message ControlsCharacterResponse
+{
+  bool hold_to_select_item = 1;
+  bool auto_switch = 2;
+  bool hold_inventory = 3;
+}
+
+enum ControlsCheckboxType
+{
+  CONTROLS_INVERT_Y = 0;
+  CONTROLS_HOLD_SPRINT = 1;
+  CONTROLS_HOLD_CROUCH = 2;
+  CONTROLS_HOLD_TO_SELECT_ITEM = 3;
+  CONTROLS_AUTO_SWITCH = 4;
+  CONTROLS_HOLD_INVENTORY = 5;
+}
+
+message ControlCheckboxSetRequest
+{
+  ControlsCheckboxType control_type = 1;
+  bool checkbox_value = 2;
+}
+

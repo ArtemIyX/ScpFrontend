@@ -1,0 +1,67 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+
+enum AudioSettingRequestType
+{
+  PLAYBACK_DEVICE = 0;
+  CAPTURE_DEVICE = 1;
+  VOICE_CHAT = 2;
+  MIXER = 3;
+}
+message AudioSettingsRequest {
+  AudioSettingRequestType request_type = 1;
+}
+
+message AudioStringArray
+{
+  repeated string arr = 1;
+  uint32 selected = 2;
+}
+
+message AudioPlaybackDevicesResponse
+{
+  AudioStringArray result = 1;
+}
+
+message AudioCaptureDevicesResponse
+{
+  AudioStringArray result = 1;
+}
+
+enum AudioTalkMode
+{
+  PUSH_TO_TALK = 0;
+  VOICE_ACTIVATION = 1;
+}
+
+message AudioVoiceChatResponse
+{
+  AudioTalkMode talk_mode = 1;
+  uint32 threshold = 2;
+}
+
+message AudioMixerResponse
+{
+  uint32 master = 1;
+  uint32 ambient = 2;
+  uint32 ui = 3;
+  uint32 music = 4;
+  uint32 voice = 5;
+  uint32 sfx = 6;
+}
+
+enum AudioMixerType
+{
+  AUDIO_MASTER = 0;
+  AUDIO_AMBIENT = 1;
+  AUDIO_UI = 2;
+  AUDIO_MUSIC = 3;
+  AUDIO_VOICE = 4;
+  AUDIO_SFX = 5;
+}
+
+message AudioMixerSetRequest
+{
+  AudioMixerType type = 1;
+  uint32 value = 2;
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+
+message KeyBindingSettingVisualData
+{
+  string unique_id = 1;
+  string display_key = 2;
+  string key = 3;
+}
+message KeyBindingSettingCategory
+{
+  string category_name = 1;
+  repeated KeyBindingSettingVisualData key_bindings = 2;
+}
+
+// Retrieve all categories with display_key for localization
+message KeyBindingsSettingsResponse
+{
+  repeated KeyBindingSettingCategory categories = 1;
+}
+
+message KeyBindingSettingData
+{
+  string unique_id = 1;
+  string key = 2;
+}
+
+// Set key_bindings -> new values
+message KeyBindingsSettingsSetRequest
+{
+  repeated KeyBindingSettingData key_bindings = 1;
+}
