@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import { customComponentsPlugin } from './components/register'
 import router from './router'
+import { installScpWebSocketWindowApi } from './services'
 import './styles/global.css'
 import './styles/fonts.css'
 import './styles/colors.css'
@@ -11,6 +12,8 @@ import './styles/colors.css'
 document.addEventListener('contextmenu', (event) => {
   event.preventDefault()
 })
+
+installScpWebSocketWindowApi()
 
 const app = createApp(App)
 
