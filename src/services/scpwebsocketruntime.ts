@@ -4,12 +4,40 @@ let sharedScpWebSocketClient: ScpWebSocketClient | null = null
 
 export function createScpWebSocketClient(host: string): ScpWebSocketClient {
   const url = normalizeSocketUrl(host)
+  let hasOpened = false
 
   if (sharedScpWebSocketClient) {
     sharedScpWebSocketClient.disconnect()
   }
 
   sharedScpWebSocketClient = new ScpWebSocketClient({ url })
+  sharedScpWebSocketClient.onStateChange((state) => {
+    if (!sharedScpWebSocketClient || sharedScpWebSocketClient.socketUrl !== url) {
+      return
+    }
+
+    if (state === 'open') {
+      hasOpened = true
+      console.info('[scp-websocket] connected', url)
+      return
+    }
+
+    if (state === 'closed') {
+      if (hasOpened) {
+        console.warn('[scp-websocket] closed', url)
+      } else {
+        console.error('[scp-websocket] failed to connect', url)
+      }
+    }
+  })
+  sharedScpWebSocketClient.onError((error) => {
+    if (!sharedScpWebSocketClient || sharedScpWebSocketClient.socketUrl !== url) {
+      return
+    }
+
+    console.error('[scp-websocket] error', url, error)
+  })
+  console.info('[scp-websocket] connecting', url)
   sharedScpWebSocketClient.connect()
 
   return sharedScpWebSocketClient

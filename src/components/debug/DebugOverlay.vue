@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { createScpWebSocketClient, getScpWebSocketClient } from '@/services'
 
@@ -15,17 +15,30 @@ type DebugLogEntry = {
 type ConsoleMethodName = 'log' | 'info' | 'warn' | 'error' | 'debug'
 
 const isDebugPanelOpen = ref(false)
-const debugHost = ref('localhost')
+const debugHost = ref('localhost:18181')
 const debugLogs = ref<DebugLogEntry[]>([])
 const debugWindowWidth = ref(36)
 const debugWindowHeight = ref(28)
+const debugWindowShellRef = ref<HTMLElement | null>(null)
+const debugLogViewportRef = ref<HTMLElement | null>(null)
 let nextDebugLogId = 1
 let restoreConsole: (() => void) | null = null
+let debugResizeObserver: ResizeObserver | null = null
 
 const socketStateLabel = computed(() => getScpWebSocketClient()?.connectionState ?? 'idle')
 
 function toggleDebugPanel(): void {
+  if (isDebugPanelOpen.value) {
+    onDebugPanelClose()
+  }
+
   isDebugPanelOpen.value = !isDebugPanelOpen.value
+
+  if (isDebugPanelOpen.value) {
+    requestAnimationFrame(() => {
+      onDebugPanelOpen()
+    })
+  }
 }
 
 function connectDebugSocket(): void {
@@ -86,8 +99,7 @@ function installConsoleCapture(): () => void {
   }
 }
 
-function onDebugWindowResize(event: Event): void {
-  const element = event.target as HTMLElement | null
+function syncDebugWindowSize(element: HTMLElement | null): void {
   if (!element) {
     return
   }
@@ -99,12 +111,47 @@ function onDebugWindowResize(event: Event): void {
 onMounted(() => {
   restoreConsole = installConsoleCapture()
   pushDebugLog('info', ['Debug console ready.'])
+
+  if (typeof ResizeObserver !== 'undefined') {
+    debugResizeObserver = new ResizeObserver(() => {
+      syncDebugWindowSize(debugWindowShellRef.value)
+    })
+  }
 })
 
 onBeforeUnmount(() => {
   restoreConsole?.()
   restoreConsole = null
+  debugResizeObserver?.disconnect()
+  debugResizeObserver = null
 })
+
+watch(
+  () => debugLogs.value.length,
+  async () => {
+    await nextTick()
+
+    const viewport = debugLogViewportRef.value
+    if (!viewport) {
+      return
+    }
+
+    viewport.scrollTop = viewport.scrollHeight
+  },
+)
+
+function onDebugPanelOpen(): void {
+  syncDebugWindowSize(debugWindowShellRef.value)
+
+  if (debugResizeObserver && debugWindowShellRef.value) {
+    debugResizeObserver.disconnect()
+    debugResizeObserver.observe(debugWindowShellRef.value)
+  }
+}
+
+function onDebugPanelClose(): void {
+  debugResizeObserver?.disconnect()
+}
 </script>
 
 <template>
@@ -121,12 +168,12 @@ onBeforeUnmount(() => {
 
     <div
       v-if="isDebugPanelOpen"
+      ref="debugWindowShellRef"
       class="debug-overlay__window-shell"
       :style="{
         width: `${debugWindowWidth}rem`,
         height: `${debugWindowHeight}rem`,
       }"
-      @mouseup="onDebugWindowResize"
     >
       <GWindow
         class="debug-overlay__window"
@@ -137,7 +184,12 @@ onBeforeUnmount(() => {
         closable
         width="full"
         height="full"
-        @close="toggleDebugPanel"
+        @close="
+          () => {
+            onDebugPanelClose()
+            toggleDebugPanel()
+          }
+        "
       >
         <div class="debug-overlay__content">
           <div class="debug-overlay__controls">
@@ -160,7 +212,7 @@ onBeforeUnmount(() => {
           <div class="debug-overlay__log-frame">
             <GText preset="caps">Browser Console</GText>
 
-            <GScroller class="debug-overlay__log-scroller">
+            <div ref="debugLogViewportRef" class="debug-overlay__log-scroller">
               <div class="debug-overlay__log-list">
                 <div
                   v-for="entry in debugLogs"
@@ -173,7 +225,7 @@ onBeforeUnmount(() => {
                   </GText>
                 </div>
               </div>
-            </GScroller>
+            </div>
           </div>
         </div>
       </GWindow>
@@ -225,10 +277,11 @@ onBeforeUnmount(() => {
 
 .debug-overlay__content {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 1rem;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .debug-overlay__controls {
@@ -249,29 +302,50 @@ onBeforeUnmount(() => {
 
 .debug-overlay__log-frame {
   display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 0.75rem;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.5rem;
   min-height: 0;
+  overflow: hidden;
 }
 
 .debug-overlay__log-scroller {
   height: 100%;
   min-height: 0;
+  min-width: 0;
+  overflow: auto;
   border: 0.0625rem solid rgba(210, 226, 214, 0.12);
   border-radius: 0.5rem;
   background: rgba(3, 6, 7, 0.72);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(198, 255, 74, 0.45) rgba(255, 255, 255, 0.04);
+  overscroll-behavior: contain;
+}
+
+.debug-overlay__log-scroller::-webkit-scrollbar {
+  width: 0.625rem;
+}
+
+.debug-overlay__log-scroller::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.debug-overlay__log-scroller::-webkit-scrollbar-thumb {
+  background: rgba(198, 255, 74, 0.35);
+  border-radius: 62.4375rem;
 }
 
 .debug-overlay__log-list {
   display: grid;
-  gap: 0.5rem;
-  padding: 0.875rem;
+  align-content: start;
+  gap: 0.25rem;
+  padding: 0.5rem;
 }
 
 .debug-overlay__log-entry {
-  padding: 0.5rem 0.625rem;
-  border-left: 0.1875rem solid rgba(192, 205, 198, 0.22);
-  background: rgba(255, 255, 255, 0.02);
+  padding: 0.3125rem 0.5rem;
+  border-left: 0.125rem solid rgba(192, 205, 198, 0.22);
+  background: rgba(255, 255, 255, 0.018);
+  border-radius: 0.25rem;
 }
 
 .debug-overlay__log-entry--info {
@@ -291,6 +365,9 @@ onBeforeUnmount(() => {
 }
 
 .debug-overlay__log-line {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.25;
   white-space: pre-wrap;
   word-break: break-word;
 }

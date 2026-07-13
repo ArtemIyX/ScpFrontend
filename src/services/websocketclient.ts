@@ -33,6 +33,10 @@ export class WebSocketClient {
     return this.state
   }
 
+  get socketUrl(): string {
+    return this.url
+  }
+
   connect(): void {
     if (this.socket && this.socket.readyState !== WebSocket.CLOSED) {
       return

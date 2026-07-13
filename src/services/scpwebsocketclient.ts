@@ -91,26 +91,41 @@ export class ScpWebSocketClient extends WebSocketClient {
   }
 
   private handleEnvelopeBytes(bytes: Uint8Array): void {
-    const envelope = ScpEnvelope.decode(bytes)
+    try {
+      const envelope = ScpEnvelope.decode(bytes)
 
-    for (const handler of this.envelopeHandlers) {
-      handler(envelope)
-    }
+      console.info('[scp-websocket] incoming envelope', {
+        messageType: envelope.messageType,
+        messageBytesLength: envelope.messageBytes.length,
+      })
 
-    const codec = this.codecs.get(envelope.messageType)
-    const handlers = this.typedHandlers.get(envelope.messageType)
-
-    if (!codec || !handlers || handlers.size === 0) {
-      for (const handler of this.unknownMessageHandlers) {
+      for (const handler of this.envelopeHandlers) {
         handler(envelope)
       }
-      return
-    }
 
-    const decodedMessage = codec.decode(envelope.messageBytes)
+      const codec = this.codecs.get(envelope.messageType)
+      const handlers = this.typedHandlers.get(envelope.messageType)
 
-    for (const handler of handlers) {
-      handler(decodedMessage, envelope)
+      if (!codec || !handlers || handlers.size === 0) {
+        for (const handler of this.unknownMessageHandlers) {
+          handler(envelope)
+        }
+        return
+      }
+
+      const decodedMessage = codec.decode(envelope.messageBytes)
+
+      for (const handler of handlers) {
+        handler(decodedMessage, envelope)
+      }
+    } catch (error) {
+      console.error(
+        '[scp-websocket] failed to decode envelope bytes',
+        Array.from(bytes.slice(0, 32))
+          .map((value) => value.toString(16).padStart(2, '0'))
+          .join(' '),
+      )
+      throw error
     }
   }
 }
