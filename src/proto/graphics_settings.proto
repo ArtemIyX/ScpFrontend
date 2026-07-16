@@ -1,22 +1,10 @@
 syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
+package scp.webui.v1;
 
-enum GraphicsSettingRequestType
-{
-  RESOLUTION_SCALE = 0;
-  AA = 1;
-  VIEW_DISTANCE = 2;
-  AA_QUALITY = 3;
-  PP_QUALITY = 4;
-  SHADOWS_QUALITY = 5;
-  TEXTURE_QUALITY = 6;
-  EFFECTS_QUALITY = 7;
-}
 
-message GraphicsSettingsRequest {
-  GraphicsSettingRequestType request_type = 1;
-}
 
+// Coarse preset buckets for settings that expose the full very-low to ultra range.
 enum GraphicsQuality
 {
   GRAPHICS_QUALITY_VERY_LOW = 0;
@@ -26,6 +14,7 @@ enum GraphicsQuality
   GRAPHICS_QUALITY_ULTRA = 4;
 }
 
+// Preset buckets for settings that use low to ultra plus a custom mode.
 enum GraphicsQualityDetailed
 {
   GRAPHICS_QUALITY_DETAILED_LOW = 0;
@@ -35,94 +24,121 @@ enum GraphicsQualityDetailed
   GRAPHICS_QUALITY_DETAILED_CUSTOM = 4;
 }
 
+// Supported anti-aliasing methods.
 enum AntiAliasingType
 {
-  NONE = 0;
-  FXAA = 1;
-  TAA = 2;
-  MSAA = 3;
-  TSR = 4;
-  SMAA = 5;
+  AA_TYPE_NONE = 0;
+  AA_TYPE_FXAA = 1;
+  AA_TYPE_TAA = 2;
+  AA_TYPE_MSAA = 3;
+  AA_TYPE_TSR = 4;
+  AA_TYPE_SMAA = 5;
 }
 
+// Frame-generation multiplier options.
 enum FrameGenScale
 {
-  GEN_OFF = 0;
-  GEN_2 = 1;
-  GEN_3 = 2;
-  GEN_4 = 3;
+  FG_GEN_OFF = 0;
+  FG_GEN_2 = 1;
+  FG_GEN_3 = 2;
+  FG_GEN_4 = 3;
 }
 
+// Supported temporal upscaler implementations.
 enum UpscaleMode
 {
-  OFF = 0;
-  DLSS = 1;
-  FSR = 2;
+  UPSCALE_MODE_OFF = 0;
+  UPSCALE_MODE_DLSS = 1;
+  UPSCALE_MODE_FSR = 2;
 }
 
+// Common quality presets used by supported upscalers.
 enum UpscaleQuality
 {
-  DLAA = 0;
-  ULTRA_QUALITY = 1;
-  QUALITY = 2;
-  BALANCED = 3;
-  PERFORMANCE = 4;
-  ULTRA_PERFORMANCE = 5;
+  UPSCALE_QUAL_DLAA = 0;
+  UPSCALE_QUAL_ULTRA_QUALITY = 1;
+  UPSCALE_QUAL_QUALITY = 2;
+  UPSCALE_QUAL_BALANCED = 3;
+  UPSCALE_QUAL_PERFORMANCE = 4;
+  UPSCALE_QUAL_ULTRA_PERFORMANCE = 5;
 }
 
+message ResolutionScaleResponse
+{
+  uint32 resolution_scale = 1;
+}
+
+message ResolutionScaleSetRequest
+{
+  uint32 resolution_scale = 1;
+}
+
+
+// Current anti-aliasing, frame generation, and upscaler selections.
 message AntiAliasingResponse
 {
   AntiAliasingType aa_method = 1;
-  FrameGenScale fg = 2;
-  UpscaleMode upscaler = 3;
-  UpscaleQuality quality = 4;
+  GraphicsQuality aa_quality = 2;
+  FrameGenScale fg = 3;
+  UpscaleMode upscaler = 4;
+  UpscaleQuality upscaler_quality = 5;
 }
 
+// Sets the active anti-aliasing method.
 message AntialiasingMethodSetRequest
 {
   AntiAliasingType aa_method = 1;
 }
 
+// Sets the active frame-generation mode.
 message FrameGenSetRequest
 {
   FrameGenScale fg = 1;
 }
 
+// Sets the active upscaler implementation.
 message UpscaleModeSetRequest
 {
   UpscaleMode upscaler = 1;
 }
 
+// Sets the quality preset for the active upscaler.
 message UpscaleQualitySetRequest
 {
   UpscaleQuality quality = 1;
 }
 
+// Sets the anti-aliasing quality preset.
 message AntiAliasingQualitySetRequest
 {
   GraphicsQuality quality = 1;
 }
 
+// Sets the view distance quality preset.
 message ViewDistanceQualitySetRequest
 {
   GraphicsQuality quality = 1;
 }
 
+// Sets the shadow quality preset.
 message ShadowQualitySetRequest
 {
   GraphicsQualityDetailed quality_detailed = 1;
 }
 
+// Sets the texture quality preset.
 message TextureQualitySetRequest
 {
   GraphicsQualityDetailed quality_detailed = 1;
 }
 
+// Sets the effects quality preset.
 message EffectsQualitySetRequest
 {
   GraphicsQualityDetailed quality_detailed = 1;
 }
 
+// Post-processing quality preset plus its underlying tunable values.
 message PostProcessQualityResponse
 {
   GraphicsQualityDetailed quality_detailed = 1;
@@ -141,6 +157,7 @@ message PostProcessQualityResponse
   uint32 tonemapper_grain_quantization = 14;
 }
 
+// Texture quality preset plus its underlying tunable values.
 message TextureQualityResponse
 {
   GraphicsQualityDetailed quality_detailed = 1;
@@ -149,7 +166,8 @@ message TextureQualityResponse
   uint32 streaming_pool_size = 4;
 }
 
-message EffectsQualityResponse
+// Effects quality preset plus its underlying tunable values.
+message ShadowQualityResponse
 {
   GraphicsQualityDetailed quality_detailed = 1;
   uint32 light_function_quality = 2;
@@ -161,7 +179,22 @@ message EffectsQualityResponse
   uint32 shadow_csm_transition_scale = 8;
 }
 
-enum SettingType {
+message EffectsQualityResponse
+{
+  GraphicsQualityDetailed quality_detailed = 1;
+  uint32 translucency_lighting_volume_dim = 2;
+  uint32 refraction_quality = 3;
+  uint32 ssr = 4;
+  uint32 scene_color_format = 5;
+  uint32 detail_mode = 6;
+  uint32 translucency_volume_blur = 7;
+  uint32 material_quality_level = 8;
+}
+
+
+// Identifies a specific low-level graphics tunable for custom set requests.
+enum SettingType
+{
   SETTING_TYPE_UNSPECIFIED = 0;
 
   SETTING_TYPE_MOTION_BLUR_QUALITY = 1;
@@ -189,9 +222,19 @@ enum SettingType {
   SETTING_TYPE_STREAMING_MIP_BIAS = 21;
   SETTING_TYPE_MAX_ANISOTROPY = 22;
   SETTING_TYPE_STREAMING_POOL_SIZE = 23;
+
+  SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM = 24;
+  SETTING_TYPE_REFRACTION_QUALITY = 25;
+  SETTING_TYPE_SSR = 26;
+  SETTING_TYPE_SCENE_COLOR_FORMAT = 27;;
+  SETTING_TYPE_DETAIL_MODE = 28;
+  SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR = 29;
+  SETTING_TYPE_MATERIAL_QUALITY_LEVEL = 30;
 }
 
-message GraphicsSettingValue {
+// Carries a single typed low-level graphics setting value.
+message GraphicsSettingValue
+{
   SettingType type = 1;
 
   oneof value {
@@ -201,12 +244,69 @@ message GraphicsSettingValue {
   }
 }
 
+// Applies one low-level graphics setting override.
 message GraphicsSettingValueSingleRequest
 {
   GraphicsSettingValue value = 1;
 }
 
+// Applies multiple low-level graphics setting overrides in one request.
 message GraphicsSettingValueMultipleRequest
 {
   repeated GraphicsSettingValue values = 1;
+}
+
+// Identifies which graphics settings group the client wants to fetch.
+enum GraphicsSettingRequestType
+{
+  GRAPHICS_SETTING_RESOLUTION_SCALE = 0;
+  GRAPHICS_SETTING_AA = 1;
+  GRAPHICS_SETTING_VIEW_DISTANCE = 2;
+  GRAPHICS_SETTING_PP_QUALITY = 3;
+  GRAPHICS_SETTING_SHADOWS_QUALITY = 4;
+  GRAPHICS_SETTING_TEXTURE_QUALITY = 5;
+  GRAPHICS_SETTING_EFFECTS_QUALITY = 6;
+}
+
+
+// Requests one graphics settings section from the backend.
+message RequestGetGraphicsSettings
+{
+  GraphicsSettingRequestType request_type = 1;
+}
+
+// Applies one graphics settings change. Only one payload variant is valid per request.
+message RequestSetGraphicsSettings
+{
+  oneof content
+  {
+    ResolutionScaleSetRequest resolution_scale = 1;
+    AntialiasingMethodSetRequest aa_method = 2;
+    FrameGenSetRequest fg_method = 3;
+    UpscaleModeSetRequest upscaler = 4;
+    UpscaleQualitySetRequest upscaler_quality = 5;
+    AntiAliasingQualitySetRequest aa_quality = 6;
+    ViewDistanceQualitySetRequest view_distance_quality = 7;
+    ShadowQualitySetRequest shadows_quality = 8;
+    TextureQualitySetRequest texture_quality = 9;
+    EffectsQualitySetRequest effects_quality = 10;
+    GraphicsSettingValueSingleRequest single_set = 11;
+    GraphicsSettingValueMultipleRequest array_set = 12;
+  }
+}
+
+// Returns the graphics settings payload matching the requested section.
+message ResponseGraphicsSettings
+{
+  GraphicsSettingRequestType requested_type = 1;
+  oneof result
+  {
+    ResolutionScaleResponse resolution_scale = 2;
+    AntiAliasingResponse aa = 3;
+    GraphicsQuality view_distance = 4;
+    PostProcessQualityResponse pp = 5;
+    ShadowQualityResponse shadows = 6;
+    TextureQualityResponse texture = 7;
+    EffectsQualityResponse effects = 8;
+  }
 }

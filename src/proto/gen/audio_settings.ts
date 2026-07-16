@@ -7,30 +7,31 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
-export const protobufPackage = "";
+export const protobufPackage = "scp.webui.v1";
 
+/** Identifies which audio settings group the client wants to fetch. */
 export enum AudioSettingRequestType {
-  PLAYBACK_DEVICE = 0,
-  CAPTURE_DEVICE = 1,
-  VOICE_CHAT = 2,
-  MIXER = 3,
+  AUDIO_SETTING_PLAYBACK_DEVICE = 0,
+  AUDIO_SETTING_CAPTURE_DEVICE = 1,
+  AUDIO_SETTING_VOICE_CHAT = 2,
+  AUDIO_SETTING_MIXER = 3,
   UNRECOGNIZED = -1,
 }
 
 export function audioSettingRequestTypeFromJSON(object: any): AudioSettingRequestType {
   switch (object) {
     case 0:
-    case "PLAYBACK_DEVICE":
-      return AudioSettingRequestType.PLAYBACK_DEVICE;
+    case "AUDIO_SETTING_PLAYBACK_DEVICE":
+      return AudioSettingRequestType.AUDIO_SETTING_PLAYBACK_DEVICE;
     case 1:
-    case "CAPTURE_DEVICE":
-      return AudioSettingRequestType.CAPTURE_DEVICE;
+    case "AUDIO_SETTING_CAPTURE_DEVICE":
+      return AudioSettingRequestType.AUDIO_SETTING_CAPTURE_DEVICE;
     case 2:
-    case "VOICE_CHAT":
-      return AudioSettingRequestType.VOICE_CHAT;
+    case "AUDIO_SETTING_VOICE_CHAT":
+      return AudioSettingRequestType.AUDIO_SETTING_VOICE_CHAT;
     case 3:
-    case "MIXER":
-      return AudioSettingRequestType.MIXER;
+    case "AUDIO_SETTING_MIXER":
+      return AudioSettingRequestType.AUDIO_SETTING_MIXER;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -40,20 +41,21 @@ export function audioSettingRequestTypeFromJSON(object: any): AudioSettingReques
 
 export function audioSettingRequestTypeToJSON(object: AudioSettingRequestType): string {
   switch (object) {
-    case AudioSettingRequestType.PLAYBACK_DEVICE:
-      return "PLAYBACK_DEVICE";
-    case AudioSettingRequestType.CAPTURE_DEVICE:
-      return "CAPTURE_DEVICE";
-    case AudioSettingRequestType.VOICE_CHAT:
-      return "VOICE_CHAT";
-    case AudioSettingRequestType.MIXER:
-      return "MIXER";
+    case AudioSettingRequestType.AUDIO_SETTING_PLAYBACK_DEVICE:
+      return "AUDIO_SETTING_PLAYBACK_DEVICE";
+    case AudioSettingRequestType.AUDIO_SETTING_CAPTURE_DEVICE:
+      return "AUDIO_SETTING_CAPTURE_DEVICE";
+    case AudioSettingRequestType.AUDIO_SETTING_VOICE_CHAT:
+      return "AUDIO_SETTING_VOICE_CHAT";
+    case AudioSettingRequestType.AUDIO_SETTING_MIXER:
+      return "AUDIO_SETTING_MIXER";
     case AudioSettingRequestType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Voice chat activation mode. */
 export enum AudioTalkMode {
   PUSH_TO_TALK = 0,
   VOICE_ACTIVATION = 1,
@@ -87,6 +89,7 @@ export function audioTalkModeToJSON(object: AudioTalkMode): string {
   }
 }
 
+/** Identifies which mixer channel to update. */
 export enum AudioMixerType {
   AUDIO_MASTER = 0,
   AUDIO_AMBIENT = 1,
@@ -144,28 +147,34 @@ export function audioMixerTypeToJSON(object: AudioMixerType): string {
   }
 }
 
-export interface AudioSettingsRequest {
-  requestType: AudioSettingRequestType;
+export interface AudioDeviceElement {
+  displayName: string;
+  deviceId: string;
 }
 
-export interface AudioStringArray {
-  arr: string[];
+/** Common string-list payload with the currently selected entry index. */
+export interface AudioDeviceArray {
+  arr: AudioDeviceElement[];
   selected: number;
 }
 
+/** Available playback devices and the currently selected device. */
 export interface AudioPlaybackDevicesResponse {
-  result: AudioStringArray | undefined;
+  result: AudioDeviceArray | undefined;
 }
 
+/** Available capture devices and the currently selected device. */
 export interface AudioCaptureDevicesResponse {
-  result: AudioStringArray | undefined;
+  result: AudioDeviceArray | undefined;
 }
 
-export interface AudioVoiceChatResponse {
+/** Voice chat mode and activation threshold values. */
+export interface AudioVoiceChatData {
   talkMode: AudioTalkMode;
   threshold: number;
 }
 
+/** Mixer slider values for each audio bus exposed in the UI. */
 export interface AudioMixerResponse {
   master: number;
   ambient: number;
@@ -175,36 +184,80 @@ export interface AudioMixerResponse {
   sfx: number;
 }
 
+/** Sets a single audio mixer channel value. */
 export interface AudioMixerSetRequest {
   type: AudioMixerType;
   value: number;
 }
 
-function createBaseAudioSettingsRequest(): AudioSettingsRequest {
-  return { requestType: 0 };
+/** Selects the active playback device by index. */
+export interface AudioSetPlaybackDeviceRequest {
+  selectedIndex: number;
 }
 
-export const AudioSettingsRequest: MessageFns<AudioSettingsRequest> = {
-  encode(message: AudioSettingsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.requestType !== 0) {
-      writer.uint32(8).int32(message.requestType);
+/** Selects the active capture device by index. */
+export interface AudioSetCaptureDeviceRequest {
+  selectedIndex: number;
+}
+
+/** Requests one audio settings section from the backend. */
+export interface RequestGetAudioSettings {
+  requestType: AudioSettingRequestType;
+}
+
+/** Applies one audio settings change. Only one payload variant is valid per request. */
+export interface RequestSetAudioSettings {
+  playback?: AudioSetPlaybackDeviceRequest | undefined;
+  capture?: AudioSetCaptureDeviceRequest | undefined;
+  voiceChat?: AudioVoiceChatData | undefined;
+  mixer?: AudioMixerSetRequest | undefined;
+}
+
+/** Returns the audio settings payload matching the requested section. */
+export interface ResponseAudioSettings {
+  requestedType: AudioSettingRequestType;
+  playbackDevice?: AudioPlaybackDevicesResponse | undefined;
+  audioCaptureDevice?: AudioCaptureDevicesResponse | undefined;
+  voiceChat?: AudioVoiceChatData | undefined;
+  mixer?: AudioMixerResponse | undefined;
+}
+
+function createBaseAudioDeviceElement(): AudioDeviceElement {
+  return { displayName: "", deviceId: "" };
+}
+
+export const AudioDeviceElement: MessageFns<AudioDeviceElement> = {
+  encode(message: AudioDeviceElement, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.displayName !== "") {
+      writer.uint32(10).string(message.displayName);
+    }
+    if (message.deviceId !== "") {
+      writer.uint32(18).string(message.deviceId);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): AudioSettingsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): AudioDeviceElement {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAudioSettingsRequest();
+    const message = createBaseAudioDeviceElement();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1: {
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.requestType = reader.int32() as any;
+          message.displayName = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.deviceId = reader.string();
           continue;
         }
       }
@@ -216,42 +269,51 @@ export const AudioSettingsRequest: MessageFns<AudioSettingsRequest> = {
     return message;
   },
 
-  fromJSON(object: any): AudioSettingsRequest {
+  fromJSON(object: any): AudioDeviceElement {
     return {
-      requestType: isSet(object.requestType)
-        ? audioSettingRequestTypeFromJSON(object.requestType)
-        : isSet(object.request_type)
-        ? audioSettingRequestTypeFromJSON(object.request_type)
-        : 0,
+      displayName: isSet(object.displayName)
+        ? globalThis.String(object.displayName)
+        : isSet(object.display_name)
+        ? globalThis.String(object.display_name)
+        : "",
+      deviceId: isSet(object.deviceId)
+        ? globalThis.String(object.deviceId)
+        : isSet(object.device_id)
+        ? globalThis.String(object.device_id)
+        : "",
     };
   },
 
-  toJSON(message: AudioSettingsRequest): unknown {
+  toJSON(message: AudioDeviceElement): unknown {
     const obj: any = {};
-    if (message.requestType !== 0) {
-      obj.requestType = audioSettingRequestTypeToJSON(message.requestType);
+    if (message.displayName !== "") {
+      obj.displayName = message.displayName;
+    }
+    if (message.deviceId !== "") {
+      obj.deviceId = message.deviceId;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AudioSettingsRequest>, I>>(base?: I): AudioSettingsRequest {
-    return AudioSettingsRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<AudioDeviceElement>, I>>(base?: I): AudioDeviceElement {
+    return AudioDeviceElement.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AudioSettingsRequest>, I>>(object: I): AudioSettingsRequest {
-    const message = createBaseAudioSettingsRequest();
-    message.requestType = object.requestType ?? 0;
+  fromPartial<I extends Exact<DeepPartial<AudioDeviceElement>, I>>(object: I): AudioDeviceElement {
+    const message = createBaseAudioDeviceElement();
+    message.displayName = object.displayName ?? "";
+    message.deviceId = object.deviceId ?? "";
     return message;
   },
 };
 
-function createBaseAudioStringArray(): AudioStringArray {
+function createBaseAudioDeviceArray(): AudioDeviceArray {
   return { arr: [], selected: 0 };
 }
 
-export const AudioStringArray: MessageFns<AudioStringArray> = {
-  encode(message: AudioStringArray, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const AudioDeviceArray: MessageFns<AudioDeviceArray> = {
+  encode(message: AudioDeviceArray, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.arr) {
-      writer.uint32(10).string(v!);
+      AudioDeviceElement.encode(v!, writer.uint32(10).fork()).join();
     }
     if (message.selected !== 0) {
       writer.uint32(16).uint32(message.selected);
@@ -259,10 +321,10 @@ export const AudioStringArray: MessageFns<AudioStringArray> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): AudioStringArray {
+  decode(input: BinaryReader | Uint8Array, length?: number): AudioDeviceArray {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAudioStringArray();
+    const message = createBaseAudioDeviceArray();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -271,7 +333,7 @@ export const AudioStringArray: MessageFns<AudioStringArray> = {
             break;
           }
 
-          message.arr.push(reader.string());
+          message.arr.push(AudioDeviceElement.decode(reader, reader.uint32()));
           continue;
         }
         case 2: {
@@ -291,17 +353,17 @@ export const AudioStringArray: MessageFns<AudioStringArray> = {
     return message;
   },
 
-  fromJSON(object: any): AudioStringArray {
+  fromJSON(object: any): AudioDeviceArray {
     return {
-      arr: globalThis.Array.isArray(object?.arr) ? object.arr.map((e: any) => globalThis.String(e)) : [],
+      arr: globalThis.Array.isArray(object?.arr) ? object.arr.map((e: any) => AudioDeviceElement.fromJSON(e)) : [],
       selected: isSet(object.selected) ? globalThis.Number(object.selected) : 0,
     };
   },
 
-  toJSON(message: AudioStringArray): unknown {
+  toJSON(message: AudioDeviceArray): unknown {
     const obj: any = {};
     if (message.arr?.length) {
-      obj.arr = message.arr;
+      obj.arr = message.arr.map((e) => AudioDeviceElement.toJSON(e));
     }
     if (message.selected !== 0) {
       obj.selected = Math.round(message.selected);
@@ -309,12 +371,12 @@ export const AudioStringArray: MessageFns<AudioStringArray> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AudioStringArray>, I>>(base?: I): AudioStringArray {
-    return AudioStringArray.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<AudioDeviceArray>, I>>(base?: I): AudioDeviceArray {
+    return AudioDeviceArray.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AudioStringArray>, I>>(object: I): AudioStringArray {
-    const message = createBaseAudioStringArray();
-    message.arr = object.arr?.map((e) => e) || [];
+  fromPartial<I extends Exact<DeepPartial<AudioDeviceArray>, I>>(object: I): AudioDeviceArray {
+    const message = createBaseAudioDeviceArray();
+    message.arr = object.arr?.map((e) => AudioDeviceElement.fromPartial(e)) || [];
     message.selected = object.selected ?? 0;
     return message;
   },
@@ -327,7 +389,7 @@ function createBaseAudioPlaybackDevicesResponse(): AudioPlaybackDevicesResponse 
 export const AudioPlaybackDevicesResponse: MessageFns<AudioPlaybackDevicesResponse> = {
   encode(message: AudioPlaybackDevicesResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.result !== undefined) {
-      AudioStringArray.encode(message.result, writer.uint32(10).fork()).join();
+      AudioDeviceArray.encode(message.result, writer.uint32(10).fork()).join();
     }
     return writer;
   },
@@ -344,7 +406,7 @@ export const AudioPlaybackDevicesResponse: MessageFns<AudioPlaybackDevicesRespon
             break;
           }
 
-          message.result = AudioStringArray.decode(reader, reader.uint32());
+          message.result = AudioDeviceArray.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -357,13 +419,13 @@ export const AudioPlaybackDevicesResponse: MessageFns<AudioPlaybackDevicesRespon
   },
 
   fromJSON(object: any): AudioPlaybackDevicesResponse {
-    return { result: isSet(object.result) ? AudioStringArray.fromJSON(object.result) : undefined };
+    return { result: isSet(object.result) ? AudioDeviceArray.fromJSON(object.result) : undefined };
   },
 
   toJSON(message: AudioPlaybackDevicesResponse): unknown {
     const obj: any = {};
     if (message.result !== undefined) {
-      obj.result = AudioStringArray.toJSON(message.result);
+      obj.result = AudioDeviceArray.toJSON(message.result);
     }
     return obj;
   },
@@ -374,7 +436,7 @@ export const AudioPlaybackDevicesResponse: MessageFns<AudioPlaybackDevicesRespon
   fromPartial<I extends Exact<DeepPartial<AudioPlaybackDevicesResponse>, I>>(object: I): AudioPlaybackDevicesResponse {
     const message = createBaseAudioPlaybackDevicesResponse();
     message.result = (object.result !== undefined && object.result !== null)
-      ? AudioStringArray.fromPartial(object.result)
+      ? AudioDeviceArray.fromPartial(object.result)
       : undefined;
     return message;
   },
@@ -387,7 +449,7 @@ function createBaseAudioCaptureDevicesResponse(): AudioCaptureDevicesResponse {
 export const AudioCaptureDevicesResponse: MessageFns<AudioCaptureDevicesResponse> = {
   encode(message: AudioCaptureDevicesResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.result !== undefined) {
-      AudioStringArray.encode(message.result, writer.uint32(10).fork()).join();
+      AudioDeviceArray.encode(message.result, writer.uint32(10).fork()).join();
     }
     return writer;
   },
@@ -404,7 +466,7 @@ export const AudioCaptureDevicesResponse: MessageFns<AudioCaptureDevicesResponse
             break;
           }
 
-          message.result = AudioStringArray.decode(reader, reader.uint32());
+          message.result = AudioDeviceArray.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -417,13 +479,13 @@ export const AudioCaptureDevicesResponse: MessageFns<AudioCaptureDevicesResponse
   },
 
   fromJSON(object: any): AudioCaptureDevicesResponse {
-    return { result: isSet(object.result) ? AudioStringArray.fromJSON(object.result) : undefined };
+    return { result: isSet(object.result) ? AudioDeviceArray.fromJSON(object.result) : undefined };
   },
 
   toJSON(message: AudioCaptureDevicesResponse): unknown {
     const obj: any = {};
     if (message.result !== undefined) {
-      obj.result = AudioStringArray.toJSON(message.result);
+      obj.result = AudioDeviceArray.toJSON(message.result);
     }
     return obj;
   },
@@ -434,18 +496,18 @@ export const AudioCaptureDevicesResponse: MessageFns<AudioCaptureDevicesResponse
   fromPartial<I extends Exact<DeepPartial<AudioCaptureDevicesResponse>, I>>(object: I): AudioCaptureDevicesResponse {
     const message = createBaseAudioCaptureDevicesResponse();
     message.result = (object.result !== undefined && object.result !== null)
-      ? AudioStringArray.fromPartial(object.result)
+      ? AudioDeviceArray.fromPartial(object.result)
       : undefined;
     return message;
   },
 };
 
-function createBaseAudioVoiceChatResponse(): AudioVoiceChatResponse {
+function createBaseAudioVoiceChatData(): AudioVoiceChatData {
   return { talkMode: 0, threshold: 0 };
 }
 
-export const AudioVoiceChatResponse: MessageFns<AudioVoiceChatResponse> = {
-  encode(message: AudioVoiceChatResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const AudioVoiceChatData: MessageFns<AudioVoiceChatData> = {
+  encode(message: AudioVoiceChatData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.talkMode !== 0) {
       writer.uint32(8).int32(message.talkMode);
     }
@@ -455,10 +517,10 @@ export const AudioVoiceChatResponse: MessageFns<AudioVoiceChatResponse> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): AudioVoiceChatResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): AudioVoiceChatData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAudioVoiceChatResponse();
+    const message = createBaseAudioVoiceChatData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -487,7 +549,7 @@ export const AudioVoiceChatResponse: MessageFns<AudioVoiceChatResponse> = {
     return message;
   },
 
-  fromJSON(object: any): AudioVoiceChatResponse {
+  fromJSON(object: any): AudioVoiceChatData {
     return {
       talkMode: isSet(object.talkMode)
         ? audioTalkModeFromJSON(object.talkMode)
@@ -498,7 +560,7 @@ export const AudioVoiceChatResponse: MessageFns<AudioVoiceChatResponse> = {
     };
   },
 
-  toJSON(message: AudioVoiceChatResponse): unknown {
+  toJSON(message: AudioVoiceChatData): unknown {
     const obj: any = {};
     if (message.talkMode !== 0) {
       obj.talkMode = audioTalkModeToJSON(message.talkMode);
@@ -509,11 +571,11 @@ export const AudioVoiceChatResponse: MessageFns<AudioVoiceChatResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AudioVoiceChatResponse>, I>>(base?: I): AudioVoiceChatResponse {
-    return AudioVoiceChatResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<AudioVoiceChatData>, I>>(base?: I): AudioVoiceChatData {
+    return AudioVoiceChatData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AudioVoiceChatResponse>, I>>(object: I): AudioVoiceChatResponse {
-    const message = createBaseAudioVoiceChatResponse();
+  fromPartial<I extends Exact<DeepPartial<AudioVoiceChatData>, I>>(object: I): AudioVoiceChatData {
+    const message = createBaseAudioVoiceChatData();
     message.talkMode = object.talkMode ?? 0;
     message.threshold = object.threshold ?? 0;
     return message;
@@ -732,6 +794,474 @@ export const AudioMixerSetRequest: MessageFns<AudioMixerSetRequest> = {
     const message = createBaseAudioMixerSetRequest();
     message.type = object.type ?? 0;
     message.value = object.value ?? 0;
+    return message;
+  },
+};
+
+function createBaseAudioSetPlaybackDeviceRequest(): AudioSetPlaybackDeviceRequest {
+  return { selectedIndex: 0 };
+}
+
+export const AudioSetPlaybackDeviceRequest: MessageFns<AudioSetPlaybackDeviceRequest> = {
+  encode(message: AudioSetPlaybackDeviceRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.selectedIndex !== 0) {
+      writer.uint32(8).uint32(message.selectedIndex);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AudioSetPlaybackDeviceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAudioSetPlaybackDeviceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.selectedIndex = reader.uint32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AudioSetPlaybackDeviceRequest {
+    return {
+      selectedIndex: isSet(object.selectedIndex)
+        ? globalThis.Number(object.selectedIndex)
+        : isSet(object.selected_index)
+        ? globalThis.Number(object.selected_index)
+        : 0,
+    };
+  },
+
+  toJSON(message: AudioSetPlaybackDeviceRequest): unknown {
+    const obj: any = {};
+    if (message.selectedIndex !== 0) {
+      obj.selectedIndex = Math.round(message.selectedIndex);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AudioSetPlaybackDeviceRequest>, I>>(base?: I): AudioSetPlaybackDeviceRequest {
+    return AudioSetPlaybackDeviceRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AudioSetPlaybackDeviceRequest>, I>>(
+    object: I,
+  ): AudioSetPlaybackDeviceRequest {
+    const message = createBaseAudioSetPlaybackDeviceRequest();
+    message.selectedIndex = object.selectedIndex ?? 0;
+    return message;
+  },
+};
+
+function createBaseAudioSetCaptureDeviceRequest(): AudioSetCaptureDeviceRequest {
+  return { selectedIndex: 0 };
+}
+
+export const AudioSetCaptureDeviceRequest: MessageFns<AudioSetCaptureDeviceRequest> = {
+  encode(message: AudioSetCaptureDeviceRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.selectedIndex !== 0) {
+      writer.uint32(8).uint32(message.selectedIndex);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AudioSetCaptureDeviceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAudioSetCaptureDeviceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.selectedIndex = reader.uint32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AudioSetCaptureDeviceRequest {
+    return {
+      selectedIndex: isSet(object.selectedIndex)
+        ? globalThis.Number(object.selectedIndex)
+        : isSet(object.selected_index)
+        ? globalThis.Number(object.selected_index)
+        : 0,
+    };
+  },
+
+  toJSON(message: AudioSetCaptureDeviceRequest): unknown {
+    const obj: any = {};
+    if (message.selectedIndex !== 0) {
+      obj.selectedIndex = Math.round(message.selectedIndex);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AudioSetCaptureDeviceRequest>, I>>(base?: I): AudioSetCaptureDeviceRequest {
+    return AudioSetCaptureDeviceRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AudioSetCaptureDeviceRequest>, I>>(object: I): AudioSetCaptureDeviceRequest {
+    const message = createBaseAudioSetCaptureDeviceRequest();
+    message.selectedIndex = object.selectedIndex ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestGetAudioSettings(): RequestGetAudioSettings {
+  return { requestType: 0 };
+}
+
+export const RequestGetAudioSettings: MessageFns<RequestGetAudioSettings> = {
+  encode(message: RequestGetAudioSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestType !== 0) {
+      writer.uint32(8).int32(message.requestType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestGetAudioSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestGetAudioSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestType = reader.int32() as any;
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestGetAudioSettings {
+    return {
+      requestType: isSet(object.requestType)
+        ? audioSettingRequestTypeFromJSON(object.requestType)
+        : isSet(object.request_type)
+        ? audioSettingRequestTypeFromJSON(object.request_type)
+        : 0,
+    };
+  },
+
+  toJSON(message: RequestGetAudioSettings): unknown {
+    const obj: any = {};
+    if (message.requestType !== 0) {
+      obj.requestType = audioSettingRequestTypeToJSON(message.requestType);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestGetAudioSettings>, I>>(base?: I): RequestGetAudioSettings {
+    return RequestGetAudioSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestGetAudioSettings>, I>>(object: I): RequestGetAudioSettings {
+    const message = createBaseRequestGetAudioSettings();
+    message.requestType = object.requestType ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestSetAudioSettings(): RequestSetAudioSettings {
+  return { playback: undefined, capture: undefined, voiceChat: undefined, mixer: undefined };
+}
+
+export const RequestSetAudioSettings: MessageFns<RequestSetAudioSettings> = {
+  encode(message: RequestSetAudioSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.playback !== undefined) {
+      AudioSetPlaybackDeviceRequest.encode(message.playback, writer.uint32(10).fork()).join();
+    }
+    if (message.capture !== undefined) {
+      AudioSetCaptureDeviceRequest.encode(message.capture, writer.uint32(18).fork()).join();
+    }
+    if (message.voiceChat !== undefined) {
+      AudioVoiceChatData.encode(message.voiceChat, writer.uint32(26).fork()).join();
+    }
+    if (message.mixer !== undefined) {
+      AudioMixerSetRequest.encode(message.mixer, writer.uint32(34).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestSetAudioSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestSetAudioSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.playback = AudioSetPlaybackDeviceRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.capture = AudioSetCaptureDeviceRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.voiceChat = AudioVoiceChatData.decode(reader, reader.uint32());
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.mixer = AudioMixerSetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestSetAudioSettings {
+    return {
+      playback: isSet(object.playback) ? AudioSetPlaybackDeviceRequest.fromJSON(object.playback) : undefined,
+      capture: isSet(object.capture) ? AudioSetCaptureDeviceRequest.fromJSON(object.capture) : undefined,
+      voiceChat: isSet(object.voiceChat)
+        ? AudioVoiceChatData.fromJSON(object.voiceChat)
+        : isSet(object.voice_chat)
+        ? AudioVoiceChatData.fromJSON(object.voice_chat)
+        : undefined,
+      mixer: isSet(object.mixer) ? AudioMixerSetRequest.fromJSON(object.mixer) : undefined,
+    };
+  },
+
+  toJSON(message: RequestSetAudioSettings): unknown {
+    const obj: any = {};
+    if (message.playback !== undefined) {
+      obj.playback = AudioSetPlaybackDeviceRequest.toJSON(message.playback);
+    }
+    if (message.capture !== undefined) {
+      obj.capture = AudioSetCaptureDeviceRequest.toJSON(message.capture);
+    }
+    if (message.voiceChat !== undefined) {
+      obj.voiceChat = AudioVoiceChatData.toJSON(message.voiceChat);
+    }
+    if (message.mixer !== undefined) {
+      obj.mixer = AudioMixerSetRequest.toJSON(message.mixer);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestSetAudioSettings>, I>>(base?: I): RequestSetAudioSettings {
+    return RequestSetAudioSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestSetAudioSettings>, I>>(object: I): RequestSetAudioSettings {
+    const message = createBaseRequestSetAudioSettings();
+    message.playback = (object.playback !== undefined && object.playback !== null)
+      ? AudioSetPlaybackDeviceRequest.fromPartial(object.playback)
+      : undefined;
+    message.capture = (object.capture !== undefined && object.capture !== null)
+      ? AudioSetCaptureDeviceRequest.fromPartial(object.capture)
+      : undefined;
+    message.voiceChat = (object.voiceChat !== undefined && object.voiceChat !== null)
+      ? AudioVoiceChatData.fromPartial(object.voiceChat)
+      : undefined;
+    message.mixer = (object.mixer !== undefined && object.mixer !== null)
+      ? AudioMixerSetRequest.fromPartial(object.mixer)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseResponseAudioSettings(): ResponseAudioSettings {
+  return {
+    requestedType: 0,
+    playbackDevice: undefined,
+    audioCaptureDevice: undefined,
+    voiceChat: undefined,
+    mixer: undefined,
+  };
+}
+
+export const ResponseAudioSettings: MessageFns<ResponseAudioSettings> = {
+  encode(message: ResponseAudioSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestedType !== 0) {
+      writer.uint32(8).int32(message.requestedType);
+    }
+    if (message.playbackDevice !== undefined) {
+      AudioPlaybackDevicesResponse.encode(message.playbackDevice, writer.uint32(18).fork()).join();
+    }
+    if (message.audioCaptureDevice !== undefined) {
+      AudioCaptureDevicesResponse.encode(message.audioCaptureDevice, writer.uint32(26).fork()).join();
+    }
+    if (message.voiceChat !== undefined) {
+      AudioVoiceChatData.encode(message.voiceChat, writer.uint32(34).fork()).join();
+    }
+    if (message.mixer !== undefined) {
+      AudioMixerResponse.encode(message.mixer, writer.uint32(42).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseAudioSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseAudioSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestedType = reader.int32() as any;
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.playbackDevice = AudioPlaybackDevicesResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.audioCaptureDevice = AudioCaptureDevicesResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.voiceChat = AudioVoiceChatData.decode(reader, reader.uint32());
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.mixer = AudioMixerResponse.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResponseAudioSettings {
+    return {
+      requestedType: isSet(object.requestedType)
+        ? audioSettingRequestTypeFromJSON(object.requestedType)
+        : isSet(object.requested_type)
+        ? audioSettingRequestTypeFromJSON(object.requested_type)
+        : 0,
+      playbackDevice: isSet(object.playbackDevice)
+        ? AudioPlaybackDevicesResponse.fromJSON(object.playbackDevice)
+        : isSet(object.playback_device)
+        ? AudioPlaybackDevicesResponse.fromJSON(object.playback_device)
+        : undefined,
+      audioCaptureDevice: isSet(object.audioCaptureDevice)
+        ? AudioCaptureDevicesResponse.fromJSON(object.audioCaptureDevice)
+        : isSet(object.audio_capture_device)
+        ? AudioCaptureDevicesResponse.fromJSON(object.audio_capture_device)
+        : undefined,
+      voiceChat: isSet(object.voiceChat)
+        ? AudioVoiceChatData.fromJSON(object.voiceChat)
+        : isSet(object.voice_chat)
+        ? AudioVoiceChatData.fromJSON(object.voice_chat)
+        : undefined,
+      mixer: isSet(object.mixer) ? AudioMixerResponse.fromJSON(object.mixer) : undefined,
+    };
+  },
+
+  toJSON(message: ResponseAudioSettings): unknown {
+    const obj: any = {};
+    if (message.requestedType !== 0) {
+      obj.requestedType = audioSettingRequestTypeToJSON(message.requestedType);
+    }
+    if (message.playbackDevice !== undefined) {
+      obj.playbackDevice = AudioPlaybackDevicesResponse.toJSON(message.playbackDevice);
+    }
+    if (message.audioCaptureDevice !== undefined) {
+      obj.audioCaptureDevice = AudioCaptureDevicesResponse.toJSON(message.audioCaptureDevice);
+    }
+    if (message.voiceChat !== undefined) {
+      obj.voiceChat = AudioVoiceChatData.toJSON(message.voiceChat);
+    }
+    if (message.mixer !== undefined) {
+      obj.mixer = AudioMixerResponse.toJSON(message.mixer);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResponseAudioSettings>, I>>(base?: I): ResponseAudioSettings {
+    return ResponseAudioSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResponseAudioSettings>, I>>(object: I): ResponseAudioSettings {
+    const message = createBaseResponseAudioSettings();
+    message.requestedType = object.requestedType ?? 0;
+    message.playbackDevice = (object.playbackDevice !== undefined && object.playbackDevice !== null)
+      ? AudioPlaybackDevicesResponse.fromPartial(object.playbackDevice)
+      : undefined;
+    message.audioCaptureDevice = (object.audioCaptureDevice !== undefined && object.audioCaptureDevice !== null)
+      ? AudioCaptureDevicesResponse.fromPartial(object.audioCaptureDevice)
+      : undefined;
+    message.voiceChat = (object.voiceChat !== undefined && object.voiceChat !== null)
+      ? AudioVoiceChatData.fromPartial(object.voiceChat)
+      : undefined;
+    message.mixer = (object.mixer !== undefined && object.mixer !== null)
+      ? AudioMixerResponse.fromPartial(object.mixer)
+      : undefined;
     return message;
   },
 };

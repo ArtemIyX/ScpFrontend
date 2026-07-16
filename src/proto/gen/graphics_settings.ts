@@ -7,77 +7,9 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
-export const protobufPackage = "";
+export const protobufPackage = "scp.webui.v1";
 
-export enum GraphicsSettingRequestType {
-  RESOLUTION_SCALE = 0,
-  AA = 1,
-  VIEW_DISTANCE = 2,
-  AA_QUALITY = 3,
-  PP_QUALITY = 4,
-  SHADOWS_QUALITY = 5,
-  TEXTURE_QUALITY = 6,
-  EFFECTS_QUALITY = 7,
-  UNRECOGNIZED = -1,
-}
-
-export function graphicsSettingRequestTypeFromJSON(object: any): GraphicsSettingRequestType {
-  switch (object) {
-    case 0:
-    case "RESOLUTION_SCALE":
-      return GraphicsSettingRequestType.RESOLUTION_SCALE;
-    case 1:
-    case "AA":
-      return GraphicsSettingRequestType.AA;
-    case 2:
-    case "VIEW_DISTANCE":
-      return GraphicsSettingRequestType.VIEW_DISTANCE;
-    case 3:
-    case "AA_QUALITY":
-      return GraphicsSettingRequestType.AA_QUALITY;
-    case 4:
-    case "PP_QUALITY":
-      return GraphicsSettingRequestType.PP_QUALITY;
-    case 5:
-    case "SHADOWS_QUALITY":
-      return GraphicsSettingRequestType.SHADOWS_QUALITY;
-    case 6:
-    case "TEXTURE_QUALITY":
-      return GraphicsSettingRequestType.TEXTURE_QUALITY;
-    case 7:
-    case "EFFECTS_QUALITY":
-      return GraphicsSettingRequestType.EFFECTS_QUALITY;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return GraphicsSettingRequestType.UNRECOGNIZED;
-  }
-}
-
-export function graphicsSettingRequestTypeToJSON(object: GraphicsSettingRequestType): string {
-  switch (object) {
-    case GraphicsSettingRequestType.RESOLUTION_SCALE:
-      return "RESOLUTION_SCALE";
-    case GraphicsSettingRequestType.AA:
-      return "AA";
-    case GraphicsSettingRequestType.VIEW_DISTANCE:
-      return "VIEW_DISTANCE";
-    case GraphicsSettingRequestType.AA_QUALITY:
-      return "AA_QUALITY";
-    case GraphicsSettingRequestType.PP_QUALITY:
-      return "PP_QUALITY";
-    case GraphicsSettingRequestType.SHADOWS_QUALITY:
-      return "SHADOWS_QUALITY";
-    case GraphicsSettingRequestType.TEXTURE_QUALITY:
-      return "TEXTURE_QUALITY";
-    case GraphicsSettingRequestType.EFFECTS_QUALITY:
-      return "EFFECTS_QUALITY";
-    case GraphicsSettingRequestType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
+/** Coarse preset buckets for settings that expose the full very-low to ultra range. */
 export enum GraphicsQuality {
   GRAPHICS_QUALITY_VERY_LOW = 0,
   GRAPHICS_QUALITY_LOW = 1,
@@ -129,6 +61,7 @@ export function graphicsQualityToJSON(object: GraphicsQuality): string {
   }
 }
 
+/** Preset buckets for settings that use low to ultra plus a custom mode. */
 export enum GraphicsQualityDetailed {
   GRAPHICS_QUALITY_DETAILED_LOW = 0,
   GRAPHICS_QUALITY_DETAILED_MEDIUM = 1,
@@ -180,36 +113,37 @@ export function graphicsQualityDetailedToJSON(object: GraphicsQualityDetailed): 
   }
 }
 
+/** Supported anti-aliasing methods. */
 export enum AntiAliasingType {
-  NONE = 0,
-  FXAA = 1,
-  TAA = 2,
-  MSAA = 3,
-  TSR = 4,
-  SMAA = 5,
+  AA_TYPE_NONE = 0,
+  AA_TYPE_FXAA = 1,
+  AA_TYPE_TAA = 2,
+  AA_TYPE_MSAA = 3,
+  AA_TYPE_TSR = 4,
+  AA_TYPE_SMAA = 5,
   UNRECOGNIZED = -1,
 }
 
 export function antiAliasingTypeFromJSON(object: any): AntiAliasingType {
   switch (object) {
     case 0:
-    case "NONE":
-      return AntiAliasingType.NONE;
+    case "AA_TYPE_NONE":
+      return AntiAliasingType.AA_TYPE_NONE;
     case 1:
-    case "FXAA":
-      return AntiAliasingType.FXAA;
+    case "AA_TYPE_FXAA":
+      return AntiAliasingType.AA_TYPE_FXAA;
     case 2:
-    case "TAA":
-      return AntiAliasingType.TAA;
+    case "AA_TYPE_TAA":
+      return AntiAliasingType.AA_TYPE_TAA;
     case 3:
-    case "MSAA":
-      return AntiAliasingType.MSAA;
+    case "AA_TYPE_MSAA":
+      return AntiAliasingType.AA_TYPE_MSAA;
     case 4:
-    case "TSR":
-      return AntiAliasingType.TSR;
+    case "AA_TYPE_TSR":
+      return AntiAliasingType.AA_TYPE_TSR;
     case 5:
-    case "SMAA":
-      return AntiAliasingType.SMAA;
+    case "AA_TYPE_SMAA":
+      return AntiAliasingType.AA_TYPE_SMAA;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -219,46 +153,47 @@ export function antiAliasingTypeFromJSON(object: any): AntiAliasingType {
 
 export function antiAliasingTypeToJSON(object: AntiAliasingType): string {
   switch (object) {
-    case AntiAliasingType.NONE:
-      return "NONE";
-    case AntiAliasingType.FXAA:
-      return "FXAA";
-    case AntiAliasingType.TAA:
-      return "TAA";
-    case AntiAliasingType.MSAA:
-      return "MSAA";
-    case AntiAliasingType.TSR:
-      return "TSR";
-    case AntiAliasingType.SMAA:
-      return "SMAA";
+    case AntiAliasingType.AA_TYPE_NONE:
+      return "AA_TYPE_NONE";
+    case AntiAliasingType.AA_TYPE_FXAA:
+      return "AA_TYPE_FXAA";
+    case AntiAliasingType.AA_TYPE_TAA:
+      return "AA_TYPE_TAA";
+    case AntiAliasingType.AA_TYPE_MSAA:
+      return "AA_TYPE_MSAA";
+    case AntiAliasingType.AA_TYPE_TSR:
+      return "AA_TYPE_TSR";
+    case AntiAliasingType.AA_TYPE_SMAA:
+      return "AA_TYPE_SMAA";
     case AntiAliasingType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Frame-generation multiplier options. */
 export enum FrameGenScale {
-  GEN_OFF = 0,
-  GEN_2 = 1,
-  GEN_3 = 2,
-  GEN_4 = 3,
+  FG_GEN_OFF = 0,
+  FG_GEN_2 = 1,
+  FG_GEN_3 = 2,
+  FG_GEN_4 = 3,
   UNRECOGNIZED = -1,
 }
 
 export function frameGenScaleFromJSON(object: any): FrameGenScale {
   switch (object) {
     case 0:
-    case "GEN_OFF":
-      return FrameGenScale.GEN_OFF;
+    case "FG_GEN_OFF":
+      return FrameGenScale.FG_GEN_OFF;
     case 1:
-    case "GEN_2":
-      return FrameGenScale.GEN_2;
+    case "FG_GEN_2":
+      return FrameGenScale.FG_GEN_2;
     case 2:
-    case "GEN_3":
-      return FrameGenScale.GEN_3;
+    case "FG_GEN_3":
+      return FrameGenScale.FG_GEN_3;
     case 3:
-    case "GEN_4":
-      return FrameGenScale.GEN_4;
+    case "FG_GEN_4":
+      return FrameGenScale.FG_GEN_4;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -268,38 +203,39 @@ export function frameGenScaleFromJSON(object: any): FrameGenScale {
 
 export function frameGenScaleToJSON(object: FrameGenScale): string {
   switch (object) {
-    case FrameGenScale.GEN_OFF:
-      return "GEN_OFF";
-    case FrameGenScale.GEN_2:
-      return "GEN_2";
-    case FrameGenScale.GEN_3:
-      return "GEN_3";
-    case FrameGenScale.GEN_4:
-      return "GEN_4";
+    case FrameGenScale.FG_GEN_OFF:
+      return "FG_GEN_OFF";
+    case FrameGenScale.FG_GEN_2:
+      return "FG_GEN_2";
+    case FrameGenScale.FG_GEN_3:
+      return "FG_GEN_3";
+    case FrameGenScale.FG_GEN_4:
+      return "FG_GEN_4";
     case FrameGenScale.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Supported temporal upscaler implementations. */
 export enum UpscaleMode {
-  OFF = 0,
-  DLSS = 1,
-  FSR = 2,
+  UPSCALE_MODE_OFF = 0,
+  UPSCALE_MODE_DLSS = 1,
+  UPSCALE_MODE_FSR = 2,
   UNRECOGNIZED = -1,
 }
 
 export function upscaleModeFromJSON(object: any): UpscaleMode {
   switch (object) {
     case 0:
-    case "OFF":
-      return UpscaleMode.OFF;
+    case "UPSCALE_MODE_OFF":
+      return UpscaleMode.UPSCALE_MODE_OFF;
     case 1:
-    case "DLSS":
-      return UpscaleMode.DLSS;
+    case "UPSCALE_MODE_DLSS":
+      return UpscaleMode.UPSCALE_MODE_DLSS;
     case 2:
-    case "FSR":
-      return UpscaleMode.FSR;
+    case "UPSCALE_MODE_FSR":
+      return UpscaleMode.UPSCALE_MODE_FSR;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -309,48 +245,49 @@ export function upscaleModeFromJSON(object: any): UpscaleMode {
 
 export function upscaleModeToJSON(object: UpscaleMode): string {
   switch (object) {
-    case UpscaleMode.OFF:
-      return "OFF";
-    case UpscaleMode.DLSS:
-      return "DLSS";
-    case UpscaleMode.FSR:
-      return "FSR";
+    case UpscaleMode.UPSCALE_MODE_OFF:
+      return "UPSCALE_MODE_OFF";
+    case UpscaleMode.UPSCALE_MODE_DLSS:
+      return "UPSCALE_MODE_DLSS";
+    case UpscaleMode.UPSCALE_MODE_FSR:
+      return "UPSCALE_MODE_FSR";
     case UpscaleMode.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Common quality presets used by supported upscalers. */
 export enum UpscaleQuality {
-  DLAA = 0,
-  ULTRA_QUALITY = 1,
-  QUALITY = 2,
-  BALANCED = 3,
-  PERFORMANCE = 4,
-  ULTRA_PERFORMANCE = 5,
+  UPSCALE_QUAL_DLAA = 0,
+  UPSCALE_QUAL_ULTRA_QUALITY = 1,
+  UPSCALE_QUAL_QUALITY = 2,
+  UPSCALE_QUAL_BALANCED = 3,
+  UPSCALE_QUAL_PERFORMANCE = 4,
+  UPSCALE_QUAL_ULTRA_PERFORMANCE = 5,
   UNRECOGNIZED = -1,
 }
 
 export function upscaleQualityFromJSON(object: any): UpscaleQuality {
   switch (object) {
     case 0:
-    case "DLAA":
-      return UpscaleQuality.DLAA;
+    case "UPSCALE_QUAL_DLAA":
+      return UpscaleQuality.UPSCALE_QUAL_DLAA;
     case 1:
-    case "ULTRA_QUALITY":
-      return UpscaleQuality.ULTRA_QUALITY;
+    case "UPSCALE_QUAL_ULTRA_QUALITY":
+      return UpscaleQuality.UPSCALE_QUAL_ULTRA_QUALITY;
     case 2:
-    case "QUALITY":
-      return UpscaleQuality.QUALITY;
+    case "UPSCALE_QUAL_QUALITY":
+      return UpscaleQuality.UPSCALE_QUAL_QUALITY;
     case 3:
-    case "BALANCED":
-      return UpscaleQuality.BALANCED;
+    case "UPSCALE_QUAL_BALANCED":
+      return UpscaleQuality.UPSCALE_QUAL_BALANCED;
     case 4:
-    case "PERFORMANCE":
-      return UpscaleQuality.PERFORMANCE;
+    case "UPSCALE_QUAL_PERFORMANCE":
+      return UpscaleQuality.UPSCALE_QUAL_PERFORMANCE;
     case 5:
-    case "ULTRA_PERFORMANCE":
-      return UpscaleQuality.ULTRA_PERFORMANCE;
+    case "UPSCALE_QUAL_ULTRA_PERFORMANCE":
+      return UpscaleQuality.UPSCALE_QUAL_ULTRA_PERFORMANCE;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -360,24 +297,25 @@ export function upscaleQualityFromJSON(object: any): UpscaleQuality {
 
 export function upscaleQualityToJSON(object: UpscaleQuality): string {
   switch (object) {
-    case UpscaleQuality.DLAA:
-      return "DLAA";
-    case UpscaleQuality.ULTRA_QUALITY:
-      return "ULTRA_QUALITY";
-    case UpscaleQuality.QUALITY:
-      return "QUALITY";
-    case UpscaleQuality.BALANCED:
-      return "BALANCED";
-    case UpscaleQuality.PERFORMANCE:
-      return "PERFORMANCE";
-    case UpscaleQuality.ULTRA_PERFORMANCE:
-      return "ULTRA_PERFORMANCE";
+    case UpscaleQuality.UPSCALE_QUAL_DLAA:
+      return "UPSCALE_QUAL_DLAA";
+    case UpscaleQuality.UPSCALE_QUAL_ULTRA_QUALITY:
+      return "UPSCALE_QUAL_ULTRA_QUALITY";
+    case UpscaleQuality.UPSCALE_QUAL_QUALITY:
+      return "UPSCALE_QUAL_QUALITY";
+    case UpscaleQuality.UPSCALE_QUAL_BALANCED:
+      return "UPSCALE_QUAL_BALANCED";
+    case UpscaleQuality.UPSCALE_QUAL_PERFORMANCE:
+      return "UPSCALE_QUAL_PERFORMANCE";
+    case UpscaleQuality.UPSCALE_QUAL_ULTRA_PERFORMANCE:
+      return "UPSCALE_QUAL_ULTRA_PERFORMANCE";
     case UpscaleQuality.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Identifies a specific low-level graphics tunable for custom set requests. */
 export enum SettingType {
   SETTING_TYPE_UNSPECIFIED = 0,
   SETTING_TYPE_MOTION_BLUR_QUALITY = 1,
@@ -403,6 +341,13 @@ export enum SettingType {
   SETTING_TYPE_STREAMING_MIP_BIAS = 21,
   SETTING_TYPE_MAX_ANISOTROPY = 22,
   SETTING_TYPE_STREAMING_POOL_SIZE = 23,
+  SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM = 24,
+  SETTING_TYPE_REFRACTION_QUALITY = 25,
+  SETTING_TYPE_SSR = 26,
+  SETTING_TYPE_SCENE_COLOR_FORMAT = 27,
+  SETTING_TYPE_DETAIL_MODE = 28,
+  SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR = 29,
+  SETTING_TYPE_MATERIAL_QUALITY_LEVEL = 30,
   UNRECOGNIZED = -1,
 }
 
@@ -480,6 +425,27 @@ export function settingTypeFromJSON(object: any): SettingType {
     case 23:
     case "SETTING_TYPE_STREAMING_POOL_SIZE":
       return SettingType.SETTING_TYPE_STREAMING_POOL_SIZE;
+    case 24:
+    case "SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM":
+      return SettingType.SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM;
+    case 25:
+    case "SETTING_TYPE_REFRACTION_QUALITY":
+      return SettingType.SETTING_TYPE_REFRACTION_QUALITY;
+    case 26:
+    case "SETTING_TYPE_SSR":
+      return SettingType.SETTING_TYPE_SSR;
+    case 27:
+    case "SETTING_TYPE_SCENE_COLOR_FORMAT":
+      return SettingType.SETTING_TYPE_SCENE_COLOR_FORMAT;
+    case 28:
+    case "SETTING_TYPE_DETAIL_MODE":
+      return SettingType.SETTING_TYPE_DETAIL_MODE;
+    case 29:
+    case "SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR":
+      return SettingType.SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR;
+    case 30:
+    case "SETTING_TYPE_MATERIAL_QUALITY_LEVEL":
+      return SettingType.SETTING_TYPE_MATERIAL_QUALITY_LEVEL;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -537,59 +503,153 @@ export function settingTypeToJSON(object: SettingType): string {
       return "SETTING_TYPE_MAX_ANISOTROPY";
     case SettingType.SETTING_TYPE_STREAMING_POOL_SIZE:
       return "SETTING_TYPE_STREAMING_POOL_SIZE";
+    case SettingType.SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM:
+      return "SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM";
+    case SettingType.SETTING_TYPE_REFRACTION_QUALITY:
+      return "SETTING_TYPE_REFRACTION_QUALITY";
+    case SettingType.SETTING_TYPE_SSR:
+      return "SETTING_TYPE_SSR";
+    case SettingType.SETTING_TYPE_SCENE_COLOR_FORMAT:
+      return "SETTING_TYPE_SCENE_COLOR_FORMAT";
+    case SettingType.SETTING_TYPE_DETAIL_MODE:
+      return "SETTING_TYPE_DETAIL_MODE";
+    case SettingType.SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR:
+      return "SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR";
+    case SettingType.SETTING_TYPE_MATERIAL_QUALITY_LEVEL:
+      return "SETTING_TYPE_MATERIAL_QUALITY_LEVEL";
     case SettingType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export interface GraphicsSettingsRequest {
-  requestType: GraphicsSettingRequestType;
+/** Identifies which graphics settings group the client wants to fetch. */
+export enum GraphicsSettingRequestType {
+  GRAPHICS_SETTING_RESOLUTION_SCALE = 0,
+  GRAPHICS_SETTING_AA = 1,
+  GRAPHICS_SETTING_VIEW_DISTANCE = 2,
+  GRAPHICS_SETTING_PP_QUALITY = 3,
+  GRAPHICS_SETTING_SHADOWS_QUALITY = 4,
+  GRAPHICS_SETTING_TEXTURE_QUALITY = 5,
+  GRAPHICS_SETTING_EFFECTS_QUALITY = 6,
+  UNRECOGNIZED = -1,
 }
 
+export function graphicsSettingRequestTypeFromJSON(object: any): GraphicsSettingRequestType {
+  switch (object) {
+    case 0:
+    case "GRAPHICS_SETTING_RESOLUTION_SCALE":
+      return GraphicsSettingRequestType.GRAPHICS_SETTING_RESOLUTION_SCALE;
+    case 1:
+    case "GRAPHICS_SETTING_AA":
+      return GraphicsSettingRequestType.GRAPHICS_SETTING_AA;
+    case 2:
+    case "GRAPHICS_SETTING_VIEW_DISTANCE":
+      return GraphicsSettingRequestType.GRAPHICS_SETTING_VIEW_DISTANCE;
+    case 3:
+    case "GRAPHICS_SETTING_PP_QUALITY":
+      return GraphicsSettingRequestType.GRAPHICS_SETTING_PP_QUALITY;
+    case 4:
+    case "GRAPHICS_SETTING_SHADOWS_QUALITY":
+      return GraphicsSettingRequestType.GRAPHICS_SETTING_SHADOWS_QUALITY;
+    case 5:
+    case "GRAPHICS_SETTING_TEXTURE_QUALITY":
+      return GraphicsSettingRequestType.GRAPHICS_SETTING_TEXTURE_QUALITY;
+    case 6:
+    case "GRAPHICS_SETTING_EFFECTS_QUALITY":
+      return GraphicsSettingRequestType.GRAPHICS_SETTING_EFFECTS_QUALITY;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return GraphicsSettingRequestType.UNRECOGNIZED;
+  }
+}
+
+export function graphicsSettingRequestTypeToJSON(object: GraphicsSettingRequestType): string {
+  switch (object) {
+    case GraphicsSettingRequestType.GRAPHICS_SETTING_RESOLUTION_SCALE:
+      return "GRAPHICS_SETTING_RESOLUTION_SCALE";
+    case GraphicsSettingRequestType.GRAPHICS_SETTING_AA:
+      return "GRAPHICS_SETTING_AA";
+    case GraphicsSettingRequestType.GRAPHICS_SETTING_VIEW_DISTANCE:
+      return "GRAPHICS_SETTING_VIEW_DISTANCE";
+    case GraphicsSettingRequestType.GRAPHICS_SETTING_PP_QUALITY:
+      return "GRAPHICS_SETTING_PP_QUALITY";
+    case GraphicsSettingRequestType.GRAPHICS_SETTING_SHADOWS_QUALITY:
+      return "GRAPHICS_SETTING_SHADOWS_QUALITY";
+    case GraphicsSettingRequestType.GRAPHICS_SETTING_TEXTURE_QUALITY:
+      return "GRAPHICS_SETTING_TEXTURE_QUALITY";
+    case GraphicsSettingRequestType.GRAPHICS_SETTING_EFFECTS_QUALITY:
+      return "GRAPHICS_SETTING_EFFECTS_QUALITY";
+    case GraphicsSettingRequestType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export interface ResolutionScaleResponse {
+  resolutionScale: number;
+}
+
+export interface ResolutionScaleSetRequest {
+  resolutionScale: number;
+}
+
+/** Current anti-aliasing, frame generation, and upscaler selections. */
 export interface AntiAliasingResponse {
   aaMethod: AntiAliasingType;
+  aaQuality: GraphicsQuality;
   fg: FrameGenScale;
   upscaler: UpscaleMode;
-  quality: UpscaleQuality;
+  upscalerQuality: UpscaleQuality;
 }
 
+/** Sets the active anti-aliasing method. */
 export interface AntialiasingMethodSetRequest {
   aaMethod: AntiAliasingType;
 }
 
+/** Sets the active frame-generation mode. */
 export interface FrameGenSetRequest {
   fg: FrameGenScale;
 }
 
+/** Sets the active upscaler implementation. */
 export interface UpscaleModeSetRequest {
   upscaler: UpscaleMode;
 }
 
+/** Sets the quality preset for the active upscaler. */
 export interface UpscaleQualitySetRequest {
   quality: UpscaleQuality;
 }
 
+/** Sets the anti-aliasing quality preset. */
 export interface AntiAliasingQualitySetRequest {
   quality: GraphicsQuality;
 }
 
+/** Sets the view distance quality preset. */
 export interface ViewDistanceQualitySetRequest {
   quality: GraphicsQuality;
 }
 
+/** Sets the shadow quality preset. */
 export interface ShadowQualitySetRequest {
   qualityDetailed: GraphicsQualityDetailed;
 }
 
+/** Sets the texture quality preset. */
 export interface TextureQualitySetRequest {
   qualityDetailed: GraphicsQualityDetailed;
 }
 
+/** Sets the effects quality preset. */
 export interface EffectsQualitySetRequest {
   qualityDetailed: GraphicsQualityDetailed;
 }
 
+/** Post-processing quality preset plus its underlying tunable values. */
 export interface PostProcessQualityResponse {
   qualityDetailed: GraphicsQualityDetailed;
   motionBlurQuality: number;
@@ -607,6 +667,7 @@ export interface PostProcessQualityResponse {
   tonemapperGrainQuantization: number;
 }
 
+/** Texture quality preset plus its underlying tunable values. */
 export interface TextureQualityResponse {
   qualityDetailed: GraphicsQualityDetailed;
   streamingMipBias: number;
@@ -614,7 +675,8 @@ export interface TextureQualityResponse {
   streamingPoolSize: number;
 }
 
-export interface EffectsQualityResponse {
+/** Effects quality preset plus its underlying tunable values. */
+export interface ShadowQualityResponse {
   qualityDetailed: GraphicsQualityDetailed;
   lightFunctionQuality: number;
   shadowQuality: number;
@@ -625,6 +687,18 @@ export interface EffectsQualityResponse {
   shadowCsmTransitionScale: number;
 }
 
+export interface EffectsQualityResponse {
+  qualityDetailed: GraphicsQualityDetailed;
+  translucencyLightingVolumeDim: number;
+  refractionQuality: number;
+  ssr: number;
+  sceneColorFormat: number;
+  detailMode: number;
+  translucencyVolumeBlur: number;
+  materialQualityLevel: number;
+}
+
+/** Carries a single typed low-level graphics setting value. */
 export interface GraphicsSettingValue {
   type: SettingType;
   uint32Value?: number | undefined;
@@ -632,30 +706,65 @@ export interface GraphicsSettingValue {
   floatValue?: number | undefined;
 }
 
+/** Applies one low-level graphics setting override. */
 export interface GraphicsSettingValueSingleRequest {
   value: GraphicsSettingValue | undefined;
 }
 
+/** Applies multiple low-level graphics setting overrides in one request. */
 export interface GraphicsSettingValueMultipleRequest {
   values: GraphicsSettingValue[];
 }
 
-function createBaseGraphicsSettingsRequest(): GraphicsSettingsRequest {
-  return { requestType: 0 };
+/** Requests one graphics settings section from the backend. */
+export interface RequestGetGraphicsSettings {
+  requestType: GraphicsSettingRequestType;
 }
 
-export const GraphicsSettingsRequest: MessageFns<GraphicsSettingsRequest> = {
-  encode(message: GraphicsSettingsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.requestType !== 0) {
-      writer.uint32(8).int32(message.requestType);
+/** Applies one graphics settings change. Only one payload variant is valid per request. */
+export interface RequestSetGraphicsSettings {
+  resolutionScale?: ResolutionScaleSetRequest | undefined;
+  aaMethod?: AntialiasingMethodSetRequest | undefined;
+  fgMethod?: FrameGenSetRequest | undefined;
+  upscaler?: UpscaleModeSetRequest | undefined;
+  upscalerQuality?: UpscaleQualitySetRequest | undefined;
+  aaQuality?: AntiAliasingQualitySetRequest | undefined;
+  viewDistanceQuality?: ViewDistanceQualitySetRequest | undefined;
+  shadowsQuality?: ShadowQualitySetRequest | undefined;
+  textureQuality?: TextureQualitySetRequest | undefined;
+  effectsQuality?: EffectsQualitySetRequest | undefined;
+  singleSet?: GraphicsSettingValueSingleRequest | undefined;
+  arraySet?: GraphicsSettingValueMultipleRequest | undefined;
+}
+
+/** Returns the graphics settings payload matching the requested section. */
+export interface ResponseGraphicsSettings {
+  requestedType: GraphicsSettingRequestType;
+  resolutionScale?: ResolutionScaleResponse | undefined;
+  aa?: AntiAliasingResponse | undefined;
+  viewDistance?: GraphicsQuality | undefined;
+  pp?: PostProcessQualityResponse | undefined;
+  shadows?: ShadowQualityResponse | undefined;
+  texture?: TextureQualityResponse | undefined;
+  effects?: EffectsQualityResponse | undefined;
+}
+
+function createBaseResolutionScaleResponse(): ResolutionScaleResponse {
+  return { resolutionScale: 0 };
+}
+
+export const ResolutionScaleResponse: MessageFns<ResolutionScaleResponse> = {
+  encode(message: ResolutionScaleResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.resolutionScale !== 0) {
+      writer.uint32(8).uint32(message.resolutionScale);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): GraphicsSettingsRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): ResolutionScaleResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGraphicsSettingsRequest();
+    const message = createBaseResolutionScaleResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -664,7 +773,7 @@ export const GraphicsSettingsRequest: MessageFns<GraphicsSettingsRequest> = {
             break;
           }
 
-          message.requestType = reader.int32() as any;
+          message.resolutionScale = reader.uint32();
           continue;
         }
       }
@@ -676,36 +785,100 @@ export const GraphicsSettingsRequest: MessageFns<GraphicsSettingsRequest> = {
     return message;
   },
 
-  fromJSON(object: any): GraphicsSettingsRequest {
+  fromJSON(object: any): ResolutionScaleResponse {
     return {
-      requestType: isSet(object.requestType)
-        ? graphicsSettingRequestTypeFromJSON(object.requestType)
-        : isSet(object.request_type)
-        ? graphicsSettingRequestTypeFromJSON(object.request_type)
+      resolutionScale: isSet(object.resolutionScale)
+        ? globalThis.Number(object.resolutionScale)
+        : isSet(object.resolution_scale)
+        ? globalThis.Number(object.resolution_scale)
         : 0,
     };
   },
 
-  toJSON(message: GraphicsSettingsRequest): unknown {
+  toJSON(message: ResolutionScaleResponse): unknown {
     const obj: any = {};
-    if (message.requestType !== 0) {
-      obj.requestType = graphicsSettingRequestTypeToJSON(message.requestType);
+    if (message.resolutionScale !== 0) {
+      obj.resolutionScale = Math.round(message.resolutionScale);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GraphicsSettingsRequest>, I>>(base?: I): GraphicsSettingsRequest {
-    return GraphicsSettingsRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ResolutionScaleResponse>, I>>(base?: I): ResolutionScaleResponse {
+    return ResolutionScaleResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GraphicsSettingsRequest>, I>>(object: I): GraphicsSettingsRequest {
-    const message = createBaseGraphicsSettingsRequest();
-    message.requestType = object.requestType ?? 0;
+  fromPartial<I extends Exact<DeepPartial<ResolutionScaleResponse>, I>>(object: I): ResolutionScaleResponse {
+    const message = createBaseResolutionScaleResponse();
+    message.resolutionScale = object.resolutionScale ?? 0;
+    return message;
+  },
+};
+
+function createBaseResolutionScaleSetRequest(): ResolutionScaleSetRequest {
+  return { resolutionScale: 0 };
+}
+
+export const ResolutionScaleSetRequest: MessageFns<ResolutionScaleSetRequest> = {
+  encode(message: ResolutionScaleSetRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.resolutionScale !== 0) {
+      writer.uint32(8).uint32(message.resolutionScale);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResolutionScaleSetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResolutionScaleSetRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.resolutionScale = reader.uint32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResolutionScaleSetRequest {
+    return {
+      resolutionScale: isSet(object.resolutionScale)
+        ? globalThis.Number(object.resolutionScale)
+        : isSet(object.resolution_scale)
+        ? globalThis.Number(object.resolution_scale)
+        : 0,
+    };
+  },
+
+  toJSON(message: ResolutionScaleSetRequest): unknown {
+    const obj: any = {};
+    if (message.resolutionScale !== 0) {
+      obj.resolutionScale = Math.round(message.resolutionScale);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResolutionScaleSetRequest>, I>>(base?: I): ResolutionScaleSetRequest {
+    return ResolutionScaleSetRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResolutionScaleSetRequest>, I>>(object: I): ResolutionScaleSetRequest {
+    const message = createBaseResolutionScaleSetRequest();
+    message.resolutionScale = object.resolutionScale ?? 0;
     return message;
   },
 };
 
 function createBaseAntiAliasingResponse(): AntiAliasingResponse {
-  return { aaMethod: 0, fg: 0, upscaler: 0, quality: 0 };
+  return { aaMethod: 0, aaQuality: 0, fg: 0, upscaler: 0, upscalerQuality: 0 };
 }
 
 export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
@@ -713,14 +886,17 @@ export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
     if (message.aaMethod !== 0) {
       writer.uint32(8).int32(message.aaMethod);
     }
+    if (message.aaQuality !== 0) {
+      writer.uint32(16).int32(message.aaQuality);
+    }
     if (message.fg !== 0) {
-      writer.uint32(16).int32(message.fg);
+      writer.uint32(24).int32(message.fg);
     }
     if (message.upscaler !== 0) {
-      writer.uint32(24).int32(message.upscaler);
+      writer.uint32(32).int32(message.upscaler);
     }
-    if (message.quality !== 0) {
-      writer.uint32(32).int32(message.quality);
+    if (message.upscalerQuality !== 0) {
+      writer.uint32(40).int32(message.upscalerQuality);
     }
     return writer;
   },
@@ -745,7 +921,7 @@ export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
             break;
           }
 
-          message.fg = reader.int32() as any;
+          message.aaQuality = reader.int32() as any;
           continue;
         }
         case 3: {
@@ -753,7 +929,7 @@ export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
             break;
           }
 
-          message.upscaler = reader.int32() as any;
+          message.fg = reader.int32() as any;
           continue;
         }
         case 4: {
@@ -761,7 +937,15 @@ export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
             break;
           }
 
-          message.quality = reader.int32() as any;
+          message.upscaler = reader.int32() as any;
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.upscalerQuality = reader.int32() as any;
           continue;
         }
       }
@@ -780,9 +964,18 @@ export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
         : isSet(object.aa_method)
         ? antiAliasingTypeFromJSON(object.aa_method)
         : 0,
+      aaQuality: isSet(object.aaQuality)
+        ? graphicsQualityFromJSON(object.aaQuality)
+        : isSet(object.aa_quality)
+        ? graphicsQualityFromJSON(object.aa_quality)
+        : 0,
       fg: isSet(object.fg) ? frameGenScaleFromJSON(object.fg) : 0,
       upscaler: isSet(object.upscaler) ? upscaleModeFromJSON(object.upscaler) : 0,
-      quality: isSet(object.quality) ? upscaleQualityFromJSON(object.quality) : 0,
+      upscalerQuality: isSet(object.upscalerQuality)
+        ? upscaleQualityFromJSON(object.upscalerQuality)
+        : isSet(object.upscaler_quality)
+        ? upscaleQualityFromJSON(object.upscaler_quality)
+        : 0,
     };
   },
 
@@ -791,14 +984,17 @@ export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
     if (message.aaMethod !== 0) {
       obj.aaMethod = antiAliasingTypeToJSON(message.aaMethod);
     }
+    if (message.aaQuality !== 0) {
+      obj.aaQuality = graphicsQualityToJSON(message.aaQuality);
+    }
     if (message.fg !== 0) {
       obj.fg = frameGenScaleToJSON(message.fg);
     }
     if (message.upscaler !== 0) {
       obj.upscaler = upscaleModeToJSON(message.upscaler);
     }
-    if (message.quality !== 0) {
-      obj.quality = upscaleQualityToJSON(message.quality);
+    if (message.upscalerQuality !== 0) {
+      obj.upscalerQuality = upscaleQualityToJSON(message.upscalerQuality);
     }
     return obj;
   },
@@ -809,9 +1005,10 @@ export const AntiAliasingResponse: MessageFns<AntiAliasingResponse> = {
   fromPartial<I extends Exact<DeepPartial<AntiAliasingResponse>, I>>(object: I): AntiAliasingResponse {
     const message = createBaseAntiAliasingResponse();
     message.aaMethod = object.aaMethod ?? 0;
+    message.aaQuality = object.aaQuality ?? 0;
     message.fg = object.fg ?? 0;
     message.upscaler = object.upscaler ?? 0;
-    message.quality = object.quality ?? 0;
+    message.upscalerQuality = object.upscalerQuality ?? 0;
     return message;
   },
 };
@@ -1829,7 +2026,7 @@ export const TextureQualityResponse: MessageFns<TextureQualityResponse> = {
   },
 };
 
-function createBaseEffectsQualityResponse(): EffectsQualityResponse {
+function createBaseShadowQualityResponse(): ShadowQualityResponse {
   return {
     qualityDetailed: 0,
     lightFunctionQuality: 0,
@@ -1842,8 +2039,8 @@ function createBaseEffectsQualityResponse(): EffectsQualityResponse {
   };
 }
 
-export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
-  encode(message: EffectsQualityResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ShadowQualityResponse: MessageFns<ShadowQualityResponse> = {
+  encode(message: ShadowQualityResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.qualityDetailed !== 0) {
       writer.uint32(8).int32(message.qualityDetailed);
     }
@@ -1871,10 +2068,10 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): EffectsQualityResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): ShadowQualityResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEffectsQualityResponse();
+    const message = createBaseShadowQualityResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1951,7 +2148,7 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     return message;
   },
 
-  fromJSON(object: any): EffectsQualityResponse {
+  fromJSON(object: any): ShadowQualityResponse {
     return {
       qualityDetailed: isSet(object.qualityDetailed)
         ? graphicsQualityDetailedFromJSON(object.qualityDetailed)
@@ -1996,7 +2193,7 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     };
   },
 
-  toJSON(message: EffectsQualityResponse): unknown {
+  toJSON(message: ShadowQualityResponse): unknown {
     const obj: any = {};
     if (message.qualityDetailed !== 0) {
       obj.qualityDetailed = graphicsQualityDetailedToJSON(message.qualityDetailed);
@@ -2025,11 +2222,11 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<EffectsQualityResponse>, I>>(base?: I): EffectsQualityResponse {
-    return EffectsQualityResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ShadowQualityResponse>, I>>(base?: I): ShadowQualityResponse {
+    return ShadowQualityResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<EffectsQualityResponse>, I>>(object: I): EffectsQualityResponse {
-    const message = createBaseEffectsQualityResponse();
+  fromPartial<I extends Exact<DeepPartial<ShadowQualityResponse>, I>>(object: I): ShadowQualityResponse {
+    const message = createBaseShadowQualityResponse();
     message.qualityDetailed = object.qualityDetailed ?? 0;
     message.lightFunctionQuality = object.lightFunctionQuality ?? 0;
     message.shadowQuality = object.shadowQuality ?? 0;
@@ -2038,6 +2235,215 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     message.shadowRadiusThreshold = object.shadowRadiusThreshold ?? 0;
     message.shadowDistanceScale = object.shadowDistanceScale ?? 0;
     message.shadowCsmTransitionScale = object.shadowCsmTransitionScale ?? 0;
+    return message;
+  },
+};
+
+function createBaseEffectsQualityResponse(): EffectsQualityResponse {
+  return {
+    qualityDetailed: 0,
+    translucencyLightingVolumeDim: 0,
+    refractionQuality: 0,
+    ssr: 0,
+    sceneColorFormat: 0,
+    detailMode: 0,
+    translucencyVolumeBlur: 0,
+    materialQualityLevel: 0,
+  };
+}
+
+export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
+  encode(message: EffectsQualityResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.qualityDetailed !== 0) {
+      writer.uint32(8).int32(message.qualityDetailed);
+    }
+    if (message.translucencyLightingVolumeDim !== 0) {
+      writer.uint32(16).uint32(message.translucencyLightingVolumeDim);
+    }
+    if (message.refractionQuality !== 0) {
+      writer.uint32(24).uint32(message.refractionQuality);
+    }
+    if (message.ssr !== 0) {
+      writer.uint32(32).uint32(message.ssr);
+    }
+    if (message.sceneColorFormat !== 0) {
+      writer.uint32(40).uint32(message.sceneColorFormat);
+    }
+    if (message.detailMode !== 0) {
+      writer.uint32(48).uint32(message.detailMode);
+    }
+    if (message.translucencyVolumeBlur !== 0) {
+      writer.uint32(56).uint32(message.translucencyVolumeBlur);
+    }
+    if (message.materialQualityLevel !== 0) {
+      writer.uint32(64).uint32(message.materialQualityLevel);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EffectsQualityResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEffectsQualityResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.qualityDetailed = reader.int32() as any;
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.translucencyLightingVolumeDim = reader.uint32();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.refractionQuality = reader.uint32();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.ssr = reader.uint32();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.sceneColorFormat = reader.uint32();
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.detailMode = reader.uint32();
+          continue;
+        }
+        case 7: {
+          if (tag !== 56) {
+            break;
+          }
+
+          message.translucencyVolumeBlur = reader.uint32();
+          continue;
+        }
+        case 8: {
+          if (tag !== 64) {
+            break;
+          }
+
+          message.materialQualityLevel = reader.uint32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EffectsQualityResponse {
+    return {
+      qualityDetailed: isSet(object.qualityDetailed)
+        ? graphicsQualityDetailedFromJSON(object.qualityDetailed)
+        : isSet(object.quality_detailed)
+        ? graphicsQualityDetailedFromJSON(object.quality_detailed)
+        : 0,
+      translucencyLightingVolumeDim: isSet(object.translucencyLightingVolumeDim)
+        ? globalThis.Number(object.translucencyLightingVolumeDim)
+        : isSet(object.translucency_lighting_volume_dim)
+        ? globalThis.Number(object.translucency_lighting_volume_dim)
+        : 0,
+      refractionQuality: isSet(object.refractionQuality)
+        ? globalThis.Number(object.refractionQuality)
+        : isSet(object.refraction_quality)
+        ? globalThis.Number(object.refraction_quality)
+        : 0,
+      ssr: isSet(object.ssr) ? globalThis.Number(object.ssr) : 0,
+      sceneColorFormat: isSet(object.sceneColorFormat)
+        ? globalThis.Number(object.sceneColorFormat)
+        : isSet(object.scene_color_format)
+        ? globalThis.Number(object.scene_color_format)
+        : 0,
+      detailMode: isSet(object.detailMode)
+        ? globalThis.Number(object.detailMode)
+        : isSet(object.detail_mode)
+        ? globalThis.Number(object.detail_mode)
+        : 0,
+      translucencyVolumeBlur: isSet(object.translucencyVolumeBlur)
+        ? globalThis.Number(object.translucencyVolumeBlur)
+        : isSet(object.translucency_volume_blur)
+        ? globalThis.Number(object.translucency_volume_blur)
+        : 0,
+      materialQualityLevel: isSet(object.materialQualityLevel)
+        ? globalThis.Number(object.materialQualityLevel)
+        : isSet(object.material_quality_level)
+        ? globalThis.Number(object.material_quality_level)
+        : 0,
+    };
+  },
+
+  toJSON(message: EffectsQualityResponse): unknown {
+    const obj: any = {};
+    if (message.qualityDetailed !== 0) {
+      obj.qualityDetailed = graphicsQualityDetailedToJSON(message.qualityDetailed);
+    }
+    if (message.translucencyLightingVolumeDim !== 0) {
+      obj.translucencyLightingVolumeDim = Math.round(message.translucencyLightingVolumeDim);
+    }
+    if (message.refractionQuality !== 0) {
+      obj.refractionQuality = Math.round(message.refractionQuality);
+    }
+    if (message.ssr !== 0) {
+      obj.ssr = Math.round(message.ssr);
+    }
+    if (message.sceneColorFormat !== 0) {
+      obj.sceneColorFormat = Math.round(message.sceneColorFormat);
+    }
+    if (message.detailMode !== 0) {
+      obj.detailMode = Math.round(message.detailMode);
+    }
+    if (message.translucencyVolumeBlur !== 0) {
+      obj.translucencyVolumeBlur = Math.round(message.translucencyVolumeBlur);
+    }
+    if (message.materialQualityLevel !== 0) {
+      obj.materialQualityLevel = Math.round(message.materialQualityLevel);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<EffectsQualityResponse>, I>>(base?: I): EffectsQualityResponse {
+    return EffectsQualityResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<EffectsQualityResponse>, I>>(object: I): EffectsQualityResponse {
+    const message = createBaseEffectsQualityResponse();
+    message.qualityDetailed = object.qualityDetailed ?? 0;
+    message.translucencyLightingVolumeDim = object.translucencyLightingVolumeDim ?? 0;
+    message.refractionQuality = object.refractionQuality ?? 0;
+    message.ssr = object.ssr ?? 0;
+    message.sceneColorFormat = object.sceneColorFormat ?? 0;
+    message.detailMode = object.detailMode ?? 0;
+    message.translucencyVolumeBlur = object.translucencyVolumeBlur ?? 0;
+    message.materialQualityLevel = object.materialQualityLevel ?? 0;
     return message;
   },
 };
@@ -2288,6 +2694,592 @@ export const GraphicsSettingValueMultipleRequest: MessageFns<GraphicsSettingValu
   ): GraphicsSettingValueMultipleRequest {
     const message = createBaseGraphicsSettingValueMultipleRequest();
     message.values = object.values?.map((e) => GraphicsSettingValue.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseRequestGetGraphicsSettings(): RequestGetGraphicsSettings {
+  return { requestType: 0 };
+}
+
+export const RequestGetGraphicsSettings: MessageFns<RequestGetGraphicsSettings> = {
+  encode(message: RequestGetGraphicsSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestType !== 0) {
+      writer.uint32(8).int32(message.requestType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestGetGraphicsSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestGetGraphicsSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestType = reader.int32() as any;
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestGetGraphicsSettings {
+    return {
+      requestType: isSet(object.requestType)
+        ? graphicsSettingRequestTypeFromJSON(object.requestType)
+        : isSet(object.request_type)
+        ? graphicsSettingRequestTypeFromJSON(object.request_type)
+        : 0,
+    };
+  },
+
+  toJSON(message: RequestGetGraphicsSettings): unknown {
+    const obj: any = {};
+    if (message.requestType !== 0) {
+      obj.requestType = graphicsSettingRequestTypeToJSON(message.requestType);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestGetGraphicsSettings>, I>>(base?: I): RequestGetGraphicsSettings {
+    return RequestGetGraphicsSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestGetGraphicsSettings>, I>>(object: I): RequestGetGraphicsSettings {
+    const message = createBaseRequestGetGraphicsSettings();
+    message.requestType = object.requestType ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestSetGraphicsSettings(): RequestSetGraphicsSettings {
+  return {
+    resolutionScale: undefined,
+    aaMethod: undefined,
+    fgMethod: undefined,
+    upscaler: undefined,
+    upscalerQuality: undefined,
+    aaQuality: undefined,
+    viewDistanceQuality: undefined,
+    shadowsQuality: undefined,
+    textureQuality: undefined,
+    effectsQuality: undefined,
+    singleSet: undefined,
+    arraySet: undefined,
+  };
+}
+
+export const RequestSetGraphicsSettings: MessageFns<RequestSetGraphicsSettings> = {
+  encode(message: RequestSetGraphicsSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.resolutionScale !== undefined) {
+      ResolutionScaleSetRequest.encode(message.resolutionScale, writer.uint32(10).fork()).join();
+    }
+    if (message.aaMethod !== undefined) {
+      AntialiasingMethodSetRequest.encode(message.aaMethod, writer.uint32(18).fork()).join();
+    }
+    if (message.fgMethod !== undefined) {
+      FrameGenSetRequest.encode(message.fgMethod, writer.uint32(26).fork()).join();
+    }
+    if (message.upscaler !== undefined) {
+      UpscaleModeSetRequest.encode(message.upscaler, writer.uint32(34).fork()).join();
+    }
+    if (message.upscalerQuality !== undefined) {
+      UpscaleQualitySetRequest.encode(message.upscalerQuality, writer.uint32(42).fork()).join();
+    }
+    if (message.aaQuality !== undefined) {
+      AntiAliasingQualitySetRequest.encode(message.aaQuality, writer.uint32(50).fork()).join();
+    }
+    if (message.viewDistanceQuality !== undefined) {
+      ViewDistanceQualitySetRequest.encode(message.viewDistanceQuality, writer.uint32(58).fork()).join();
+    }
+    if (message.shadowsQuality !== undefined) {
+      ShadowQualitySetRequest.encode(message.shadowsQuality, writer.uint32(66).fork()).join();
+    }
+    if (message.textureQuality !== undefined) {
+      TextureQualitySetRequest.encode(message.textureQuality, writer.uint32(74).fork()).join();
+    }
+    if (message.effectsQuality !== undefined) {
+      EffectsQualitySetRequest.encode(message.effectsQuality, writer.uint32(82).fork()).join();
+    }
+    if (message.singleSet !== undefined) {
+      GraphicsSettingValueSingleRequest.encode(message.singleSet, writer.uint32(90).fork()).join();
+    }
+    if (message.arraySet !== undefined) {
+      GraphicsSettingValueMultipleRequest.encode(message.arraySet, writer.uint32(98).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestSetGraphicsSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestSetGraphicsSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.resolutionScale = ResolutionScaleSetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.aaMethod = AntialiasingMethodSetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.fgMethod = FrameGenSetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.upscaler = UpscaleModeSetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.upscalerQuality = UpscaleQualitySetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.aaQuality = AntiAliasingQualitySetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.viewDistanceQuality = ViewDistanceQualitySetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.shadowsQuality = ShadowQualitySetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 9: {
+          if (tag !== 74) {
+            break;
+          }
+
+          message.textureQuality = TextureQualitySetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 10: {
+          if (tag !== 82) {
+            break;
+          }
+
+          message.effectsQuality = EffectsQualitySetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 11: {
+          if (tag !== 90) {
+            break;
+          }
+
+          message.singleSet = GraphicsSettingValueSingleRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 12: {
+          if (tag !== 98) {
+            break;
+          }
+
+          message.arraySet = GraphicsSettingValueMultipleRequest.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestSetGraphicsSettings {
+    return {
+      resolutionScale: isSet(object.resolutionScale)
+        ? ResolutionScaleSetRequest.fromJSON(object.resolutionScale)
+        : isSet(object.resolution_scale)
+        ? ResolutionScaleSetRequest.fromJSON(object.resolution_scale)
+        : undefined,
+      aaMethod: isSet(object.aaMethod)
+        ? AntialiasingMethodSetRequest.fromJSON(object.aaMethod)
+        : isSet(object.aa_method)
+        ? AntialiasingMethodSetRequest.fromJSON(object.aa_method)
+        : undefined,
+      fgMethod: isSet(object.fgMethod)
+        ? FrameGenSetRequest.fromJSON(object.fgMethod)
+        : isSet(object.fg_method)
+        ? FrameGenSetRequest.fromJSON(object.fg_method)
+        : undefined,
+      upscaler: isSet(object.upscaler) ? UpscaleModeSetRequest.fromJSON(object.upscaler) : undefined,
+      upscalerQuality: isSet(object.upscalerQuality)
+        ? UpscaleQualitySetRequest.fromJSON(object.upscalerQuality)
+        : isSet(object.upscaler_quality)
+        ? UpscaleQualitySetRequest.fromJSON(object.upscaler_quality)
+        : undefined,
+      aaQuality: isSet(object.aaQuality)
+        ? AntiAliasingQualitySetRequest.fromJSON(object.aaQuality)
+        : isSet(object.aa_quality)
+        ? AntiAliasingQualitySetRequest.fromJSON(object.aa_quality)
+        : undefined,
+      viewDistanceQuality: isSet(object.viewDistanceQuality)
+        ? ViewDistanceQualitySetRequest.fromJSON(object.viewDistanceQuality)
+        : isSet(object.view_distance_quality)
+        ? ViewDistanceQualitySetRequest.fromJSON(object.view_distance_quality)
+        : undefined,
+      shadowsQuality: isSet(object.shadowsQuality)
+        ? ShadowQualitySetRequest.fromJSON(object.shadowsQuality)
+        : isSet(object.shadows_quality)
+        ? ShadowQualitySetRequest.fromJSON(object.shadows_quality)
+        : undefined,
+      textureQuality: isSet(object.textureQuality)
+        ? TextureQualitySetRequest.fromJSON(object.textureQuality)
+        : isSet(object.texture_quality)
+        ? TextureQualitySetRequest.fromJSON(object.texture_quality)
+        : undefined,
+      effectsQuality: isSet(object.effectsQuality)
+        ? EffectsQualitySetRequest.fromJSON(object.effectsQuality)
+        : isSet(object.effects_quality)
+        ? EffectsQualitySetRequest.fromJSON(object.effects_quality)
+        : undefined,
+      singleSet: isSet(object.singleSet)
+        ? GraphicsSettingValueSingleRequest.fromJSON(object.singleSet)
+        : isSet(object.single_set)
+        ? GraphicsSettingValueSingleRequest.fromJSON(object.single_set)
+        : undefined,
+      arraySet: isSet(object.arraySet)
+        ? GraphicsSettingValueMultipleRequest.fromJSON(object.arraySet)
+        : isSet(object.array_set)
+        ? GraphicsSettingValueMultipleRequest.fromJSON(object.array_set)
+        : undefined,
+    };
+  },
+
+  toJSON(message: RequestSetGraphicsSettings): unknown {
+    const obj: any = {};
+    if (message.resolutionScale !== undefined) {
+      obj.resolutionScale = ResolutionScaleSetRequest.toJSON(message.resolutionScale);
+    }
+    if (message.aaMethod !== undefined) {
+      obj.aaMethod = AntialiasingMethodSetRequest.toJSON(message.aaMethod);
+    }
+    if (message.fgMethod !== undefined) {
+      obj.fgMethod = FrameGenSetRequest.toJSON(message.fgMethod);
+    }
+    if (message.upscaler !== undefined) {
+      obj.upscaler = UpscaleModeSetRequest.toJSON(message.upscaler);
+    }
+    if (message.upscalerQuality !== undefined) {
+      obj.upscalerQuality = UpscaleQualitySetRequest.toJSON(message.upscalerQuality);
+    }
+    if (message.aaQuality !== undefined) {
+      obj.aaQuality = AntiAliasingQualitySetRequest.toJSON(message.aaQuality);
+    }
+    if (message.viewDistanceQuality !== undefined) {
+      obj.viewDistanceQuality = ViewDistanceQualitySetRequest.toJSON(message.viewDistanceQuality);
+    }
+    if (message.shadowsQuality !== undefined) {
+      obj.shadowsQuality = ShadowQualitySetRequest.toJSON(message.shadowsQuality);
+    }
+    if (message.textureQuality !== undefined) {
+      obj.textureQuality = TextureQualitySetRequest.toJSON(message.textureQuality);
+    }
+    if (message.effectsQuality !== undefined) {
+      obj.effectsQuality = EffectsQualitySetRequest.toJSON(message.effectsQuality);
+    }
+    if (message.singleSet !== undefined) {
+      obj.singleSet = GraphicsSettingValueSingleRequest.toJSON(message.singleSet);
+    }
+    if (message.arraySet !== undefined) {
+      obj.arraySet = GraphicsSettingValueMultipleRequest.toJSON(message.arraySet);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestSetGraphicsSettings>, I>>(base?: I): RequestSetGraphicsSettings {
+    return RequestSetGraphicsSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestSetGraphicsSettings>, I>>(object: I): RequestSetGraphicsSettings {
+    const message = createBaseRequestSetGraphicsSettings();
+    message.resolutionScale = (object.resolutionScale !== undefined && object.resolutionScale !== null)
+      ? ResolutionScaleSetRequest.fromPartial(object.resolutionScale)
+      : undefined;
+    message.aaMethod = (object.aaMethod !== undefined && object.aaMethod !== null)
+      ? AntialiasingMethodSetRequest.fromPartial(object.aaMethod)
+      : undefined;
+    message.fgMethod = (object.fgMethod !== undefined && object.fgMethod !== null)
+      ? FrameGenSetRequest.fromPartial(object.fgMethod)
+      : undefined;
+    message.upscaler = (object.upscaler !== undefined && object.upscaler !== null)
+      ? UpscaleModeSetRequest.fromPartial(object.upscaler)
+      : undefined;
+    message.upscalerQuality = (object.upscalerQuality !== undefined && object.upscalerQuality !== null)
+      ? UpscaleQualitySetRequest.fromPartial(object.upscalerQuality)
+      : undefined;
+    message.aaQuality = (object.aaQuality !== undefined && object.aaQuality !== null)
+      ? AntiAliasingQualitySetRequest.fromPartial(object.aaQuality)
+      : undefined;
+    message.viewDistanceQuality = (object.viewDistanceQuality !== undefined && object.viewDistanceQuality !== null)
+      ? ViewDistanceQualitySetRequest.fromPartial(object.viewDistanceQuality)
+      : undefined;
+    message.shadowsQuality = (object.shadowsQuality !== undefined && object.shadowsQuality !== null)
+      ? ShadowQualitySetRequest.fromPartial(object.shadowsQuality)
+      : undefined;
+    message.textureQuality = (object.textureQuality !== undefined && object.textureQuality !== null)
+      ? TextureQualitySetRequest.fromPartial(object.textureQuality)
+      : undefined;
+    message.effectsQuality = (object.effectsQuality !== undefined && object.effectsQuality !== null)
+      ? EffectsQualitySetRequest.fromPartial(object.effectsQuality)
+      : undefined;
+    message.singleSet = (object.singleSet !== undefined && object.singleSet !== null)
+      ? GraphicsSettingValueSingleRequest.fromPartial(object.singleSet)
+      : undefined;
+    message.arraySet = (object.arraySet !== undefined && object.arraySet !== null)
+      ? GraphicsSettingValueMultipleRequest.fromPartial(object.arraySet)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseResponseGraphicsSettings(): ResponseGraphicsSettings {
+  return {
+    requestedType: 0,
+    resolutionScale: undefined,
+    aa: undefined,
+    viewDistance: undefined,
+    pp: undefined,
+    shadows: undefined,
+    texture: undefined,
+    effects: undefined,
+  };
+}
+
+export const ResponseGraphicsSettings: MessageFns<ResponseGraphicsSettings> = {
+  encode(message: ResponseGraphicsSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestedType !== 0) {
+      writer.uint32(8).int32(message.requestedType);
+    }
+    if (message.resolutionScale !== undefined) {
+      ResolutionScaleResponse.encode(message.resolutionScale, writer.uint32(18).fork()).join();
+    }
+    if (message.aa !== undefined) {
+      AntiAliasingResponse.encode(message.aa, writer.uint32(26).fork()).join();
+    }
+    if (message.viewDistance !== undefined) {
+      writer.uint32(32).int32(message.viewDistance);
+    }
+    if (message.pp !== undefined) {
+      PostProcessQualityResponse.encode(message.pp, writer.uint32(42).fork()).join();
+    }
+    if (message.shadows !== undefined) {
+      ShadowQualityResponse.encode(message.shadows, writer.uint32(50).fork()).join();
+    }
+    if (message.texture !== undefined) {
+      TextureQualityResponse.encode(message.texture, writer.uint32(58).fork()).join();
+    }
+    if (message.effects !== undefined) {
+      EffectsQualityResponse.encode(message.effects, writer.uint32(66).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseGraphicsSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseGraphicsSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestedType = reader.int32() as any;
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.resolutionScale = ResolutionScaleResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.aa = AntiAliasingResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.viewDistance = reader.int32() as any;
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.pp = PostProcessQualityResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.shadows = ShadowQualityResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.texture = TextureQualityResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.effects = EffectsQualityResponse.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResponseGraphicsSettings {
+    return {
+      requestedType: isSet(object.requestedType)
+        ? graphicsSettingRequestTypeFromJSON(object.requestedType)
+        : isSet(object.requested_type)
+        ? graphicsSettingRequestTypeFromJSON(object.requested_type)
+        : 0,
+      resolutionScale: isSet(object.resolutionScale)
+        ? ResolutionScaleResponse.fromJSON(object.resolutionScale)
+        : isSet(object.resolution_scale)
+        ? ResolutionScaleResponse.fromJSON(object.resolution_scale)
+        : undefined,
+      aa: isSet(object.aa) ? AntiAliasingResponse.fromJSON(object.aa) : undefined,
+      viewDistance: isSet(object.viewDistance)
+        ? graphicsQualityFromJSON(object.viewDistance)
+        : isSet(object.view_distance)
+        ? graphicsQualityFromJSON(object.view_distance)
+        : undefined,
+      pp: isSet(object.pp) ? PostProcessQualityResponse.fromJSON(object.pp) : undefined,
+      shadows: isSet(object.shadows) ? ShadowQualityResponse.fromJSON(object.shadows) : undefined,
+      texture: isSet(object.texture) ? TextureQualityResponse.fromJSON(object.texture) : undefined,
+      effects: isSet(object.effects) ? EffectsQualityResponse.fromJSON(object.effects) : undefined,
+    };
+  },
+
+  toJSON(message: ResponseGraphicsSettings): unknown {
+    const obj: any = {};
+    if (message.requestedType !== 0) {
+      obj.requestedType = graphicsSettingRequestTypeToJSON(message.requestedType);
+    }
+    if (message.resolutionScale !== undefined) {
+      obj.resolutionScale = ResolutionScaleResponse.toJSON(message.resolutionScale);
+    }
+    if (message.aa !== undefined) {
+      obj.aa = AntiAliasingResponse.toJSON(message.aa);
+    }
+    if (message.viewDistance !== undefined) {
+      obj.viewDistance = graphicsQualityToJSON(message.viewDistance);
+    }
+    if (message.pp !== undefined) {
+      obj.pp = PostProcessQualityResponse.toJSON(message.pp);
+    }
+    if (message.shadows !== undefined) {
+      obj.shadows = ShadowQualityResponse.toJSON(message.shadows);
+    }
+    if (message.texture !== undefined) {
+      obj.texture = TextureQualityResponse.toJSON(message.texture);
+    }
+    if (message.effects !== undefined) {
+      obj.effects = EffectsQualityResponse.toJSON(message.effects);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResponseGraphicsSettings>, I>>(base?: I): ResponseGraphicsSettings {
+    return ResponseGraphicsSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResponseGraphicsSettings>, I>>(object: I): ResponseGraphicsSettings {
+    const message = createBaseResponseGraphicsSettings();
+    message.requestedType = object.requestedType ?? 0;
+    message.resolutionScale = (object.resolutionScale !== undefined && object.resolutionScale !== null)
+      ? ResolutionScaleResponse.fromPartial(object.resolutionScale)
+      : undefined;
+    message.aa = (object.aa !== undefined && object.aa !== null)
+      ? AntiAliasingResponse.fromPartial(object.aa)
+      : undefined;
+    message.viewDistance = object.viewDistance ?? undefined;
+    message.pp = (object.pp !== undefined && object.pp !== null)
+      ? PostProcessQualityResponse.fromPartial(object.pp)
+      : undefined;
+    message.shadows = (object.shadows !== undefined && object.shadows !== null)
+      ? ShadowQualityResponse.fromPartial(object.shadows)
+      : undefined;
+    message.texture = (object.texture !== undefined && object.texture !== null)
+      ? TextureQualityResponse.fromPartial(object.texture)
+      : undefined;
+    message.effects = (object.effects !== undefined && object.effects !== null)
+      ? EffectsQualityResponse.fromPartial(object.effects)
+      : undefined;
     return message;
   },
 };

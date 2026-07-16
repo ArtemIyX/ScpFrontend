@@ -9,10 +9,34 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "scp.webui.v1";
 
+/** Identifies the payload packed into ScpEnvelope.message_bytes. */
 export enum MessageType {
   MESSAGE_INVALID = 0,
   MESSAGE_PING = 1,
   MESSAGE_PONG = 2,
+  REQUEST_GET_DISPLAY_SETTINGS = 3,
+  REQUEST_SET_DISPLAY_SETTINGS = 4,
+  RESPONSE_DISPLAY_SETTINGS = 5,
+  REQUEST_GET_GRAPHICS_SETTINGS = 6,
+  REQUEST_SET_GRAPHICS_SETTINGS = 7,
+  RESPONSE_GRAPHICS_SETTINGS = 8,
+  REQUEST_GET_CONTROL_SETTINGS = 9,
+  REQUEST_SET_CONTROL_SETTINGS = 10,
+  RESPONSE_CONTROL_SETTINGS = 11,
+  REQUEST_GET_AUDIO_SETTINGS = 12,
+  REQUEST_SET_AUDIO_SETTINGS = 13,
+  RESPONSE_AUDIO_SETTINGS = 14,
+  REQUEST_GET_KEYS_SETTINGS = 15,
+  REQUEST_CLEAR_KEY_SETTINGS = 16,
+  REQUEST_RESET_KEY_SETTINGS = 17,
+  REQUEST_SET_KEYS_SETTINGS = 18,
+  REQUEST_RESET_ALL_KEY_SETTINGS = 19,
+  /** RESPONSE_ALL_KEY_SETTINGS - UI */
+  RESPONSE_ALL_KEY_SETTINGS = 21,
+  /** RESPONSE_KEYS_SETTINGS - Changed multiple */
+  RESPONSE_KEYS_SETTINGS = 22,
+  /** RESPONSE_SINGLE_KEY_SETTING - Changed single */
+  RESPONSE_SINGLE_KEY_SETTING = 23,
   UNRECOGNIZED = -1,
 }
 
@@ -27,6 +51,66 @@ export function messageTypeFromJSON(object: any): MessageType {
     case 2:
     case "MESSAGE_PONG":
       return MessageType.MESSAGE_PONG;
+    case 3:
+    case "REQUEST_GET_DISPLAY_SETTINGS":
+      return MessageType.REQUEST_GET_DISPLAY_SETTINGS;
+    case 4:
+    case "REQUEST_SET_DISPLAY_SETTINGS":
+      return MessageType.REQUEST_SET_DISPLAY_SETTINGS;
+    case 5:
+    case "RESPONSE_DISPLAY_SETTINGS":
+      return MessageType.RESPONSE_DISPLAY_SETTINGS;
+    case 6:
+    case "REQUEST_GET_GRAPHICS_SETTINGS":
+      return MessageType.REQUEST_GET_GRAPHICS_SETTINGS;
+    case 7:
+    case "REQUEST_SET_GRAPHICS_SETTINGS":
+      return MessageType.REQUEST_SET_GRAPHICS_SETTINGS;
+    case 8:
+    case "RESPONSE_GRAPHICS_SETTINGS":
+      return MessageType.RESPONSE_GRAPHICS_SETTINGS;
+    case 9:
+    case "REQUEST_GET_CONTROL_SETTINGS":
+      return MessageType.REQUEST_GET_CONTROL_SETTINGS;
+    case 10:
+    case "REQUEST_SET_CONTROL_SETTINGS":
+      return MessageType.REQUEST_SET_CONTROL_SETTINGS;
+    case 11:
+    case "RESPONSE_CONTROL_SETTINGS":
+      return MessageType.RESPONSE_CONTROL_SETTINGS;
+    case 12:
+    case "REQUEST_GET_AUDIO_SETTINGS":
+      return MessageType.REQUEST_GET_AUDIO_SETTINGS;
+    case 13:
+    case "REQUEST_SET_AUDIO_SETTINGS":
+      return MessageType.REQUEST_SET_AUDIO_SETTINGS;
+    case 14:
+    case "RESPONSE_AUDIO_SETTINGS":
+      return MessageType.RESPONSE_AUDIO_SETTINGS;
+    case 15:
+    case "REQUEST_GET_KEYS_SETTINGS":
+      return MessageType.REQUEST_GET_KEYS_SETTINGS;
+    case 16:
+    case "REQUEST_CLEAR_KEY_SETTINGS":
+      return MessageType.REQUEST_CLEAR_KEY_SETTINGS;
+    case 17:
+    case "REQUEST_RESET_KEY_SETTINGS":
+      return MessageType.REQUEST_RESET_KEY_SETTINGS;
+    case 18:
+    case "REQUEST_SET_KEYS_SETTINGS":
+      return MessageType.REQUEST_SET_KEYS_SETTINGS;
+    case 19:
+    case "REQUEST_RESET_ALL_KEY_SETTINGS":
+      return MessageType.REQUEST_RESET_ALL_KEY_SETTINGS;
+    case 21:
+    case "RESPONSE_ALL_KEY_SETTINGS":
+      return MessageType.RESPONSE_ALL_KEY_SETTINGS;
+    case 22:
+    case "RESPONSE_KEYS_SETTINGS":
+      return MessageType.RESPONSE_KEYS_SETTINGS;
+    case 23:
+    case "RESPONSE_SINGLE_KEY_SETTING":
+      return MessageType.RESPONSE_SINGLE_KEY_SETTING;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -42,23 +126,66 @@ export function messageTypeToJSON(object: MessageType): string {
       return "MESSAGE_PING";
     case MessageType.MESSAGE_PONG:
       return "MESSAGE_PONG";
+    case MessageType.REQUEST_GET_DISPLAY_SETTINGS:
+      return "REQUEST_GET_DISPLAY_SETTINGS";
+    case MessageType.REQUEST_SET_DISPLAY_SETTINGS:
+      return "REQUEST_SET_DISPLAY_SETTINGS";
+    case MessageType.RESPONSE_DISPLAY_SETTINGS:
+      return "RESPONSE_DISPLAY_SETTINGS";
+    case MessageType.REQUEST_GET_GRAPHICS_SETTINGS:
+      return "REQUEST_GET_GRAPHICS_SETTINGS";
+    case MessageType.REQUEST_SET_GRAPHICS_SETTINGS:
+      return "REQUEST_SET_GRAPHICS_SETTINGS";
+    case MessageType.RESPONSE_GRAPHICS_SETTINGS:
+      return "RESPONSE_GRAPHICS_SETTINGS";
+    case MessageType.REQUEST_GET_CONTROL_SETTINGS:
+      return "REQUEST_GET_CONTROL_SETTINGS";
+    case MessageType.REQUEST_SET_CONTROL_SETTINGS:
+      return "REQUEST_SET_CONTROL_SETTINGS";
+    case MessageType.RESPONSE_CONTROL_SETTINGS:
+      return "RESPONSE_CONTROL_SETTINGS";
+    case MessageType.REQUEST_GET_AUDIO_SETTINGS:
+      return "REQUEST_GET_AUDIO_SETTINGS";
+    case MessageType.REQUEST_SET_AUDIO_SETTINGS:
+      return "REQUEST_SET_AUDIO_SETTINGS";
+    case MessageType.RESPONSE_AUDIO_SETTINGS:
+      return "RESPONSE_AUDIO_SETTINGS";
+    case MessageType.REQUEST_GET_KEYS_SETTINGS:
+      return "REQUEST_GET_KEYS_SETTINGS";
+    case MessageType.REQUEST_CLEAR_KEY_SETTINGS:
+      return "REQUEST_CLEAR_KEY_SETTINGS";
+    case MessageType.REQUEST_RESET_KEY_SETTINGS:
+      return "REQUEST_RESET_KEY_SETTINGS";
+    case MessageType.REQUEST_SET_KEYS_SETTINGS:
+      return "REQUEST_SET_KEYS_SETTINGS";
+    case MessageType.REQUEST_RESET_ALL_KEY_SETTINGS:
+      return "REQUEST_RESET_ALL_KEY_SETTINGS";
+    case MessageType.RESPONSE_ALL_KEY_SETTINGS:
+      return "RESPONSE_ALL_KEY_SETTINGS";
+    case MessageType.RESPONSE_KEYS_SETTINGS:
+      return "RESPONSE_KEYS_SETTINGS";
+    case MessageType.RESPONSE_SINGLE_KEY_SETTING:
+      return "RESPONSE_SINGLE_KEY_SETTING";
     case MessageType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Ping sent by the client to validate connectivity and measure round-trip time. */
 export interface PingMessage {
   clientTimeMs: string;
   code: number;
 }
 
+/** Pong sent by the server with the original client timestamp and server timestamp. */
 export interface PongMessage {
   clientTimeMs: string;
   serverTimeMs: string;
   code: number;
 }
 
+/** Wraps typed protobuf payloads for transport across the WebUI channel. */
 export interface ScpEnvelope {
   messageType: MessageType;
   messageBytes: Uint8Array;

@@ -7,26 +7,27 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
-export const protobufPackage = "";
+export const protobufPackage = "scp.webui.v1";
 
+/** Identifies which controls settings group the client wants to fetch. */
 export enum ControlsSettingRequestType {
-  CONTROLS_MOUSE_SENSITIVITY = 0,
-  CONTROLS_MOVEMENT = 1,
-  CONTROLS_CHARACTER = 2,
+  CONTROLS_SETTING_MOUSE_SENSITIVITY = 0,
+  CONTROLS_SETTING_MOVEMENT = 1,
+  CONTROLS_SETTING_CHARACTER = 2,
   UNRECOGNIZED = -1,
 }
 
 export function controlsSettingRequestTypeFromJSON(object: any): ControlsSettingRequestType {
   switch (object) {
     case 0:
-    case "CONTROLS_MOUSE_SENSITIVITY":
-      return ControlsSettingRequestType.CONTROLS_MOUSE_SENSITIVITY;
+    case "CONTROLS_SETTING_MOUSE_SENSITIVITY":
+      return ControlsSettingRequestType.CONTROLS_SETTING_MOUSE_SENSITIVITY;
     case 1:
-    case "CONTROLS_MOVEMENT":
-      return ControlsSettingRequestType.CONTROLS_MOVEMENT;
+    case "CONTROLS_SETTING_MOVEMENT":
+      return ControlsSettingRequestType.CONTROLS_SETTING_MOVEMENT;
     case 2:
-    case "CONTROLS_CHARACTER":
-      return ControlsSettingRequestType.CONTROLS_CHARACTER;
+    case "CONTROLS_SETTING_CHARACTER":
+      return ControlsSettingRequestType.CONTROLS_SETTING_CHARACTER;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -36,18 +37,19 @@ export function controlsSettingRequestTypeFromJSON(object: any): ControlsSetting
 
 export function controlsSettingRequestTypeToJSON(object: ControlsSettingRequestType): string {
   switch (object) {
-    case ControlsSettingRequestType.CONTROLS_MOUSE_SENSITIVITY:
-      return "CONTROLS_MOUSE_SENSITIVITY";
-    case ControlsSettingRequestType.CONTROLS_MOVEMENT:
-      return "CONTROLS_MOVEMENT";
-    case ControlsSettingRequestType.CONTROLS_CHARACTER:
-      return "CONTROLS_CHARACTER";
+    case ControlsSettingRequestType.CONTROLS_SETTING_MOUSE_SENSITIVITY:
+      return "CONTROLS_SETTING_MOUSE_SENSITIVITY";
+    case ControlsSettingRequestType.CONTROLS_SETTING_MOVEMENT:
+      return "CONTROLS_SETTING_MOVEMENT";
+    case ControlsSettingRequestType.CONTROLS_SETTING_CHARACTER:
+      return "CONTROLS_SETTING_CHARACTER";
     case ControlsSettingRequestType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Identifies a specific controls checkbox toggle to update. */
 export enum ControlsCheckboxType {
   CONTROLS_INVERT_Y = 0,
   CONTROLS_HOLD_SPRINT = 1,
@@ -105,98 +107,54 @@ export function controlsCheckboxTypeToJSON(object: ControlsCheckboxType): string
   }
 }
 
-export interface ControlsSettingsRequest {
-  requestType: ControlsSettingRequestType;
-}
-
+/** Current mouse sensitivity slider value. */
 export interface MouseSensitivityResponse {
   sensitivity: number;
 }
 
+/** Updates the mouse sensitivity slider value. */
 export interface MouseSensitivitySetRequest {
   sensitivity: number;
 }
 
+/** Movement-related toggle states. */
 export interface ControlsMovementResponse {
   invertY: boolean;
   holdSprint: boolean;
   holdCrouch: boolean;
 }
 
+/** Character and inventory interaction toggle states. */
 export interface ControlsCharacterResponse {
   holdToSelectItem: boolean;
   autoSwitch: boolean;
   holdInventory: boolean;
 }
 
+/** Sets a single controls checkbox state. */
 export interface ControlCheckboxSetRequest {
   controlType: ControlsCheckboxType;
   checkboxValue: boolean;
 }
 
-function createBaseControlsSettingsRequest(): ControlsSettingsRequest {
-  return { requestType: 0 };
+/** Requests one controls settings section from the backend. */
+export interface RequestGetControlSettings {
+  requestType: ControlsSettingRequestType;
 }
 
-export const ControlsSettingsRequest: MessageFns<ControlsSettingsRequest> = {
-  encode(message: ControlsSettingsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.requestType !== 0) {
-      writer.uint32(8).int32(message.requestType);
-    }
-    return writer;
-  },
+/** Applies a controls settings change. Only one payload variant is valid per request. */
+export interface RequestSetControlSettings {
+  sensitivity?: MouseSensitivitySetRequest | undefined;
+  checkbox?: ControlCheckboxSetRequest | undefined;
+}
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ControlsSettingsRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseControlsSettingsRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
-          }
-
-          message.requestType = reader.int32() as any;
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ControlsSettingsRequest {
-    return {
-      requestType: isSet(object.requestType)
-        ? controlsSettingRequestTypeFromJSON(object.requestType)
-        : isSet(object.request_type)
-        ? controlsSettingRequestTypeFromJSON(object.request_type)
-        : 0,
-    };
-  },
-
-  toJSON(message: ControlsSettingsRequest): unknown {
-    const obj: any = {};
-    if (message.requestType !== 0) {
-      obj.requestType = controlsSettingRequestTypeToJSON(message.requestType);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ControlsSettingsRequest>, I>>(base?: I): ControlsSettingsRequest {
-    return ControlsSettingsRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ControlsSettingsRequest>, I>>(object: I): ControlsSettingsRequest {
-    const message = createBaseControlsSettingsRequest();
-    message.requestType = object.requestType ?? 0;
-    return message;
-  },
-};
+/** Returns the controls settings payload matching the requested section. */
+export interface ResponseControlSettings {
+  requestedType: ControlsSettingRequestType;
+  sensitivity?: MouseSensitivityResponse | undefined;
+  movement?: ControlsMovementResponse | undefined;
+  character?: ControlsCharacterResponse | undefined;
+}
 
 function createBaseMouseSensitivityResponse(): MouseSensitivityResponse {
   return { sensitivity: 0 };
@@ -602,6 +560,268 @@ export const ControlCheckboxSetRequest: MessageFns<ControlCheckboxSetRequest> = 
     const message = createBaseControlCheckboxSetRequest();
     message.controlType = object.controlType ?? 0;
     message.checkboxValue = object.checkboxValue ?? false;
+    return message;
+  },
+};
+
+function createBaseRequestGetControlSettings(): RequestGetControlSettings {
+  return { requestType: 0 };
+}
+
+export const RequestGetControlSettings: MessageFns<RequestGetControlSettings> = {
+  encode(message: RequestGetControlSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestType !== 0) {
+      writer.uint32(8).int32(message.requestType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestGetControlSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestGetControlSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestType = reader.int32() as any;
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestGetControlSettings {
+    return {
+      requestType: isSet(object.requestType)
+        ? controlsSettingRequestTypeFromJSON(object.requestType)
+        : isSet(object.request_type)
+        ? controlsSettingRequestTypeFromJSON(object.request_type)
+        : 0,
+    };
+  },
+
+  toJSON(message: RequestGetControlSettings): unknown {
+    const obj: any = {};
+    if (message.requestType !== 0) {
+      obj.requestType = controlsSettingRequestTypeToJSON(message.requestType);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestGetControlSettings>, I>>(base?: I): RequestGetControlSettings {
+    return RequestGetControlSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestGetControlSettings>, I>>(object: I): RequestGetControlSettings {
+    const message = createBaseRequestGetControlSettings();
+    message.requestType = object.requestType ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestSetControlSettings(): RequestSetControlSettings {
+  return { sensitivity: undefined, checkbox: undefined };
+}
+
+export const RequestSetControlSettings: MessageFns<RequestSetControlSettings> = {
+  encode(message: RequestSetControlSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.sensitivity !== undefined) {
+      MouseSensitivitySetRequest.encode(message.sensitivity, writer.uint32(10).fork()).join();
+    }
+    if (message.checkbox !== undefined) {
+      ControlCheckboxSetRequest.encode(message.checkbox, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestSetControlSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestSetControlSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.sensitivity = MouseSensitivitySetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.checkbox = ControlCheckboxSetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestSetControlSettings {
+    return {
+      sensitivity: isSet(object.sensitivity) ? MouseSensitivitySetRequest.fromJSON(object.sensitivity) : undefined,
+      checkbox: isSet(object.checkbox) ? ControlCheckboxSetRequest.fromJSON(object.checkbox) : undefined,
+    };
+  },
+
+  toJSON(message: RequestSetControlSettings): unknown {
+    const obj: any = {};
+    if (message.sensitivity !== undefined) {
+      obj.sensitivity = MouseSensitivitySetRequest.toJSON(message.sensitivity);
+    }
+    if (message.checkbox !== undefined) {
+      obj.checkbox = ControlCheckboxSetRequest.toJSON(message.checkbox);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestSetControlSettings>, I>>(base?: I): RequestSetControlSettings {
+    return RequestSetControlSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestSetControlSettings>, I>>(object: I): RequestSetControlSettings {
+    const message = createBaseRequestSetControlSettings();
+    message.sensitivity = (object.sensitivity !== undefined && object.sensitivity !== null)
+      ? MouseSensitivitySetRequest.fromPartial(object.sensitivity)
+      : undefined;
+    message.checkbox = (object.checkbox !== undefined && object.checkbox !== null)
+      ? ControlCheckboxSetRequest.fromPartial(object.checkbox)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseResponseControlSettings(): ResponseControlSettings {
+  return { requestedType: 0, sensitivity: undefined, movement: undefined, character: undefined };
+}
+
+export const ResponseControlSettings: MessageFns<ResponseControlSettings> = {
+  encode(message: ResponseControlSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestedType !== 0) {
+      writer.uint32(8).int32(message.requestedType);
+    }
+    if (message.sensitivity !== undefined) {
+      MouseSensitivityResponse.encode(message.sensitivity, writer.uint32(18).fork()).join();
+    }
+    if (message.movement !== undefined) {
+      ControlsMovementResponse.encode(message.movement, writer.uint32(26).fork()).join();
+    }
+    if (message.character !== undefined) {
+      ControlsCharacterResponse.encode(message.character, writer.uint32(34).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseControlSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseControlSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestedType = reader.int32() as any;
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.sensitivity = MouseSensitivityResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.movement = ControlsMovementResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.character = ControlsCharacterResponse.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResponseControlSettings {
+    return {
+      requestedType: isSet(object.requestedType)
+        ? controlsSettingRequestTypeFromJSON(object.requestedType)
+        : isSet(object.requested_type)
+        ? controlsSettingRequestTypeFromJSON(object.requested_type)
+        : 0,
+      sensitivity: isSet(object.sensitivity) ? MouseSensitivityResponse.fromJSON(object.sensitivity) : undefined,
+      movement: isSet(object.movement) ? ControlsMovementResponse.fromJSON(object.movement) : undefined,
+      character: isSet(object.character) ? ControlsCharacterResponse.fromJSON(object.character) : undefined,
+    };
+  },
+
+  toJSON(message: ResponseControlSettings): unknown {
+    const obj: any = {};
+    if (message.requestedType !== 0) {
+      obj.requestedType = controlsSettingRequestTypeToJSON(message.requestedType);
+    }
+    if (message.sensitivity !== undefined) {
+      obj.sensitivity = MouseSensitivityResponse.toJSON(message.sensitivity);
+    }
+    if (message.movement !== undefined) {
+      obj.movement = ControlsMovementResponse.toJSON(message.movement);
+    }
+    if (message.character !== undefined) {
+      obj.character = ControlsCharacterResponse.toJSON(message.character);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResponseControlSettings>, I>>(base?: I): ResponseControlSettings {
+    return ResponseControlSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResponseControlSettings>, I>>(object: I): ResponseControlSettings {
+    const message = createBaseResponseControlSettings();
+    message.requestedType = object.requestedType ?? 0;
+    message.sensitivity = (object.sensitivity !== undefined && object.sensitivity !== null)
+      ? MouseSensitivityResponse.fromPartial(object.sensitivity)
+      : undefined;
+    message.movement = (object.movement !== undefined && object.movement !== null)
+      ? ControlsMovementResponse.fromPartial(object.movement)
+      : undefined;
+    message.character = (object.character !== undefined && object.character !== null)
+      ? ControlsCharacterResponse.fromPartial(object.character)
+      : undefined;
     return message;
   },
 };

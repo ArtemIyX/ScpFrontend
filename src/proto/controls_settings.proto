@@ -1,30 +1,36 @@
 syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
+package scp.webui.v1;
 
+// Identifies which controls settings group the client wants to fetch.
 enum ControlsSettingRequestType
 {
-  CONTROLS_MOUSE_SENSITIVITY = 0;
-  CONTROLS_MOVEMENT = 1;
-  CONTROLS_CHARACTER = 2;
+  CONTROLS_SETTING_MOUSE_SENSITIVITY = 0;
+  CONTROLS_SETTING_MOVEMENT = 1;
+  CONTROLS_SETTING_CHARACTER = 2;
 }
 
-message ControlsSettingsRequest {
-  ControlsSettingRequestType request_type = 1;
-}
-
-message MouseSensitivityResponse {
-  float sensitivity = 1;
-}
-message MouseSensitivitySetRequest {
+// Current mouse sensitivity slider value.
+message MouseSensitivityResponse
+{
   float sensitivity = 1;
 }
 
-message ControlsMovementResponse {
+// Updates the mouse sensitivity slider value.
+message MouseSensitivitySetRequest
+{
+  float sensitivity = 1;
+}
+
+// Movement-related toggle states.
+message ControlsMovementResponse
+{
   bool invert_y = 1;
   bool hold_sprint = 2;
   bool hold_crouch = 3;
 }
 
+// Character and inventory interaction toggle states.
 message ControlsCharacterResponse
 {
   bool hold_to_select_item = 1;
@@ -32,6 +38,7 @@ message ControlsCharacterResponse
   bool hold_inventory = 3;
 }
 
+// Identifies a specific controls checkbox toggle to update.
 enum ControlsCheckboxType
 {
   CONTROLS_INVERT_Y = 0;
@@ -42,9 +49,37 @@ enum ControlsCheckboxType
   CONTROLS_HOLD_INVENTORY = 5;
 }
 
+// Sets a single controls checkbox state.
 message ControlCheckboxSetRequest
 {
   ControlsCheckboxType control_type = 1;
   bool checkbox_value = 2;
 }
 
+// Requests one controls settings section from the backend.
+message RequestGetControlSettings
+{
+  ControlsSettingRequestType request_type = 1;
+}
+
+// Applies a controls settings change. Only one payload variant is valid per request.
+message RequestSetControlSettings
+{
+  oneof content
+  {
+    MouseSensitivitySetRequest sensitivity = 1;
+    ControlCheckboxSetRequest checkbox = 2;
+  }
+}
+
+// Returns the controls settings payload matching the requested section.
+message ResponseControlSettings
+{
+  ControlsSettingRequestType requested_type = 1;
+  oneof result
+  {
+      MouseSensitivityResponse sensitivity = 2;
+      ControlsMovementResponse movement = 3;
+      ControlsCharacterResponse character = 4;
+  }
+}

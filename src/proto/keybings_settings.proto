@@ -1,32 +1,75 @@
 syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
+package scp.webui.v1;
 
+// UI-facing metadata for a single key binding entry.
 message KeyBindingSettingVisualData
 {
   string unique_id = 1;
   string display_key = 2;
   string key = 3;
+  uint32 sort_order = 4;
 }
+
+
+// A named group of key bindings shown together in the controls UI.
 message KeyBindingSettingCategory
 {
   string category_name = 1;
   repeated KeyBindingSettingVisualData key_bindings = 2;
 }
 
-// Retrieve all categories with display_key for localization
-message KeyBindingsSettingsResponse
-{
-  repeated KeyBindingSettingCategory categories = 1;
-}
-
+// Minimal key binding payload used when persisting changed bindings.
 message KeyBindingSettingData
 {
   string unique_id = 1;
   string key = 2;
 }
 
-// Set key_bindings -> new values
-message KeyBindingsSettingsSetRequest
+// Requests the current key binding configuration. The field is unused placeholder data.
+message RequestGetKeysSettings
+{
+  uint32 empty = 1;
+}
+
+// Applies one or more key binding updates.
+message RequestSetKeysSettings
 {
   repeated KeyBindingSettingData key_bindings = 1;
+}
+
+// Reset to default single key
+message RequestResetKeySettings
+{
+  string unique_id = 1;
+}
+
+// Reset to default single key
+message RequestResetAllKeySettings
+{
+  uint32 empty = 1;
+}
+
+// Clear single key
+message RequestClearKeySettings
+{
+  string unique_id = 1;
+}
+
+// Returns all key bindings grouped by UI category.
+message ResponseKeysSettings
+{
+  repeated KeyBindingSettingCategory categories = 1;
+}
+
+message ResponseSingleKeySetting
+{
+  KeyBindingSettingData content = 1;
+  string error = 2;
+}
+
+message ResponseMultipleKeySetting
+{
+  repeated KeyBindingSettingData content = 1;
+  string error = 2;
 }

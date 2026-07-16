@@ -1,71 +1,77 @@
 syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
+package scp.webui.v1;
 
+// Identifies which display settings group the client wants to fetch.
 enum DisplaySettingRequestType
 {
-  FULLSCREEN_MODE = 0;
-  RESOLUTION = 1;
-  VSYNC = 2;
-  FRAME_RATE_LIMIT = 3;
-  HDR = 4;
-  ACCESSIBILITY = 5;
-  FIELD_OF_VIEW = 6;
-  CAMERA = 7;
+  DISPLAY_SETTING_FULLSCREEN_MODE = 0;
+  DISPLAY_SETTING_RESOLUTION = 1;
+  DISPLAY_SETTING_VSYNC = 2;
+  DISPLAY_SETTING_FRAME_RATE_LIMIT = 3;
+  DISPLAY_SETTING_HDR = 4;
+  DISPLAY_SETTING_ACCESSIBILITY = 5;
+  DISPLAY_SETTING_CAMERA = 6;
 }
 
-message DisplaySettingsRequest {
-  DisplaySettingRequestType request_type = 1;
-}
-
+// Supported window presentation modes.
 enum FullscreenMode
 {
-  FULLSCREEN = 0;
-  WINDOWED_FULLSCREEN = 1;
-  WINDOWED = 2;
+  FULLSCREEN_MODE_FULLSCREEN = 0;
+  FULLSCREEN_MODE_WINDOWED_FULLSCREEN = 1;
+  FULLSCREEN_MODE_WINDOWED = 2;
 }
 
+// A single supported screen resolution.
 message Resolution
 {
   uint32 x = 1;
   uint32 y = 2;
 }
 
+// Lists available resolutions and the currently selected entry.
 message ResolutionResponse
 {
   repeated Resolution resolutions = 1;
+  uint32 selected_index = 2;
 }
 
+// Simple enabled/disabled response payload for VSync.
 message VSyncContent
 {
   bool enabled = 1;
 }
 
+// Frame-rate limiter state and selected cap value.
 message FrameLimitContent
 {
   bool flag = 1;
   uint32 limit = 2;
 }
 
+// HDR output transfer function / device target.
 enum HdrOutput
 {
-  SRGB = 0;
-  REC = 1;
-  LDR = 2;
-  ACES_1000 = 3;
-  ACES_2000 = 4;
-  ACES_1000_ScRGB = 5;
-  ACES_2000_ScRGB = 6;
+  HDR_OUTPUT_SRGB = 0;
+  HDR_OUTPUT_REC = 1;
+  HDR_OUTPUT_LDR = 2;
+  HDR_OUTPUT_ACES_1000 = 3;
+  HDR_OUTPUT_ACES_2000 = 4;
+  HDR_OUTPUT_ACES_1000_ScRGB = 5;
+  HDR_OUTPUT_ACES_2000_ScRGB = 6;
 }
 
+// HDR rendering color gamut.
 enum ColorGamut
 {
-  REC_709 = 0;
-  DCI = 1;
-  REC_2020 = 2;
-  ACES = 3;
-  ACESsg = 4;
+  HDR_GAMUT_REC_709 = 0;
+  HDR_GAMUT_DCI = 1;
+  HDR_GAMUT_REC_2020 = 2;
+  HDR_GAMUT_ACES = 3;
+  HDR_GAMUT_ACESsg = 4;
 }
 
+// HDR capability and currently selected HDR values.
 message HdrResponse
 {
   bool supported = 1;
@@ -74,6 +80,7 @@ message HdrResponse
   ColorGamut color_gamut = 4;
 }
 
+// Accessibility slider values exposed by the display settings UI.
 message AccessibilityResponse
 {
   uint32 brightness = 1;
@@ -81,6 +88,7 @@ message AccessibilityResponse
   uint32 contrast = 3;
 }
 
+// Camera-related slider values exposed by the display settings UI.
 message CameraResponse
 {
   uint32 fov = 1;
@@ -89,39 +97,59 @@ message CameraResponse
   uint32 bob = 4;
 }
 
-message ResolutionSetRequest
-{
-  Resolution resolution = 1;
-}
-
-message HdrEnableSetRequest
-{
-  bool flag = 1;
-}
-
-message HdrOutputDeviceSetRequest
-{
-  HdrOutput output_device = 1;
-}
-
-message HdrColorGamutSetRequest
-{
-  ColorGamut color_gamut = 1;
-}
-
+// Identifies which display slider to update.
 enum DisplaySliderType
 {
-  BRIGHTNESS = 0;
-  GAMMA = 1;
-  CONTRAST = 2;
-  FOV = 3;
-  CAMERA_SMOOTHING = 4;
-  SCREEN_SHAKE_INTENSITY = 5;
-  HEAD_BOBBING_INTENSITY = 6;
+  DISPLAY_SLIDER_BRIGHTNESS = 0;
+  DISPLAY_SLIDER_GAMMA = 1;
+  DISPLAY_SLIDER_CONTRAST = 2;
+  DISPLAY_SLIDER_FOV = 3;
+  DISPLAY_SLIDER_CAMERA_SMOOTHING = 4;
+  DISPLAY_SLIDER_SCREEN_SHAKE_INTENSITY = 5;
+  DISPLAY_SLIDER_HEAD_BOBBING_INTENSITY = 6;
 }
 
+// Sets a single display slider value.
 message DisplaySliderSetRequest
 {
   DisplaySliderType slider_type = 1;
   uint32 value = 2;
+}
+
+// Requests one display settings section from the backend.
+message RequestGetDisplaySettings 
+{
+  DisplaySettingRequestType request_type = 1;
+}
+
+// Applies one display settings change. Only one payload variant is valid per request.
+message RequestSetDisplaySettings
+{
+  oneof content
+  {
+    FullscreenMode full_screen_mode = 1;
+    Resolution resolution = 2;
+    VSyncContent vsync = 3;
+    bool hdr_enable_flag = 4;
+    HdrOutput hdr_output_device = 5;
+    ColorGamut hdr_color_gamut = 6;
+    DisplaySliderSetRequest display_slider = 7;
+  }
+}
+
+// Returns the display settings payload matching the requested section.
+message ResponseDisplaySettings
+{
+  DisplaySettingRequestType requested_type = 1;
+  oneof result
+  {
+    FullscreenMode full_screen_mode = 2;
+    ResolutionResponse resolution = 3;
+    VSyncContent vsync = 4;
+    HdrResponse hdr = 5;
+    FrameLimitContent frame_limit = 6;
+    
+    AccessibilityResponse sliders_accessibility = 7;
+    CameraResponse sliders_camera = 8;
+  }
 }

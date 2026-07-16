@@ -4,12 +4,14 @@ option optimize_for = LITE_RUNTIME;
 
 package scp.webui.v1;
 
+// Ping sent by the client to validate connectivity and measure round-trip time.
 message PingMessage
 {
   uint64 client_time_ms = 1;
   uint32 code = 2;
 }
 
+// Pong sent by the server with the original client timestamp and server timestamp.
 message PongMessage
 {
   uint64 client_time_ms = 1;
@@ -17,16 +19,42 @@ message PongMessage
   uint32 code = 3;
 }
 
+// Wraps typed protobuf payloads for transport across the WebUI channel.
 message ScpEnvelope
 {
   MessageType message_type = 1;
   bytes message_bytes = 2;
 }
 
+// Identifies the payload packed into ScpEnvelope.message_bytes.
 enum MessageType
 {
   MESSAGE_INVALID = 0;
   MESSAGE_PING = 1;
   MESSAGE_PONG = 2;
-}
+  
+  REQUEST_GET_DISPLAY_SETTINGS = 3;
+  REQUEST_SET_DISPLAY_SETTINGS = 4;
+  RESPONSE_DISPLAY_SETTINGS = 5;
 
+  REQUEST_GET_GRAPHICS_SETTINGS = 6;
+  REQUEST_SET_GRAPHICS_SETTINGS = 7;
+  RESPONSE_GRAPHICS_SETTINGS = 8;
+
+  REQUEST_GET_CONTROL_SETTINGS = 9;
+  REQUEST_SET_CONTROL_SETTINGS = 10;
+  RESPONSE_CONTROL_SETTINGS = 11;
+
+  REQUEST_GET_AUDIO_SETTINGS = 12;
+  REQUEST_SET_AUDIO_SETTINGS = 13;
+  RESPONSE_AUDIO_SETTINGS = 14;
+
+  REQUEST_GET_KEYS_SETTINGS = 15;
+  REQUEST_CLEAR_KEY_SETTINGS = 16;
+  REQUEST_RESET_KEY_SETTINGS = 17;
+  REQUEST_SET_KEYS_SETTINGS = 18;
+  REQUEST_RESET_ALL_KEY_SETTINGS = 19;
+  RESPONSE_ALL_KEY_SETTINGS = 21; // UI
+  RESPONSE_KEYS_SETTINGS = 22; // Changed multiple
+  RESPONSE_SINGLE_KEY_SETTING = 23; // Changed single
+}

@@ -7,46 +7,43 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
-export const protobufPackage = "";
+export const protobufPackage = "scp.webui.v1";
 
+/** Identifies which display settings group the client wants to fetch. */
 export enum DisplaySettingRequestType {
-  FULLSCREEN_MODE = 0,
-  RESOLUTION = 1,
-  VSYNC = 2,
-  FRAME_RATE_LIMIT = 3,
-  HDR = 4,
-  ACCESSIBILITY = 5,
-  FIELD_OF_VIEW = 6,
-  CAMERA = 7,
+  DISPLAY_SETTING_FULLSCREEN_MODE = 0,
+  DISPLAY_SETTING_RESOLUTION = 1,
+  DISPLAY_SETTING_VSYNC = 2,
+  DISPLAY_SETTING_FRAME_RATE_LIMIT = 3,
+  DISPLAY_SETTING_HDR = 4,
+  DISPLAY_SETTING_ACCESSIBILITY = 5,
+  DISPLAY_SETTING_CAMERA = 6,
   UNRECOGNIZED = -1,
 }
 
 export function displaySettingRequestTypeFromJSON(object: any): DisplaySettingRequestType {
   switch (object) {
     case 0:
-    case "FULLSCREEN_MODE":
-      return DisplaySettingRequestType.FULLSCREEN_MODE;
+    case "DISPLAY_SETTING_FULLSCREEN_MODE":
+      return DisplaySettingRequestType.DISPLAY_SETTING_FULLSCREEN_MODE;
     case 1:
-    case "RESOLUTION":
-      return DisplaySettingRequestType.RESOLUTION;
+    case "DISPLAY_SETTING_RESOLUTION":
+      return DisplaySettingRequestType.DISPLAY_SETTING_RESOLUTION;
     case 2:
-    case "VSYNC":
-      return DisplaySettingRequestType.VSYNC;
+    case "DISPLAY_SETTING_VSYNC":
+      return DisplaySettingRequestType.DISPLAY_SETTING_VSYNC;
     case 3:
-    case "FRAME_RATE_LIMIT":
-      return DisplaySettingRequestType.FRAME_RATE_LIMIT;
+    case "DISPLAY_SETTING_FRAME_RATE_LIMIT":
+      return DisplaySettingRequestType.DISPLAY_SETTING_FRAME_RATE_LIMIT;
     case 4:
-    case "HDR":
-      return DisplaySettingRequestType.HDR;
+    case "DISPLAY_SETTING_HDR":
+      return DisplaySettingRequestType.DISPLAY_SETTING_HDR;
     case 5:
-    case "ACCESSIBILITY":
-      return DisplaySettingRequestType.ACCESSIBILITY;
+    case "DISPLAY_SETTING_ACCESSIBILITY":
+      return DisplaySettingRequestType.DISPLAY_SETTING_ACCESSIBILITY;
     case 6:
-    case "FIELD_OF_VIEW":
-      return DisplaySettingRequestType.FIELD_OF_VIEW;
-    case 7:
-    case "CAMERA":
-      return DisplaySettingRequestType.CAMERA;
+    case "DISPLAY_SETTING_CAMERA":
+      return DisplaySettingRequestType.DISPLAY_SETTING_CAMERA;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -56,46 +53,45 @@ export function displaySettingRequestTypeFromJSON(object: any): DisplaySettingRe
 
 export function displaySettingRequestTypeToJSON(object: DisplaySettingRequestType): string {
   switch (object) {
-    case DisplaySettingRequestType.FULLSCREEN_MODE:
-      return "FULLSCREEN_MODE";
-    case DisplaySettingRequestType.RESOLUTION:
-      return "RESOLUTION";
-    case DisplaySettingRequestType.VSYNC:
-      return "VSYNC";
-    case DisplaySettingRequestType.FRAME_RATE_LIMIT:
-      return "FRAME_RATE_LIMIT";
-    case DisplaySettingRequestType.HDR:
-      return "HDR";
-    case DisplaySettingRequestType.ACCESSIBILITY:
-      return "ACCESSIBILITY";
-    case DisplaySettingRequestType.FIELD_OF_VIEW:
-      return "FIELD_OF_VIEW";
-    case DisplaySettingRequestType.CAMERA:
-      return "CAMERA";
+    case DisplaySettingRequestType.DISPLAY_SETTING_FULLSCREEN_MODE:
+      return "DISPLAY_SETTING_FULLSCREEN_MODE";
+    case DisplaySettingRequestType.DISPLAY_SETTING_RESOLUTION:
+      return "DISPLAY_SETTING_RESOLUTION";
+    case DisplaySettingRequestType.DISPLAY_SETTING_VSYNC:
+      return "DISPLAY_SETTING_VSYNC";
+    case DisplaySettingRequestType.DISPLAY_SETTING_FRAME_RATE_LIMIT:
+      return "DISPLAY_SETTING_FRAME_RATE_LIMIT";
+    case DisplaySettingRequestType.DISPLAY_SETTING_HDR:
+      return "DISPLAY_SETTING_HDR";
+    case DisplaySettingRequestType.DISPLAY_SETTING_ACCESSIBILITY:
+      return "DISPLAY_SETTING_ACCESSIBILITY";
+    case DisplaySettingRequestType.DISPLAY_SETTING_CAMERA:
+      return "DISPLAY_SETTING_CAMERA";
     case DisplaySettingRequestType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Supported window presentation modes. */
 export enum FullscreenMode {
-  FULLSCREEN = 0,
-  WINDOWED_FULLSCREEN = 1,
-  WINDOWED = 2,
+  FULLSCREEN_MODE_FULLSCREEN = 0,
+  FULLSCREEN_MODE_WINDOWED_FULLSCREEN = 1,
+  FULLSCREEN_MODE_WINDOWED = 2,
   UNRECOGNIZED = -1,
 }
 
 export function fullscreenModeFromJSON(object: any): FullscreenMode {
   switch (object) {
     case 0:
-    case "FULLSCREEN":
-      return FullscreenMode.FULLSCREEN;
+    case "FULLSCREEN_MODE_FULLSCREEN":
+      return FullscreenMode.FULLSCREEN_MODE_FULLSCREEN;
     case 1:
-    case "WINDOWED_FULLSCREEN":
-      return FullscreenMode.WINDOWED_FULLSCREEN;
+    case "FULLSCREEN_MODE_WINDOWED_FULLSCREEN":
+      return FullscreenMode.FULLSCREEN_MODE_WINDOWED_FULLSCREEN;
     case 2:
-    case "WINDOWED":
-      return FullscreenMode.WINDOWED;
+    case "FULLSCREEN_MODE_WINDOWED":
+      return FullscreenMode.FULLSCREEN_MODE_WINDOWED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -105,52 +101,53 @@ export function fullscreenModeFromJSON(object: any): FullscreenMode {
 
 export function fullscreenModeToJSON(object: FullscreenMode): string {
   switch (object) {
-    case FullscreenMode.FULLSCREEN:
-      return "FULLSCREEN";
-    case FullscreenMode.WINDOWED_FULLSCREEN:
-      return "WINDOWED_FULLSCREEN";
-    case FullscreenMode.WINDOWED:
-      return "WINDOWED";
+    case FullscreenMode.FULLSCREEN_MODE_FULLSCREEN:
+      return "FULLSCREEN_MODE_FULLSCREEN";
+    case FullscreenMode.FULLSCREEN_MODE_WINDOWED_FULLSCREEN:
+      return "FULLSCREEN_MODE_WINDOWED_FULLSCREEN";
+    case FullscreenMode.FULLSCREEN_MODE_WINDOWED:
+      return "FULLSCREEN_MODE_WINDOWED";
     case FullscreenMode.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** HDR output transfer function / device target. */
 export enum HdrOutput {
-  SRGB = 0,
-  REC = 1,
-  LDR = 2,
-  ACES_1000 = 3,
-  ACES_2000 = 4,
-  ACES_1000_ScRGB = 5,
-  ACES_2000_ScRGB = 6,
+  HDR_OUTPUT_SRGB = 0,
+  HDR_OUTPUT_REC = 1,
+  HDR_OUTPUT_LDR = 2,
+  HDR_OUTPUT_ACES_1000 = 3,
+  HDR_OUTPUT_ACES_2000 = 4,
+  HDR_OUTPUT_ACES_1000_ScRGB = 5,
+  HDR_OUTPUT_ACES_2000_ScRGB = 6,
   UNRECOGNIZED = -1,
 }
 
 export function hdrOutputFromJSON(object: any): HdrOutput {
   switch (object) {
     case 0:
-    case "SRGB":
-      return HdrOutput.SRGB;
+    case "HDR_OUTPUT_SRGB":
+      return HdrOutput.HDR_OUTPUT_SRGB;
     case 1:
-    case "REC":
-      return HdrOutput.REC;
+    case "HDR_OUTPUT_REC":
+      return HdrOutput.HDR_OUTPUT_REC;
     case 2:
-    case "LDR":
-      return HdrOutput.LDR;
+    case "HDR_OUTPUT_LDR":
+      return HdrOutput.HDR_OUTPUT_LDR;
     case 3:
-    case "ACES_1000":
-      return HdrOutput.ACES_1000;
+    case "HDR_OUTPUT_ACES_1000":
+      return HdrOutput.HDR_OUTPUT_ACES_1000;
     case 4:
-    case "ACES_2000":
-      return HdrOutput.ACES_2000;
+    case "HDR_OUTPUT_ACES_2000":
+      return HdrOutput.HDR_OUTPUT_ACES_2000;
     case 5:
-    case "ACES_1000_ScRGB":
-      return HdrOutput.ACES_1000_ScRGB;
+    case "HDR_OUTPUT_ACES_1000_ScRGB":
+      return HdrOutput.HDR_OUTPUT_ACES_1000_ScRGB;
     case 6:
-    case "ACES_2000_ScRGB":
-      return HdrOutput.ACES_2000_ScRGB;
+    case "HDR_OUTPUT_ACES_2000_ScRGB":
+      return HdrOutput.HDR_OUTPUT_ACES_2000_ScRGB;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -160,52 +157,53 @@ export function hdrOutputFromJSON(object: any): HdrOutput {
 
 export function hdrOutputToJSON(object: HdrOutput): string {
   switch (object) {
-    case HdrOutput.SRGB:
-      return "SRGB";
-    case HdrOutput.REC:
-      return "REC";
-    case HdrOutput.LDR:
-      return "LDR";
-    case HdrOutput.ACES_1000:
-      return "ACES_1000";
-    case HdrOutput.ACES_2000:
-      return "ACES_2000";
-    case HdrOutput.ACES_1000_ScRGB:
-      return "ACES_1000_ScRGB";
-    case HdrOutput.ACES_2000_ScRGB:
-      return "ACES_2000_ScRGB";
+    case HdrOutput.HDR_OUTPUT_SRGB:
+      return "HDR_OUTPUT_SRGB";
+    case HdrOutput.HDR_OUTPUT_REC:
+      return "HDR_OUTPUT_REC";
+    case HdrOutput.HDR_OUTPUT_LDR:
+      return "HDR_OUTPUT_LDR";
+    case HdrOutput.HDR_OUTPUT_ACES_1000:
+      return "HDR_OUTPUT_ACES_1000";
+    case HdrOutput.HDR_OUTPUT_ACES_2000:
+      return "HDR_OUTPUT_ACES_2000";
+    case HdrOutput.HDR_OUTPUT_ACES_1000_ScRGB:
+      return "HDR_OUTPUT_ACES_1000_ScRGB";
+    case HdrOutput.HDR_OUTPUT_ACES_2000_ScRGB:
+      return "HDR_OUTPUT_ACES_2000_ScRGB";
     case HdrOutput.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** HDR rendering color gamut. */
 export enum ColorGamut {
-  REC_709 = 0,
-  DCI = 1,
-  REC_2020 = 2,
-  ACES = 3,
-  ACESsg = 4,
+  HDR_GAMUT_REC_709 = 0,
+  HDR_GAMUT_DCI = 1,
+  HDR_GAMUT_REC_2020 = 2,
+  HDR_GAMUT_ACES = 3,
+  HDR_GAMUT_ACESsg = 4,
   UNRECOGNIZED = -1,
 }
 
 export function colorGamutFromJSON(object: any): ColorGamut {
   switch (object) {
     case 0:
-    case "REC_709":
-      return ColorGamut.REC_709;
+    case "HDR_GAMUT_REC_709":
+      return ColorGamut.HDR_GAMUT_REC_709;
     case 1:
-    case "DCI":
-      return ColorGamut.DCI;
+    case "HDR_GAMUT_DCI":
+      return ColorGamut.HDR_GAMUT_DCI;
     case 2:
-    case "REC_2020":
-      return ColorGamut.REC_2020;
+    case "HDR_GAMUT_REC_2020":
+      return ColorGamut.HDR_GAMUT_REC_2020;
     case 3:
-    case "ACES":
-      return ColorGamut.ACES;
+    case "HDR_GAMUT_ACES":
+      return ColorGamut.HDR_GAMUT_ACES;
     case 4:
-    case "ACESsg":
-      return ColorGamut.ACESsg;
+    case "HDR_GAMUT_ACESsg":
+      return ColorGamut.HDR_GAMUT_ACESsg;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -215,56 +213,57 @@ export function colorGamutFromJSON(object: any): ColorGamut {
 
 export function colorGamutToJSON(object: ColorGamut): string {
   switch (object) {
-    case ColorGamut.REC_709:
-      return "REC_709";
-    case ColorGamut.DCI:
-      return "DCI";
-    case ColorGamut.REC_2020:
-      return "REC_2020";
-    case ColorGamut.ACES:
-      return "ACES";
-    case ColorGamut.ACESsg:
-      return "ACESsg";
+    case ColorGamut.HDR_GAMUT_REC_709:
+      return "HDR_GAMUT_REC_709";
+    case ColorGamut.HDR_GAMUT_DCI:
+      return "HDR_GAMUT_DCI";
+    case ColorGamut.HDR_GAMUT_REC_2020:
+      return "HDR_GAMUT_REC_2020";
+    case ColorGamut.HDR_GAMUT_ACES:
+      return "HDR_GAMUT_ACES";
+    case ColorGamut.HDR_GAMUT_ACESsg:
+      return "HDR_GAMUT_ACESsg";
     case ColorGamut.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/** Identifies which display slider to update. */
 export enum DisplaySliderType {
-  BRIGHTNESS = 0,
-  GAMMA = 1,
-  CONTRAST = 2,
-  FOV = 3,
-  CAMERA_SMOOTHING = 4,
-  SCREEN_SHAKE_INTENSITY = 5,
-  HEAD_BOBBING_INTENSITY = 6,
+  DISPLAY_SLIDER_BRIGHTNESS = 0,
+  DISPLAY_SLIDER_GAMMA = 1,
+  DISPLAY_SLIDER_CONTRAST = 2,
+  DISPLAY_SLIDER_FOV = 3,
+  DISPLAY_SLIDER_CAMERA_SMOOTHING = 4,
+  DISPLAY_SLIDER_SCREEN_SHAKE_INTENSITY = 5,
+  DISPLAY_SLIDER_HEAD_BOBBING_INTENSITY = 6,
   UNRECOGNIZED = -1,
 }
 
 export function displaySliderTypeFromJSON(object: any): DisplaySliderType {
   switch (object) {
     case 0:
-    case "BRIGHTNESS":
-      return DisplaySliderType.BRIGHTNESS;
+    case "DISPLAY_SLIDER_BRIGHTNESS":
+      return DisplaySliderType.DISPLAY_SLIDER_BRIGHTNESS;
     case 1:
-    case "GAMMA":
-      return DisplaySliderType.GAMMA;
+    case "DISPLAY_SLIDER_GAMMA":
+      return DisplaySliderType.DISPLAY_SLIDER_GAMMA;
     case 2:
-    case "CONTRAST":
-      return DisplaySliderType.CONTRAST;
+    case "DISPLAY_SLIDER_CONTRAST":
+      return DisplaySliderType.DISPLAY_SLIDER_CONTRAST;
     case 3:
-    case "FOV":
-      return DisplaySliderType.FOV;
+    case "DISPLAY_SLIDER_FOV":
+      return DisplaySliderType.DISPLAY_SLIDER_FOV;
     case 4:
-    case "CAMERA_SMOOTHING":
-      return DisplaySliderType.CAMERA_SMOOTHING;
+    case "DISPLAY_SLIDER_CAMERA_SMOOTHING":
+      return DisplaySliderType.DISPLAY_SLIDER_CAMERA_SMOOTHING;
     case 5:
-    case "SCREEN_SHAKE_INTENSITY":
-      return DisplaySliderType.SCREEN_SHAKE_INTENSITY;
+    case "DISPLAY_SLIDER_SCREEN_SHAKE_INTENSITY":
+      return DisplaySliderType.DISPLAY_SLIDER_SCREEN_SHAKE_INTENSITY;
     case 6:
-    case "HEAD_BOBBING_INTENSITY":
-      return DisplaySliderType.HEAD_BOBBING_INTENSITY;
+    case "DISPLAY_SLIDER_HEAD_BOBBING_INTENSITY":
+      return DisplaySliderType.DISPLAY_SLIDER_HEAD_BOBBING_INTENSITY;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -274,48 +273,50 @@ export function displaySliderTypeFromJSON(object: any): DisplaySliderType {
 
 export function displaySliderTypeToJSON(object: DisplaySliderType): string {
   switch (object) {
-    case DisplaySliderType.BRIGHTNESS:
-      return "BRIGHTNESS";
-    case DisplaySliderType.GAMMA:
-      return "GAMMA";
-    case DisplaySliderType.CONTRAST:
-      return "CONTRAST";
-    case DisplaySliderType.FOV:
-      return "FOV";
-    case DisplaySliderType.CAMERA_SMOOTHING:
-      return "CAMERA_SMOOTHING";
-    case DisplaySliderType.SCREEN_SHAKE_INTENSITY:
-      return "SCREEN_SHAKE_INTENSITY";
-    case DisplaySliderType.HEAD_BOBBING_INTENSITY:
-      return "HEAD_BOBBING_INTENSITY";
+    case DisplaySliderType.DISPLAY_SLIDER_BRIGHTNESS:
+      return "DISPLAY_SLIDER_BRIGHTNESS";
+    case DisplaySliderType.DISPLAY_SLIDER_GAMMA:
+      return "DISPLAY_SLIDER_GAMMA";
+    case DisplaySliderType.DISPLAY_SLIDER_CONTRAST:
+      return "DISPLAY_SLIDER_CONTRAST";
+    case DisplaySliderType.DISPLAY_SLIDER_FOV:
+      return "DISPLAY_SLIDER_FOV";
+    case DisplaySliderType.DISPLAY_SLIDER_CAMERA_SMOOTHING:
+      return "DISPLAY_SLIDER_CAMERA_SMOOTHING";
+    case DisplaySliderType.DISPLAY_SLIDER_SCREEN_SHAKE_INTENSITY:
+      return "DISPLAY_SLIDER_SCREEN_SHAKE_INTENSITY";
+    case DisplaySliderType.DISPLAY_SLIDER_HEAD_BOBBING_INTENSITY:
+      return "DISPLAY_SLIDER_HEAD_BOBBING_INTENSITY";
     case DisplaySliderType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export interface DisplaySettingsRequest {
-  requestType: DisplaySettingRequestType;
-}
-
+/** A single supported screen resolution. */
 export interface Resolution {
   x: number;
   y: number;
 }
 
+/** Lists available resolutions and the currently selected entry. */
 export interface ResolutionResponse {
   resolutions: Resolution[];
+  selectedIndex: number;
 }
 
+/** Simple enabled/disabled response payload for VSync. */
 export interface VSyncContent {
   enabled: boolean;
 }
 
+/** Frame-rate limiter state and selected cap value. */
 export interface FrameLimitContent {
   flag: boolean;
   limit: number;
 }
 
+/** HDR capability and currently selected HDR values. */
 export interface HdrResponse {
   supported: boolean;
   enabled: boolean;
@@ -323,12 +324,14 @@ export interface HdrResponse {
   colorGamut: ColorGamut;
 }
 
+/** Accessibility slider values exposed by the display settings UI. */
 export interface AccessibilityResponse {
   brightness: number;
   gamma: number;
   contrast: number;
 }
 
+/** Camera-related slider values exposed by the display settings UI. */
 export interface CameraResponse {
   fov: number;
   smoothing: number;
@@ -336,90 +339,39 @@ export interface CameraResponse {
   bob: number;
 }
 
-export interface ResolutionSetRequest {
-  resolution: Resolution | undefined;
-}
-
-export interface HdrEnableSetRequest {
-  flag: boolean;
-}
-
-export interface HdrOutputDeviceSetRequest {
-  outputDevice: HdrOutput;
-}
-
-export interface HdrColorGamutSetRequest {
-  colorGamut: ColorGamut;
-}
-
+/** Sets a single display slider value. */
 export interface DisplaySliderSetRequest {
   sliderType: DisplaySliderType;
   value: number;
 }
 
-function createBaseDisplaySettingsRequest(): DisplaySettingsRequest {
-  return { requestType: 0 };
+/** Requests one display settings section from the backend. */
+export interface RequestGetDisplaySettings {
+  requestType: DisplaySettingRequestType;
 }
 
-export const DisplaySettingsRequest: MessageFns<DisplaySettingsRequest> = {
-  encode(message: DisplaySettingsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.requestType !== 0) {
-      writer.uint32(8).int32(message.requestType);
-    }
-    return writer;
-  },
+/** Applies one display settings change. Only one payload variant is valid per request. */
+export interface RequestSetDisplaySettings {
+  fullScreenMode?: FullscreenMode | undefined;
+  resolution?: Resolution | undefined;
+  vsync?: VSyncContent | undefined;
+  hdrEnableFlag?: boolean | undefined;
+  hdrOutputDevice?: HdrOutput | undefined;
+  hdrColorGamut?: ColorGamut | undefined;
+  displaySlider?: DisplaySliderSetRequest | undefined;
+}
 
-  decode(input: BinaryReader | Uint8Array, length?: number): DisplaySettingsRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseDisplaySettingsRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
-          }
-
-          message.requestType = reader.int32() as any;
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): DisplaySettingsRequest {
-    return {
-      requestType: isSet(object.requestType)
-        ? displaySettingRequestTypeFromJSON(object.requestType)
-        : isSet(object.request_type)
-        ? displaySettingRequestTypeFromJSON(object.request_type)
-        : 0,
-    };
-  },
-
-  toJSON(message: DisplaySettingsRequest): unknown {
-    const obj: any = {};
-    if (message.requestType !== 0) {
-      obj.requestType = displaySettingRequestTypeToJSON(message.requestType);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DisplaySettingsRequest>, I>>(base?: I): DisplaySettingsRequest {
-    return DisplaySettingsRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DisplaySettingsRequest>, I>>(object: I): DisplaySettingsRequest {
-    const message = createBaseDisplaySettingsRequest();
-    message.requestType = object.requestType ?? 0;
-    return message;
-  },
-};
+/** Returns the display settings payload matching the requested section. */
+export interface ResponseDisplaySettings {
+  requestedType: DisplaySettingRequestType;
+  fullScreenMode?: FullscreenMode | undefined;
+  resolution?: ResolutionResponse | undefined;
+  vsync?: VSyncContent | undefined;
+  hdr?: HdrResponse | undefined;
+  frameLimit?: FrameLimitContent | undefined;
+  slidersAccessibility?: AccessibilityResponse | undefined;
+  slidersCamera?: CameraResponse | undefined;
+}
 
 function createBaseResolution(): Resolution {
   return { x: 0, y: 0 };
@@ -498,13 +450,16 @@ export const Resolution: MessageFns<Resolution> = {
 };
 
 function createBaseResolutionResponse(): ResolutionResponse {
-  return { resolutions: [] };
+  return { resolutions: [], selectedIndex: 0 };
 }
 
 export const ResolutionResponse: MessageFns<ResolutionResponse> = {
   encode(message: ResolutionResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.resolutions) {
       Resolution.encode(v!, writer.uint32(10).fork()).join();
+    }
+    if (message.selectedIndex !== 0) {
+      writer.uint32(16).uint32(message.selectedIndex);
     }
     return writer;
   },
@@ -524,6 +479,14 @@ export const ResolutionResponse: MessageFns<ResolutionResponse> = {
           message.resolutions.push(Resolution.decode(reader, reader.uint32()));
           continue;
         }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.selectedIndex = reader.uint32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -538,6 +501,11 @@ export const ResolutionResponse: MessageFns<ResolutionResponse> = {
       resolutions: globalThis.Array.isArray(object?.resolutions)
         ? object.resolutions.map((e: any) => Resolution.fromJSON(e))
         : [],
+      selectedIndex: isSet(object.selectedIndex)
+        ? globalThis.Number(object.selectedIndex)
+        : isSet(object.selected_index)
+        ? globalThis.Number(object.selected_index)
+        : 0,
     };
   },
 
@@ -545,6 +513,9 @@ export const ResolutionResponse: MessageFns<ResolutionResponse> = {
     const obj: any = {};
     if (message.resolutions?.length) {
       obj.resolutions = message.resolutions.map((e) => Resolution.toJSON(e));
+    }
+    if (message.selectedIndex !== 0) {
+      obj.selectedIndex = Math.round(message.selectedIndex);
     }
     return obj;
   },
@@ -555,6 +526,7 @@ export const ResolutionResponse: MessageFns<ResolutionResponse> = {
   fromPartial<I extends Exact<DeepPartial<ResolutionResponse>, I>>(object: I): ResolutionResponse {
     const message = createBaseResolutionResponse();
     message.resolutions = object.resolutions?.map((e) => Resolution.fromPartial(e)) || [];
+    message.selectedIndex = object.selectedIndex ?? 0;
     return message;
   },
 };
@@ -1009,252 +981,6 @@ export const CameraResponse: MessageFns<CameraResponse> = {
   },
 };
 
-function createBaseResolutionSetRequest(): ResolutionSetRequest {
-  return { resolution: undefined };
-}
-
-export const ResolutionSetRequest: MessageFns<ResolutionSetRequest> = {
-  encode(message: ResolutionSetRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.resolution !== undefined) {
-      Resolution.encode(message.resolution, writer.uint32(10).fork()).join();
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): ResolutionSetRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseResolutionSetRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.resolution = Resolution.decode(reader, reader.uint32());
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ResolutionSetRequest {
-    return { resolution: isSet(object.resolution) ? Resolution.fromJSON(object.resolution) : undefined };
-  },
-
-  toJSON(message: ResolutionSetRequest): unknown {
-    const obj: any = {};
-    if (message.resolution !== undefined) {
-      obj.resolution = Resolution.toJSON(message.resolution);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ResolutionSetRequest>, I>>(base?: I): ResolutionSetRequest {
-    return ResolutionSetRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ResolutionSetRequest>, I>>(object: I): ResolutionSetRequest {
-    const message = createBaseResolutionSetRequest();
-    message.resolution = (object.resolution !== undefined && object.resolution !== null)
-      ? Resolution.fromPartial(object.resolution)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseHdrEnableSetRequest(): HdrEnableSetRequest {
-  return { flag: false };
-}
-
-export const HdrEnableSetRequest: MessageFns<HdrEnableSetRequest> = {
-  encode(message: HdrEnableSetRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.flag !== false) {
-      writer.uint32(8).bool(message.flag);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): HdrEnableSetRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseHdrEnableSetRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
-          }
-
-          message.flag = reader.bool();
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): HdrEnableSetRequest {
-    return { flag: isSet(object.flag) ? globalThis.Boolean(object.flag) : false };
-  },
-
-  toJSON(message: HdrEnableSetRequest): unknown {
-    const obj: any = {};
-    if (message.flag !== false) {
-      obj.flag = message.flag;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<HdrEnableSetRequest>, I>>(base?: I): HdrEnableSetRequest {
-    return HdrEnableSetRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<HdrEnableSetRequest>, I>>(object: I): HdrEnableSetRequest {
-    const message = createBaseHdrEnableSetRequest();
-    message.flag = object.flag ?? false;
-    return message;
-  },
-};
-
-function createBaseHdrOutputDeviceSetRequest(): HdrOutputDeviceSetRequest {
-  return { outputDevice: 0 };
-}
-
-export const HdrOutputDeviceSetRequest: MessageFns<HdrOutputDeviceSetRequest> = {
-  encode(message: HdrOutputDeviceSetRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.outputDevice !== 0) {
-      writer.uint32(8).int32(message.outputDevice);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): HdrOutputDeviceSetRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseHdrOutputDeviceSetRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
-          }
-
-          message.outputDevice = reader.int32() as any;
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): HdrOutputDeviceSetRequest {
-    return {
-      outputDevice: isSet(object.outputDevice)
-        ? hdrOutputFromJSON(object.outputDevice)
-        : isSet(object.output_device)
-        ? hdrOutputFromJSON(object.output_device)
-        : 0,
-    };
-  },
-
-  toJSON(message: HdrOutputDeviceSetRequest): unknown {
-    const obj: any = {};
-    if (message.outputDevice !== 0) {
-      obj.outputDevice = hdrOutputToJSON(message.outputDevice);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<HdrOutputDeviceSetRequest>, I>>(base?: I): HdrOutputDeviceSetRequest {
-    return HdrOutputDeviceSetRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<HdrOutputDeviceSetRequest>, I>>(object: I): HdrOutputDeviceSetRequest {
-    const message = createBaseHdrOutputDeviceSetRequest();
-    message.outputDevice = object.outputDevice ?? 0;
-    return message;
-  },
-};
-
-function createBaseHdrColorGamutSetRequest(): HdrColorGamutSetRequest {
-  return { colorGamut: 0 };
-}
-
-export const HdrColorGamutSetRequest: MessageFns<HdrColorGamutSetRequest> = {
-  encode(message: HdrColorGamutSetRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.colorGamut !== 0) {
-      writer.uint32(8).int32(message.colorGamut);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): HdrColorGamutSetRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseHdrColorGamutSetRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
-          }
-
-          message.colorGamut = reader.int32() as any;
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): HdrColorGamutSetRequest {
-    return {
-      colorGamut: isSet(object.colorGamut)
-        ? colorGamutFromJSON(object.colorGamut)
-        : isSet(object.color_gamut)
-        ? colorGamutFromJSON(object.color_gamut)
-        : 0,
-    };
-  },
-
-  toJSON(message: HdrColorGamutSetRequest): unknown {
-    const obj: any = {};
-    if (message.colorGamut !== 0) {
-      obj.colorGamut = colorGamutToJSON(message.colorGamut);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<HdrColorGamutSetRequest>, I>>(base?: I): HdrColorGamutSetRequest {
-    return HdrColorGamutSetRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<HdrColorGamutSetRequest>, I>>(object: I): HdrColorGamutSetRequest {
-    const message = createBaseHdrColorGamutSetRequest();
-    message.colorGamut = object.colorGamut ?? 0;
-    return message;
-  },
-};
-
 function createBaseDisplaySliderSetRequest(): DisplaySliderSetRequest {
   return { sliderType: 0, value: 0 };
 }
@@ -1331,6 +1057,471 @@ export const DisplaySliderSetRequest: MessageFns<DisplaySliderSetRequest> = {
     const message = createBaseDisplaySliderSetRequest();
     message.sliderType = object.sliderType ?? 0;
     message.value = object.value ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestGetDisplaySettings(): RequestGetDisplaySettings {
+  return { requestType: 0 };
+}
+
+export const RequestGetDisplaySettings: MessageFns<RequestGetDisplaySettings> = {
+  encode(message: RequestGetDisplaySettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestType !== 0) {
+      writer.uint32(8).int32(message.requestType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestGetDisplaySettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestGetDisplaySettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestType = reader.int32() as any;
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestGetDisplaySettings {
+    return {
+      requestType: isSet(object.requestType)
+        ? displaySettingRequestTypeFromJSON(object.requestType)
+        : isSet(object.request_type)
+        ? displaySettingRequestTypeFromJSON(object.request_type)
+        : 0,
+    };
+  },
+
+  toJSON(message: RequestGetDisplaySettings): unknown {
+    const obj: any = {};
+    if (message.requestType !== 0) {
+      obj.requestType = displaySettingRequestTypeToJSON(message.requestType);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestGetDisplaySettings>, I>>(base?: I): RequestGetDisplaySettings {
+    return RequestGetDisplaySettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestGetDisplaySettings>, I>>(object: I): RequestGetDisplaySettings {
+    const message = createBaseRequestGetDisplaySettings();
+    message.requestType = object.requestType ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestSetDisplaySettings(): RequestSetDisplaySettings {
+  return {
+    fullScreenMode: undefined,
+    resolution: undefined,
+    vsync: undefined,
+    hdrEnableFlag: undefined,
+    hdrOutputDevice: undefined,
+    hdrColorGamut: undefined,
+    displaySlider: undefined,
+  };
+}
+
+export const RequestSetDisplaySettings: MessageFns<RequestSetDisplaySettings> = {
+  encode(message: RequestSetDisplaySettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.fullScreenMode !== undefined) {
+      writer.uint32(8).int32(message.fullScreenMode);
+    }
+    if (message.resolution !== undefined) {
+      Resolution.encode(message.resolution, writer.uint32(18).fork()).join();
+    }
+    if (message.vsync !== undefined) {
+      VSyncContent.encode(message.vsync, writer.uint32(26).fork()).join();
+    }
+    if (message.hdrEnableFlag !== undefined) {
+      writer.uint32(32).bool(message.hdrEnableFlag);
+    }
+    if (message.hdrOutputDevice !== undefined) {
+      writer.uint32(40).int32(message.hdrOutputDevice);
+    }
+    if (message.hdrColorGamut !== undefined) {
+      writer.uint32(48).int32(message.hdrColorGamut);
+    }
+    if (message.displaySlider !== undefined) {
+      DisplaySliderSetRequest.encode(message.displaySlider, writer.uint32(58).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestSetDisplaySettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestSetDisplaySettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.fullScreenMode = reader.int32() as any;
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.resolution = Resolution.decode(reader, reader.uint32());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.vsync = VSyncContent.decode(reader, reader.uint32());
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.hdrEnableFlag = reader.bool();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.hdrOutputDevice = reader.int32() as any;
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.hdrColorGamut = reader.int32() as any;
+          continue;
+        }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.displaySlider = DisplaySliderSetRequest.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestSetDisplaySettings {
+    return {
+      fullScreenMode: isSet(object.fullScreenMode)
+        ? fullscreenModeFromJSON(object.fullScreenMode)
+        : isSet(object.full_screen_mode)
+        ? fullscreenModeFromJSON(object.full_screen_mode)
+        : undefined,
+      resolution: isSet(object.resolution) ? Resolution.fromJSON(object.resolution) : undefined,
+      vsync: isSet(object.vsync) ? VSyncContent.fromJSON(object.vsync) : undefined,
+      hdrEnableFlag: isSet(object.hdrEnableFlag)
+        ? globalThis.Boolean(object.hdrEnableFlag)
+        : isSet(object.hdr_enable_flag)
+        ? globalThis.Boolean(object.hdr_enable_flag)
+        : undefined,
+      hdrOutputDevice: isSet(object.hdrOutputDevice)
+        ? hdrOutputFromJSON(object.hdrOutputDevice)
+        : isSet(object.hdr_output_device)
+        ? hdrOutputFromJSON(object.hdr_output_device)
+        : undefined,
+      hdrColorGamut: isSet(object.hdrColorGamut)
+        ? colorGamutFromJSON(object.hdrColorGamut)
+        : isSet(object.hdr_color_gamut)
+        ? colorGamutFromJSON(object.hdr_color_gamut)
+        : undefined,
+      displaySlider: isSet(object.displaySlider)
+        ? DisplaySliderSetRequest.fromJSON(object.displaySlider)
+        : isSet(object.display_slider)
+        ? DisplaySliderSetRequest.fromJSON(object.display_slider)
+        : undefined,
+    };
+  },
+
+  toJSON(message: RequestSetDisplaySettings): unknown {
+    const obj: any = {};
+    if (message.fullScreenMode !== undefined) {
+      obj.fullScreenMode = fullscreenModeToJSON(message.fullScreenMode);
+    }
+    if (message.resolution !== undefined) {
+      obj.resolution = Resolution.toJSON(message.resolution);
+    }
+    if (message.vsync !== undefined) {
+      obj.vsync = VSyncContent.toJSON(message.vsync);
+    }
+    if (message.hdrEnableFlag !== undefined) {
+      obj.hdrEnableFlag = message.hdrEnableFlag;
+    }
+    if (message.hdrOutputDevice !== undefined) {
+      obj.hdrOutputDevice = hdrOutputToJSON(message.hdrOutputDevice);
+    }
+    if (message.hdrColorGamut !== undefined) {
+      obj.hdrColorGamut = colorGamutToJSON(message.hdrColorGamut);
+    }
+    if (message.displaySlider !== undefined) {
+      obj.displaySlider = DisplaySliderSetRequest.toJSON(message.displaySlider);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestSetDisplaySettings>, I>>(base?: I): RequestSetDisplaySettings {
+    return RequestSetDisplaySettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestSetDisplaySettings>, I>>(object: I): RequestSetDisplaySettings {
+    const message = createBaseRequestSetDisplaySettings();
+    message.fullScreenMode = object.fullScreenMode ?? undefined;
+    message.resolution = (object.resolution !== undefined && object.resolution !== null)
+      ? Resolution.fromPartial(object.resolution)
+      : undefined;
+    message.vsync = (object.vsync !== undefined && object.vsync !== null)
+      ? VSyncContent.fromPartial(object.vsync)
+      : undefined;
+    message.hdrEnableFlag = object.hdrEnableFlag ?? undefined;
+    message.hdrOutputDevice = object.hdrOutputDevice ?? undefined;
+    message.hdrColorGamut = object.hdrColorGamut ?? undefined;
+    message.displaySlider = (object.displaySlider !== undefined && object.displaySlider !== null)
+      ? DisplaySliderSetRequest.fromPartial(object.displaySlider)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseResponseDisplaySettings(): ResponseDisplaySettings {
+  return {
+    requestedType: 0,
+    fullScreenMode: undefined,
+    resolution: undefined,
+    vsync: undefined,
+    hdr: undefined,
+    frameLimit: undefined,
+    slidersAccessibility: undefined,
+    slidersCamera: undefined,
+  };
+}
+
+export const ResponseDisplaySettings: MessageFns<ResponseDisplaySettings> = {
+  encode(message: ResponseDisplaySettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.requestedType !== 0) {
+      writer.uint32(8).int32(message.requestedType);
+    }
+    if (message.fullScreenMode !== undefined) {
+      writer.uint32(16).int32(message.fullScreenMode);
+    }
+    if (message.resolution !== undefined) {
+      ResolutionResponse.encode(message.resolution, writer.uint32(26).fork()).join();
+    }
+    if (message.vsync !== undefined) {
+      VSyncContent.encode(message.vsync, writer.uint32(34).fork()).join();
+    }
+    if (message.hdr !== undefined) {
+      HdrResponse.encode(message.hdr, writer.uint32(42).fork()).join();
+    }
+    if (message.frameLimit !== undefined) {
+      FrameLimitContent.encode(message.frameLimit, writer.uint32(50).fork()).join();
+    }
+    if (message.slidersAccessibility !== undefined) {
+      AccessibilityResponse.encode(message.slidersAccessibility, writer.uint32(58).fork()).join();
+    }
+    if (message.slidersCamera !== undefined) {
+      CameraResponse.encode(message.slidersCamera, writer.uint32(66).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseDisplaySettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseDisplaySettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.requestedType = reader.int32() as any;
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.fullScreenMode = reader.int32() as any;
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.resolution = ResolutionResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.vsync = VSyncContent.decode(reader, reader.uint32());
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.hdr = HdrResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.frameLimit = FrameLimitContent.decode(reader, reader.uint32());
+          continue;
+        }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.slidersAccessibility = AccessibilityResponse.decode(reader, reader.uint32());
+          continue;
+        }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.slidersCamera = CameraResponse.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResponseDisplaySettings {
+    return {
+      requestedType: isSet(object.requestedType)
+        ? displaySettingRequestTypeFromJSON(object.requestedType)
+        : isSet(object.requested_type)
+        ? displaySettingRequestTypeFromJSON(object.requested_type)
+        : 0,
+      fullScreenMode: isSet(object.fullScreenMode)
+        ? fullscreenModeFromJSON(object.fullScreenMode)
+        : isSet(object.full_screen_mode)
+        ? fullscreenModeFromJSON(object.full_screen_mode)
+        : undefined,
+      resolution: isSet(object.resolution) ? ResolutionResponse.fromJSON(object.resolution) : undefined,
+      vsync: isSet(object.vsync) ? VSyncContent.fromJSON(object.vsync) : undefined,
+      hdr: isSet(object.hdr) ? HdrResponse.fromJSON(object.hdr) : undefined,
+      frameLimit: isSet(object.frameLimit)
+        ? FrameLimitContent.fromJSON(object.frameLimit)
+        : isSet(object.frame_limit)
+        ? FrameLimitContent.fromJSON(object.frame_limit)
+        : undefined,
+      slidersAccessibility: isSet(object.slidersAccessibility)
+        ? AccessibilityResponse.fromJSON(object.slidersAccessibility)
+        : isSet(object.sliders_accessibility)
+        ? AccessibilityResponse.fromJSON(object.sliders_accessibility)
+        : undefined,
+      slidersCamera: isSet(object.slidersCamera)
+        ? CameraResponse.fromJSON(object.slidersCamera)
+        : isSet(object.sliders_camera)
+        ? CameraResponse.fromJSON(object.sliders_camera)
+        : undefined,
+    };
+  },
+
+  toJSON(message: ResponseDisplaySettings): unknown {
+    const obj: any = {};
+    if (message.requestedType !== 0) {
+      obj.requestedType = displaySettingRequestTypeToJSON(message.requestedType);
+    }
+    if (message.fullScreenMode !== undefined) {
+      obj.fullScreenMode = fullscreenModeToJSON(message.fullScreenMode);
+    }
+    if (message.resolution !== undefined) {
+      obj.resolution = ResolutionResponse.toJSON(message.resolution);
+    }
+    if (message.vsync !== undefined) {
+      obj.vsync = VSyncContent.toJSON(message.vsync);
+    }
+    if (message.hdr !== undefined) {
+      obj.hdr = HdrResponse.toJSON(message.hdr);
+    }
+    if (message.frameLimit !== undefined) {
+      obj.frameLimit = FrameLimitContent.toJSON(message.frameLimit);
+    }
+    if (message.slidersAccessibility !== undefined) {
+      obj.slidersAccessibility = AccessibilityResponse.toJSON(message.slidersAccessibility);
+    }
+    if (message.slidersCamera !== undefined) {
+      obj.slidersCamera = CameraResponse.toJSON(message.slidersCamera);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResponseDisplaySettings>, I>>(base?: I): ResponseDisplaySettings {
+    return ResponseDisplaySettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResponseDisplaySettings>, I>>(object: I): ResponseDisplaySettings {
+    const message = createBaseResponseDisplaySettings();
+    message.requestedType = object.requestedType ?? 0;
+    message.fullScreenMode = object.fullScreenMode ?? undefined;
+    message.resolution = (object.resolution !== undefined && object.resolution !== null)
+      ? ResolutionResponse.fromPartial(object.resolution)
+      : undefined;
+    message.vsync = (object.vsync !== undefined && object.vsync !== null)
+      ? VSyncContent.fromPartial(object.vsync)
+      : undefined;
+    message.hdr = (object.hdr !== undefined && object.hdr !== null) ? HdrResponse.fromPartial(object.hdr) : undefined;
+    message.frameLimit = (object.frameLimit !== undefined && object.frameLimit !== null)
+      ? FrameLimitContent.fromPartial(object.frameLimit)
+      : undefined;
+    message.slidersAccessibility = (object.slidersAccessibility !== undefined && object.slidersAccessibility !== null)
+      ? AccessibilityResponse.fromPartial(object.slidersAccessibility)
+      : undefined;
+    message.slidersCamera = (object.slidersCamera !== undefined && object.slidersCamera !== null)
+      ? CameraResponse.fromPartial(object.slidersCamera)
+      : undefined;
     return message;
   },
 };

@@ -7,36 +7,70 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
-export const protobufPackage = "";
+export const protobufPackage = "scp.webui.v1";
 
+/** UI-facing metadata for a single key binding entry. */
 export interface KeyBindingSettingVisualData {
   uniqueId: string;
   displayKey: string;
   key: string;
+  sortOrder: number;
 }
 
+/** A named group of key bindings shown together in the controls UI. */
 export interface KeyBindingSettingCategory {
   categoryName: string;
   keyBindings: KeyBindingSettingVisualData[];
 }
 
-/** Retrieve all categories with display_key for localization */
-export interface KeyBindingsSettingsResponse {
-  categories: KeyBindingSettingCategory[];
-}
-
+/** Minimal key binding payload used when persisting changed bindings. */
 export interface KeyBindingSettingData {
   uniqueId: string;
   key: string;
 }
 
-/** Set key_bindings -> new values */
-export interface KeyBindingsSettingsSetRequest {
+/** Requests the current key binding configuration. The field is unused placeholder data. */
+export interface RequestGetKeysSettings {
+  empty: number;
+}
+
+/** Applies one or more key binding updates. */
+export interface RequestSetKeysSettings {
   keyBindings: KeyBindingSettingData[];
 }
 
+/** Reset to default single key */
+export interface RequestResetKeySettings {
+  uniqueId: string;
+}
+
+/** Reset to default single key */
+export interface RequestResetAllKeySettings {
+  empty: number;
+}
+
+/** Clear single key */
+export interface RequestClearKeySettings {
+  uniqueId: string;
+}
+
+/** Returns all key bindings grouped by UI category. */
+export interface ResponseKeysSettings {
+  categories: KeyBindingSettingCategory[];
+}
+
+export interface ResponseSingleKeySetting {
+  content: KeyBindingSettingData | undefined;
+  error: string;
+}
+
+export interface ResponseMultipleKeySetting {
+  content: KeyBindingSettingData[];
+  error: string;
+}
+
 function createBaseKeyBindingSettingVisualData(): KeyBindingSettingVisualData {
-  return { uniqueId: "", displayKey: "", key: "" };
+  return { uniqueId: "", displayKey: "", key: "", sortOrder: 0 };
 }
 
 export const KeyBindingSettingVisualData: MessageFns<KeyBindingSettingVisualData> = {
@@ -49,6 +83,9 @@ export const KeyBindingSettingVisualData: MessageFns<KeyBindingSettingVisualData
     }
     if (message.key !== "") {
       writer.uint32(26).string(message.key);
+    }
+    if (message.sortOrder !== 0) {
+      writer.uint32(32).uint32(message.sortOrder);
     }
     return writer;
   },
@@ -84,6 +121,14 @@ export const KeyBindingSettingVisualData: MessageFns<KeyBindingSettingVisualData
           message.key = reader.string();
           continue;
         }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.sortOrder = reader.uint32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -106,6 +151,11 @@ export const KeyBindingSettingVisualData: MessageFns<KeyBindingSettingVisualData
         ? globalThis.String(object.display_key)
         : "",
       key: isSet(object.key) ? globalThis.String(object.key) : "",
+      sortOrder: isSet(object.sortOrder)
+        ? globalThis.Number(object.sortOrder)
+        : isSet(object.sort_order)
+        ? globalThis.Number(object.sort_order)
+        : 0,
     };
   },
 
@@ -120,6 +170,9 @@ export const KeyBindingSettingVisualData: MessageFns<KeyBindingSettingVisualData
     if (message.key !== "") {
       obj.key = message.key;
     }
+    if (message.sortOrder !== 0) {
+      obj.sortOrder = Math.round(message.sortOrder);
+    }
     return obj;
   },
 
@@ -131,6 +184,7 @@ export const KeyBindingSettingVisualData: MessageFns<KeyBindingSettingVisualData
     message.uniqueId = object.uniqueId ?? "";
     message.displayKey = object.displayKey ?? "";
     message.key = object.key ?? "";
+    message.sortOrder = object.sortOrder ?? 0;
     return message;
   },
 };
@@ -219,68 +273,6 @@ export const KeyBindingSettingCategory: MessageFns<KeyBindingSettingCategory> = 
   },
 };
 
-function createBaseKeyBindingsSettingsResponse(): KeyBindingsSettingsResponse {
-  return { categories: [] };
-}
-
-export const KeyBindingsSettingsResponse: MessageFns<KeyBindingsSettingsResponse> = {
-  encode(message: KeyBindingsSettingsResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.categories) {
-      KeyBindingSettingCategory.encode(v!, writer.uint32(10).fork()).join();
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): KeyBindingsSettingsResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseKeyBindingsSettingsResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.categories.push(KeyBindingSettingCategory.decode(reader, reader.uint32()));
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): KeyBindingsSettingsResponse {
-    return {
-      categories: globalThis.Array.isArray(object?.categories)
-        ? object.categories.map((e: any) => KeyBindingSettingCategory.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: KeyBindingsSettingsResponse): unknown {
-    const obj: any = {};
-    if (message.categories?.length) {
-      obj.categories = message.categories.map((e) => KeyBindingSettingCategory.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<KeyBindingsSettingsResponse>, I>>(base?: I): KeyBindingsSettingsResponse {
-    return KeyBindingsSettingsResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<KeyBindingsSettingsResponse>, I>>(object: I): KeyBindingsSettingsResponse {
-    const message = createBaseKeyBindingsSettingsResponse();
-    message.categories = object.categories?.map((e) => KeyBindingSettingCategory.fromPartial(e)) || [];
-    return message;
-  },
-};
-
 function createBaseKeyBindingSettingData(): KeyBindingSettingData {
   return { uniqueId: "", key: "" };
 }
@@ -361,22 +353,80 @@ export const KeyBindingSettingData: MessageFns<KeyBindingSettingData> = {
   },
 };
 
-function createBaseKeyBindingsSettingsSetRequest(): KeyBindingsSettingsSetRequest {
+function createBaseRequestGetKeysSettings(): RequestGetKeysSettings {
+  return { empty: 0 };
+}
+
+export const RequestGetKeysSettings: MessageFns<RequestGetKeysSettings> = {
+  encode(message: RequestGetKeysSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.empty !== 0) {
+      writer.uint32(8).uint32(message.empty);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestGetKeysSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestGetKeysSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.empty = reader.uint32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestGetKeysSettings {
+    return { empty: isSet(object.empty) ? globalThis.Number(object.empty) : 0 };
+  },
+
+  toJSON(message: RequestGetKeysSettings): unknown {
+    const obj: any = {};
+    if (message.empty !== 0) {
+      obj.empty = Math.round(message.empty);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestGetKeysSettings>, I>>(base?: I): RequestGetKeysSettings {
+    return RequestGetKeysSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestGetKeysSettings>, I>>(object: I): RequestGetKeysSettings {
+    const message = createBaseRequestGetKeysSettings();
+    message.empty = object.empty ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestSetKeysSettings(): RequestSetKeysSettings {
   return { keyBindings: [] };
 }
 
-export const KeyBindingsSettingsSetRequest: MessageFns<KeyBindingsSettingsSetRequest> = {
-  encode(message: KeyBindingsSettingsSetRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RequestSetKeysSettings: MessageFns<RequestSetKeysSettings> = {
+  encode(message: RequestSetKeysSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.keyBindings) {
       KeyBindingSettingData.encode(v!, writer.uint32(10).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): KeyBindingsSettingsSetRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestSetKeysSettings {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseKeyBindingsSettingsSetRequest();
+    const message = createBaseRequestSetKeysSettings();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -397,7 +447,7 @@ export const KeyBindingsSettingsSetRequest: MessageFns<KeyBindingsSettingsSetReq
     return message;
   },
 
-  fromJSON(object: any): KeyBindingsSettingsSetRequest {
+  fromJSON(object: any): RequestSetKeysSettings {
     return {
       keyBindings: globalThis.Array.isArray(object?.keyBindings)
         ? object.keyBindings.map((e: any) => KeyBindingSettingData.fromJSON(e))
@@ -407,7 +457,7 @@ export const KeyBindingsSettingsSetRequest: MessageFns<KeyBindingsSettingsSetReq
     };
   },
 
-  toJSON(message: KeyBindingsSettingsSetRequest): unknown {
+  toJSON(message: RequestSetKeysSettings): unknown {
     const obj: any = {};
     if (message.keyBindings?.length) {
       obj.keyBindings = message.keyBindings.map((e) => KeyBindingSettingData.toJSON(e));
@@ -415,14 +465,416 @@ export const KeyBindingsSettingsSetRequest: MessageFns<KeyBindingsSettingsSetReq
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<KeyBindingsSettingsSetRequest>, I>>(base?: I): KeyBindingsSettingsSetRequest {
-    return KeyBindingsSettingsSetRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RequestSetKeysSettings>, I>>(base?: I): RequestSetKeysSettings {
+    return RequestSetKeysSettings.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<KeyBindingsSettingsSetRequest>, I>>(
-    object: I,
-  ): KeyBindingsSettingsSetRequest {
-    const message = createBaseKeyBindingsSettingsSetRequest();
+  fromPartial<I extends Exact<DeepPartial<RequestSetKeysSettings>, I>>(object: I): RequestSetKeysSettings {
+    const message = createBaseRequestSetKeysSettings();
     message.keyBindings = object.keyBindings?.map((e) => KeyBindingSettingData.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseRequestResetKeySettings(): RequestResetKeySettings {
+  return { uniqueId: "" };
+}
+
+export const RequestResetKeySettings: MessageFns<RequestResetKeySettings> = {
+  encode(message: RequestResetKeySettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.uniqueId !== "") {
+      writer.uint32(10).string(message.uniqueId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestResetKeySettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestResetKeySettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.uniqueId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestResetKeySettings {
+    return {
+      uniqueId: isSet(object.uniqueId)
+        ? globalThis.String(object.uniqueId)
+        : isSet(object.unique_id)
+        ? globalThis.String(object.unique_id)
+        : "",
+    };
+  },
+
+  toJSON(message: RequestResetKeySettings): unknown {
+    const obj: any = {};
+    if (message.uniqueId !== "") {
+      obj.uniqueId = message.uniqueId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestResetKeySettings>, I>>(base?: I): RequestResetKeySettings {
+    return RequestResetKeySettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestResetKeySettings>, I>>(object: I): RequestResetKeySettings {
+    const message = createBaseRequestResetKeySettings();
+    message.uniqueId = object.uniqueId ?? "";
+    return message;
+  },
+};
+
+function createBaseRequestResetAllKeySettings(): RequestResetAllKeySettings {
+  return { empty: 0 };
+}
+
+export const RequestResetAllKeySettings: MessageFns<RequestResetAllKeySettings> = {
+  encode(message: RequestResetAllKeySettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.empty !== 0) {
+      writer.uint32(8).uint32(message.empty);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestResetAllKeySettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestResetAllKeySettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.empty = reader.uint32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestResetAllKeySettings {
+    return { empty: isSet(object.empty) ? globalThis.Number(object.empty) : 0 };
+  },
+
+  toJSON(message: RequestResetAllKeySettings): unknown {
+    const obj: any = {};
+    if (message.empty !== 0) {
+      obj.empty = Math.round(message.empty);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestResetAllKeySettings>, I>>(base?: I): RequestResetAllKeySettings {
+    return RequestResetAllKeySettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestResetAllKeySettings>, I>>(object: I): RequestResetAllKeySettings {
+    const message = createBaseRequestResetAllKeySettings();
+    message.empty = object.empty ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestClearKeySettings(): RequestClearKeySettings {
+  return { uniqueId: "" };
+}
+
+export const RequestClearKeySettings: MessageFns<RequestClearKeySettings> = {
+  encode(message: RequestClearKeySettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.uniqueId !== "") {
+      writer.uint32(10).string(message.uniqueId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestClearKeySettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestClearKeySettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.uniqueId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestClearKeySettings {
+    return {
+      uniqueId: isSet(object.uniqueId)
+        ? globalThis.String(object.uniqueId)
+        : isSet(object.unique_id)
+        ? globalThis.String(object.unique_id)
+        : "",
+    };
+  },
+
+  toJSON(message: RequestClearKeySettings): unknown {
+    const obj: any = {};
+    if (message.uniqueId !== "") {
+      obj.uniqueId = message.uniqueId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestClearKeySettings>, I>>(base?: I): RequestClearKeySettings {
+    return RequestClearKeySettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestClearKeySettings>, I>>(object: I): RequestClearKeySettings {
+    const message = createBaseRequestClearKeySettings();
+    message.uniqueId = object.uniqueId ?? "";
+    return message;
+  },
+};
+
+function createBaseResponseKeysSettings(): ResponseKeysSettings {
+  return { categories: [] };
+}
+
+export const ResponseKeysSettings: MessageFns<ResponseKeysSettings> = {
+  encode(message: ResponseKeysSettings, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.categories) {
+      KeyBindingSettingCategory.encode(v!, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseKeysSettings {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseKeysSettings();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.categories.push(KeyBindingSettingCategory.decode(reader, reader.uint32()));
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResponseKeysSettings {
+    return {
+      categories: globalThis.Array.isArray(object?.categories)
+        ? object.categories.map((e: any) => KeyBindingSettingCategory.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: ResponseKeysSettings): unknown {
+    const obj: any = {};
+    if (message.categories?.length) {
+      obj.categories = message.categories.map((e) => KeyBindingSettingCategory.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResponseKeysSettings>, I>>(base?: I): ResponseKeysSettings {
+    return ResponseKeysSettings.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResponseKeysSettings>, I>>(object: I): ResponseKeysSettings {
+    const message = createBaseResponseKeysSettings();
+    message.categories = object.categories?.map((e) => KeyBindingSettingCategory.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseResponseSingleKeySetting(): ResponseSingleKeySetting {
+  return { content: undefined, error: "" };
+}
+
+export const ResponseSingleKeySetting: MessageFns<ResponseSingleKeySetting> = {
+  encode(message: ResponseSingleKeySetting, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.content !== undefined) {
+      KeyBindingSettingData.encode(message.content, writer.uint32(10).fork()).join();
+    }
+    if (message.error !== "") {
+      writer.uint32(18).string(message.error);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseSingleKeySetting {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseSingleKeySetting();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.content = KeyBindingSettingData.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.error = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResponseSingleKeySetting {
+    return {
+      content: isSet(object.content) ? KeyBindingSettingData.fromJSON(object.content) : undefined,
+      error: isSet(object.error) ? globalThis.String(object.error) : "",
+    };
+  },
+
+  toJSON(message: ResponseSingleKeySetting): unknown {
+    const obj: any = {};
+    if (message.content !== undefined) {
+      obj.content = KeyBindingSettingData.toJSON(message.content);
+    }
+    if (message.error !== "") {
+      obj.error = message.error;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResponseSingleKeySetting>, I>>(base?: I): ResponseSingleKeySetting {
+    return ResponseSingleKeySetting.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResponseSingleKeySetting>, I>>(object: I): ResponseSingleKeySetting {
+    const message = createBaseResponseSingleKeySetting();
+    message.content = (object.content !== undefined && object.content !== null)
+      ? KeyBindingSettingData.fromPartial(object.content)
+      : undefined;
+    message.error = object.error ?? "";
+    return message;
+  },
+};
+
+function createBaseResponseMultipleKeySetting(): ResponseMultipleKeySetting {
+  return { content: [], error: "" };
+}
+
+export const ResponseMultipleKeySetting: MessageFns<ResponseMultipleKeySetting> = {
+  encode(message: ResponseMultipleKeySetting, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.content) {
+      KeyBindingSettingData.encode(v!, writer.uint32(10).fork()).join();
+    }
+    if (message.error !== "") {
+      writer.uint32(18).string(message.error);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseMultipleKeySetting {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseMultipleKeySetting();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.content.push(KeyBindingSettingData.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.error = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResponseMultipleKeySetting {
+    return {
+      content: globalThis.Array.isArray(object?.content)
+        ? object.content.map((e: any) => KeyBindingSettingData.fromJSON(e))
+        : [],
+      error: isSet(object.error) ? globalThis.String(object.error) : "",
+    };
+  },
+
+  toJSON(message: ResponseMultipleKeySetting): unknown {
+    const obj: any = {};
+    if (message.content?.length) {
+      obj.content = message.content.map((e) => KeyBindingSettingData.toJSON(e));
+    }
+    if (message.error !== "") {
+      obj.error = message.error;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ResponseMultipleKeySetting>, I>>(base?: I): ResponseMultipleKeySetting {
+    return ResponseMultipleKeySetting.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ResponseMultipleKeySetting>, I>>(object: I): ResponseMultipleKeySetting {
+    const message = createBaseResponseMultipleKeySetting();
+    message.content = object.content?.map((e) => KeyBindingSettingData.fromPartial(e)) || [];
+    message.error = object.error ?? "";
     return message;
   },
 };

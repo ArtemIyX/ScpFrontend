@@ -1,45 +1,56 @@
 syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
+package scp.webui.v1;
 
+// Identifies which audio settings group the client wants to fetch.
 enum AudioSettingRequestType
 {
-  PLAYBACK_DEVICE = 0;
-  CAPTURE_DEVICE = 1;
-  VOICE_CHAT = 2;
-  MIXER = 3;
-}
-message AudioSettingsRequest {
-  AudioSettingRequestType request_type = 1;
+  AUDIO_SETTING_PLAYBACK_DEVICE = 0;
+  AUDIO_SETTING_CAPTURE_DEVICE = 1;
+  AUDIO_SETTING_VOICE_CHAT = 2;
+  AUDIO_SETTING_MIXER = 3;
 }
 
-message AudioStringArray
+message AudioDeviceElement
 {
-  repeated string arr = 1;
+  string display_name = 1;
+  string device_id = 2;
+}
+
+// Common string-list payload with the currently selected entry index.
+message AudioDeviceArray
+{
+  repeated AudioDeviceElement arr = 1;
   uint32 selected = 2;
 }
 
+// Available playback devices and the currently selected device.
 message AudioPlaybackDevicesResponse
 {
-  AudioStringArray result = 1;
+  AudioDeviceArray result = 1;
 }
 
+// Available capture devices and the currently selected device.
 message AudioCaptureDevicesResponse
 {
-  AudioStringArray result = 1;
+  AudioDeviceArray result = 1;
 }
 
+// Voice chat activation mode.
 enum AudioTalkMode
 {
   PUSH_TO_TALK = 0;
   VOICE_ACTIVATION = 1;
 }
 
-message AudioVoiceChatResponse
+// Voice chat mode and activation threshold values.
+message AudioVoiceChatData
 {
   AudioTalkMode talk_mode = 1;
   uint32 threshold = 2;
 }
 
+// Mixer slider values for each audio bus exposed in the UI.
 message AudioMixerResponse
 {
   uint32 master = 1;
@@ -50,6 +61,7 @@ message AudioMixerResponse
   uint32 sfx = 6;
 }
 
+// Identifies which mixer channel to update.
 enum AudioMixerType
 {
   AUDIO_MASTER = 0;
@@ -60,8 +72,53 @@ enum AudioMixerType
   AUDIO_SFX = 5;
 }
 
+// Sets a single audio mixer channel value.
 message AudioMixerSetRequest
 {
   AudioMixerType type = 1;
   uint32 value = 2;
+}
+
+// Selects the active playback device by index.
+message AudioSetPlaybackDeviceRequest
+{
+  uint32 selected_index = 1;
+}
+
+// Selects the active capture device by index.
+message AudioSetCaptureDeviceRequest
+{
+  uint32 selected_index = 1;
+}
+
+// Requests one audio settings section from the backend.
+message RequestGetAudioSettings
+{
+  AudioSettingRequestType request_type = 1;
+}
+
+// Applies one audio settings change. Only one payload variant is valid per request.
+message RequestSetAudioSettings
+{
+  oneof content
+  {
+    AudioSetPlaybackDeviceRequest playback = 1;
+    AudioSetCaptureDeviceRequest capture = 2;
+    AudioVoiceChatData voice_chat = 3;
+    AudioMixerSetRequest mixer = 4;
+  }
+}
+
+
+// Returns the audio settings payload matching the requested section.
+message ResponseAudioSettings
+{
+  AudioSettingRequestType requested_type = 1;
+  oneof result
+  {
+    AudioPlaybackDevicesResponse playback_device = 2;
+    AudioCaptureDevicesResponse audio_capture_device = 3;
+    AudioVoiceChatData voice_chat = 4;
+    AudioMixerResponse mixer = 5;
+  }
 }
