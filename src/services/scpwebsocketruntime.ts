@@ -14,7 +14,7 @@ export function createScpWebSocketClient(host: string): ScpWebSocketClient {
 
   sharedScpWebSocketClient = new ScpWebSocketClient({ url })
   sharedScpWebSocketClient.onTypedMessage(MessageType.MESSAGE_PONG, (message) => {
-    console.log(JSON.stringify(message))
+    console.log("pong:" + JSON.stringify(message))
   })
   sharedScpWebSocketClient.onStateChange((state) => {
     if (!sharedScpWebSocketClient || sharedScpWebSocketClient.socketUrl !== url) {

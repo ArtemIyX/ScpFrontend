@@ -1,10 +1,22 @@
-import { MessageType, PingMessage, PongMessage, ScpEnvelope, type PingMessage as PingMessageShape, type PongMessage as PongMessageShape } from '@/proto/gen/scp_webui'
+import {
+  ResponseDisplaySettings,
+  type ResponseDisplaySettings as ResponseDisplaySettingsShape,
+} from '@/proto/gen/display_settings'
+import {
+  MessageType,
+  PingMessage,
+  PongMessage,
+  ScpEnvelope,
+  type PingMessage as PingMessageShape,
+  type PongMessage as PongMessageShape,
+} from '@/proto/gen/scp_webui'
 
 import { WebSocketClient, type WebSocketClientOptions } from './websocketclient'
 
 export type ScpIncomingMessageMap = {
   [MessageType.MESSAGE_PING]: PingMessageShape
   [MessageType.MESSAGE_PONG]: PongMessageShape
+  [MessageType.RESPONSE_DISPLAY_SETTINGS]: ResponseDisplaySettingsShape
 }
 
 export type ScpKnownMessageType = keyof ScpIncomingMessageMap
@@ -31,6 +43,7 @@ export class ScpWebSocketClient extends WebSocketClient {
 
     this.registerCodec(MessageType.MESSAGE_PING, PingMessage)
     this.registerCodec(MessageType.MESSAGE_PONG, PongMessage)
+    this.registerCodec(MessageType.RESPONSE_DISPLAY_SETTINGS, ResponseDisplaySettings)
     this.onBytes((bytes) => {
       this.handleEnvelopeBytes(bytes)
     })
