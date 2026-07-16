@@ -33,7 +33,7 @@
               shape="block"
               size="lg"
               class="display-settings__mode-button"
-              @click="fullscreenMode = mode.value"
+              @click="applyFullscreenMode(mode.value)"
             >
               {{ mode.label }}
             </GButton>
@@ -67,6 +67,7 @@
               width="full"
               preset="quiet"
               placeholder="Select resolution"
+              @change="applyResolution"
             />
           </GField>
 
@@ -90,7 +91,7 @@
             </template>
 
             <div class="display-settings__toggle-column">
-              <GCheckbox v-model="vsync" preset="quiet">VSync</GCheckbox>
+              <GCheckbox v-model="vsync" preset="quiet" @update:model-value="applyVsync">VSync</GCheckbox>
             </div>
           </GField>
         </div>
@@ -115,7 +116,9 @@
           </template>
 
           <div class="display-settings__fps-group">
-            <GCheckbox v-model="limitFps" preset="quiet">Limit FPS</GCheckbox>
+            <GCheckbox v-model="limitFps" preset="quiet" @update:model-value="applyFrameRateLimitToggle">
+              Limit FPS
+            </GCheckbox>
 
             <div class="display-settings__fps-row" :class="{ 'display-settings__fps-row--disabled': fpsControlsDisabled }">
               <GSlider
@@ -129,6 +132,7 @@
                 width="full"
                 preset="quiet"
                 aria-label="Maximum frames per second"
+                @change="() => applyFrameRateLimit(limitFps, maxFps)"
               />
               <GNumberInput
                 v-model="maxFps"
@@ -141,6 +145,9 @@
                 width="full"
                 preset="quiet"
                 aria-label="Maximum FPS input"
+                @change="() => applyFrameRateLimit(limitFps, maxFps)"
+                @increment="applyFrameRateLimitValue"
+                @decrement="applyFrameRateLimitValue"
               >
                 <template #suffix>
                   <span class="display-settings__unit">FPS</span>
@@ -153,7 +160,7 @@
         <div class="display-settings__hdr-shell">
           <div class="display-settings__hdr-head">
 
-            <GCheckbox v-model="hdrEnabled" preset="quiet">HDR Enable</GCheckbox>
+            <GCheckbox v-model="hdrEnabled" preset="quiet" @update:model-value="applyHdrEnabled">HDR Enable</GCheckbox>
             <GBadge
               v-if="displaySettingsRuntime.showHdrUnsupportedBadge"
               preset="warning"
@@ -191,6 +198,7 @@
                 width="full"
                 preset="quiet"
                 placeholder="Select output device"
+                @change="applyHdrOutputDevice"
               />
             </GField>
 
@@ -220,6 +228,7 @@
                 width="full"
                 preset="quiet"
                 placeholder="Select color gamut"
+                @change="applyHdrColorGamut"
               />
             </GField>
           </div>
@@ -257,6 +266,7 @@
             width="full"
             preset="quiet"
             aria-label="Brightness"
+            @change="applyBrightness"
           />
         </GField>
 
@@ -282,6 +292,7 @@
             width="full"
             preset="quiet"
             aria-label="Gamma"
+            @change="applyGamma"
           />
         </GField>
 
@@ -307,6 +318,7 @@
             width="full"
             preset="quiet"
             aria-label="Contrast"
+            @change="applyContrast"
           />
         </GField>
       </div>
@@ -343,6 +355,7 @@
             width="full"
             preset="quiet"
             aria-label="Field of view"
+            @change="applyFov"
           />
         </GField>
 
@@ -369,6 +382,7 @@
               width="full"
               preset="quiet"
               aria-label="Camera smoothing"
+              @change="applyCameraSmoothing"
             />
           </GField>
 
@@ -394,6 +408,7 @@
               width="full"
               preset="quiet"
               aria-label="Screen shake intensity"
+              @change="applyScreenShakeIntensity"
             />
           </GField>
 
@@ -419,6 +434,7 @@
               width="full"
               preset="quiet"
               aria-label="Head bobbing intensity"
+              @change="applyHeadBobbingIntensity"
             />
           </GField>
         </div>

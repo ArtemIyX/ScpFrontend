@@ -3,11 +3,15 @@ import { computed, defineComponent, onMounted, onUnmounted, reactive, ref } from
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
 import {
   ColorGamut,
+  DisplaySliderType,
   DisplaySettingRequestType,
+  FrameLimitContent,
   FullscreenMode as ProtoFullscreenMode,
   HdrOutput,
   RequestGetDisplaySettings,
+  RequestSetDisplaySettings,
   ResponseDisplaySettings,
+  type RequestSetDisplaySettings as RequestSetDisplaySettingsShape,
   type ResolutionResponse,
 } from '@/proto/gen/display_settings'
 import { MessageType } from '@/proto/gen/scp_webui'
@@ -98,8 +102,146 @@ export default defineComponent({
       }
     }
 
+    function mapFullscreenMode(mode: FullscreenMode): ProtoFullscreenMode {
+      switch (mode) {
+        case 'borderless':
+          return ProtoFullscreenMode.FULLSCREEN_MODE_WINDOWED_FULLSCREEN
+        case 'windowed':
+          return ProtoFullscreenMode.FULLSCREEN_MODE_WINDOWED
+        case 'fullscreen':
+        default:
+          return ProtoFullscreenMode.FULLSCREEN_MODE_FULLSCREEN
+      }
+    }
+
     function formatResolutionOptionValue(width: number, height: number): string {
       return `${width}x${height}`
+    }
+
+    function parseResolutionValue(value: string | number | null): { x: number; y: number } | null {
+      if (typeof value !== 'string') {
+        return null
+      }
+
+      const match = /^(\d+)x(\d+)$/.exec(value)
+      if (!match) {
+        return null
+      }
+
+      const x = Number(match[1])
+      const y = Number(match[2])
+
+      if (!Number.isInteger(x) || !Number.isInteger(y)) {
+        return null
+      }
+
+      return { x, y }
+    }
+
+    function sendDisplaySettingsUpdate(message: RequestSetDisplaySettingsShape): void {
+      const client = getScpWebSocketClient()
+
+      if (!client || client.connectionState !== 'open') {
+        return
+      }
+
+      client.sendTypedMessage(
+        MessageType.REQUEST_SET_DISPLAY_SETTINGS,
+        message,
+        RequestSetDisplaySettings,
+      )
+    }
+
+    function applyFullscreenMode(mode: FullscreenMode): void {
+      fullscreenMode.value = mode
+      sendDisplaySettingsUpdate({
+        fullScreenMode: mapFullscreenMode(mode),
+      })
+    }
+
+    function applyResolution(value: string | number | null): void {
+      resolution.value = value
+
+      const parsed = parseResolutionValue(value)
+      if (!parsed) {
+        return
+      }
+
+      sendDisplaySettingsUpdate({
+        resolution: parsed,
+      })
+    }
+
+    function applyVsync(enabled: boolean): void {
+      vsync.value = enabled
+      sendDisplaySettingsUpdate({
+        vsync: { enabled },
+      })
+    }
+
+    function applyFrameRateLimit(flag: boolean, limit = maxFps.value): void {
+      limitFps.value = flag
+
+      if (typeof limit === 'number') {
+        maxFps.value = limit
+      }
+
+      sendDisplaySettingsUpdate({
+        frameRateLimit: FrameLimitContent.create({
+          flag,
+          limit: typeof limit === 'number' ? limit : 0,
+        }),
+      })
+    }
+
+    function applyFrameRateLimitToggle(value: boolean): void {
+      applyFrameRateLimit(value)
+    }
+
+    function applyFrameRateLimitValue(value: number | null): void {
+      applyFrameRateLimit(limitFps.value, value)
+    }
+
+    function applyHdrEnabled(enabled: boolean): void {
+      hdrEnabled.value = enabled
+      sendDisplaySettingsUpdate({
+        hdrEnableFlag: enabled,
+      })
+    }
+
+    function applyHdrOutputDevice(value: string | number | null): void {
+      if (typeof value !== 'number') {
+        return
+      }
+
+      hdrOutputDevice.value = value
+      sendDisplaySettingsUpdate({
+        hdrOutputDevice: value,
+      })
+    }
+
+    function applyHdrColorGamut(value: string | number | null): void {
+      if (typeof value !== 'number') {
+        return
+      }
+
+      hdrColorGamut.value = value
+      sendDisplaySettingsUpdate({
+        hdrColorGamut: value,
+      })
+    }
+
+    function applyDisplaySlider(sliderType: DisplaySliderType, value: number | null): void {
+      if (typeof value !== 'number') {
+        return
+      }
+
+      sendDisplaySettingsUpdate({
+        displaySlider: {
+          sliderType,
+          value,
+        },
+      })
     }
 
     function applyResolutionResponse(payload: ResolutionResponse | undefined): void {
@@ -235,6 +377,25 @@ export default defineComponent({
       contrast,
       displaySettingsRuntime,
       displayHelp,
+      applyBrightness: () => applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_BRIGHTNESS, brightness.value),
+      applyCameraSmoothing: () =>
+        applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_CAMERA_SMOOTHING, cameraSmoothing.value),
+      applyContrast: () => applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_CONTRAST, contrast.value),
+      applyFov: () => applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_FOV, fov.value),
+      applyFrameRateLimit,
+      applyFrameRateLimitToggle,
+      applyFrameRateLimitValue,
+      applyFullscreenMode,
+      applyGamma: () => applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_GAMMA, gamma.value),
+      applyHdrColorGamut,
+      applyHdrEnabled,
+      applyHdrOutputDevice,
+      applyHeadBobbingIntensity: () =>
+        applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_HEAD_BOBBING_INTENSITY, headBobbingIntensity.value),
+      applyResolution,
+      applyScreenShakeIntensity: () =>
+        applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_SCREEN_SHAKE_INTENSITY, screenShakeIntensity.value),
+      applyVsync,
       fpsControlsDisabled,
       fov,
       fullscreenMode,
