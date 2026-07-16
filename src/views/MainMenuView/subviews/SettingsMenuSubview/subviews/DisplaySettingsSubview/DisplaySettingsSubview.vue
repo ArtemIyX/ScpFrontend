@@ -160,14 +160,21 @@
         <div class="display-settings__hdr-shell">
           <div class="display-settings__hdr-head">
 
-            <GCheckbox v-model="hdrEnabled" preset="quiet" @update:model-value="applyHdrEnabled">HDR Enable</GCheckbox>
+            <GCheckbox
+              v-model="hdrEnabled"
+              :disabled="hdrToggleDisabled"
+              preset="quiet"
+              @update:model-value="applyHdrEnabled"
+            >
+              HDR Enable
+            </GCheckbox>
             <GBadge
               v-if="displaySettingsRuntime.showHdrUnsupportedBadge"
               preset="warning"
               variant="soft"
               size="sm"
             >
-              Not Supported
+              not supported
             </GBadge>
           </div>
 

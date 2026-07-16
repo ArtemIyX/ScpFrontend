@@ -54,7 +54,7 @@ const displayRequestTypes: DisplaySettingRequestType[] = [
 ]
 
 export const displaySettingsRuntime = reactive({
-  showHdrUnsupportedBadge: true,
+  showHdrUnsupportedBadge: false,
 })
 
 export function setDisplayHdrUnsupportedBadgeVisible(visible: boolean): void {
@@ -85,6 +85,7 @@ export default defineComponent({
 
     const resolutionDisabled = computed(() => fullscreenMode.value === 'borderless')
     const fpsControlsDisabled = computed(() => !limitFps.value)
+    const hdrToggleDisabled = computed(() => displaySettingsRuntime.showHdrUnsupportedBadge)
     const hdrControlsDisabled = computed(() => !hdrEnabled.value)
     const hoverHelpDelay = 600
     let unsubscribeResponse: (() => void) | null = null
@@ -203,6 +204,11 @@ export default defineComponent({
     }
 
     function applyHdrEnabled(enabled: boolean): void {
+      if (enabled && hdrToggleDisabled.value) {
+        hdrEnabled.value = false
+        return
+      }
+
       hdrEnabled.value = enabled
       sendDisplaySettingsUpdate({
         hdrEnableFlag: enabled,
@@ -403,6 +409,7 @@ export default defineComponent({
       gamma,
       hdrColorGamut,
       hdrColorGamutOptions,
+      hdrToggleDisabled,
       hdrControlsDisabled,
       hdrEnabled,
       hdrOutputDevice,
