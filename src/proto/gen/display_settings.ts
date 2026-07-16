@@ -359,6 +359,7 @@ export interface RequestSetDisplaySettings {
   hdrOutputDevice?: HdrOutput | undefined;
   hdrColorGamut?: ColorGamut | undefined;
   displaySlider?: DisplaySliderSetRequest | undefined;
+  frameRateLimit?: FrameLimitContent | undefined;
 }
 
 /** Returns the display settings payload matching the requested section. */
@@ -1134,6 +1135,7 @@ function createBaseRequestSetDisplaySettings(): RequestSetDisplaySettings {
     hdrOutputDevice: undefined,
     hdrColorGamut: undefined,
     displaySlider: undefined,
+    frameRateLimit: undefined,
   };
 }
 
@@ -1159,6 +1161,9 @@ export const RequestSetDisplaySettings: MessageFns<RequestSetDisplaySettings> = 
     }
     if (message.displaySlider !== undefined) {
       DisplaySliderSetRequest.encode(message.displaySlider, writer.uint32(58).fork()).join();
+    }
+    if (message.frameRateLimit !== undefined) {
+      FrameLimitContent.encode(message.frameRateLimit, writer.uint32(66).fork()).join();
     }
     return writer;
   },
@@ -1226,6 +1231,14 @@ export const RequestSetDisplaySettings: MessageFns<RequestSetDisplaySettings> = 
           message.displaySlider = DisplaySliderSetRequest.decode(reader, reader.uint32());
           continue;
         }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.frameRateLimit = FrameLimitContent.decode(reader, reader.uint32());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1264,6 +1277,11 @@ export const RequestSetDisplaySettings: MessageFns<RequestSetDisplaySettings> = 
         : isSet(object.display_slider)
         ? DisplaySliderSetRequest.fromJSON(object.display_slider)
         : undefined,
+      frameRateLimit: isSet(object.frameRateLimit)
+        ? FrameLimitContent.fromJSON(object.frameRateLimit)
+        : isSet(object.frame_rate_limit)
+        ? FrameLimitContent.fromJSON(object.frame_rate_limit)
+        : undefined,
     };
   },
 
@@ -1290,6 +1308,9 @@ export const RequestSetDisplaySettings: MessageFns<RequestSetDisplaySettings> = 
     if (message.displaySlider !== undefined) {
       obj.displaySlider = DisplaySliderSetRequest.toJSON(message.displaySlider);
     }
+    if (message.frameRateLimit !== undefined) {
+      obj.frameRateLimit = FrameLimitContent.toJSON(message.frameRateLimit);
+    }
     return obj;
   },
 
@@ -1310,6 +1331,9 @@ export const RequestSetDisplaySettings: MessageFns<RequestSetDisplaySettings> = 
     message.hdrColorGamut = object.hdrColorGamut ?? undefined;
     message.displaySlider = (object.displaySlider !== undefined && object.displaySlider !== null)
       ? DisplaySliderSetRequest.fromPartial(object.displaySlider)
+      : undefined;
+    message.frameRateLimit = (object.frameRateLimit !== undefined && object.frameRateLimit !== null)
+      ? FrameLimitContent.fromPartial(object.frameRateLimit)
       : undefined;
     return message;
   },

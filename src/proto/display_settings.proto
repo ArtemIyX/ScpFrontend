@@ -134,6 +134,7 @@ message RequestSetDisplaySettings
     HdrOutput hdr_output_device = 5;
     ColorGamut hdr_color_gamut = 6;
     DisplaySliderSetRequest display_slider = 7;
+    FrameLimitContent frame_rate_limit = 8;
   }
 }
 
