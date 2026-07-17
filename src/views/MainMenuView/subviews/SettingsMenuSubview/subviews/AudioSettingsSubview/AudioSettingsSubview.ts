@@ -1,6 +1,8 @@
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
+import { useSettingsStore } from '@/stores/settings'
 
 type TalkMode = 'push-to-talk' | 'voice-activation'
 
@@ -33,17 +35,19 @@ const talkModes: Array<{ value: TalkMode; label: string; helper: string }> = [
 export default defineComponent({
   name: 'AudioSettingsSubview',
   setup() {
-    const outputDevice = ref<string | number | null>('headphones-usb')
-    const inputDevice = ref<string | number | null>('headset-mic')
-    const talkMode = ref<TalkMode>('push-to-talk')
-
-    const voiceActivationThreshold = ref<number | null>(55)
-    const masterVolume = ref<number | null>(80)
-    const sfxVolume = ref<number | null>(85)
-    const uiVolume = ref<number | null>(70)
-    const musicVolume = ref<number | null>(45)
-    const voiceVolume = ref<number | null>(90)
-    const ambientVolume = ref<number | null>(65)
+    const settingsStore = useSettingsStore()
+    const {
+      ambientVolume,
+      inputDevice,
+      masterVolume,
+      musicVolume,
+      outputDevice,
+      sfxVolume,
+      talkMode,
+      uiVolume,
+      voiceActivationThreshold,
+      voiceVolume,
+    } = storeToRefs(settingsStore)
 
     const voiceActivationDisabled = computed(() => talkMode.value !== 'voice-activation')
     const hoverHelpDelay = 600

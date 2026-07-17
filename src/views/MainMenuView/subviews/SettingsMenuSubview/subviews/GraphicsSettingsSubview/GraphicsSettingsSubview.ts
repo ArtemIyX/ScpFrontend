@@ -1,4 +1,5 @@
 import { computed, defineComponent, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
 import type { GRailItem } from '@/components/g/GRail/GRail'
@@ -23,6 +24,7 @@ import {
 } from '@/proto/gen/graphics_settings'
 import { MessageType } from '@/proto/gen/scp_webui'
 import { getScpWebSocketClient } from '@/services'
+import { useSettingsStore } from '@/stores/settings'
 import GraphicsNumberOverrideRow from './components/GraphicsNumberOverrideRow.vue'
 import GraphicsPresetField from './components/GraphicsPresetField.vue'
 
@@ -576,31 +578,35 @@ export default defineComponent({
     GraphicsPresetField,
   },
   setup() {
-    const antiAliasingMethod = ref<AntiAliasingMethodValue>('tsr')
-    const upscaleMode = ref<UpscaleModeValue>('off')
-    const dlssQuality = ref<DlssQualityValue>('quality')
-    const frameGeneration = ref<FrameGenerationValue>('off')
-    const resolutionScale = ref<number | null>(100)
-    const viewDistanceQuality = ref<QualityValue>('high')
-    const antiAliasingQuality = ref<QualityValue>('high')
-    const materialQualityLevel = ref<MaterialQualityValue>('high')
-
-    const postProcessSettings = reactive<PostProcessSettings>(clonePostProcessSettings(postProcessPresetMap.pp2))
-    const postProcessPreset = ref<PostProcessPresetValue>('pp2')
-    const postProcessCustomOpen = ref(false)
-    const shadowSettings = reactive<ShadowSettings>(cloneShadowSettings(shadowPresetMap.shadow2))
-    const shadowPreset = ref<ShadowPresetValue>('shadow2')
-    const shadowCustomOpen = ref(false)
-    const textureSettings = reactive<TextureSettings>(cloneTextureSettings(texturePresetMap.texture2))
-    const texturePreset = ref<TexturePresetValue>('texture2')
-    const textureCustomOpen = ref(false)
-    const effectsSettings = reactive<EffectsSettings>(cloneEffectsSettings(effectsPresetMap.effects2))
-    const effectsPreset = ref<EffectsPresetValue>('effects2')
-    const effectsCustomOpen = ref(false)
+    const settingsStore = useSettingsStore()
+    const {
+      antiAliasingMethod,
+      antiAliasingQuality,
+      dlssQuality,
+      effectsCustomOpen,
+      effectsPreset,
+      frameGeneration,
+      materialQualityLevel,
+      postProcessCustomOpen,
+      postProcessPreset,
+      resolutionScale,
+      shadowCustomOpen,
+      shadowPreset,
+      textureCustomOpen,
+      texturePreset,
+      upscaleMode,
+      viewDistanceQuality,
+    } = storeToRefs(settingsStore)
+    const postProcessSettings = settingsStore.postProcessSettings
+    const shadowSettings = settingsStore.shadowSettings
+    const textureSettings = settingsStore.textureSettings
+    const effectsSettings = settingsStore.effectsSettings
     const antiAliasingMethodLocked = computed(
       () => upscaleMode.value !== 'off' || frameGeneration.value !== 'off'
     )
     const upscaleQualityDisabled = computed(() => upscaleMode.value === 'off')
+    const pendingGraphicsRequestTypes = ref<Set<GraphicsSettingRequestType>>(new Set(graphicsRequestTypes))
+    const graphicsSettingsLoaded = computed(() => pendingGraphicsRequestTypes.value.size === 0)
     const upscaleQualityOptions = computed(() =>
       upscaleMode.value === 'fsr'
         ? dlssQualityOptions.filter((option) => option.value !== 'dlaa')
@@ -1154,6 +1160,7 @@ export default defineComponent({
 
     function applyGraphicsResponse(message: ResponseGraphicsSettings): void {
       console.log('[graphics-settings] received ResponseGraphicsSettings', message)
+      pendingGraphicsRequestTypes.value.delete(message.requestedType)
 
       switch (message.requestedType) {
         case GraphicsSettingRequestType.GRAPHICS_SETTING_RESOLUTION_SCALE:
@@ -1200,6 +1207,8 @@ export default defineComponent({
       if (!client || client.connectionState !== 'open') {
         return
       }
+
+      pendingGraphicsRequestTypes.value = new Set(graphicsRequestTypes)
 
       for (const requestType of graphicsRequestTypes) {
         client.sendTypedMessage(
@@ -1483,6 +1492,10 @@ export default defineComponent({
           requestGraphicsSettings()
         }
       })
+
+      if (client.connectionState === 'open') {
+        requestGraphicsSettings()
+      }
     })
 
     onUnmounted(() => {
@@ -1531,6 +1544,7 @@ export default defineComponent({
       postProcessOverrideRows,
       frameGeneration,
       frameGenerationOptions,
+      graphicsSettingsLoaded,
       resolutionScale,
       scalabilityItems,
       shadowCustomOpen,

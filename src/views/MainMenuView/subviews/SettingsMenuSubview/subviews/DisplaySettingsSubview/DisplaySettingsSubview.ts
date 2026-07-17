@@ -1,4 +1,5 @@
 import { computed, defineComponent, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
 import {
@@ -16,8 +17,7 @@ import {
 } from '@/proto/gen/display_settings'
 import { MessageType } from '@/proto/gen/scp_webui'
 import { getScpWebSocketClient } from '@/services'
-
-type FullscreenMode = 'fullscreen' | 'borderless' | 'windowed'
+import { useSettingsStore, type FullscreenMode } from '@/stores/settings'
 
 const fullscreenModes: Array<{ value: FullscreenMode; label: string }> = [
   { value: 'fullscreen', label: 'Fullscreen' },
@@ -64,29 +64,32 @@ export function setDisplayHdrUnsupportedBadgeVisible(visible: boolean): void {
 export default defineComponent({
   name: 'DisplaySettingsSubview',
   setup() {
-    const fullscreenMode = ref<FullscreenMode>('fullscreen')
-    const resolution = ref<string | number | null>(null)
-    const resolutionOptions = ref<GComboOption[]>([])
-    const vsync = ref(false)
-    const limitFps = ref(false)
-    const maxFps = ref<number | null>(null)
-    const hdrEnabled = ref(false)
-    const hdrOutputDevice = ref<HdrOutput | null>(null)
-    const hdrColorGamut = ref<ColorGamut | null>(null)
-
-    const brightness = ref<number | null>(null)
-    const gamma = ref<number | null>(null)
-    const contrast = ref<number | null>(null)
-
-    const fov = ref<number | null>(null)
-    const cameraSmoothing = ref<number | null>(null)
-    const screenShakeIntensity = ref<number | null>(null)
-    const headBobbingIntensity = ref<number | null>(null)
+    const settingsStore = useSettingsStore()
+    const {
+      brightness,
+      cameraSmoothing,
+      contrast,
+      fov,
+      fullscreenMode,
+      gamma,
+      hdrColorGamut,
+      hdrEnabled,
+      hdrOutputDevice,
+      headBobbingIntensity,
+      limitFps,
+      maxFps,
+      resolution,
+      resolutionOptions,
+      screenShakeIntensity,
+      vsync,
+    } = storeToRefs(settingsStore)
 
     const resolutionDisabled = computed(() => fullscreenMode.value === 'borderless')
     const fpsControlsDisabled = computed(() => !limitFps.value)
     const hdrToggleDisabled = computed(() => displaySettingsRuntime.showHdrUnsupportedBadge)
     const hdrControlsDisabled = computed(() => !hdrEnabled.value)
+    const pendingDisplayRequestTypes = ref<Set<DisplaySettingRequestType>>(new Set(displayRequestTypes))
+    const displaySettingsLoaded = computed(() => pendingDisplayRequestTypes.value.size === 0)
     const hoverHelpDelay = 600
     let unsubscribeResponse: (() => void) | null = null
     let unsubscribeState: (() => void) | null = null
@@ -268,6 +271,8 @@ export default defineComponent({
     }
 
     function applyDisplayResponse(message: ResponseDisplaySettings): void {
+      pendingDisplayRequestTypes.value.delete(message.requestedType)
+
       switch (message.requestedType) {
         case DisplaySettingRequestType.DISPLAY_SETTING_FULLSCREEN_MODE:
           fullscreenMode.value = mapProtoFullscreenMode(message.fullScreenMode)
@@ -311,6 +316,8 @@ export default defineComponent({
         return
       }
 
+      pendingDisplayRequestTypes.value = new Set(displayRequestTypes)
+
       for (const requestType of displayRequestTypes) {
         client.sendTypedMessage(
           MessageType.REQUEST_GET_DISPLAY_SETTINGS,
@@ -339,6 +346,10 @@ export default defineComponent({
           requestDisplaySettings()
         }
       })
+
+      if (client.connectionState === 'open') {
+        requestDisplaySettings()
+      }
     })
 
     onUnmounted(() => {
@@ -381,6 +392,7 @@ export default defineComponent({
       brightness,
       cameraSmoothing,
       contrast,
+      displaySettingsLoaded,
       displaySettingsRuntime,
       displayHelp,
       applyBrightness: () => applyDisplaySlider(DisplaySliderType.DISPLAY_SLIDER_BRIGHTNESS, brightness.value),

@@ -2,6 +2,17 @@
 
 <template>
   <section class="display-settings" aria-label="Display settings">
+    <GLoading
+      v-if="!displaySettingsLoaded"
+      label="Syncing display profile"
+      helper="Waiting for fullscreen, output, accessibility, and camera settings from the game client."
+      preset="quiet"
+      size="lg"
+      width="full"
+      background
+    />
+
+    <template v-else>
     <section class="display-settings__group" aria-label="Display output settings">
       <div class="display-settings__stack">
         <GField
@@ -447,6 +458,7 @@
         </div>
       </div>
     </section>
+    </template>
   </section>
 </template>
 

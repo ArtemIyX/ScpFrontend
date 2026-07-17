@@ -2,6 +2,17 @@
 
 <template>
   <section class="graphics-settings" aria-label="Graphics settings">
+    <GLoading
+      v-if="!graphicsSettingsLoaded"
+      label="Syncing graphics profile"
+      helper="Waiting for scalability, post-process, shadows, textures, and effects settings from the game client."
+      preset="quiet"
+      size="lg"
+      width="full"
+      background
+    />
+
+    <template v-else>
     <section class="graphics-settings__group" aria-label="Scalability settings">
       <div class="graphics-settings__stack">
         <GField
@@ -379,6 +390,7 @@
         />
       </GraphicsPresetField>
     </section>
+    </template>
   </section>
 </template>
 
