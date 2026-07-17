@@ -32,6 +32,7 @@
             width="full"
             preset="quiet"
             aria-label="Resolution scale"
+            @change="applyResolutionScale"
           />
         </GField>
 
@@ -82,6 +83,7 @@
                   width="full"
                   preset="quiet"
                   placeholder="Select anti-aliasing method"
+                  @change="applyAntiAliasingMethod"
                 />
               </GField>
 
@@ -110,6 +112,7 @@
                   width="full"
                   preset="quiet"
                   placeholder="Select frame generation"
+                  @change="applyFrameGeneration"
                 />
               </GField>
             </div>
@@ -140,6 +143,7 @@
                   width="full"
                   preset="quiet"
                   placeholder="Select upscale mode"
+                  @change="applyUpscaleMode"
                 />
               </GField>
 
@@ -169,6 +173,7 @@
                   width="full"
                   preset="quiet"
                   placeholder="Select upscale quality"
+                  @change="applyUpscaleQuality"
                 />
               </GField>
             </div>
@@ -200,6 +205,7 @@
             width="full"
             preset="quiet"
             aria-label="Anti-aliasing quality"
+            @update:model-value="applyAntiAliasingQuality"
           />
         </GField>
 
@@ -228,6 +234,7 @@
             width="full"
             preset="quiet"
             aria-label="View distance quality"
+            @update:model-value="applyViewDistanceQuality"
           />
         </GField>
 

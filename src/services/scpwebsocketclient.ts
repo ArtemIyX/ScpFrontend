@@ -3,6 +3,10 @@ import {
   type ResponseDisplaySettings as ResponseDisplaySettingsShape,
 } from '@/proto/gen/display_settings'
 import {
+  ResponseGraphicsSettings,
+  type ResponseGraphicsSettings as ResponseGraphicsSettingsShape,
+} from '@/proto/gen/graphics_settings'
+import {
   MessageType,
   PingMessage,
   PongMessage,
@@ -17,6 +21,7 @@ export type ScpIncomingMessageMap = {
   [MessageType.MESSAGE_PING]: PingMessageShape
   [MessageType.MESSAGE_PONG]: PongMessageShape
   [MessageType.RESPONSE_DISPLAY_SETTINGS]: ResponseDisplaySettingsShape
+  [MessageType.RESPONSE_GRAPHICS_SETTINGS]: ResponseGraphicsSettingsShape
 }
 
 export type ScpKnownMessageType = keyof ScpIncomingMessageMap
@@ -44,6 +49,7 @@ export class ScpWebSocketClient extends WebSocketClient {
     this.registerCodec(MessageType.MESSAGE_PING, PingMessage)
     this.registerCodec(MessageType.MESSAGE_PONG, PongMessage)
     this.registerCodec(MessageType.RESPONSE_DISPLAY_SETTINGS, ResponseDisplaySettings)
+    this.registerCodec(MessageType.RESPONSE_GRAPHICS_SETTINGS, ResponseGraphicsSettings)
     this.onBytes((bytes) => {
       this.handleEnvelopeBytes(bytes)
     })

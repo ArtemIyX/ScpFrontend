@@ -1,7 +1,28 @@
-import { computed, defineComponent, reactive, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
 import type { GRailItem } from '@/components/g/GRail/GRail'
+import {
+  AntiAliasingType,
+  FrameGenScale,
+  GraphicsQuality,
+  GraphicsQualityDetailed,
+  GraphicsSettingRequestType,
+  RequestGetGraphicsSettings,
+  RequestSetGraphicsSettings,
+  ResponseGraphicsSettings,
+  SettingType,
+  UpscaleMode,
+  UpscaleQuality,
+  type EffectsQualityResponse,
+  type GraphicsSettingValue,
+  type PostProcessQualityResponse,
+  type RequestSetGraphicsSettings as RequestSetGraphicsSettingsShape,
+  type ShadowQualityResponse,
+  type TextureQualityResponse,
+} from '@/proto/gen/graphics_settings'
+import { MessageType } from '@/proto/gen/scp_webui'
+import { getScpWebSocketClient } from '@/services'
 import GraphicsNumberOverrideRow from './components/GraphicsNumberOverrideRow.vue'
 import GraphicsPresetField from './components/GraphicsPresetField.vue'
 
@@ -390,6 +411,58 @@ const effectsOverrideRows: OverrideRowConfig<EffectsSettings>[] = [
   { key: 'effectsMaterialQualityLevel', label: 'Material Quality Level', cvar: 'r.MaterialQualityLevel', presetValues: '0/1/1/1', ariaLabel: 'Effects material quality level', min: 0, max: 1, step: 1 },
 ]
 
+const graphicsRequestTypes: GraphicsSettingRequestType[] = [
+  GraphicsSettingRequestType.GRAPHICS_SETTING_RESOLUTION_SCALE,
+  GraphicsSettingRequestType.GRAPHICS_SETTING_AA,
+  GraphicsSettingRequestType.GRAPHICS_SETTING_VIEW_DISTANCE,
+  GraphicsSettingRequestType.GRAPHICS_SETTING_PP_QUALITY,
+  GraphicsSettingRequestType.GRAPHICS_SETTING_SHADOWS_QUALITY,
+  GraphicsSettingRequestType.GRAPHICS_SETTING_TEXTURE_QUALITY,
+  GraphicsSettingRequestType.GRAPHICS_SETTING_EFFECTS_QUALITY,
+]
+
+const postProcessSettingTypeMap: Record<keyof PostProcessSettings, SettingType> = {
+  motionBlurQuality: SettingType.SETTING_TYPE_MOTION_BLUR_QUALITY,
+  blurGBuffer: SettingType.SETTING_TYPE_BLUR_GBUFFER,
+  ambientOcclusionLevels: SettingType.SETTING_TYPE_AMBIENT_OCCLUSION_LEVELS,
+  ambientOcclusionRadiusScale: SettingType.SETTING_TYPE_AMBIENT_OCCLUSION_RADIUS_SCALE,
+  depthOfFieldQuality: SettingType.SETTING_TYPE_DEPTH_OF_FIELD_QUALITY,
+  renderTargetPoolMin: SettingType.SETTING_TYPE_RENDER_TARGET_POOL_MIN,
+  lensFlareQuality: SettingType.SETTING_TYPE_LENS_FLARE_QUALITY,
+  sceneColorFringeQuality: SettingType.SETTING_TYPE_SCENE_COLOR_FRINGE_QUALITY,
+  eyeAdaptationQuality: SettingType.SETTING_TYPE_EYE_ADAPTATION_QUALITY,
+  bloomQuality: SettingType.SETTING_TYPE_BLOOM_QUALITY,
+  fastBlurThreshold: SettingType.SETTING_TYPE_FAST_BLUR_THRESHOLD,
+  upscaleQuality: SettingType.SETTING_TYPE_UPSCALE_QUALITY,
+  tonemapperGrainQuantization: SettingType.SETTING_TYPE_TONEMAPPER_GRAIN_QUANTIZATION,
+}
+
+const shadowSettingTypeMap: Record<keyof ShadowSettings, SettingType> = {
+  lightFunctionQuality: SettingType.SETTING_TYPE_LIGHT_FUNCTION_QUALITY,
+  shadowQuality: SettingType.SETTING_TYPE_SHADOW_QUALITY,
+  shadowCsmMaxCascades: SettingType.SETTING_TYPE_SHADOW_CSM_MAX_CASCADES,
+  shadowMaxResolution: SettingType.SETTING_TYPE_SHADOW_MAX_RESOLUTION,
+  shadowRadiusThreshold: SettingType.SETTING_TYPE_SHADOW_RADIUS_THRESHOLD,
+  shadowDistanceScale: SettingType.SETTING_TYPE_SHADOW_DISTANCE_SCALE,
+  shadowCsmTransitionScale: SettingType.SETTING_TYPE_SHADOW_CSM_TRANSITION_SCALE,
+}
+
+const textureSettingTypeMap: Record<keyof TextureSettings, SettingType> = {
+  streamingMipBias: SettingType.SETTING_TYPE_STREAMING_MIP_BIAS,
+  maxAnisotropy: SettingType.SETTING_TYPE_MAX_ANISOTROPY,
+  streamingPoolSize: SettingType.SETTING_TYPE_STREAMING_POOL_SIZE,
+}
+
+const effectsSettingTypeMap: Partial<Record<keyof EffectsSettings, SettingType>> = {
+  translucencyLightingVolumeDim: SettingType.SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM,
+  refractionQuality: SettingType.SETTING_TYPE_REFRACTION_QUALITY,
+  ssr: SettingType.SETTING_TYPE_SSR,
+  sceneColorFormat: SettingType.SETTING_TYPE_SCENE_COLOR_FORMAT,
+  detailMode: SettingType.SETTING_TYPE_DETAIL_MODE,
+  translucencyVolumeBlur: SettingType.SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR,
+  effectsMaterialQualityLevel: SettingType.SETTING_TYPE_MATERIAL_QUALITY_LEVEL,
+}
+
 function clonePostProcessSettings(settings: PostProcessSettings): PostProcessSettings {
   return {
     motionBlurQuality: settings.motionBlurQuality,
@@ -533,6 +606,8 @@ export default defineComponent({
         : dlssQualityOptions
     )
     const hoverHelpDelay = 600
+    let unsubscribeResponse: (() => void) | null = null
+    let unsubscribeState: (() => void) | null = null
 
     const graphicsHelp = {
       resolutionScale:
@@ -582,6 +657,529 @@ export default defineComponent({
       },
       { immediate: true },
     )
+
+    function mapGraphicsQualityToValue(quality: GraphicsQuality | undefined): QualityValue {
+      switch (quality) {
+        case GraphicsQuality.GRAPHICS_QUALITY_VERY_LOW:
+          return 'low'
+        case GraphicsQuality.GRAPHICS_QUALITY_LOW:
+          return 'medium'
+        case GraphicsQuality.GRAPHICS_QUALITY_MEDIUM:
+          return 'high'
+        case GraphicsQuality.GRAPHICS_QUALITY_HIGH:
+          return 'epic'
+        case GraphicsQuality.GRAPHICS_QUALITY_ULTRA:
+        default:
+          return 'cinematic'
+      }
+    }
+
+    function mapValueToGraphicsQuality(value: QualityValue): GraphicsQuality {
+      switch (value) {
+        case 'low':
+          return GraphicsQuality.GRAPHICS_QUALITY_VERY_LOW
+        case 'medium':
+          return GraphicsQuality.GRAPHICS_QUALITY_LOW
+        case 'high':
+          return GraphicsQuality.GRAPHICS_QUALITY_MEDIUM
+        case 'epic':
+          return GraphicsQuality.GRAPHICS_QUALITY_HIGH
+        case 'cinematic':
+        default:
+          return GraphicsQuality.GRAPHICS_QUALITY_ULTRA
+      }
+    }
+
+    function mapDetailedQualityToPostProcessPreset(
+      quality: GraphicsQualityDetailed | undefined,
+    ): PostProcessPresetValue {
+      switch (quality) {
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_LOW:
+          return 'pp0'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_MEDIUM:
+          return 'pp1'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_HIGH:
+          return 'pp2'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_ULTRA:
+          return 'pp3'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_CUSTOM:
+        default:
+          return 'custom'
+      }
+    }
+
+    function mapDetailedQualityToShadowPreset(
+      quality: GraphicsQualityDetailed | undefined,
+    ): ShadowPresetValue {
+      switch (quality) {
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_LOW:
+          return 'shadow0'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_MEDIUM:
+          return 'shadow1'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_HIGH:
+          return 'shadow2'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_ULTRA:
+          return 'shadow3'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_CUSTOM:
+        default:
+          return 'custom'
+      }
+    }
+
+    function mapDetailedQualityToTexturePreset(
+      quality: GraphicsQualityDetailed | undefined,
+    ): TexturePresetValue {
+      switch (quality) {
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_LOW:
+          return 'texture0'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_MEDIUM:
+          return 'texture1'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_HIGH:
+          return 'texture2'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_ULTRA:
+          return 'texture3'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_CUSTOM:
+        default:
+          return 'custom'
+      }
+    }
+
+    function mapDetailedQualityToEffectsPreset(
+      quality: GraphicsQualityDetailed | undefined,
+    ): EffectsPresetValue {
+      switch (quality) {
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_LOW:
+          return 'effects0'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_MEDIUM:
+          return 'effects1'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_HIGH:
+          return 'effects2'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_ULTRA:
+          return 'effects3'
+        case GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_CUSTOM:
+        default:
+          return 'custom'
+      }
+    }
+
+    function mapPresetToDetailedQuality(
+      value: ShadowPresetValue | TexturePresetValue | EffectsPresetValue,
+    ): GraphicsQualityDetailed {
+      switch (value) {
+        case 'shadow0':
+        case 'texture0':
+        case 'effects0':
+          return GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_LOW
+        case 'shadow1':
+        case 'texture1':
+        case 'effects1':
+          return GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_MEDIUM
+        case 'shadow2':
+        case 'texture2':
+        case 'effects2':
+          return GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_HIGH
+        case 'shadow3':
+        case 'texture3':
+        case 'effects3':
+          return GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_ULTRA
+        case 'custom':
+        default:
+          return GraphicsQualityDetailed.GRAPHICS_QUALITY_DETAILED_CUSTOM
+      }
+    }
+
+    function mapAntiAliasingType(value: AntiAliasingType | undefined): AntiAliasingMethodValue {
+      switch (value) {
+        case AntiAliasingType.AA_TYPE_NONE:
+          return 'none'
+        case AntiAliasingType.AA_TYPE_FXAA:
+          return 'fxaa'
+        case AntiAliasingType.AA_TYPE_TAA:
+          return 'taa'
+        case AntiAliasingType.AA_TYPE_MSAA:
+          return 'msaa'
+        case AntiAliasingType.AA_TYPE_SMAA:
+          return 'smaa'
+        case AntiAliasingType.AA_TYPE_TSR:
+        default:
+          return 'tsr'
+      }
+    }
+
+    function mapValueToAntiAliasingType(value: AntiAliasingMethodValue): AntiAliasingType {
+      switch (value) {
+        case 'none':
+          return AntiAliasingType.AA_TYPE_NONE
+        case 'fxaa':
+          return AntiAliasingType.AA_TYPE_FXAA
+        case 'taa':
+          return AntiAliasingType.AA_TYPE_TAA
+        case 'msaa':
+          return AntiAliasingType.AA_TYPE_MSAA
+        case 'smaa':
+          return AntiAliasingType.AA_TYPE_SMAA
+        case 'tsr':
+        default:
+          return AntiAliasingType.AA_TYPE_TSR
+      }
+    }
+
+    function mapUpscaleMode(value: UpscaleMode | undefined): UpscaleModeValue {
+      switch (value) {
+        case UpscaleMode.UPSCALE_MODE_DLSS:
+          return 'dlss'
+        case UpscaleMode.UPSCALE_MODE_FSR:
+          return 'fsr'
+        case UpscaleMode.UPSCALE_MODE_OFF:
+        default:
+          return 'off'
+      }
+    }
+
+    function mapValueToUpscaleMode(value: UpscaleModeValue): UpscaleMode {
+      switch (value) {
+        case 'dlss':
+          return UpscaleMode.UPSCALE_MODE_DLSS
+        case 'fsr':
+          return UpscaleMode.UPSCALE_MODE_FSR
+        case 'off':
+        default:
+          return UpscaleMode.UPSCALE_MODE_OFF
+      }
+    }
+
+    function mapUpscaleQuality(value: UpscaleQuality | undefined): DlssQualityValue {
+      switch (value) {
+        case UpscaleQuality.UPSCALE_QUAL_DLAA:
+          return 'dlaa'
+        case UpscaleQuality.UPSCALE_QUAL_ULTRA_QUALITY:
+          return 'ultra-quality'
+        case UpscaleQuality.UPSCALE_QUAL_BALANCED:
+          return 'balanced'
+        case UpscaleQuality.UPSCALE_QUAL_PERFORMANCE:
+          return 'performance'
+        case UpscaleQuality.UPSCALE_QUAL_ULTRA_PERFORMANCE:
+          return 'ultra-performance'
+        case UpscaleQuality.UPSCALE_QUAL_QUALITY:
+        default:
+          return 'quality'
+      }
+    }
+
+    function mapValueToUpscaleQuality(value: DlssQualityValue): UpscaleQuality {
+      switch (value) {
+        case 'dlaa':
+          return UpscaleQuality.UPSCALE_QUAL_DLAA
+        case 'ultra-quality':
+          return UpscaleQuality.UPSCALE_QUAL_ULTRA_QUALITY
+        case 'balanced':
+          return UpscaleQuality.UPSCALE_QUAL_BALANCED
+        case 'performance':
+          return UpscaleQuality.UPSCALE_QUAL_PERFORMANCE
+        case 'ultra-performance':
+          return UpscaleQuality.UPSCALE_QUAL_ULTRA_PERFORMANCE
+        case 'quality':
+        default:
+          return UpscaleQuality.UPSCALE_QUAL_QUALITY
+      }
+    }
+
+    function mapFrameGeneration(value: FrameGenScale | undefined): FrameGenerationValue {
+      switch (value) {
+        case FrameGenScale.FG_GEN_2:
+          return '2x'
+        case FrameGenScale.FG_GEN_3:
+          return '3x'
+        case FrameGenScale.FG_GEN_4:
+          return '4x'
+        case FrameGenScale.FG_GEN_OFF:
+        default:
+          return 'off'
+      }
+    }
+
+    function mapValueToFrameGeneration(value: FrameGenerationValue): FrameGenScale {
+      switch (value) {
+        case '2x':
+          return FrameGenScale.FG_GEN_2
+        case '3x':
+          return FrameGenScale.FG_GEN_3
+        case '4x':
+          return FrameGenScale.FG_GEN_4
+        case 'off':
+        default:
+          return FrameGenScale.FG_GEN_OFF
+      }
+    }
+
+    function sendGraphicsSettingsUpdate(message: RequestSetGraphicsSettingsShape): void {
+      const client = getScpWebSocketClient()
+
+      if (!client || client.connectionState !== 'open') {
+        return
+      }
+
+      client.sendTypedMessage(
+        MessageType.REQUEST_SET_GRAPHICS_SETTINGS,
+        message,
+        RequestSetGraphicsSettings,
+      )
+    }
+
+    function createGraphicsSettingValue(type: SettingType, value: number): GraphicsSettingValue {
+      const settingValue: GraphicsSettingValue = { type }
+
+      if (Number.isInteger(value)) {
+        if (value < 0) {
+          settingValue.int32Value = value
+        } else {
+          settingValue.uint32Value = value
+        }
+      } else {
+        settingValue.floatValue = value
+      }
+
+      return settingValue
+    }
+
+    function applyResolutionScale(value: number | null): void {
+      if (typeof value !== 'number') {
+        return
+      }
+
+      resolutionScale.value = value
+      sendGraphicsSettingsUpdate({
+        resolutionScale: {
+          resolutionScale: value,
+        },
+      })
+    }
+
+    function applyAntiAliasingMethod(value: string | number | null): void {
+      if (
+        value !== 'none' &&
+        value !== 'fxaa' &&
+        value !== 'taa' &&
+        value !== 'msaa' &&
+        value !== 'tsr' &&
+        value !== 'smaa'
+      ) {
+        return
+      }
+
+      antiAliasingMethod.value = value
+      sendGraphicsSettingsUpdate({
+        aaMethod: {
+          aaMethod: mapValueToAntiAliasingType(value),
+        },
+      })
+    }
+
+    function applyFrameGeneration(value: string | number | null): void {
+      if (value !== 'off' && value !== '2x' && value !== '3x' && value !== '4x') {
+        return
+      }
+
+      frameGeneration.value = value
+      sendGraphicsSettingsUpdate({
+        fgMethod: {
+          fg: mapValueToFrameGeneration(value),
+        },
+      })
+    }
+
+    function applyUpscaleMode(value: string | number | null): void {
+      if (value !== 'off' && value !== 'dlss' && value !== 'fsr') {
+        return
+      }
+
+      upscaleMode.value = value
+      sendGraphicsSettingsUpdate({
+        upscaler: {
+          upscaler: mapValueToUpscaleMode(value),
+        },
+      })
+    }
+
+    function applyUpscaleQuality(value: string | number | null): void {
+      if (
+        value !== 'dlaa' &&
+        value !== 'ultra-quality' &&
+        value !== 'quality' &&
+        value !== 'balanced' &&
+        value !== 'performance' &&
+        value !== 'ultra-performance'
+      ) {
+        return
+      }
+
+      dlssQuality.value = value
+      sendGraphicsSettingsUpdate({
+        upscalerQuality: {
+          quality: mapValueToUpscaleQuality(value),
+        },
+      })
+    }
+
+    function applyAntiAliasingQuality(value: string | number | boolean | null): void {
+      if (
+        value !== 'low' &&
+        value !== 'medium' &&
+        value !== 'high' &&
+        value !== 'epic' &&
+        value !== 'cinematic'
+      ) {
+        return
+      }
+
+      antiAliasingQuality.value = value
+      sendGraphicsSettingsUpdate({
+        aaQuality: {
+          quality: mapValueToGraphicsQuality(value),
+        },
+      })
+    }
+
+    function applyViewDistanceQuality(value: string | number | boolean | null): void {
+      if (
+        value !== 'low' &&
+        value !== 'medium' &&
+        value !== 'high' &&
+        value !== 'epic' &&
+        value !== 'cinematic'
+      ) {
+        return
+      }
+
+      viewDistanceQuality.value = value
+      sendGraphicsSettingsUpdate({
+        viewDistanceQuality: {
+          quality: mapValueToGraphicsQuality(value),
+        },
+      })
+    }
+
+    function applyPostProcessResponse(response: PostProcessQualityResponse | undefined): void {
+      if (!response) {
+        return
+      }
+
+      Object.assign(postProcessSettings, {
+        motionBlurQuality: response.motionBlurQuality,
+        blurGBuffer: response.blurGbuffer,
+        ambientOcclusionLevels: response.ambientOcclusionLevels,
+        ambientOcclusionRadiusScale: response.ambientOcclusionRadiusScale,
+        depthOfFieldQuality: response.depthOfFieldQuality,
+        renderTargetPoolMin: response.renderTargetPoolMin,
+        lensFlareQuality: response.lensFlareQuality,
+        sceneColorFringeQuality: response.sceneColorFringeQuality,
+        eyeAdaptationQuality: response.eyeAdaptationQuality,
+        bloomQuality: response.bloomQuality,
+        fastBlurThreshold: response.fastBlurThreshold,
+        upscaleQuality: response.upscaleQuality,
+        tonemapperGrainQuantization: response.tonemapperGrainQuantization,
+      })
+
+      postProcessPreset.value = mapDetailedQualityToPostProcessPreset(response.qualityDetailed)
+    }
+
+    function applyShadowResponse(response: ShadowQualityResponse | undefined): void {
+      if (!response) {
+        return
+      }
+
+      Object.assign(shadowSettings, {
+        lightFunctionQuality: response.lightFunctionQuality,
+        shadowQuality: response.shadowQuality,
+        shadowCsmMaxCascades: response.shadowCsmMaxCascades,
+        shadowMaxResolution: response.shadowMaxResolution,
+        shadowRadiusThreshold: response.shadowRadiusThreshold,
+        shadowDistanceScale: response.shadowDistanceScale,
+        shadowCsmTransitionScale: response.shadowCsmTransitionScale,
+      })
+
+      shadowPreset.value = mapDetailedQualityToShadowPreset(response.qualityDetailed)
+    }
+
+    function applyTextureResponse(response: TextureQualityResponse | undefined): void {
+      if (!response) {
+        return
+      }
+
+      Object.assign(textureSettings, {
+        streamingMipBias: response.streamingMipBias,
+        maxAnisotropy: response.maxAnisotropy,
+        streamingPoolSize: response.streamingPoolSize,
+      })
+
+      texturePreset.value = mapDetailedQualityToTexturePreset(response.qualityDetailed)
+    }
+
+    function applyEffectsResponse(response: EffectsQualityResponse | undefined): void {
+      if (!response) {
+        return
+      }
+
+      Object.assign(effectsSettings, {
+        translucencyLightingVolumeDim: response.translucencyLightingVolumeDim,
+        refractionQuality: response.refractionQuality,
+        ssr: response.ssr,
+        sceneColorFormat: response.sceneColorFormat,
+        detailMode: response.detailMode,
+        translucencyVolumeBlur: response.translucencyVolumeBlur,
+        effectsMaterialQualityLevel: response.materialQualityLevel,
+      })
+
+      effectsPreset.value = mapDetailedQualityToEffectsPreset(response.qualityDetailed)
+    }
+
+    function applyGraphicsResponse(message: ResponseGraphicsSettings): void {
+      switch (message.requestedType) {
+        case GraphicsSettingRequestType.GRAPHICS_SETTING_RESOLUTION_SCALE:
+          resolutionScale.value = message.resolutionScale?.resolutionScale ?? 100
+          return
+        case GraphicsSettingRequestType.GRAPHICS_SETTING_AA:
+          antiAliasingMethod.value = mapAntiAliasingType(message.aa?.aaMethod)
+          antiAliasingQuality.value = mapGraphicsQualityToValue(message.aa?.aaQuality)
+          frameGeneration.value = mapFrameGeneration(message.aa?.fg)
+          upscaleMode.value = mapUpscaleMode(message.aa?.upscaler)
+          dlssQuality.value = mapUpscaleQuality(message.aa?.upscalerQuality)
+          return
+        case GraphicsSettingRequestType.GRAPHICS_SETTING_VIEW_DISTANCE:
+          viewDistanceQuality.value = mapGraphicsQualityToValue(message.viewDistance)
+          return
+        case GraphicsSettingRequestType.GRAPHICS_SETTING_PP_QUALITY:
+          applyPostProcessResponse(message.pp)
+          return
+        case GraphicsSettingRequestType.GRAPHICS_SETTING_SHADOWS_QUALITY:
+          applyShadowResponse(message.shadows)
+          return
+        case GraphicsSettingRequestType.GRAPHICS_SETTING_TEXTURE_QUALITY:
+          applyTextureResponse(message.texture)
+          return
+        case GraphicsSettingRequestType.GRAPHICS_SETTING_EFFECTS_QUALITY:
+          applyEffectsResponse(message.effects)
+          return
+        default:
+          return
+      }
+    }
+
+    function requestGraphicsSettings(): void {
+      const client = getScpWebSocketClient()
+
+      if (!client || client.connectionState !== 'open') {
+        return
+      }
+
+      for (const requestType of graphicsRequestTypes) {
+        client.sendTypedMessage(
+          MessageType.REQUEST_GET_GRAPHICS_SETTINGS,
+          { requestType },
+          RequestGetGraphicsSettings,
+        )
+      }
+    }
 
     const derivedPostProcessPreset = computed<PostProcessPresetValue>(() => {
       const matchedPreset = (Object.entries(postProcessPresetMap) as Array<
@@ -636,6 +1234,19 @@ export default defineComponent({
 
       Object.assign(postProcessSettings, clonePostProcessSettings(postProcessPresetMap[nextPreset]))
       postProcessPreset.value = nextPreset
+
+      sendGraphicsSettingsUpdate({
+        arraySet: {
+          values: Object.entries(postProcessPresetMap[nextPreset]).map(([key, value]) => {
+            const numericValue = value ?? 0
+
+            return createGraphicsSettingValue(
+              postProcessSettingTypeMap[key as keyof PostProcessSettings],
+              numericValue,
+            )
+          }),
+        },
+      })
     }
 
     function applyShadowPreset(nextPreset: ShadowPresetValue): void {
@@ -646,6 +1257,11 @@ export default defineComponent({
 
       Object.assign(shadowSettings, cloneShadowSettings(shadowPresetMap[nextPreset]))
       shadowPreset.value = nextPreset
+      sendGraphicsSettingsUpdate({
+        shadowsQuality: {
+          qualityDetailed: mapPresetToDetailedQuality(nextPreset),
+        },
+      })
     }
 
     function applyTexturePreset(nextPreset: TexturePresetValue): void {
@@ -656,6 +1272,11 @@ export default defineComponent({
 
       Object.assign(textureSettings, cloneTextureSettings(texturePresetMap[nextPreset]))
       texturePreset.value = nextPreset
+      sendGraphicsSettingsUpdate({
+        textureQuality: {
+          qualityDetailed: mapPresetToDetailedQuality(nextPreset),
+        },
+      })
     }
 
     function applyEffectsPreset(nextPreset: EffectsPresetValue): void {
@@ -666,6 +1287,11 @@ export default defineComponent({
 
       Object.assign(effectsSettings, cloneEffectsSettings(effectsPresetMap[nextPreset]))
       effectsPreset.value = nextPreset
+      sendGraphicsSettingsUpdate({
+        effectsQuality: {
+          qualityDetailed: mapPresetToDetailedQuality(nextPreset),
+        },
+      })
     }
 
     function onPostProcessPresetChange(value: string | number | boolean | null): void {
@@ -722,6 +1348,16 @@ export default defineComponent({
     ): void {
       postProcessSettings[key] = value
       syncPostProcessPreset()
+
+      if (typeof value !== 'number') {
+        return
+      }
+
+      sendGraphicsSettingsUpdate({
+        singleSet: {
+          value: createGraphicsSettingValue(postProcessSettingTypeMap[key], value),
+        },
+      })
     }
 
     function updateShadowSetting<Key extends keyof ShadowSettings>(
@@ -730,6 +1366,16 @@ export default defineComponent({
     ): void {
       shadowSettings[key] = value
       syncShadowPreset()
+
+      if (typeof value !== 'number') {
+        return
+      }
+
+      sendGraphicsSettingsUpdate({
+        singleSet: {
+          value: createGraphicsSettingValue(shadowSettingTypeMap[key], value),
+        },
+      })
     }
 
     function updateTextureSetting<Key extends keyof TextureSettings>(
@@ -738,6 +1384,16 @@ export default defineComponent({
     ): void {
       textureSettings[key] = value
       syncTexturePreset()
+
+      if (typeof value !== 'number') {
+        return
+      }
+
+      sendGraphicsSettingsUpdate({
+        singleSet: {
+          value: createGraphicsSettingValue(textureSettingTypeMap[key], value),
+        },
+      })
     }
 
     function updateEffectsSetting<Key extends keyof EffectsSettings>(
@@ -746,6 +1402,21 @@ export default defineComponent({
     ): void {
       effectsSettings[key] = value
       syncEffectsPreset()
+
+      if (typeof value !== 'number') {
+        return
+      }
+
+      const settingType = effectsSettingTypeMap[key]
+      if (settingType === undefined) {
+        return
+      }
+
+      sendGraphicsSettingsUpdate({
+        singleSet: {
+          value: createGraphicsSettingValue(settingType, value),
+        },
+      })
     }
 
     function togglePostProcessCustomOpen(): void {
@@ -764,11 +1435,44 @@ export default defineComponent({
       effectsCustomOpen.value = !effectsCustomOpen.value
     }
 
+    onMounted(() => {
+      const client = getScpWebSocketClient()
+
+      if (!client) {
+        return
+      }
+
+      unsubscribeResponse = client.onTypedMessage(
+        MessageType.RESPONSE_GRAPHICS_SETTINGS,
+        (message) => {
+          applyGraphicsResponse(message)
+        },
+      )
+
+      unsubscribeState = client.onStateChange((state) => {
+        if (state === 'open') {
+          requestGraphicsSettings()
+        }
+      })
+    })
+
+    onUnmounted(() => {
+      unsubscribeResponse?.()
+      unsubscribeState?.()
+    })
+
     return {
       antiAliasingMethod,
       antiAliasingMethodOptions,
       antiAliasingMethodLocked,
       antiAliasingQuality,
+      applyAntiAliasingMethod,
+      applyAntiAliasingQuality,
+      applyFrameGeneration,
+      applyResolutionScale,
+      applyUpscaleMode,
+      applyUpscaleQuality,
+      applyViewDistanceQuality,
       graphicsHelp,
       dlssQuality,
       hoverHelpDelay,
