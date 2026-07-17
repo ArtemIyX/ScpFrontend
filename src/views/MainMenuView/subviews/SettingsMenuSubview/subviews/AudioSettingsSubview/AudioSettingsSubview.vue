@@ -2,6 +2,17 @@
 
 <template>
   <section class="audio-settings" aria-label="Audio settings">
+    <GLoading
+      v-if="!audioSettingsLoaded"
+      label="Syncing audio profile"
+      helper="Waiting for playback devices, capture devices, voice chat, and mixer settings from the game client."
+      preset="quiet"
+      size="lg"
+      width="full"
+      background
+    />
+
+    <template v-else>
     <section class="audio-settings__group" aria-label="Device routing">
       <GField
         label="Playback Device"
@@ -28,6 +39,7 @@
           width="full"
           preset="quiet"
           placeholder="Select output device"
+          @change="applyPlaybackDevice"
         />
       </GField>
 
@@ -56,6 +68,7 @@
           width="full"
           preset="quiet"
           placeholder="Select input device"
+          @change="applyCaptureDevice"
         />
       </GField>
     </section>
@@ -93,6 +106,7 @@
             width="full"
             :label="mode.label"
             :helper="mode.helper"
+            @update:model-value="applyTalkMode"
           />
         </div>
       </GField>
@@ -126,6 +140,7 @@
             width="full"
             preset="quiet"
             aria-label="Voice activation threshold"
+            @change="applyVoiceActivationThreshold"
           />
           <GText as="p" preset="muted" class="audio-settings__threshold-copy">
             Lower values are more sensitive. Higher values require a stronger voice signal.
@@ -165,6 +180,7 @@
           width="full"
           preset="quiet"
           aria-label="Master volume"
+          @change="applyMasterVolume"
         />
       </GField>
 
@@ -197,6 +213,7 @@
             width="full"
             preset="quiet"
             aria-label="Ambient sound volume"
+            @change="applyAmbientVolume"
           />
         </GField>
 
@@ -228,6 +245,7 @@
             width="full"
             preset="quiet"
             aria-label="Interface volume"
+            @change="applyUiVolume"
           />
         </GField>
 
@@ -259,6 +277,7 @@
             width="full"
             preset="quiet"
             aria-label="Music volume"
+            @change="applyMusicVolume"
           />
         </GField>
 
@@ -290,6 +309,7 @@
             width="full"
             preset="quiet"
             aria-label="Voice volume"
+            @change="applyVoiceVolume"
           />
         </GField>
 
@@ -321,10 +341,12 @@
             width="full"
             preset="quiet"
             aria-label="Sound effects volume"
+            @change="applySfxVolume"
           />
         </GField>
       </div>
     </section>
+    </template>
   </section>
 </template>
 

@@ -111,7 +111,9 @@ type PersistedSettingsState = {
   }
   audio: {
     outputDevice: string | number | null
+    outputDeviceOptions: GComboOption[]
     inputDevice: string | number | null
+    inputDeviceOptions: GComboOption[]
     talkMode: AudioTalkMode
     voiceActivationThreshold: number | null
     masterVolume: number | null
@@ -211,7 +213,9 @@ function createDefaultPersistedSettingsState(): PersistedSettingsState {
     },
     audio: {
       outputDevice: 'headphones-usb',
+      outputDeviceOptions: [],
       inputDevice: 'headset-mic',
+      inputDeviceOptions: [],
       talkMode: 'push-to-talk',
       voiceActivationThreshold: 55,
       masterVolume: 80,
@@ -280,6 +284,8 @@ function loadPersistedSettingsState(): PersistedSettingsState {
       audio: {
         ...fallback.audio,
         ...parsed.audio,
+        outputDeviceOptions: parsed.audio?.outputDeviceOptions ?? fallback.audio.outputDeviceOptions,
+        inputDeviceOptions: parsed.audio?.inputDeviceOptions ?? fallback.audio.inputDeviceOptions,
       },
       controls: {
         ...fallback.controls,
@@ -342,7 +348,9 @@ export const useSettingsStore = defineStore('settings', () => {
   const effectsCustomOpen = ref(initialState.graphics.effectsCustomOpen)
 
   const outputDevice = ref<string | number | null>(initialState.audio.outputDevice)
+  const outputDeviceOptions = ref<GComboOption[]>(initialState.audio.outputDeviceOptions)
   const inputDevice = ref<string | number | null>(initialState.audio.inputDevice)
+  const inputDeviceOptions = ref<GComboOption[]>(initialState.audio.inputDeviceOptions)
   const talkMode = ref<AudioTalkMode>(initialState.audio.talkMode)
   const voiceActivationThreshold = ref<number | null>(initialState.audio.voiceActivationThreshold)
   const masterVolume = ref<number | null>(initialState.audio.masterVolume)
@@ -404,7 +412,9 @@ export const useSettingsStore = defineStore('settings', () => {
       },
       audio: {
         outputDevice: outputDevice.value,
+        outputDeviceOptions: outputDeviceOptions.value,
         inputDevice: inputDevice.value,
+        inputDeviceOptions: inputDeviceOptions.value,
         talkMode: talkMode.value,
         voiceActivationThreshold: voiceActivationThreshold.value,
         masterVolume: masterVolume.value,
@@ -461,17 +471,19 @@ export const useSettingsStore = defineStore('settings', () => {
     holdToCrouch,
     holdToSeeInventory,
     holdToSelectItem,
-    holdToSprint,
-    inputDevice,
-    invertYAxis,
+      holdToSprint,
+      inputDevice,
+      inputDeviceOptions,
+      invertYAxis,
     limitFps,
     masterVolume,
     materialQualityLevel,
     maxFps,
     mouseSensitivity,
     musicVolume,
-    outputDevice,
-    postProcessCustomOpen,
+      outputDevice,
+      outputDeviceOptions,
+      postProcessCustomOpen,
     postProcessPreset,
     postProcessSettings,
     resolution,

@@ -88,8 +88,11 @@ export default defineComponent({
     const fpsControlsDisabled = computed(() => !limitFps.value)
     const hdrToggleDisabled = computed(() => displaySettingsRuntime.showHdrUnsupportedBadge)
     const hdrControlsDisabled = computed(() => !hdrEnabled.value)
+    const websocketConnected = ref(getScpWebSocketClient()?.connectionState === 'open')
     const pendingDisplayRequestTypes = ref<Set<DisplaySettingRequestType>>(new Set(displayRequestTypes))
-    const displaySettingsLoaded = computed(() => pendingDisplayRequestTypes.value.size === 0)
+    const displaySettingsLoaded = computed(
+      () => !websocketConnected.value || pendingDisplayRequestTypes.value.size === 0,
+    )
     const hoverHelpDelay = 600
     let unsubscribeResponse: (() => void) | null = null
     let unsubscribeState: (() => void) | null = null
@@ -342,6 +345,7 @@ export default defineComponent({
       )
 
       unsubscribeState = client.onStateChange((state) => {
+        websocketConnected.value = state === 'open'
         if (state === 'open') {
           requestDisplaySettings()
         }

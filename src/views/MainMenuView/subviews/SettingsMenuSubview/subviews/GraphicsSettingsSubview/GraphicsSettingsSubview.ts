@@ -605,8 +605,11 @@ export default defineComponent({
       () => upscaleMode.value !== 'off' || frameGeneration.value !== 'off'
     )
     const upscaleQualityDisabled = computed(() => upscaleMode.value === 'off')
+    const websocketConnected = ref(getScpWebSocketClient()?.connectionState === 'open')
     const pendingGraphicsRequestTypes = ref<Set<GraphicsSettingRequestType>>(new Set(graphicsRequestTypes))
-    const graphicsSettingsLoaded = computed(() => pendingGraphicsRequestTypes.value.size === 0)
+    const graphicsSettingsLoaded = computed(
+      () => !websocketConnected.value || pendingGraphicsRequestTypes.value.size === 0,
+    )
     const upscaleQualityOptions = computed(() =>
       upscaleMode.value === 'fsr'
         ? dlssQualityOptions.filter((option) => option.value !== 'dlaa')
@@ -1488,6 +1491,7 @@ export default defineComponent({
       )
 
       unsubscribeState = client.onStateChange((state) => {
+        websocketConnected.value = state === 'open'
         if (state === 'open') {
           requestGraphicsSettings()
         }
