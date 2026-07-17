@@ -45,6 +45,7 @@ export default defineComponent({
     const settingsStore = useSettingsStore()
     const {
       ambientVolume,
+      audioSettingsLoadState,
       inputDevice,
       inputDeviceOptions,
       masterVolume,
@@ -61,7 +62,7 @@ export default defineComponent({
     const websocketConnected = ref(getScpWebSocketClient()?.connectionState === 'open')
     const pendingAudioRequestTypes = ref<Set<AudioSettingRequestType>>(new Set(audioRequestTypes))
     const audioSettingsLoaded = computed(
-      () => !websocketConnected.value || pendingAudioRequestTypes.value.size === 0,
+      () => !websocketConnected.value || audioSettingsLoadState.value === 'loaded',
     )
     const voiceActivationDisabled = computed(() => talkMode.value !== 'voice-activation')
     const hoverHelpDelay = 600
@@ -161,6 +162,10 @@ export default defineComponent({
     function applyAudioResponse(message: ResponseAudioSettings): void {
       pendingAudioRequestTypes.value.delete(message.requestedType)
 
+      if (pendingAudioRequestTypes.value.size === 0) {
+        audioSettingsLoadState.value = 'loaded'
+      }
+
       switch (message.requestedType) {
         case AudioSettingRequestType.AUDIO_SETTING_PLAYBACK_DEVICE:
           applyAudioPlaybackResponse(message.playbackDevice)
@@ -182,10 +187,11 @@ export default defineComponent({
     function requestAudioSettings(): void {
       const client = getScpWebSocketClient()
 
-      if (!client || client.connectionState !== 'open') {
+      if (!client || client.connectionState !== 'open' || audioSettingsLoadState.value !== 'idle') {
         return
       }
 
+      audioSettingsLoadState.value = 'loading'
       pendingAudioRequestTypes.value = new Set(audioRequestTypes)
 
       for (const requestType of audioRequestTypes) {

@@ -69,6 +69,7 @@ export default defineComponent({
       brightness,
       cameraSmoothing,
       contrast,
+      displaySettingsLoadState,
       fov,
       fullscreenMode,
       gamma,
@@ -91,7 +92,7 @@ export default defineComponent({
     const websocketConnected = ref(getScpWebSocketClient()?.connectionState === 'open')
     const pendingDisplayRequestTypes = ref<Set<DisplaySettingRequestType>>(new Set(displayRequestTypes))
     const displaySettingsLoaded = computed(
-      () => !websocketConnected.value || pendingDisplayRequestTypes.value.size === 0,
+      () => !websocketConnected.value || displaySettingsLoadState.value === 'loaded',
     )
     const hoverHelpDelay = 600
     let unsubscribeResponse: (() => void) | null = null
@@ -276,6 +277,10 @@ export default defineComponent({
     function applyDisplayResponse(message: ResponseDisplaySettings): void {
       pendingDisplayRequestTypes.value.delete(message.requestedType)
 
+      if (pendingDisplayRequestTypes.value.size === 0) {
+        displaySettingsLoadState.value = 'loaded'
+      }
+
       switch (message.requestedType) {
         case DisplaySettingRequestType.DISPLAY_SETTING_FULLSCREEN_MODE:
           fullscreenMode.value = mapProtoFullscreenMode(message.fullScreenMode)
@@ -315,10 +320,15 @@ export default defineComponent({
     function requestDisplaySettings(): void {
       const client = getScpWebSocketClient()
 
-      if (!client || client.connectionState !== 'open') {
+      if (
+        !client ||
+        client.connectionState !== 'open' ||
+        displaySettingsLoadState.value !== 'idle'
+      ) {
         return
       }
 
+      displaySettingsLoadState.value = 'loading'
       pendingDisplayRequestTypes.value = new Set(displayRequestTypes)
 
       for (const requestType of displayRequestTypes) {

@@ -22,6 +22,7 @@ export type PostProcessPresetValue = 'pp0' | 'pp1' | 'pp2' | 'pp3' | 'custom'
 export type ShadowPresetValue = 'shadow0' | 'shadow1' | 'shadow2' | 'shadow3' | 'custom'
 export type TexturePresetValue = 'texture0' | 'texture1' | 'texture2' | 'texture3' | 'custom'
 export type EffectsPresetValue = 'effects0' | 'effects1' | 'effects2' | 'effects3' | 'custom'
+export type SettingsSectionLoadState = 'idle' | 'loading' | 'loaded'
 
 export type PostProcessSettings = {
   motionBlurQuality: number | null
@@ -367,6 +368,9 @@ export const useSettingsStore = defineStore('settings', () => {
   const holdToSelectItem = ref(initialState.controls.holdToSelectItem)
   const autoSwitchNewItemPickedUp = ref(initialState.controls.autoSwitchNewItemPickedUp)
   const holdToSeeInventory = ref(initialState.controls.holdToSeeInventory)
+  const displaySettingsLoadState = ref<SettingsSectionLoadState>('idle')
+  const graphicsSettingsLoadState = ref<SettingsSectionLoadState>('idle')
+  const audioSettingsLoadState = ref<SettingsSectionLoadState>('idle')
 
   function snapshot(): PersistedSettingsState {
     return clonePersistedSettingsState({
@@ -452,11 +456,13 @@ export const useSettingsStore = defineStore('settings', () => {
     ambientVolume,
     antiAliasingMethod,
     antiAliasingQuality,
+    audioSettingsLoadState,
     autoSwitchNewItemPickedUp,
     brightness,
     cameraSmoothing,
     contrast,
     dlssQuality,
+    displaySettingsLoadState,
     effectsCustomOpen,
     effectsPreset,
     effectsSettings,
@@ -464,6 +470,7 @@ export const useSettingsStore = defineStore('settings', () => {
     frameGeneration,
     fullscreenMode,
     gamma,
+    graphicsSettingsLoadState,
     hdrColorGamut,
     hdrEnabled,
     hdrOutputDevice,

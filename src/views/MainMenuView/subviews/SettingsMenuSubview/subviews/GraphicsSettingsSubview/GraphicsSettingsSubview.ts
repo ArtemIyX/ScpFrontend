@@ -585,6 +585,7 @@ export default defineComponent({
       dlssQuality,
       effectsCustomOpen,
       effectsPreset,
+      graphicsSettingsLoadState,
       frameGeneration,
       materialQualityLevel,
       postProcessCustomOpen,
@@ -608,7 +609,7 @@ export default defineComponent({
     const websocketConnected = ref(getScpWebSocketClient()?.connectionState === 'open')
     const pendingGraphicsRequestTypes = ref<Set<GraphicsSettingRequestType>>(new Set(graphicsRequestTypes))
     const graphicsSettingsLoaded = computed(
-      () => !websocketConnected.value || pendingGraphicsRequestTypes.value.size === 0,
+      () => !websocketConnected.value || graphicsSettingsLoadState.value === 'loaded',
     )
     const upscaleQualityOptions = computed(() =>
       upscaleMode.value === 'fsr'
@@ -1165,6 +1166,10 @@ export default defineComponent({
       console.log('[graphics-settings] received ResponseGraphicsSettings', message)
       pendingGraphicsRequestTypes.value.delete(message.requestedType)
 
+      if (pendingGraphicsRequestTypes.value.size === 0) {
+        graphicsSettingsLoadState.value = 'loaded'
+      }
+
       switch (message.requestedType) {
         case GraphicsSettingRequestType.GRAPHICS_SETTING_RESOLUTION_SCALE:
           console.log('[graphics-settings] applying resolution scale response', {
@@ -1207,10 +1212,15 @@ export default defineComponent({
     function requestGraphicsSettings(): void {
       const client = getScpWebSocketClient()
 
-      if (!client || client.connectionState !== 'open') {
+      if (
+        !client ||
+        client.connectionState !== 'open' ||
+        graphicsSettingsLoadState.value !== 'idle'
+      ) {
         return
       }
 
+      graphicsSettingsLoadState.value = 'loading'
       pendingGraphicsRequestTypes.value = new Set(graphicsRequestTypes)
 
       for (const requestType of graphicsRequestTypes) {
