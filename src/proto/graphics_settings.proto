@@ -189,6 +189,7 @@ message EffectsQualityResponse
   uint32 detail_mode = 6;
   uint32 translucency_volume_blur = 7;
   uint32 material_quality_level = 8;
+  uint32 ssr_quality = 9;
 }
 
 
@@ -226,10 +227,11 @@ enum SettingType
   SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM = 24;
   SETTING_TYPE_REFRACTION_QUALITY = 25;
   SETTING_TYPE_SSR = 26;
-  SETTING_TYPE_SCENE_COLOR_FORMAT = 27;;
+  SETTING_TYPE_SCENE_COLOR_FORMAT = 27;
   SETTING_TYPE_DETAIL_MODE = 28;
   SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR = 29;
   SETTING_TYPE_MATERIAL_QUALITY_LEVEL = 30;
+  SETTING_TYPE_SSR_QUALITY = 31;
 }
 
 // Carries a single typed low-level graphics setting value.

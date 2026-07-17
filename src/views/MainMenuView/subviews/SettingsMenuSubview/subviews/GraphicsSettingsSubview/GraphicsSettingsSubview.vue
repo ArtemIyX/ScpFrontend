@@ -32,7 +32,7 @@
             width="full"
             preset="quiet"
             aria-label="Resolution scale"
-            @change="applyResolutionScale"
+            @change="() => applyResolutionScale()"
           />
         </GField>
 

@@ -348,6 +348,7 @@ export enum SettingType {
   SETTING_TYPE_DETAIL_MODE = 28,
   SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR = 29,
   SETTING_TYPE_MATERIAL_QUALITY_LEVEL = 30,
+  SETTING_TYPE_SSR_QUALITY = 31,
   UNRECOGNIZED = -1,
 }
 
@@ -446,6 +447,9 @@ export function settingTypeFromJSON(object: any): SettingType {
     case 30:
     case "SETTING_TYPE_MATERIAL_QUALITY_LEVEL":
       return SettingType.SETTING_TYPE_MATERIAL_QUALITY_LEVEL;
+    case 31:
+    case "SETTING_TYPE_SSR_QUALITY":
+      return SettingType.SETTING_TYPE_SSR_QUALITY;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -517,6 +521,8 @@ export function settingTypeToJSON(object: SettingType): string {
       return "SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR";
     case SettingType.SETTING_TYPE_MATERIAL_QUALITY_LEVEL:
       return "SETTING_TYPE_MATERIAL_QUALITY_LEVEL";
+    case SettingType.SETTING_TYPE_SSR_QUALITY:
+      return "SETTING_TYPE_SSR_QUALITY";
     case SettingType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -696,6 +702,7 @@ export interface EffectsQualityResponse {
   detailMode: number;
   translucencyVolumeBlur: number;
   materialQualityLevel: number;
+  ssrQuality: number;
 }
 
 /** Carries a single typed low-level graphics setting value. */
@@ -2249,6 +2256,7 @@ function createBaseEffectsQualityResponse(): EffectsQualityResponse {
     detailMode: 0,
     translucencyVolumeBlur: 0,
     materialQualityLevel: 0,
+    ssrQuality: 0,
   };
 }
 
@@ -2277,6 +2285,9 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     }
     if (message.materialQualityLevel !== 0) {
       writer.uint32(64).uint32(message.materialQualityLevel);
+    }
+    if (message.ssrQuality !== 0) {
+      writer.uint32(72).uint32(message.ssrQuality);
     }
     return writer;
   },
@@ -2352,6 +2363,14 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
           message.materialQualityLevel = reader.uint32();
           continue;
         }
+        case 9: {
+          if (tag !== 72) {
+            break;
+          }
+
+          message.ssrQuality = reader.uint32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -2399,6 +2418,11 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
         : isSet(object.material_quality_level)
         ? globalThis.Number(object.material_quality_level)
         : 0,
+      ssrQuality: isSet(object.ssrQuality)
+        ? globalThis.Number(object.ssrQuality)
+        : isSet(object.ssr_quality)
+        ? globalThis.Number(object.ssr_quality)
+        : 0,
     };
   },
 
@@ -2428,6 +2452,9 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     if (message.materialQualityLevel !== 0) {
       obj.materialQualityLevel = Math.round(message.materialQualityLevel);
     }
+    if (message.ssrQuality !== 0) {
+      obj.ssrQuality = Math.round(message.ssrQuality);
+    }
     return obj;
   },
 
@@ -2444,6 +2471,7 @@ export const EffectsQualityResponse: MessageFns<EffectsQualityResponse> = {
     message.detailMode = object.detailMode ?? 0;
     message.translucencyVolumeBlur = object.translucencyVolumeBlur ?? 0;
     message.materialQualityLevel = object.materialQualityLevel ?? 0;
+    message.ssrQuality = object.ssrQuality ?? 0;
     return message;
   },
 };

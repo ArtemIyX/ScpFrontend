@@ -401,13 +401,13 @@ const textureOverrideRows: OverrideRowConfig<TextureSettings>[] = [
 ]
 
 const effectsOverrideRows: OverrideRowConfig<EffectsSettings>[] = [
-  { key: 'translucencyLightingVolumeDim', label: 'Translucency Volume Dim', cvar: 'r.TranslucencyLightingVolumeDim', presetValues: '24/32/48/64', ariaLabel: 'Translucency lighting volume dimension', min: 16, max: 96, step: 8 },
+  { key: 'translucencyLightingVolumeDim', label: 'Translucency Volume Dim', cvar: 'r.TranslucencyLightingVolume.Dim', presetValues: '24/32/48/64', ariaLabel: 'Translucency lighting volume dimension', min: 16, max: 96, step: 8 },
   { key: 'refractionQuality', label: 'Refraction Quality', cvar: 'r.RefractionQuality', presetValues: '0/0/2/2', ariaLabel: 'Refraction quality', min: 0, max: 2, step: 1 },
   { key: 'ssr', label: 'Screen Space Reflections', cvar: 'r.SSR', presetValues: '0/0/0/1', ariaLabel: 'Screen space reflections enable', min: 0, max: 1, step: 1 },
   { key: 'ssrQuality', label: 'SSR Quality', cvar: 'r.SSR.Quality', presetValues: '0/0/0/1', ariaLabel: 'Screen space reflections quality', min: 0, max: 4, step: 1 },
   { key: 'sceneColorFormat', label: 'Scene Color Format', cvar: 'r.SceneColorFormat', presetValues: '3/3/3/4', ariaLabel: 'Scene color format', min: 3, max: 5, step: 1 },
   { key: 'detailMode', label: 'Detail Mode', cvar: 'r.DetailMode', presetValues: '0/1/1/2', ariaLabel: 'Detail mode', min: 0, max: 2, step: 1 },
-  { key: 'translucencyVolumeBlur', label: 'Translucency Blur', cvar: 'r.TranslucencyVolumeBlur', presetValues: '0/0/1/1', ariaLabel: 'Translucency volume blur', min: 0, max: 1, step: 1 },
+  { key: 'translucencyVolumeBlur', label: 'Translucency Blur', cvar: 'r.TranslucencyLightingVolume.Blur', presetValues: '0/0/1/1', ariaLabel: 'Translucency volume blur', min: 0, max: 1, step: 1 },
   { key: 'effectsMaterialQualityLevel', label: 'Material Quality Level', cvar: 'r.MaterialQualityLevel', presetValues: '0/1/1/1', ariaLabel: 'Effects material quality level', min: 0, max: 1, step: 1 },
 ]
 
@@ -457,6 +457,7 @@ const effectsSettingTypeMap: Partial<Record<keyof EffectsSettings, SettingType>>
   translucencyLightingVolumeDim: SettingType.SETTING_TYPE_TRANSLUCENCY_LIGHTING_VOLUME_DIM,
   refractionQuality: SettingType.SETTING_TYPE_REFRACTION_QUALITY,
   ssr: SettingType.SETTING_TYPE_SSR,
+  ssrQuality: SettingType.SETTING_TYPE_SSR_QUALITY,
   sceneColorFormat: SettingType.SETTING_TYPE_SCENE_COLOR_FORMAT,
   detailMode: SettingType.SETTING_TYPE_DETAIL_MODE,
   translucencyVolumeBlur: SettingType.SETTING_TYPE_TRANSLUCENCY_VOLUME_BLUR,
@@ -916,8 +917,14 @@ export default defineComponent({
       const client = getScpWebSocketClient()
 
       if (!client || client.connectionState !== 'open') {
+        console.warn('[graphics-settings] skipped send because websocket is not open', {
+          connectionState: client?.connectionState ?? 'missing',
+          message,
+        })
         return
       }
+
+      console.log('[graphics-settings] sending RequestSetGraphicsSettings', message)
 
       client.sendTypedMessage(
         MessageType.REQUEST_SET_GRAPHICS_SETTINGS,
@@ -942,17 +949,28 @@ export default defineComponent({
       return settingValue
     }
 
-    function applyResolutionScale(value: number | null): void {
+    function applyResolutionScale(value = resolutionScale.value): void {
+      console.log('[graphics-settings] resolution scale change requested', {
+        incomingValue: value,
+        currentModelValue: resolutionScale.value,
+      })
+
       if (typeof value !== 'number') {
+        console.warn('[graphics-settings] resolution scale send aborted because value is not numeric', {
+          incomingValue: value,
+        })
         return
       }
 
       resolutionScale.value = value
-      sendGraphicsSettingsUpdate({
+      const message: RequestSetGraphicsSettingsShape = {
         resolutionScale: {
           resolutionScale: value,
         },
-      })
+      }
+
+      console.log('[graphics-settings] prepared resolution scale payload', message)
+      sendGraphicsSettingsUpdate(message)
     }
 
     function applyAntiAliasingMethod(value: string | number | null): void {
@@ -1124,6 +1142,7 @@ export default defineComponent({
         translucencyLightingVolumeDim: response.translucencyLightingVolumeDim,
         refractionQuality: response.refractionQuality,
         ssr: response.ssr,
+        ssrQuality: response.ssrQuality,
         sceneColorFormat: response.sceneColorFormat,
         detailMode: response.detailMode,
         translucencyVolumeBlur: response.translucencyVolumeBlur,
@@ -1134,9 +1153,19 @@ export default defineComponent({
     }
 
     function applyGraphicsResponse(message: ResponseGraphicsSettings): void {
+      console.log('[graphics-settings] received ResponseGraphicsSettings', message)
+
       switch (message.requestedType) {
         case GraphicsSettingRequestType.GRAPHICS_SETTING_RESOLUTION_SCALE:
+          console.log('[graphics-settings] applying resolution scale response', {
+            requestedType: message.requestedType,
+            resolutionScalePayload: message.resolutionScale,
+            rawMessage: message,
+          })
           resolutionScale.value = message.resolutionScale?.resolutionScale ?? 100
+          console.log('[graphics-settings] resolution scale model updated from backend', {
+            appliedValue: resolutionScale.value,
+          })
           return
         case GraphicsSettingRequestType.GRAPHICS_SETTING_AA:
           antiAliasingMethod.value = mapAntiAliasingType(message.aa?.aaMethod)
