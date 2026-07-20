@@ -5,6 +5,7 @@ import GText from '../GText/GText.vue'
 import {
   buildGKeybindInputClasses,
   formatKeybind,
+  formatKeybindDisplayValue,
   formatPointerKeybind,
   type GKeybindInputEmits,
   type GKeybindInputProps,
@@ -55,7 +56,7 @@ const displayValue = computed(() => {
     return '...'
   }
 
-  return props.modelValue || 'None'
+  return props.modelValue ? formatKeybindDisplayValue(props.modelValue) : 'None'
 })
 
 const stateLabel = computed(() => {

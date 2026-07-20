@@ -105,6 +105,24 @@ export function normalizeKeyName(key: string): string {
   return key
 }
 
+export function formatKeybindDisplayValue(value: string): string {
+  if (value.startsWith('Key') && value.length === 4) {
+    return value.charAt(3).toUpperCase()
+  }
+
+  if (value.startsWith('Digit') && value.length === 6) {
+    return value.charAt(5)
+  }
+
+  if (value.startsWith('Numpad') && value.length === 7) {
+    return `Num ${value.charAt(6)}`
+  }
+
+  return value
+    .replace(/^(Shift|Control|Alt|Meta)(Left|Right)$/, '$1 $2')
+    .replace(/^Arrow(Left|Up|Right|Down)$/, '$1')
+}
+
 export function formatKeybind(
   event: Pick<KeyboardEvent, 'key' | 'code' | 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'>,
 ): string | null {

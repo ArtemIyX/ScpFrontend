@@ -397,14 +397,6 @@ defineExpose({
               <GText as="p" preset="header" class="key-bindings-settings__binding-name">
                 {{ binding.label }}
               </GText>
-              <GText
-                v-if="isBindingPending(binding.id)"
-                as="p"
-                preset="muted"
-                class="key-bindings-settings__binding-warning"
-              >
-                Waiting for the backend to confirm this binding.
-              </GText>
             </div>
 
             <GKeybindInput
@@ -544,13 +536,6 @@ defineExpose({
 .key-bindings-settings__binding-copy {
   display: grid;
   gap: 0.28rem;
-}
-
-.key-bindings-settings__binding-warning {
-  margin: 0;
-  color: rgba(255, 219, 134, 0.84);
-  font-size: 0.75rem;
-  line-height: 1.35;
 }
 
 .key-bindings-settings__modal-copy {
