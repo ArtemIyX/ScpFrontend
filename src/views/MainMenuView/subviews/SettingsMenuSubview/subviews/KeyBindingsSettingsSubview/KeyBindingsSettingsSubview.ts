@@ -1,98 +1,108 @@
-export interface KeyBindingDefinition {
+import type {
+  KeyBindingSettingCategory,
+  KeyBindingSettingData,
+  KeyBindingSettingVisualData,
+} from '@/proto/gen/keybings_settings'
+
+export interface KeyBindingViewItem {
   id: string
   label: string
-  defaultKey: string | null
-  helper?: string
+  value: string | null
+  sortOrder: number
 }
 
-export interface KeyBindingCategoryDefinition {
+export interface KeyBindingCategoryView {
   id: string
   label: string
-  bindings: KeyBindingDefinition[]
+  bindings: KeyBindingViewItem[]
 }
 
 export type KeyBindingMap = Record<string, string | null>
 
-export const defaultKeyBindingLayout: KeyBindingCategoryDefinition[] = [
-  {
-    id: 'movement',
-    label: 'Movement',
-    bindings: [
-      { id: 'moveForward', label: 'Move Forward', defaultKey: 'W' },
-      { id: 'moveBackward', label: 'Move Backward', defaultKey: 'S' },
-      { id: 'moveLeft', label: 'Move Left', defaultKey: 'A' },
-      { id: 'moveRight', label: 'Move Right', defaultKey: 'D' },
-      { id: 'sprint', label: 'Sprint', defaultKey: 'Shift' },
-      { id: 'crouch', label: 'Crouch', defaultKey: 'Ctrl' },
-    ],
-  },
-  {
-    id: 'character',
-    label: 'Character',
-    bindings: [
-      { id: 'jump', label: 'Jump', defaultKey: 'Space' },
-      { id: 'interact', label: 'Interact', defaultKey: 'E' },
-      { id: 'reload', label: 'Reload', defaultKey: 'R' },
-      { id: 'flashlight', label: 'Flashlight', defaultKey: 'F' },
-      { id: 'inventory', label: 'Inventory', defaultKey: 'Tab' },
-    ],
-  },
-]
-
-export function flattenKeyBindingLayout(
-  layout: KeyBindingCategoryDefinition[],
-): KeyBindingDefinition[] {
-  return layout.flatMap((category) => category.bindings)
-}
-
-export function createDefaultKeyBindingMap(layout: KeyBindingCategoryDefinition[]): KeyBindingMap {
-  return Object.fromEntries(
-    flattenKeyBindingLayout(layout).map((binding) => [binding.id, binding.defaultKey ?? null]),
-  )
-}
-
-export function createResolvedKeyBindingMap(
-  layout: KeyBindingCategoryDefinition[],
-  mappings?: KeyBindingMap,
-): KeyBindingMap {
-  return {
-    ...createDefaultKeyBindingMap(layout),
-    ...(mappings ?? {}),
+export function normalizeKeyBindingValue(value: string | null | undefined): string | null {
+  if (typeof value !== 'string') {
+    return null
   }
+
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
 }
 
-export function createKeyBindingMapFromSource(
-  layout: KeyBindingCategoryDefinition[],
-  source?: KeyBindingMap,
+function slugifyKeyBindingLabel(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+export function sortKeyBindingVisualData(
+  bindings: KeyBindingSettingVisualData[],
+): KeyBindingSettingVisualData[] {
+  return [...bindings].sort((left, right) => {
+    if (left.sortOrder !== right.sortOrder) {
+      return left.sortOrder - right.sortOrder
+    }
+
+    return left.displayKey.localeCompare(right.displayKey)
+  })
+}
+
+export function sortKeyBindingCategories(
+  categories: KeyBindingSettingCategory[],
+): KeyBindingSettingCategory[] {
+  return [...categories].sort((left, right) => left.categoryName.localeCompare(right.categoryName))
+}
+
+export function mapProtoKeyBindingCategories(
+  categories: KeyBindingSettingCategory[],
+): KeyBindingCategoryView[] {
+  return sortKeyBindingCategories(categories).map((category, index) => ({
+    id: `${slugifyKeyBindingLabel(category.categoryName) || 'category'}-${index}`,
+    label: category.categoryName,
+    bindings: sortKeyBindingVisualData(category.keyBindings).map((binding) => ({
+      id: binding.uniqueId,
+      label: binding.displayKey,
+      value: normalizeKeyBindingValue(binding.key),
+      sortOrder: binding.sortOrder,
+    })),
+  }))
+}
+
+export function createKeyBindingMapFromCategories(
+  categories: KeyBindingSettingCategory[],
 ): KeyBindingMap {
   return Object.fromEntries(
-    flattenKeyBindingLayout(layout).map((binding) => [
-      binding.id,
-      source?.[binding.id] ?? binding.defaultKey ?? null,
-    ]),
+    categories.flatMap((category) =>
+      category.keyBindings.map((binding) => [binding.uniqueId, normalizeKeyBindingValue(binding.key)]),
+    ),
   )
 }
 
-export function cloneKeyBindingMap(mappings: KeyBindingMap): KeyBindingMap {
-  return { ...mappings }
-}
+export function applyKeyBindingDataToCategories(
+  categories: KeyBindingSettingCategory[],
+  updates: KeyBindingSettingData[],
+): KeyBindingSettingCategory[] {
+  if (updates.length === 0) {
+    return categories
+  }
 
-export function areKeyBindingMapsEqual(
-  left: KeyBindingMap,
-  right: KeyBindingMap,
-  layout: KeyBindingCategoryDefinition[],
-): boolean {
-  return flattenKeyBindingLayout(layout).every(
-    (binding) => (left[binding.id] ?? null) === (right[binding.id] ?? null),
+  const updatesById = new Map(
+    updates.map((update) => [update.uniqueId, normalizeKeyBindingValue(update.key) ?? '']),
   )
-}
 
-export function countDirtyKeyBindings(
-  current: KeyBindingMap,
-  baseline: KeyBindingMap,
-  layout: KeyBindingCategoryDefinition[],
-): number {
-  return flattenKeyBindingLayout(layout).filter(
-    (binding) => (current[binding.id] ?? null) !== (baseline[binding.id] ?? null),
-  ).length
+  return categories.map((category) => ({
+    ...category,
+    keyBindings: category.keyBindings.map((binding) => {
+      const nextKey = updatesById.get(binding.uniqueId)
+      if (nextKey === undefined) {
+        return binding
+      }
+
+      return {
+        ...binding,
+        key: nextKey,
+      }
+    }),
+  }))
 }

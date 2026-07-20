@@ -55,7 +55,7 @@ const displayValue = computed(() => {
     return '...'
   }
 
-  return props.modelValue || ''
+  return props.modelValue || 'None'
 })
 
 const stateLabel = computed(() => {
@@ -64,7 +64,7 @@ const stateLabel = computed(() => {
   }
 
   if (!hasValue.value) {
-    return 'Empty'
+    return ''
   }
 
   return ''

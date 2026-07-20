@@ -1,133 +1,223 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import GAlert from '@/components/g/GAlert/GAlert.vue'
 import GButton from '@/components/g/GButton/GButton.vue'
 import GDivider from '@/components/g/GDivider/GDivider.vue'
 import GKeybindInput from '@/components/g/GKeybindInput/GKeybindInput.vue'
+import GLoading from '@/components/g/GLoading/GLoading.vue'
 import GModal from '@/components/g/GModal/GModal.vue'
 import GText from '@/components/g/GText/GText.vue'
+import {
+  RequestClearKeySettings,
+  RequestGetKeysSettings,
+  RequestResetAllKeySettings,
+  RequestSetKeysSettings,
+  type ResponseKeysSettings,
+  type ResponseMultipleKeySetting,
+  type ResponseSingleKeySetting,
+} from '@/proto/gen/keybings_settings'
+import { MessageType } from '@/proto/gen/scp_webui'
+import { getScpWebSocketClient } from '@/services'
+import { useSettingsStore } from '@/stores/settings'
 
 import {
-  areKeyBindingMapsEqual,
-  cloneKeyBindingMap,
-  countDirtyKeyBindings,
-  createKeyBindingMapFromSource,
-  createResolvedKeyBindingMap,
-  defaultKeyBindingLayout,
-  type KeyBindingCategoryDefinition,
-  type KeyBindingMap,
+  applyKeyBindingDataToCategories,
+  createKeyBindingMapFromCategories,
+  mapProtoKeyBindingCategories,
+  normalizeKeyBindingValue,
+  sortKeyBindingCategories,
+  sortKeyBindingVisualData,
 } from './KeyBindingsSettingsSubview'
 
-const props = withDefaults(
-  defineProps<{
-    layout?: KeyBindingCategoryDefinition[]
-    initialMappings?: KeyBindingMap
-    defaultMappings?: KeyBindingMap
-  }>(),
-  {
-    layout: () => defaultKeyBindingLayout,
-    initialMappings: undefined,
-    defaultMappings: undefined,
-  },
-)
-
 const emit = defineEmits<{
-  save: [mappings: KeyBindingMap]
   dirtyChange: [dirty: boolean]
 }>()
 
-const savedMappings = ref<KeyBindingMap>(
-  createResolvedKeyBindingMap(props.layout, props.initialMappings),
-)
-const draftMappings = ref<KeyBindingMap>(cloneKeyBindingMap(savedMappings.value))
-const defaultMappings = computed(() =>
-  createKeyBindingMapFromSource(props.layout, props.defaultMappings),
-)
+const settingsStore = useSettingsStore()
+const { keyBindingCategories, keyBindingsLoadState } = storeToRefs(settingsStore)
+
+const websocketConnected = ref(getScpWebSocketClient()?.connectionState === 'open')
+const pendingBindingIds = ref<Set<string>>(new Set())
+const pendingBindingValues = ref<Record<string, string | null>>({})
+const mutationError = ref('')
 const showResetModal = ref(false)
 
-const dirtyCount = computed(() =>
-  countDirtyKeyBindings(draftMappings.value, savedMappings.value, props.layout),
+let unsubscribeAllResponse: (() => void) | null = null
+let unsubscribeSingleResponse: (() => void) | null = null
+let unsubscribeMultipleResponse: (() => void) | null = null
+let unsubscribeState: (() => void) | null = null
+
+const keyBindingsLoaded = computed(() => keyBindingsLoadState.value === 'loaded')
+const showBlockingLoader = computed(
+  () => websocketConnected.value && keyBindingsLoadState.value !== 'loaded',
 )
-const hasDirtyChanges = computed(
-  () => !areKeyBindingMapsEqual(draftMappings.value, savedMappings.value, props.layout),
-)
-
-const bindingIndex = computed(() =>
-  Object.fromEntries(
-    props.layout.flatMap((category) =>
-      category.bindings.map((binding) => [
-        binding.id,
-        {
-          ...binding,
-          categoryLabel: category.label,
-        },
-      ]),
-    ),
-  ),
-)
-
-const conflictMap = computed<Record<string, string>>(() => {
-  const grouped = new Map<string, string[]>()
-
-  for (const [bindingId, key] of Object.entries(draftMappings.value)) {
-    if (!key) {
-      continue
-    }
-
-    const ids = grouped.get(key) ?? []
-    ids.push(bindingId)
-    grouped.set(key, ids)
+const authoritativeBindings = computed(() => createKeyBindingMapFromCategories(keyBindingCategories.value))
+const displayedBindings = computed(() => ({
+  ...authoritativeBindings.value,
+  ...pendingBindingValues.value,
+}))
+const uiCategories = computed(() => mapProtoKeyBindingCategories(keyBindingCategories.value))
+const pendingCount = computed(() => pendingBindingIds.value.size)
+const hasBindings = computed(() => uiCategories.value.length > 0)
+const statusLabel = computed(() => {
+  if (!keyBindingsLoaded.value) {
+    return 'Requesting key bindings from the game client'
   }
 
-  const conflicts: Record<string, string> = {}
-
-  for (const [key, ids] of grouped.entries()) {
-    if (ids.length < 2) {
-      continue
-    }
-
-    for (const bindingId of ids) {
-      const duplicateNames = ids
-        .filter((id) => id !== bindingId)
-        .map((id) => {
-          const binding = bindingIndex.value[id]
-          return binding ? `${binding.label} in ${binding.categoryLabel}` : id
-        })
-
-      conflicts[bindingId] = `Key ${key} is already used by ${duplicateNames.join(', ')}.`
-    }
+  if (pendingCount.value > 0) {
+    return `${pendingCount.value} binding change${pendingCount.value === 1 ? '' : 's'} awaiting backend approval`
   }
 
-  return conflicts
+  if (!websocketConnected.value) {
+    return 'Showing cached key bindings from this session'
+  }
+
+  return 'Bindings synced with backend'
 })
 
-const conflictCount = computed(() => Object.keys(conflictMap.value).length)
-const hasConflicts = computed(() => conflictCount.value > 0)
-
-function applyMappings(source: KeyBindingMap): void {
-  draftMappings.value = createResolvedKeyBindingMap(props.layout, source)
+function setSortedCategories(categories: ResponseKeysSettings['categories']): void {
+  keyBindingCategories.value = sortKeyBindingCategories(categories).map((category) => ({
+    ...category,
+    keyBindings: sortKeyBindingVisualData(category.keyBindings),
+  }))
 }
 
-function setBinding(bindingId: string, value: string | null): void {
-  draftMappings.value = {
-    ...draftMappings.value,
+function setPendingBinding(bindingId: string, value: string | null): void {
+  pendingBindingIds.value = new Set(pendingBindingIds.value).add(bindingId)
+  pendingBindingValues.value = {
+    ...pendingBindingValues.value,
     [bindingId]: value,
   }
 }
 
-function saveChanges(): boolean {
-  if (hasConflicts.value) {
+function clearPendingBindings(bindingIds: string[]): void {
+  if (bindingIds.length === 0) {
+    return
+  }
+
+  const nextIds = new Set(pendingBindingIds.value)
+  const nextValues = { ...pendingBindingValues.value }
+
+  for (const bindingId of bindingIds) {
+    nextIds.delete(bindingId)
+    delete nextValues[bindingId]
+  }
+
+  pendingBindingIds.value = nextIds
+  pendingBindingValues.value = nextValues
+}
+
+function clearAllPendingBindings(): void {
+  pendingBindingIds.value = new Set()
+  pendingBindingValues.value = {}
+}
+
+function applyAuthoritativeBindings(updates: Array<{ uniqueId: string; key: string }>): void {
+  keyBindingCategories.value = applyKeyBindingDataToCategories(keyBindingCategories.value, updates)
+  clearPendingBindings(updates.map((update) => update.uniqueId))
+}
+
+function sendRequest<TMessage>(
+  messageType: MessageType,
+  message: TMessage,
+  codec: {
+    encode(message: TMessage): { finish(): Uint8Array }
+    decode(input: Uint8Array): TMessage
+  },
+): boolean {
+  const client = getScpWebSocketClient()
+
+  if (!client || client.connectionState !== 'open') {
+    mutationError.value = 'The game client is not connected right now.'
     return false
   }
 
-  savedMappings.value = cloneKeyBindingMap(draftMappings.value)
-  emit('save', cloneKeyBindingMap(savedMappings.value))
+  client.sendTypedMessage(messageType, message, codec)
   return true
 }
 
-function discardChanges(): void {
-  applyMappings(savedMappings.value)
+function requestKeyBindings(force = false): void {
+  if (!force && keyBindingsLoadState.value !== 'idle') {
+    return
+  }
+
+  if (
+    sendRequest(
+      MessageType.REQUEST_GET_KEYS_SETTINGS,
+      { empty: 0 },
+      RequestGetKeysSettings,
+    )
+  ) {
+    keyBindingsLoadState.value = 'loading'
+    mutationError.value = ''
+  }
+}
+
+function applyFullKeyBindingsResponse(message: ResponseKeysSettings): void {
+  setSortedCategories(message.categories)
+  keyBindingsLoadState.value = 'loaded'
+  mutationError.value = ''
+  clearAllPendingBindings()
+}
+
+function applySingleKeyBindingResponse(message: ResponseSingleKeySetting): void {
+  mutationError.value = message.error
+
+  if (message.content) {
+    applyAuthoritativeBindings([message.content])
+    return
+  }
+
+  clearAllPendingBindings()
+}
+
+function applyMultipleKeyBindingResponse(message: ResponseMultipleKeySetting): void {
+  mutationError.value = message.error
+
+  if (message.content.length > 0) {
+    applyAuthoritativeBindings(message.content)
+    return
+  }
+
+  clearAllPendingBindings()
+}
+
+function setBinding(bindingId: string, nextValue: string | null): void {
+  const normalizedValue = normalizeKeyBindingValue(nextValue)
+  const currentValue = authoritativeBindings.value[bindingId] ?? null
+
+  if (normalizedValue === currentValue) {
+    clearPendingBindings([bindingId])
+    return
+  }
+
+  setPendingBinding(bindingId, normalizedValue)
+  mutationError.value = ''
+
+  const sent = normalizedValue === null
+    ? sendRequest(
+        MessageType.REQUEST_CLEAR_KEY_SETTINGS,
+        { uniqueId: bindingId },
+        RequestClearKeySettings,
+      )
+    : sendRequest(
+        MessageType.REQUEST_SET_KEYS_SETTINGS,
+        {
+          keyBindings: [
+            {
+              uniqueId: bindingId,
+              key: normalizedValue,
+            },
+          ],
+        },
+        RequestSetKeysSettings,
+      )
+
+  if (!sent) {
+    clearPendingBindings([bindingId])
+  }
 }
 
 function openResetModal(): void {
@@ -138,154 +228,218 @@ function closeResetModal(): void {
   showResetModal.value = false
 }
 
-function resetToDefaults(): void {
-  draftMappings.value = cloneKeyBindingMap(defaultMappings.value)
+function resetAllBindings(): void {
+  mutationError.value = ''
+
+  if (
+    sendRequest(
+      MessageType.REQUEST_RESET_ALL_KEY_SETTINGS,
+      { empty: 0 },
+      RequestResetAllKeySettings,
+    )
+  ) {
+    clearAllPendingBindings()
+  }
+
   closeResetModal()
 }
 
-function isDirty(): boolean {
-  return hasDirtyChanges.value
+function isBindingPending(bindingId: string): boolean {
+  return pendingBindingIds.value.has(bindingId)
 }
 
-watch(
-  () => props.initialMappings,
-  (nextMappings) => {
-    const resolved = createResolvedKeyBindingMap(props.layout, nextMappings)
-    savedMappings.value = resolved
-    if (!hasDirtyChanges.value) {
-      draftMappings.value = cloneKeyBindingMap(resolved)
-    }
-  },
-)
+function isDirty(): boolean {
+  return false
+}
 
-watch(
-  hasDirtyChanges,
-  (value) => {
-    emit('dirtyChange', value)
-  },
-  { immediate: true },
-)
+function saveChanges(): boolean {
+  return true
+}
+
+function discardChanges(): void {
+  clearAllPendingBindings()
+}
+
+onMounted(() => {
+  emit('dirtyChange', false)
+
+  const client = getScpWebSocketClient()
+  if (!client) {
+    return
+  }
+
+  unsubscribeAllResponse = client.onTypedMessage(
+    MessageType.RESPONSE_ALL_KEY_SETTINGS,
+    (message) => {
+      applyFullKeyBindingsResponse(message)
+    },
+  )
+
+  unsubscribeSingleResponse = client.onTypedMessage(
+    MessageType.RESPONSE_SINGLE_KEY_SETTING,
+    (message) => {
+      applySingleKeyBindingResponse(message)
+    },
+  )
+
+  unsubscribeMultipleResponse = client.onTypedMessage(
+    MessageType.RESPONSE_KEYS_SETTINGS,
+    (message) => {
+      applyMultipleKeyBindingResponse(message)
+    },
+  )
+
+  unsubscribeState = client.onStateChange((state) => {
+    websocketConnected.value = state === 'open'
+
+    if (state === 'open' && keyBindingsLoadState.value === 'idle') {
+      requestKeyBindings()
+    }
+  })
+
+  if (client.connectionState === 'open' && keyBindingsLoadState.value === 'idle') {
+    requestKeyBindings()
+  }
+})
+
+onUnmounted(() => {
+  unsubscribeAllResponse?.()
+  unsubscribeSingleResponse?.()
+  unsubscribeMultipleResponse?.()
+  unsubscribeState?.()
+})
 
 defineExpose({
-  isDirty,
-  hasConflicts,
-  saveChanges,
   discardChanges,
-  resetToDefaults,
+  isDirty,
+  saveChanges,
 })
 </script>
 
 <template>
   <section class="key-bindings-settings" aria-label="Key-bindings settings">
-    <header class="key-bindings-settings__header">
-      <div class="key-bindings-settings__toolbar">
-        <GText
-          as="p"
-          preset="caps"
-          class="key-bindings-settings__status"
-          :class="{ 'key-bindings-settings__status--dirty': hasDirtyChanges }"
-        >
-          {{
-            hasDirtyChanges
-              ? `${dirtyCount} unsaved change${dirtyCount === 1 ? '' : 's'}`
-              : 'Bindings synced'
-          }}
-        </GText>
-
-        <div class="key-bindings-settings__actions">
-          <GButton preset="ghost" shape="soft" :disabled="!hasDirtyChanges" @click="discardChanges">
-            Cancel
-          </GButton>
-          <GButton preset="danger" shape="soft" @click="openResetModal">Reset</GButton>
-          <GButton
-            preset="accent"
-            shape="soft"
-            :disabled="!hasDirtyChanges || hasConflicts"
-            @click="saveChanges"
-          >
-            Save
-          </GButton>
-        </div>
-      </div>
-    </header>
-
-    <GAlert
-      v-if="hasConflicts"
-      preset="warning"
-      variant="soft"
+    <GLoading
+      v-if="showBlockingLoader"
+      label="Key Bindings"
+      helper="Waiting for the game client to send grouped key binding data and active mappings."
+      status="Syncing"
       width="full"
-      title="Duplicate keys detected"
-      class="key-bindings-settings__alert"
-    >
-      Resolve the highlighted bindings before saving. Each warning shows which action already owns
-      that key.
-    </GAlert>
+      centered
+    />
 
-    <section
-      v-for="category in layout"
-      :key="category.id"
-      class="key-bindings-settings__category"
-      :aria-label="`${category.label} key bindings`"
-    >
-      <GDivider :label="category.label" preset="quiet" class="key-bindings-settings__divider" />
+    <template v-else>
+      <header class="key-bindings-settings__header">
+        <div class="key-bindings-settings__toolbar">
+          <GText as="p" preset="caps" class="key-bindings-settings__status">
+            {{ statusLabel }}
+          </GText>
 
-      <div class="key-bindings-settings__list">
-        <div
-          v-for="binding in category.bindings"
-          :key="binding.id"
-          class="key-bindings-settings__row"
-          :class="{
-            'key-bindings-settings__row--dirty':
-              draftMappings[binding.id] !== savedMappings[binding.id],
-            'key-bindings-settings__row--error': Boolean(conflictMap[binding.id]),
-          }"
-        >
-          <div class="key-bindings-settings__binding-copy">
-            <GText as="p" preset="header" class="key-bindings-settings__binding-name">
-              {{ binding.label
-              }}{{ draftMappings[binding.id] !== savedMappings[binding.id] ? ' *' : '' }}
-            </GText>
-            <GText
-              v-if="conflictMap[binding.id]"
-              as="p"
-              preset="muted"
-              class="key-bindings-settings__binding-warning"
-            >
-              {{ conflictMap[binding.id] }}
-            </GText>
+          <div class="key-bindings-settings__actions">
+            <GButton preset="danger" shape="soft" :disabled="pendingCount > 0" @click="openResetModal">
+              Reset all
+            </GButton>
           </div>
-
-          <GKeybindInput
-            :model-value="draftMappings[binding.id]"
-            width="full"
-            size="sm"
-            preset="quiet"
-            clearable
-            :aria-label="`${binding.label} key binding`"
-            @update:model-value="setBinding(binding.id, $event)"
-          />
         </div>
-      </div>
-    </section>
+      </header>
+
+      <GAlert
+        v-if="!websocketConnected && !keyBindingsLoaded"
+        preset="quiet"
+        variant="soft"
+        width="full"
+        title="Keybindings are loading right now"
+        class="key-bindings-settings__alert"
+      >
+        The websocket is disconnected, so this page stays visible and will fill in when the game
+        client reconnects.
+      </GAlert>
+
+      <GAlert
+        v-if="mutationError"
+        preset="warning"
+        variant="soft"
+        width="full"
+        title="Backend adjusted the binding request"
+        class="key-bindings-settings__alert"
+      >
+        {{ mutationError }}
+      </GAlert>
+
+      <GAlert
+        v-if="!hasBindings"
+        preset="quiet"
+        variant="soft"
+        width="full"
+        title="No key bindings available"
+        class="key-bindings-settings__alert"
+      >
+        The game client did not return any key binding categories for this screen yet.
+      </GAlert>
+
+      <section
+        v-for="category in uiCategories"
+        :key="category.id"
+        class="key-bindings-settings__category"
+        :aria-label="`${category.label} key bindings`"
+      >
+        <GDivider :label="category.label" preset="quiet" class="key-bindings-settings__divider" />
+
+        <div class="key-bindings-settings__list">
+          <div
+            v-for="binding in category.bindings"
+            :key="binding.id"
+            class="key-bindings-settings__row"
+            :class="{
+              'key-bindings-settings__row--pending': isBindingPending(binding.id),
+            }"
+          >
+            <div class="key-bindings-settings__binding-copy">
+              <GText as="p" preset="header" class="key-bindings-settings__binding-name">
+                {{ binding.label }}
+              </GText>
+              <GText
+                v-if="isBindingPending(binding.id)"
+                as="p"
+                preset="muted"
+                class="key-bindings-settings__binding-warning"
+              >
+                Waiting for the backend to confirm this binding.
+              </GText>
+            </div>
+
+            <GKeybindInput
+              :model-value="displayedBindings[binding.id] ?? null"
+              width="full"
+              size="sm"
+              preset="quiet"
+              clearable
+              :disabled="isBindingPending(binding.id)"
+              :aria-label="`${binding.label} key binding`"
+              @update:model-value="setBinding(binding.id, $event)"
+            />
+          </div>
+        </div>
+      </section>
+    </template>
 
     <GModal
       v-model="showResetModal"
       width="md"
-      title="Reset key bindings"
-      subtitle="This replaces the current draft with the default mapping set."
-      aria-label="Reset key bindings confirmation"
+      title="Reset all key bindings"
+      subtitle="This sends an immediate reset request to the game client."
+      aria-label="Reset all key bindings confirmation"
     >
       <div class="key-bindings-settings__modal-copy">
         <GText as="p" preset="muted">
-          Unsaved edits will be replaced by the defaults. You can still review the reset result
-          before pressing Save.
+          The backend will apply the default bindings and return the actual accepted values for the
+          whole list.
         </GText>
       </div>
 
       <template #footer>
         <div class="key-bindings-settings__modal-actions">
-          <GButton preset="ghost" shape="soft" @click="closeResetModal">Keep draft</GButton>
-          <GButton preset="danger" shape="soft" @click="resetToDefaults">Reset to defaults</GButton>
+          <GButton preset="ghost" shape="soft" @click="closeResetModal">Keep current bindings</GButton>
+          <GButton preset="danger" shape="soft" @click="resetAllBindings">Reset all now</GButton>
         </div>
       </template>
     </GModal>
@@ -303,28 +457,6 @@ defineExpose({
 .key-bindings-settings__header {
   display: grid;
   gap: 1rem;
-}
-
-.key-bindings-settings__heading {
-  display: grid;
-  gap: 0.55rem;
-}
-
-.key-bindings-settings__title {
-  margin: 0;
-  color: rgba(240, 244, 238, 0.96);
-  font-family: var(--ui-body-font);
-  font-size: clamp(1.9rem, 3vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  text-shadow: 0 0 1.2rem rgba(198, 255, 74, 0.12);
-}
-
-.key-bindings-settings__summary {
-  max-width: 40rem;
-  margin: 0;
 }
 
 .key-bindings-settings__toolbar {
@@ -346,10 +478,6 @@ defineExpose({
 .key-bindings-settings__status {
   margin: 0;
   color: rgba(186, 197, 178, 0.74);
-}
-
-.key-bindings-settings__status--dirty {
-  color: rgba(255, 214, 102, 0.94);
 }
 
 .key-bindings-settings__actions {
@@ -393,19 +521,15 @@ defineExpose({
     0 0.85rem 1.6rem rgba(0, 0, 0, 0.16);
 }
 
-.key-bindings-settings__row--dirty {
-  border-color: rgba(255, 197, 58, 0.26);
+.key-bindings-settings__row--pending {
+  border-color: rgba(255, 197, 58, 0.28);
+  background:
+    linear-gradient(180deg, rgba(35, 29, 15, 0.94), rgba(11, 9, 7, 0.95)),
+    linear-gradient(90deg, rgba(255, 197, 58, 0.08), transparent 34%);
   box-shadow:
     inset 0 0.0625rem 0 rgba(255, 255, 255, 0.05),
     inset 0 0 0 0.0625rem rgba(255, 197, 58, 0.08),
     0 0.85rem 1.6rem rgba(0, 0, 0, 0.16);
-}
-
-.key-bindings-settings__row--error {
-  border-color: rgba(255, 110, 92, 0.28);
-  background:
-    linear-gradient(180deg, rgba(31, 18, 18, 0.94), rgba(11, 8, 8, 0.95)),
-    linear-gradient(90deg, rgba(255, 110, 92, 0.08), transparent 34%);
 }
 
 .key-bindings-settings__binding-name {
@@ -424,7 +548,7 @@ defineExpose({
 
 .key-bindings-settings__binding-warning {
   margin: 0;
-  color: #ffb8b3;
+  color: rgba(255, 219, 134, 0.84);
   font-size: 0.75rem;
   line-height: 1.35;
 }

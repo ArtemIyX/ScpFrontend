@@ -11,6 +11,14 @@ import {
   type ResponseGraphicsSettings as ResponseGraphicsSettingsShape,
 } from '@/proto/gen/graphics_settings'
 import {
+  ResponseKeysSettings,
+  ResponseMultipleKeySetting,
+  ResponseSingleKeySetting,
+  type ResponseKeysSettings as ResponseKeysSettingsShape,
+  type ResponseMultipleKeySetting as ResponseMultipleKeySettingShape,
+  type ResponseSingleKeySetting as ResponseSingleKeySettingShape,
+} from '@/proto/gen/keybings_settings'
+import {
   MessageType,
   PingMessage,
   PongMessage,
@@ -27,6 +35,9 @@ export type ScpIncomingMessageMap = {
   [MessageType.RESPONSE_DISPLAY_SETTINGS]: ResponseDisplaySettingsShape
   [MessageType.RESPONSE_GRAPHICS_SETTINGS]: ResponseGraphicsSettingsShape
   [MessageType.RESPONSE_AUDIO_SETTINGS]: ResponseAudioSettingsShape
+  [MessageType.RESPONSE_ALL_KEY_SETTINGS]: ResponseKeysSettingsShape
+  [MessageType.RESPONSE_KEYS_SETTINGS]: ResponseMultipleKeySettingShape
+  [MessageType.RESPONSE_SINGLE_KEY_SETTING]: ResponseSingleKeySettingShape
 }
 
 export type ScpKnownMessageType = keyof ScpIncomingMessageMap
@@ -56,6 +67,9 @@ export class ScpWebSocketClient extends WebSocketClient {
     this.registerCodec(MessageType.RESPONSE_DISPLAY_SETTINGS, ResponseDisplaySettings)
     this.registerCodec(MessageType.RESPONSE_GRAPHICS_SETTINGS, ResponseGraphicsSettings)
     this.registerCodec(MessageType.RESPONSE_AUDIO_SETTINGS, ResponseAudioSettings)
+    this.registerCodec(MessageType.RESPONSE_ALL_KEY_SETTINGS, ResponseKeysSettings)
+    this.registerCodec(MessageType.RESPONSE_KEYS_SETTINGS, ResponseMultipleKeySetting)
+    this.registerCodec(MessageType.RESPONSE_SINGLE_KEY_SETTING, ResponseSingleKeySetting)
     this.onBytes((bytes) => {
       this.handleEnvelopeBytes(bytes)
     })

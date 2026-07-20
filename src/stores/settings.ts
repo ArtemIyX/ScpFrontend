@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
+import type { KeyBindingSettingCategory } from '@/proto/gen/keybings_settings'
 import { ColorGamut, HdrOutput } from '@/proto/gen/display_settings'
 
 export type FullscreenMode = 'fullscreen' | 'borderless' | 'windowed'
@@ -371,6 +372,8 @@ export const useSettingsStore = defineStore('settings', () => {
   const displaySettingsLoadState = ref<SettingsSectionLoadState>('idle')
   const graphicsSettingsLoadState = ref<SettingsSectionLoadState>('idle')
   const audioSettingsLoadState = ref<SettingsSectionLoadState>('idle')
+  const keyBindingsLoadState = ref<SettingsSectionLoadState>('idle')
+  const keyBindingCategories = ref<KeyBindingSettingCategory[]>([])
 
   function snapshot(): PersistedSettingsState {
     return clonePersistedSettingsState({
@@ -482,6 +485,8 @@ export const useSettingsStore = defineStore('settings', () => {
       inputDevice,
       inputDeviceOptions,
       invertYAxis,
+    keyBindingCategories,
+    keyBindingsLoadState,
     limitFps,
     masterVolume,
     materialQualityLevel,

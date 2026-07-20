@@ -89,21 +89,6 @@ function getActiveModifiers(
   })
 }
 
-function normalizeModifierKey(key: string): string | null {
-  switch (key) {
-    case 'Control':
-      return 'Ctrl'
-    case 'Alt':
-      return 'Alt'
-    case 'Shift':
-      return 'Shift'
-    case 'Meta':
-      return 'Meta'
-    default:
-      return null
-  }
-}
-
 export function normalizeKeyName(key: string): string {
   if (key === ' ') {
     return 'Space'
@@ -121,21 +106,13 @@ export function normalizeKeyName(key: string): string {
 }
 
 export function formatKeybind(
-  event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'>,
+  event: Pick<KeyboardEvent, 'key' | 'code' | 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'>,
 ): string | null {
-  const modifiers = getActiveModifiers(event)
-
-  const modifierKey = normalizeModifierKey(event.key)
-  if (modifierKey) {
-    return modifiers.join('+') || modifierKey
-  }
-
-  const key = normalizeKeyName(event.key)
-  if (key === 'Esc') {
+  if (event.key === 'Escape') {
     return null
   }
 
-  return [...modifiers, key].join('+')
+  return event.code || normalizeKeyName(event.key)
 }
 
 function normalizeMouseButton(button: number): string | null {
