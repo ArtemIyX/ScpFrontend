@@ -44,13 +44,9 @@ const classes = computed(() =>
     </div>
 
     <div class="gloading__body">
-      <div v-if="label || helper" class="gloading__header">
-        <GText v-if="label" as="span" preset="header" class="gloading__label">
-          {{ label }}
-        </GText>
-        <GText v-if="helper" as="span" preset="muted" class="gloading__helper">
-          {{ helper }}
-        </GText>
+      <div v-if="label || labelKey || helper || helperKey" class="gloading__header">
+        <GText v-if="label || labelKey" :text="label" :table="table" :text-key="labelKey" as="span" preset="header" class="gloading__label" />
+        <GText v-if="helper || helperKey" :text="helper" :table="table" :text-key="helperKey" as="span" preset="muted" class="gloading__helper" />
       </div>
 
       <div class="gloading__content">

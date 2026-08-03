@@ -4,8 +4,9 @@
   <section class="display-settings" aria-label="Display settings">
     <GLoading
       v-if="!displaySettingsLoaded"
-      label="Syncing display profile"
-      helper="Waiting for fullscreen, output, accessibility, and camera settings from the game client."
+      table="Local.Settings.Display"
+      label-key="#Loading_DisplayProfile"
+      helper-key="#Helper_DisplayProfile"
       preset="quiet"
       size="lg"
       width="full"
@@ -16,8 +17,9 @@
     <section class="display-settings__group" aria-label="Display output settings">
       <div class="display-settings__stack">
         <GField
-          label="Fullscreen Mode"
-          helper="Windowed Fullscreen locks to the desktop output path."
+          table="Local.Settings.Display"
+          label-key="#Label_FullscreenMode"
+          helper-key="#Helper_FullscreenMode"
           layout="stack"
           width="full"
           class="display-settings__field display-settings__feature-field"
@@ -28,7 +30,8 @@
               placement="top"
               size="lg"
               preset="quiet"
-              :text="displayHelp.fullscreenMode"
+              table="Local.Settings.Display"
+              :text-key="displayHelp.fullscreenMode"
               aria-label="Fullscreen mode help"
             >
               <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -43,18 +46,19 @@
               :preset="fullscreenMode === mode.value ? 'accent' : 'quiet'"
               shape="block"
               size="lg"
+              table="Local.Settings.Display"
+              :text-key="mode.textKey"
               class="display-settings__mode-button"
               @click="applyFullscreenMode(mode.value)"
-            >
-              {{ mode.label }}
-            </GButton>
+            />
           </div>
         </GField>
 
         <div class="display-settings__grid display-settings__grid--duo">
           <GField
-            label="Resolution"
-            helper="Disabled while using desktop-sized borderless mode."
+            table="Local.Settings.Display"
+            label-key="#Label_Resolution"
+            helper-key="#Helper_Resolution"
             width="full"
             class="display-settings__feature-field"
           >
@@ -64,7 +68,8 @@
                 placement="top"
                 size="lg"
                 preset="quiet"
-                :text="displayHelp.resolution"
+                table="Local.Settings.Display"
+                :text-key="displayHelp.resolution"
                 aria-label="Resolution help"
               >
                 <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -77,14 +82,16 @@
               :disabled="resolutionDisabled"
               width="full"
               preset="quiet"
-              placeholder="Select resolution"
+              table="Local.Settings.Display"
+              placeholder-key="#Placeholder_Resolution"
               @change="applyResolution"
             />
           </GField>
 
           <GField
-            label="Sync"
-            helper="Presentation pacing and tear control."
+            table="Local.Settings.Display"
+            label-key="#Label_Sync"
+            helper-key="#Helper_Sync"
             width="full"
             class="display-settings__field display-settings__feature-field"
           >
@@ -94,7 +101,8 @@
                 placement="top"
                 size="lg"
                 preset="quiet"
-                :text="displayHelp.sync"
+                table="Local.Settings.Display"
+                :text-key="displayHelp.sync"
                 aria-label="VSync help"
               >
                 <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -102,14 +110,15 @@
             </template>
 
             <div class="display-settings__toggle-column">
-              <GCheckbox v-model="vsync" preset="quiet" @update:model-value="applyVsync">VSync</GCheckbox>
+              <GCheckbox v-model="vsync" table="Local.Settings.Display" label-key="#Label_VSync" preset="quiet" @update:model-value="applyVsync" />
             </div>
           </GField>
         </div>
 
         <GField
-          label="Frame Rate Limit"
-          helper="Enable the cap, then tune it with the slider or exact numeric input."
+          table="Local.Settings.Display"
+          label-key="#Label_FrameRateLimit"
+          helper-key="#Helper_FrameRateLimit"
           width="full"
           class="display-settings__field display-settings__feature-field"
         >
@@ -119,7 +128,8 @@
               placement="top"
               size="lg"
               preset="quiet"
-              :text="displayHelp.frameRateLimit"
+              table="Local.Settings.Display"
+              :text-key="displayHelp.frameRateLimit"
               aria-label="Frame rate limit help"
             >
               <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -127,9 +137,7 @@
           </template>
 
           <div class="display-settings__fps-group">
-            <GCheckbox v-model="limitFps" preset="quiet" @update:model-value="applyFrameRateLimitToggle">
-              Limit FPS
-            </GCheckbox>
+            <GCheckbox v-model="limitFps" table="Local.Settings.Display" label-key="#Label_LimitFPS" preset="quiet" @update:model-value="applyFrameRateLimitToggle" />
 
             <div class="display-settings__fps-row" :class="{ 'display-settings__fps-row--disabled': fpsControlsDisabled }">
               <GSlider
@@ -176,23 +184,24 @@
               :disabled="hdrToggleDisabled"
               preset="quiet"
               @update:model-value="applyHdrEnabled"
-            >
-              HDR Enable
-            </GCheckbox>
+              table="Local.Settings.Display"
+              label-key="#Label_HDREnable"
+            />
             <GBadge
               v-if="displaySettingsRuntime.showHdrUnsupportedBadge"
               preset="warning"
               variant="soft"
               size="sm"
-            >
-              not supported
-            </GBadge>
+              table="Local.Settings.Display"
+              text-key="#Badge_HDRNotSupported"
+            />
           </div>
 
           <div class="display-settings__grid display-settings__grid--duo">
             <GField
-              label="Output Device"
-              helper="`r.HDR.Display.OutputDevice` mapping"
+              table="Local.Settings.Display"
+              label-key="#Label_HDROutputDevice"
+              helper-key="#Helper_HDROutputDevice"
               width="full"
               class="display-settings__feature-field"
             >
@@ -202,7 +211,8 @@
                   placement="top"
                   size="lg"
                   preset="quiet"
-                  :text="displayHelp.hdrOutputDevice"
+                  table="Local.Settings.Display"
+                  :text-key="displayHelp.hdrOutputDevice"
                   aria-label="HDR output device help"
                 >
                   <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -215,14 +225,16 @@
                 :disabled="hdrControlsDisabled"
                 width="full"
                 preset="quiet"
-                placeholder="Select output device"
+                table="Local.Settings.Display"
+                placeholder-key="#Placeholder_OutputDevice"
                 @change="applyHdrOutputDevice"
               />
             </GField>
 
             <GField
-              label="Color Gamut"
-              helper="`r.HDR.Display.ColorGamut` mapping"
+              table="Local.Settings.Display"
+              label-key="#Label_HDRColorGamut"
+              helper-key="#Helper_HDRColorGamut"
               width="full"
               class="display-settings__feature-field"
             >
@@ -232,7 +244,8 @@
                   placement="top"
                   size="lg"
                   preset="quiet"
-                  :text="displayHelp.hdrColorGamut"
+                  table="Local.Settings.Display"
+                  :text-key="displayHelp.hdrColorGamut"
                   aria-label="HDR color gamut help"
                 >
                   <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -245,7 +258,8 @@
                 :disabled="hdrControlsDisabled"
                 width="full"
                 preset="quiet"
-                placeholder="Select color gamut"
+                table="Local.Settings.Display"
+                placeholder-key="#Placeholder_ColorGamut"
                 @change="applyHdrColorGamut"
               />
             </GField>
@@ -254,22 +268,23 @@
       </div>
     </section>
 
-    <GDivider label="Accessibility" preset="quiet" class="display-settings__divider" />
+    <GDivider table="Local.Settings.Display" label-key="#Divider_Accessibility" preset="quiet" class="display-settings__divider" />
 
     <section class="display-settings__group" aria-label="Accessibility settings">
       <GText as="p" preset="muted" class="display-settings__group-summary">
-        Screen comfort and readability controls.
+        <GText table="Local.Settings.Display" text-key="#Helper_Accessibility" />
       </GText>
 
       <div class="display-settings__triple">
-        <GField label="Brightness" width="full" class="display-settings__feature-field">
+        <GField table="Local.Settings.Display" label-key="#Aria_Brightness" width="full" class="display-settings__feature-field">
           <template #head>
             <GTooltip
               :delay="hoverHelpDelay"
               placement="top"
               size="lg"
               preset="quiet"
-              :text="displayHelp.brightness"
+              table="Local.Settings.Display"
+              :text-key="displayHelp.brightness"
               aria-label="Brightness help"
             >
               <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -288,14 +303,15 @@
           />
         </GField>
 
-        <GField label="Gamma" width="full" class="display-settings__feature-field">
+        <GField table="Local.Settings.Display" label-key="#Aria_Gamma" width="full" class="display-settings__feature-field">
           <template #head>
             <GTooltip
               :delay="hoverHelpDelay"
               placement="top"
               size="lg"
               preset="quiet"
-              :text="displayHelp.gamma"
+              table="Local.Settings.Display"
+              :text-key="displayHelp.gamma"
               aria-label="Gamma help"
             >
               <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -314,14 +330,15 @@
           />
         </GField>
 
-        <GField label="Contrast" width="full" class="display-settings__feature-field">
+        <GField table="Local.Settings.Display" label-key="#Aria_Contrast" width="full" class="display-settings__feature-field">
           <template #head>
             <GTooltip
               :delay="hoverHelpDelay"
               placement="top"
               size="lg"
               preset="quiet"
-              :text="displayHelp.contrast"
+              table="Local.Settings.Display"
+              :text-key="displayHelp.contrast"
               aria-label="Contrast help"
             >
               <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -342,22 +359,23 @@
       </div>
     </section>
 
-    <GDivider label="Camera" preset="quiet" class="display-settings__divider" />
+    <GDivider table="Local.Settings.Display" label-key="#Divider_Camera" preset="quiet" class="display-settings__divider" />
 
     <section class="display-settings__group" aria-label="Camera settings">
       <GText as="p" preset="muted" class="display-settings__group-summary">
-        Visual comfort tuning for movement-heavy first-person play.
+        <GText table="Local.Settings.Display" text-key="#Helper_Camera" />
       </GText>
 
       <div class="display-settings__stack">
-        <GField label="Field Of View" width="full" class="display-settings__feature-field">
+        <GField table="Local.Settings.Display" label-key="#Aria_FieldOfView" width="full" class="display-settings__feature-field">
           <template #head>
             <GTooltip
               :delay="hoverHelpDelay"
               placement="top"
               size="lg"
               preset="quiet"
-              :text="displayHelp.fov"
+              table="Local.Settings.Display"
+              :text-key="displayHelp.fov"
               aria-label="Field of view help"
             >
               <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -378,14 +396,15 @@
         </GField>
 
         <div class="display-settings__grid display-settings__grid--camera">
-          <GField label="Camera Smoothing" width="full" class="display-settings__feature-field">
+          <GField table="Local.Settings.Display" label-key="#Aria_CameraSmoothing" width="full" class="display-settings__feature-field">
             <template #head>
               <GTooltip
                 :delay="hoverHelpDelay"
                 placement="top"
                 size="lg"
                 preset="quiet"
-                :text="displayHelp.cameraSmoothing"
+                table="Local.Settings.Display"
+                :text-key="displayHelp.cameraSmoothing"
                 aria-label="Camera smoothing help"
               >
                 <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -404,14 +423,15 @@
             />
           </GField>
 
-          <GField label="Screen Shake Intensity" width="full" class="display-settings__feature-field">
+          <GField table="Local.Settings.Display" label-key="#Aria_ScreenShakeIntensity" width="full" class="display-settings__feature-field">
             <template #head>
               <GTooltip
                 :delay="hoverHelpDelay"
                 placement="top"
                 size="lg"
                 preset="quiet"
-                :text="displayHelp.screenShakeIntensity"
+                table="Local.Settings.Display"
+                :text-key="displayHelp.screenShakeIntensity"
                 aria-label="Screen shake intensity help"
               >
                 <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>
@@ -430,14 +450,15 @@
             />
           </GField>
 
-          <GField label="Head Bobbing Intensity" width="full" class="display-settings__feature-field">
+          <GField table="Local.Settings.Display" label-key="#Aria_HeadBobbingIntensity" width="full" class="display-settings__feature-field">
             <template #head>
               <GTooltip
                 :delay="hoverHelpDelay"
                 placement="top"
                 size="lg"
                 preset="quiet"
-                :text="displayHelp.headBobbingIntensity"
+                table="Local.Settings.Display"
+                :text-key="displayHelp.headBobbingIntensity"
                 aria-label="Head bobbing intensity help"
               >
                 <GBadge preset="quiet" variant="outline" size="sm" class="display-settings__help-badge">?</GBadge>

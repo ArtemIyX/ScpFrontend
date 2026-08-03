@@ -6,8 +6,13 @@ export type GFieldLayout = 'stack' | 'row'
 
 export interface GFieldProps {
   label?: string
+  /** Localizes the primary label using the surrounding table, or `table` when supplied. */
+  table?: import('@/localization/tags').LocalizationTable
+  labelKey?: string
   helper?: string
+  helperKey?: string
   error?: string
+  errorKey?: string
   preset?: GFieldPreset
   size?: GFieldSize
   width?: GFieldWidth

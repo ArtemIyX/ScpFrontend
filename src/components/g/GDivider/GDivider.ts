@@ -4,6 +4,8 @@ export type GDividerOrientation = 'horizontal' | 'vertical'
 
 export interface GDividerProps {
   label?: string
+  table?: import('@/localization/tags').LocalizationTable
+  labelKey?: string
   preset?: GDividerPreset
   size?: GDividerSize
   orientation?: GDividerOrientation

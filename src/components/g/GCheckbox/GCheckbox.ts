@@ -5,7 +5,10 @@ export type GCheckboxWidth = 'auto' | 'full'
 export interface GCheckboxProps {
   modelValue?: boolean
   label?: string
+  table?: import('@/localization/tags').LocalizationTable
+  labelKey?: string
   helper?: string
+  helperKey?: string
   error?: string
   preset?: GCheckboxPreset
   size?: GCheckboxSize

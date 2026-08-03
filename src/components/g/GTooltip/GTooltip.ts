@@ -4,6 +4,8 @@ export type GTooltipPlacement = 'top' | 'bottom' | 'left' | 'right'
 
 export interface GTooltipProps {
   text?: string
+  table?: import('@/localization/tags').LocalizationTable
+  textKey?: string
   preset?: GTooltipPreset
   size?: GTooltipSize
   placement?: GTooltipPlacement

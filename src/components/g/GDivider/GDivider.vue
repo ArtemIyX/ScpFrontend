@@ -24,9 +24,7 @@ const classes = computed(() =>
 <template>
   <div :class="classes" role="separator" :aria-label="ariaLabel || label">
     <span class="gdivider__line"></span>
-    <GText v-if="label" as="span" preset="caps" class="gdivider__label">
-      {{ label }}
-    </GText>
+    <GText v-if="label || labelKey" :text="label" :table="table" :text-key="labelKey" as="span" preset="caps" class="gdivider__label" />
     <span class="gdivider__line"></span>
   </div>
 </template>

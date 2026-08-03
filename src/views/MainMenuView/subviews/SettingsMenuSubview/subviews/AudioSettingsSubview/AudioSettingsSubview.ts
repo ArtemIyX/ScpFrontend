@@ -2,6 +2,8 @@ import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
+import { provideLocalizationTable } from '@/localization'
+import { LocalizationTable } from '@/localization/tags'
 import {
   AudioMixerType,
   AudioSettingRequestType,
@@ -42,6 +44,7 @@ const talkModes: Array<{ value: AudioTalkModeValue; label: string; helper: strin
 export default defineComponent({
   name: 'AudioSettingsSubview',
   setup() {
+    provideLocalizationTable(LocalizationTable.SettingsAudio)
     const settingsStore = useSettingsStore()
     const {
       ambientVolume,

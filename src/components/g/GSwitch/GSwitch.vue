@@ -65,14 +65,10 @@ function onKeydown(event: KeyboardEvent): void {
 <template>
   <label :class="classes">
     <div class="gswitch__head">
-      <GText v-if="label" as="span" preset="header" class="gswitch__label">
-        {{ label }}
-      </GText>
+      <GText v-if="label" :text="label" as="span" preset="header" class="gswitch__label" />
 
       <div v-if="showState" class="gswitch__state">
-        <GText as="span" preset="caps" class="gswitch__state-text">
-          {{ stateLabel }}
-        </GText>
+        <GText :text="stateLabel" as="span" preset="caps" class="gswitch__state-text" />
       </div>
     </div>
 
@@ -103,12 +99,8 @@ function onKeydown(event: KeyboardEvent): void {
     </div>
 
     <span class="gswitch__meta">
-      <GText v-if="helper && !error" as="span" preset="muted" class="gswitch__helper">
-        {{ helper }}
-      </GText>
-      <GText v-if="error" as="span" preset="muted" class="gswitch__helper gswitch__helper--error">
-        {{ error }}
-      </GText>
+      <GText v-if="helper && !error" :text="helper" as="span" preset="muted" class="gswitch__helper" />
+      <GText v-if="error" :text="error" as="span" preset="muted" class="gswitch__helper gswitch__helper--error" />
     </span>
   </label>
 </template>

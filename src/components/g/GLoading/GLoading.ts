@@ -4,7 +4,10 @@ export type GLoadingWidth = 'auto' | 'full'
 
 export interface GLoadingProps {
   label?: string
+  table?: import('@/localization/tags').LocalizationTable
+  labelKey?: string
   helper?: string
+  helperKey?: string
   preset?: GLoadingPreset
   size?: GLoadingSize
   width?: GLoadingWidth

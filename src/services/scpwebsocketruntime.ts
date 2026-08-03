@@ -1,4 +1,5 @@
 import { MessageType } from '@/proto/gen/scp_webui'
+import { installLocalizationClient } from '@/localization'
 
 import { ScpWebSocketClient } from './scpwebsocketclient'
 
@@ -13,6 +14,7 @@ export function createScpWebSocketClient(host: string): ScpWebSocketClient {
   }
 
   sharedScpWebSocketClient = new ScpWebSocketClient({ url })
+  installLocalizationClient(sharedScpWebSocketClient)
   sharedScpWebSocketClient.onTypedMessage(MessageType.MESSAGE_PONG, (message) => {
     console.log("pong:" + JSON.stringify(message))
   })

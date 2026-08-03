@@ -174,8 +174,8 @@ watch(
         @focus="focusIndex = index"
       >
         <span class="gtabs__tab-body">
-          <GText as="span" preset="header" class="gtabs__label">{{ tab.label }}</GText>
-          <span v-if="tab.description" class="gtabs__description">{{ tab.description }}</span>
+          <GText :text="tab.label" as="span" preset="header" class="gtabs__label" />
+          <GText v-if="tab.description" :text="tab.description" as="span" preset="muted" class="gtabs__description" />
         </span>
 
         <span v-if="tab.count !== undefined" class="gtabs__count">

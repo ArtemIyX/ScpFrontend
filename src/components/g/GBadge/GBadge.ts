@@ -5,6 +5,8 @@ export type GBadgeAs = 'span' | 'div' | 'button'
 
 export interface GBadgeProps {
   text?: string
+  table?: import('@/localization/tags').LocalizationTable
+  textKey?: string
   preset?: GBadgePreset
   variant?: GBadgeVariant
   size?: GBadgeSize

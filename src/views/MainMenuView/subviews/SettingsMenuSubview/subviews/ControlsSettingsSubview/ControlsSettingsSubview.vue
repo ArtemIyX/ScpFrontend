@@ -3,7 +3,7 @@
 <template>
   <section class="controls-settings" aria-label="Controls settings">
     <section class="controls-settings__section" aria-label="Mouse sensitivity settings">
-      <GField label="Mouse Sensitivity" width="full" class="controls-settings__feature-field">
+      <GField table="Local.Settings.Controls" label-key="#Group_MouseSensitivity" width="full" class="controls-settings__feature-field">
         <div class="controls-settings__sensitivity-row">
           <GSlider
             v-model="mouseSensitivity"
@@ -31,29 +31,27 @@
           />
         </div>
 
-        <GText as="p" preset="muted" class="controls-settings__sensitivity-copy">
-          Higher values turn the camera faster for the same mouse movement. Lower values feel steadier and more precise.
-        </GText>
+        <GText table="Local.Settings.Controls" text-key="#Helper_MouseSensitivity" as="p" preset="muted" class="controls-settings__sensitivity-copy" />
       </GField>
     </section>
 
-    <GDivider label="Movement" preset="quiet" class="controls-settings__divider" />
+    <GDivider table="Local.Settings.Controls" label-key="#Divider_Movement" preset="quiet" class="controls-settings__divider" />
 
     <section class="controls-settings__section" aria-label="Movement controls">
       <div class="controls-settings__checkbox-list">
-        <GCheckbox v-model="invertYAxis" preset="quiet">Invert Y axis</GCheckbox>
-        <GCheckbox v-model="holdToSprint" preset="quiet">Hold to sprint</GCheckbox>
-        <GCheckbox v-model="holdToCrouch" preset="quiet">Hold to crouch</GCheckbox>
+        <GCheckbox v-model="invertYAxis" table="Local.Settings.Controls" label-key="#Label_InvertYAxis" preset="quiet" />
+        <GCheckbox v-model="holdToSprint" table="Local.Settings.Controls" label-key="#Label_HoldToSprint" preset="quiet" />
+        <GCheckbox v-model="holdToCrouch" table="Local.Settings.Controls" label-key="#Label_HoldToCrouch" preset="quiet" />
       </div>
     </section>
 
-    <GDivider label="Character" preset="quiet" class="controls-settings__divider" />
+    <GDivider table="Local.Settings.Controls" label-key="#Divider_Character" preset="quiet" class="controls-settings__divider" />
 
     <section class="controls-settings__section" aria-label="Character controls">
       <div class="controls-settings__checkbox-list">
-        <GCheckbox v-model="holdToSelectItem" preset="quiet">Hold to select item</GCheckbox>
-        <GCheckbox v-model="autoSwitchNewItemPickedUp" preset="quiet">Auto-switch newly picked up item</GCheckbox>
-        <GCheckbox v-model="holdToSeeInventory" preset="quiet">Hold to see inventory</GCheckbox>
+        <GCheckbox v-model="holdToSelectItem" table="Local.Settings.Controls" label-key="#Label_HoldToSelectItem" preset="quiet" />
+        <GCheckbox v-model="autoSwitchNewItemPickedUp" table="Local.Settings.Controls" label-key="#Label_AutoSwitchNewItemPickedUp" preset="quiet" />
+        <GCheckbox v-model="holdToSeeInventory" table="Local.Settings.Controls" label-key="#Label_HoldToSeeInventory" preset="quiet" />
       </div>
     </section>
   </section>

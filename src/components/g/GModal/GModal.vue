@@ -113,18 +113,12 @@ onBeforeUnmount(() => {
       >
         <slot name="header" :close="requestClose" :is-open="isOpen">
           <div class="gmodal__heading">
-            <GText v-if="title" as="span" preset="title" class="gmodal__title">
-              {{ title }}
-            </GText>
-            <GText v-if="subtitle" as="span" preset="muted" class="gmodal__subtitle">
-              {{ subtitle }}
-            </GText>
+            <GText v-if="title" :text="title" as="span" preset="title" class="gmodal__title" />
+            <GText v-if="subtitle" :text="subtitle" as="span" preset="muted" class="gmodal__subtitle" />
           </div>
 
           <div class="gmodal__chrome">
-            <GText v-if="status" as="span" preset="caps" class="gmodal__status">
-              {{ status }}
-            </GText>
+            <GText v-if="status" :text="status" as="span" preset="caps" class="gmodal__status" />
 
             <GButton
               v-if="showCloseButton && closable"

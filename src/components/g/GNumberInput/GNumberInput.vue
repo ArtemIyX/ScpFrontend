@@ -146,15 +146,11 @@ function stepBy(direction: 1 | -1): void {
 <template>
   <label :class="classes">
     <div class="gnumberinput__head">
-      <GText v-if="label" as="span" preset="header" class="gnumberinput__label">
-        {{ label }}
-      </GText>
+      <GText v-if="label" :text="label" as="span" preset="header" class="gnumberinput__label" />
 
       <div v-if="showValue" class="gnumberinput__value">
         <slot name="value" :value="modelValue" :text="valueLabel">
-          <GText as="span" preset="caps" class="gnumberinput__value-text">
-            {{ valueLabel }}
-          </GText>
+          <GText :text="valueLabel" as="span" preset="caps" class="gnumberinput__value-text" />
         </slot>
       </div>
     </div>
@@ -217,12 +213,8 @@ function stepBy(direction: 1 | -1): void {
     </div>
 
     <span class="gnumberinput__meta">
-      <GText v-if="helper && !error" as="span" preset="muted" class="gnumberinput__helper">
-        {{ helper }}
-      </GText>
-      <GText v-if="error" as="span" preset="muted" class="gnumberinput__helper gnumberinput__helper--error">
-        {{ error }}
-      </GText>
+      <GText v-if="helper && !error" :text="helper" as="span" preset="muted" class="gnumberinput__helper" />
+      <GText v-if="error" :text="error" as="span" preset="muted" class="gnumberinput__helper gnumberinput__helper--error" />
     </span>
   </label>
 </template>

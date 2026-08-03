@@ -173,8 +173,8 @@ const panelRef = ref<HTMLElement | null>(null)
     <Teleport to="body">
       <transition name="gtooltip-fade">
         <span v-if="!disabled && isVisible" ref="panelRef" :class="classes" :style="panelStyle" role="tooltip">
-          <GText as="span" preset="body" class="gtooltip__text">
-            <slot name="content">{{ text }}</slot>
+          <GText as="span" :text="text" :table="table" :text-key="textKey" preset="body" class="gtooltip__text">
+            <slot name="content" />
           </GText>
         </span>
       </transition>

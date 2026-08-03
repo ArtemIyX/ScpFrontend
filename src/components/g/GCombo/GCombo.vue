@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
 import GText from '../GText/GText.vue'
+import { useLocalizedText } from '@/localization'
 import type { GComboEmits, GComboOption, GComboProps } from './GCombo'
 import { buildGComboClasses } from './GCombo'
 
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<GComboProps>(), {
 })
 
 const attrs = useAttrs()
+const localize = useLocalizedText()
 const emit = defineEmits<GComboEmits>()
 const rootRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
@@ -41,7 +43,7 @@ const selectedOption = computed<GComboOption | null>(() => {
   return props.options.find((option) => option.value === props.modelValue) ?? null
 })
 
-const selectedLabel = computed(() => selectedOption.value?.label ?? '')
+const selectedLabel = computed(() => localize(selectedOption.value?.label) ?? '')
 
 const classes = computed(() =>
   buildGComboClasses({
@@ -293,9 +295,7 @@ watch(
 
 <template>
   <label :class="classes" ref="rootRef">
-    <GText v-if="label" as="span" preset="header" class="gcombo__label">
-      {{ label }}
-    </GText>
+    <GText v-if="label || labelKey" :text="label" :table="table" :text-key="labelKey" as="span" preset="header" class="gcombo__label" />
 
     <div class="gcombo__shell">
       <button
@@ -318,7 +318,7 @@ watch(
         @keydown="onTriggerKeydown"
       >
         <span class="gcombo__value" :class="{ 'gcombo__value--placeholder': !hasValue }">
-          {{ hasValue ? selectedLabel : placeholder || 'Select value' }}
+          {{ hasValue ? selectedLabel : localize(placeholder, placeholderKey ? { table, key: placeholderKey } : undefined) || 'Select value' }}
         </span>
 
         <span class="gcombo__meta">
@@ -340,12 +340,8 @@ watch(
     </div>
 
     <span class="gcombo__meta-row">
-      <GText v-if="helper && !error" as="span" preset="muted" class="gcombo__helper">
-        {{ helper }}
-      </GText>
-      <GText v-if="error" as="span" preset="muted" class="gcombo__helper gcombo__helper--error">
-        {{ error }}
-      </GText>
+      <GText v-if="(helper || helperKey) && !error" :text="helper" :table="table" :text-key="helperKey" as="span" preset="muted" class="gcombo__helper" />
+      <GText v-if="error || errorKey" :text="error" :table="table" :text-key="errorKey" as="span" preset="muted" class="gcombo__helper gcombo__helper--error" />
     </span>
   </label>
 
@@ -380,9 +376,9 @@ watch(
           @mousemove="activeIndex = index"
           @click="selectOption(option)"
         >
-          <span class="gcombo__option-label">{{ option.label }}</span>
+          <span class="gcombo__option-label">{{ localize(option.label) }}</span>
           <span v-if="option.description" class="gcombo__option-description">
-            {{ option.description }}
+            {{ localize(option.description) }}
           </span>
         </button>
       </div>

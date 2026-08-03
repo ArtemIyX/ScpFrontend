@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 
+import { provideLocalizationTable } from '@/localization'
+import { LocalizationTable } from '@/localization/tags'
+
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
 import {
   RequestGetCurrentCulture,
@@ -13,6 +16,7 @@ import { MessageType } from '@/proto/gen/scp_webui'
 import { getScpWebSocketClient } from '@/services'
 
 const language = ref<string | number | null>(null)
+provideLocalizationTable(LocalizationTable.SettingsGameplay)
 const languageOptions = ref<GComboOption[]>([])
 
 let unsubscribeCurrentCulture: (() => void) | null = null

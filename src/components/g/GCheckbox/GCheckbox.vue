@@ -93,17 +93,13 @@ function onKeydown(event: KeyboardEvent): void {
     </span>
 
     <span class="gcheckbox__content">
-      <GText v-if="$slots.default || label" as="span" preset="header" class="gcheckbox__label">
-        <slot>{{ label }}</slot>
+      <GText v-if="$slots.default || label || labelKey" :text="label" :table="table" :text-key="labelKey" as="span" preset="header" class="gcheckbox__label">
+        <slot />
       </GText>
 
       <span class="gcheckbox__meta">
-        <GText v-if="helper && !error" as="span" preset="muted" class="gcheckbox__helper">
-          {{ helper }}
-        </GText>
-        <GText v-if="error" as="span" preset="muted" class="gcheckbox__helper gcheckbox__helper--error">
-          {{ error }}
-        </GText>
+        <GText v-if="helper || helperKey" :text="helper" :table="table" :text-key="helperKey" as="span" preset="muted" class="gcheckbox__helper" />
+        <GText v-if="error" :text="error" as="span" preset="muted" class="gcheckbox__helper gcheckbox__helper--error" />
       </span>
     </span>
   </label>

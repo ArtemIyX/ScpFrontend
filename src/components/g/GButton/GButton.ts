@@ -6,6 +6,8 @@ export type GButtonBackground = boolean
 
 export interface GButtonProps {
   text?: string
+  table?: import('@/localization/tags').LocalizationTable
+  textKey?: string
   preset?: GButtonPreset
   size?: GButtonSize
   shape?: GButtonShape

@@ -58,8 +58,9 @@ enum MessageType
   RESPONSE_KEYS_SETTINGS = 22; // Changed multiple
   RESPONSE_SINGLE_KEY_SETTING = 23; // Changed single,
   
-  REQUEST_GET_LOCAL = 24;
-  RESPONSE_LOCAL = 25;
+  // Localization request/response. Keep the established numeric IDs stable for Unreal.
+  REQUEST_GET_LOCALIZATION = 24;
+  RESPONSE_LOCALIZATION = 25;
   
   REQUEST_GET_CURRENT_CULTURE = 26;
   REQUEST_GET_SUPPORTED_CULTURES = 27;

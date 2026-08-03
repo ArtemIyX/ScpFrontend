@@ -4,8 +4,9 @@
   <section class="audio-settings" aria-label="Audio settings">
     <GLoading
       v-if="!audioSettingsLoaded"
-      label="Syncing audio profile"
-      helper="Waiting for playback devices, capture devices, voice chat, and mixer settings from the game client."
+      table="Local.Settings.Audio"
+      label-key="#Loading_AudioProfile"
+      helper-key="#Helper_AudioProfile"
       preset="quiet"
       size="lg"
       width="full"
@@ -15,8 +16,9 @@
     <template v-else>
     <section class="audio-settings__group" aria-label="Device routing">
       <GField
-        label="Playback Device"
-        helper="Select the device the game should use for audio playback."
+        table="Local.Settings.Audio"
+        label-key="#Label_PlaybackDevice"
+        helper-key="#Helper_PlaybackDevice"
         width="full"
         class="audio-settings__feature-field"
       >
@@ -44,8 +46,9 @@
       </GField>
 
       <GField
-        label="Capture Device"
-        helper="Select the microphone or input source used for voice chat."
+        table="Local.Settings.Audio"
+        label-key="#Label_CaptureDevice"
+        helper-key="#Helper_CaptureDevice"
         width="full"
         class="audio-settings__feature-field"
       >
@@ -73,11 +76,12 @@
       </GField>
     </section>
 
-    <GDivider label="Voice Chat" preset="quiet" class="audio-settings__divider" />
+    <GDivider table="Local.Settings.Audio" label-key="#Divider_VoiceChat" preset="quiet" class="audio-settings__divider" />
 
     <section class="audio-settings__group" aria-label="Voice communication settings">
       <GField
-        label="Talk Mode"
+        table="Local.Settings.Audio"
+        label-key="#Label_TalkMode"
         width="full"
         class="audio-settings__feature-field"
       >
@@ -112,7 +116,8 @@
       </GField>
 
       <GField
-        label="Voice Activation Threshold"
+        table="Local.Settings.Audio"
+        label-key="#Label_VoiceActivationThreshold"
         width="full"
         class="audio-settings__feature-field"
       >
@@ -149,11 +154,12 @@
       </GField>
     </section>
 
-    <GDivider label="Mixer" preset="quiet" class="audio-settings__divider" />
+    <GDivider table="Local.Settings.Audio" label-key="#Divider_Mixer" preset="quiet" class="audio-settings__divider" />
 
     <section class="audio-settings__group" aria-label="Volume mixer">
       <GField
-        label="Master Volume"
+        table="Local.Settings.Audio"
+        label-key="#Label_MasterVolume"
         helper="Global game output level."
         width="full"
         class="audio-settings__feature-field"
@@ -186,7 +192,8 @@
 
       <div class="audio-settings__volume-grid">
         <GField
-          label="Ambient Volume"
+        table="Local.Settings.Audio"
+        label-key="#Label_AmbientVolume"
           helper="Controls wind, machinery hum, room tone, and environmental sound beds."
           width="full"
           class="audio-settings__feature-field"
@@ -218,7 +225,8 @@
         </GField>
 
         <GField
-          label="UI Volume"
+        table="Local.Settings.Audio"
+        label-key="#Label_UIVolume"
           helper="Controls menu clicks, confirmations, alerts, and interface feedback."
           width="full"
           class="audio-settings__feature-field"
@@ -250,7 +258,8 @@
         </GField>
 
         <GField
-          label="Music Volume"
+        table="Local.Settings.Audio"
+        label-key="#Label_MusicVolume"
           helper="Controls background music, ambient score, and menu tracks."
           width="full"
           class="audio-settings__feature-field"
@@ -282,7 +291,8 @@
         </GField>
 
         <GField
-          label="Voice Volume"
+        table="Local.Settings.Audio"
+        label-key="#Label_VoiceVolume"
           helper="Controls teammate comms, radio chatter, and spoken lines."
           width="full"
           class="audio-settings__feature-field"
@@ -314,7 +324,8 @@
         </GField>
 
         <GField
-          label="SFX Volume"
+        table="Local.Settings.Audio"
+        label-key="#Label_SFXVolume"
           helper="Controls footsteps, weapons, impacts, and other world effects."
           width="full"
           class="audio-settings__feature-field audio-settings__volume-wide"

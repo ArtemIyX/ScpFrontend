@@ -96,17 +96,13 @@ function onKeydown(event: KeyboardEvent): void {
     </span>
 
     <span class="gradio__content">
-      <GText v-if="$slots.default || label" as="span" preset="header" class="gradio__label">
-        <slot>{{ label }}</slot>
+      <GText v-if="$slots.default || label" :text="label" as="span" preset="header" class="gradio__label">
+        <slot />
       </GText>
 
       <span class="gradio__meta">
-        <GText v-if="helper && !error" as="span" preset="muted" class="gradio__helper">
-          {{ helper }}
-        </GText>
-        <GText v-if="error" as="span" preset="muted" class="gradio__helper gradio__helper--error">
-          {{ error }}
-        </GText>
+        <GText v-if="helper && !error" :text="helper" as="span" preset="muted" class="gradio__helper" />
+        <GText v-if="error" :text="error" as="span" preset="muted" class="gradio__helper gradio__helper--error" />
       </span>
     </span>
   </label>

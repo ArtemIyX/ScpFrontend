@@ -54,7 +54,7 @@ function onClick(event: MouseEvent): void {
     @pointerleave="emit('pointerleave', $event)"
   >
     <span v-if="dot" class="gbadge__dot" aria-hidden="true"></span>
-    <GText as="span" preset="caps" class="gbadge__text">
+    <GText :text="text" :table="table" :text-key="textKey" as="span" preset="caps" class="gbadge__text">
       <slot>{{ text }}</slot>
     </GText>
   </component>

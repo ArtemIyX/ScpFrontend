@@ -5,7 +5,10 @@ export type GSliderWidth = 'auto' | 'full'
 export interface GSliderProps {
   modelValue?: number | null
   label?: string
+  table?: import('@/localization/tags').LocalizationTable
+  labelKey?: string
   helper?: string
+  helperKey?: string
   error?: string
   preset?: GSliderPreset
   size?: GSliderSize

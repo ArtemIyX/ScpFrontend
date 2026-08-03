@@ -141,9 +141,7 @@ watch(
 
 <template>
   <label v-bind="attrs" :class="classes">
-    <GText v-if="label" as="span" preset="header" class="grail__label">
-      {{ label }}
-    </GText>
+    <GText v-if="label" :text="label" as="span" preset="header" class="grail__label" />
 
     <div
       ref="railRef"
@@ -177,24 +175,20 @@ watch(
           <span class="grail__item-body">
             <span class="grail__item-head">
               <span class="grail__title-row">
-                <span class="grail__item-title">{{ item.title }}</span>
+                <GText :text="item.title" as="span" preset="header" class="grail__item-title" />
                 <span v-if="item.recommended" class="grail__badge">Recommended</span>
               </span>
-              <span v-if="item.meta" class="grail__item-meta">{{ item.meta }}</span>
+              <GText v-if="item.meta" :text="item.meta" as="span" preset="muted" class="grail__item-meta" />
             </span>
-            <span v-if="item.subtitle" class="grail__item-subtitle">{{ item.subtitle }}</span>
+            <GText v-if="item.subtitle" :text="item.subtitle" as="span" preset="muted" class="grail__item-subtitle" />
           </span>
         </slot>
       </button>
     </div>
 
     <span class="grail__meta-row">
-      <GText v-if="helper && !error" as="span" preset="muted" class="grail__helper">
-        {{ helper }}
-      </GText>
-      <GText v-if="error" as="span" preset="muted" class="grail__helper grail__helper--error">
-        {{ error }}
-      </GText>
+      <GText v-if="helper && !error" :text="helper" as="span" preset="muted" class="grail__helper" />
+      <GText v-if="error" :text="error" as="span" preset="muted" class="grail__helper grail__helper--error" />
     </span>
   </label>
 </template>

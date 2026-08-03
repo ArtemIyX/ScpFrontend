@@ -70,7 +70,7 @@ function onClick(event: MouseEvent): void {
           <slot name="icon-left" />
         </span>
 
-        <GText as="span" preset="header" class="gbutton__label">
+        <GText :text="text" :table="table" :text-key="textKey" as="span" preset="header" class="gbutton__label">
           <slot>{{ text }}</slot>
         </GText>
 

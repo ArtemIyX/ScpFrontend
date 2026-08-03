@@ -20,7 +20,7 @@ defineEmits<{
 <template>
   <div class="graphics-override-row">
     <div class="graphics-override-row__copy">
-      <GText as="span" class="graphics-override-row__label">{{ label }}</GText>
+      <GText :text="ariaLabel" as="span" class="graphics-override-row__label" />
       <div class="graphics-override-row__meta">
         <GText as="span" preset="muted" class="graphics-override-row__cvar">{{ cvar }}</GText>
         <GText as="span" preset="muted" class="graphics-override-row__presets">{{ presetValues }}</GText>

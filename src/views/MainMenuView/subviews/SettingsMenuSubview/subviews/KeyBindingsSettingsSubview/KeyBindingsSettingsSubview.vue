@@ -2,6 +2,9 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import { provideLocalizationTable } from '@/localization'
+import { LocalizationTable } from '@/localization/tags'
+
 import GAlert from '@/components/g/GAlert/GAlert.vue'
 import GButton from '@/components/g/GButton/GButton.vue'
 import GDivider from '@/components/g/GDivider/GDivider.vue'
@@ -9,6 +12,8 @@ import GKeybindInput from '@/components/g/GKeybindInput/GKeybindInput.vue'
 import GLoading from '@/components/g/GLoading/GLoading.vue'
 import GModal from '@/components/g/GModal/GModal.vue'
 import GText from '@/components/g/GText/GText.vue'
+
+provideLocalizationTable(LocalizationTable.SettingsKeyBindings)
 import {
   RequestClearKeySettings,
   RequestGetKeysSettings,

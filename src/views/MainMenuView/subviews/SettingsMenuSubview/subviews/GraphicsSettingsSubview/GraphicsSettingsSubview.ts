@@ -1,4 +1,6 @@
 import { computed, defineComponent, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { provideLocalizationTable } from '@/localization'
+import { LocalizationTable } from '@/localization/tags'
 import { storeToRefs } from 'pinia'
 
 import type { GComboOption } from '@/components/g/GCombo/GCombo'
@@ -578,6 +580,7 @@ export default defineComponent({
     GraphicsPresetField,
   },
   setup() {
+    provideLocalizationTable(LocalizationTable.SettingsGraphics)
     const settingsStore = useSettingsStore()
     const {
       antiAliasingMethod,

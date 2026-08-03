@@ -90,15 +90,11 @@ function onKeydown(event: KeyboardEvent): void {
 <template>
   <label :class="classes">
     <div class="gslider__head">
-      <GText v-if="label" as="span" preset="header" class="gslider__label">
-        {{ label }}
-      </GText>
+      <GText v-if="label || labelKey" :text="label" :table="table" :text-key="labelKey" as="span" preset="header" class="gslider__label" />
 
       <div v-if="showValue" class="gslider__value">
         <slot name="value" :value="numericValue" :text="valueLabel">
-          <GText as="span" preset="caps" class="gslider__value-text">
-            {{ valueLabel }}
-          </GText>
+          <GText :text="valueLabel" as="span" preset="caps" class="gslider__value-text" />
         </slot>
       </div>
     </div>
@@ -136,12 +132,8 @@ function onKeydown(event: KeyboardEvent): void {
     </div>
 
     <span class="gslider__meta">
-      <GText v-if="helper && !error" as="span" preset="muted" class="gslider__helper">
-        {{ helper }}
-      </GText>
-      <GText v-if="error" as="span" preset="muted" class="gslider__helper gslider__helper--error">
-        {{ error }}
-      </GText>
+      <GText v-if="helper || helperKey" :text="helper" :table="table" :text-key="helperKey" as="span" preset="muted" class="gslider__helper" />
+      <GText v-if="error" :text="error" as="span" preset="muted" class="gslider__helper gslider__helper--error" />
     </span>
   </label>
 </template>

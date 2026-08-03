@@ -14,9 +14,14 @@ export interface GComboProps {
   modelValue?: string | number | null
   options?: GComboOption[]
   label?: string
+  table?: import('@/localization/tags').LocalizationTable
+  labelKey?: string
   helper?: string
+  helperKey?: string
   error?: string
+  errorKey?: string
   placeholder?: string
+  placeholderKey?: string
   preset?: GComboPreset
   size?: GComboSize
   width?: GComboWidth

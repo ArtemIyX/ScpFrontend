@@ -230,9 +230,7 @@ watch(
 
 <template>
   <label :class="classes">
-    <GText v-if="label" as="span" preset="header" class="gkeybindinput__label">
-      {{ label }}
-    </GText>
+    <GText v-if="label" :text="label" as="span" preset="header" class="gkeybindinput__label" />
 
     <div class="gkeybindinput__control">
       <div
@@ -286,16 +284,14 @@ watch(
     </div>
 
     <div class="gkeybindinput__meta">
-      <GText v-if="helper && !error" as="span" preset="muted" class="gkeybindinput__helper">
-        {{ helper }}
-      </GText>
+      <GText v-if="helper && !error" :text="helper" as="span" preset="muted" class="gkeybindinput__helper" />
       <GText
         v-if="error"
         as="span"
         preset="muted"
         class="gkeybindinput__helper gkeybindinput__helper--error"
       >
-        {{ error }}
+        <GText :text="error" as="span" preset="muted" />
       </GText>
     </div>
   </label>

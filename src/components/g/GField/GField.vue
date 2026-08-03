@@ -33,9 +33,7 @@ const classes = computed(() =>
 <template>
   <section v-bind="attrs" :class="classes" :aria-label="ariaLabel" :title="title">
     <div class="gfield__head">
-      <GText v-if="label" as="span" preset="header" class="gfield__label">
-        {{ label }}
-      </GText>
+      <GText v-if="label || labelKey" :text="label" :table="table" :text-key="labelKey" as="span" preset="header" class="gfield__label" />
 
       <slot name="head" />
     </div>
@@ -45,12 +43,8 @@ const classes = computed(() =>
     </div>
 
     <div class="gfield__meta">
-      <GText v-if="helper && !error" as="span" preset="muted" class="gfield__helper">
-        {{ helper }}
-      </GText>
-      <GText v-if="error" as="span" preset="muted" class="gfield__helper gfield__helper--error">
-        {{ error }}
-      </GText>
+      <GText v-if="(helper || helperKey) && !error" :text="helper" :table="table" :text-key="helperKey" as="span" preset="muted" class="gfield__helper" />
+      <GText v-if="error || errorKey" :text="error" :table="table" :text-key="errorKey" as="span" preset="muted" class="gfield__helper gfield__helper--error" />
       <slot name="meta" />
     </div>
   </section>

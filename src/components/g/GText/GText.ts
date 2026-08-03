@@ -9,6 +9,9 @@ export type GTextPreset =
 
 export interface GTextProps {
   text?: string
+  /** Gameplay-tag table and localization key. The key is rendered until Unreal replies. */
+  table?: import('@/localization/tags').LocalizationTable
+  textKey?: string
   preset?: GTextPreset
   as?: 'p' | 'span' | 'div'
 }

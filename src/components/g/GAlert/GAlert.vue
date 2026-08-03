@@ -68,9 +68,7 @@ function onClose(): void {
         <header v-if="slots.header || title || closable" class="galert__header">
           <slot name="header" :close="onClose">
             <div class="galert__heading">
-              <GText v-if="title" as="span" preset="header" class="galert__title">
-                {{ title }}
-              </GText>
+              <GText v-if="title" :text="title" as="span" preset="header" class="galert__title" />
             </div>
 
             <div class="galert__chrome">
@@ -91,7 +89,7 @@ function onClose(): void {
         </header>
 
         <div class="galert__message">
-          <slot>{{ message }}</slot>
+          <slot><GText :text="message" as="span" /></slot>
         </div>
 
         <footer v-if="slots.footer" class="galert__footer">

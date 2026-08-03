@@ -37,13 +37,15 @@ export enum MessageType {
   RESPONSE_KEYS_SETTINGS = 22,
   /** RESPONSE_SINGLE_KEY_SETTING - Changed single, */
   RESPONSE_SINGLE_KEY_SETTING = 23,
-  REQUEST_GET_LOCAL = 24,
-  RESPONSE_LOCAL = 25,
+  /** REQUEST_GET_LOCALIZATION - Localization request/response. Keep the established numeric IDs stable for Unreal. */
+  REQUEST_GET_LOCALIZATION = 24,
+  RESPONSE_LOCALIZATION = 25,
   REQUEST_GET_CURRENT_CULTURE = 26,
   REQUEST_GET_SUPPORTED_CULTURES = 27,
   RESPONSE_CURRENT_CULTURE = 28,
   RESPONSE_SUPPORTED_CULTURES = 29,
   MESSAGE_CULTURE_CHANGED = 30,
+  REQUEST_SET_CULTURE = 31,
   UNRECOGNIZED = -1,
 }
 
@@ -119,11 +121,11 @@ export function messageTypeFromJSON(object: any): MessageType {
     case "RESPONSE_SINGLE_KEY_SETTING":
       return MessageType.RESPONSE_SINGLE_KEY_SETTING;
     case 24:
-    case "REQUEST_GET_LOCAL":
-      return MessageType.REQUEST_GET_LOCAL;
+    case "REQUEST_GET_LOCALIZATION":
+      return MessageType.REQUEST_GET_LOCALIZATION;
     case 25:
-    case "RESPONSE_LOCAL":
-      return MessageType.RESPONSE_LOCAL;
+    case "RESPONSE_LOCALIZATION":
+      return MessageType.RESPONSE_LOCALIZATION;
     case 26:
     case "REQUEST_GET_CURRENT_CULTURE":
       return MessageType.REQUEST_GET_CURRENT_CULTURE;
@@ -139,6 +141,9 @@ export function messageTypeFromJSON(object: any): MessageType {
     case 30:
     case "MESSAGE_CULTURE_CHANGED":
       return MessageType.MESSAGE_CULTURE_CHANGED;
+    case 31:
+    case "REQUEST_SET_CULTURE":
+      return MessageType.REQUEST_SET_CULTURE;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -194,10 +199,10 @@ export function messageTypeToJSON(object: MessageType): string {
       return "RESPONSE_KEYS_SETTINGS";
     case MessageType.RESPONSE_SINGLE_KEY_SETTING:
       return "RESPONSE_SINGLE_KEY_SETTING";
-    case MessageType.REQUEST_GET_LOCAL:
-      return "REQUEST_GET_LOCAL";
-    case MessageType.RESPONSE_LOCAL:
-      return "RESPONSE_LOCAL";
+    case MessageType.REQUEST_GET_LOCALIZATION:
+      return "REQUEST_GET_LOCALIZATION";
+    case MessageType.RESPONSE_LOCALIZATION:
+      return "RESPONSE_LOCALIZATION";
     case MessageType.REQUEST_GET_CURRENT_CULTURE:
       return "REQUEST_GET_CURRENT_CULTURE";
     case MessageType.REQUEST_GET_SUPPORTED_CULTURES:
@@ -208,6 +213,8 @@ export function messageTypeToJSON(object: MessageType): string {
       return "RESPONSE_SUPPORTED_CULTURES";
     case MessageType.MESSAGE_CULTURE_CHANGED:
       return "MESSAGE_CULTURE_CHANGED";
+    case MessageType.REQUEST_SET_CULTURE:
+      return "REQUEST_SET_CULTURE";
     case MessageType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
