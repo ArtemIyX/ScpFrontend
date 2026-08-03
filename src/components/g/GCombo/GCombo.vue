@@ -140,10 +140,10 @@ function selectOption(option: GComboOption): void {
     return
   }
 
+  closeMenu()
   emit('update:modelValue', option.value)
   emit('change', option.value, option)
   emit('select', option)
-  closeMenu()
 }
 
 function clearValue(): void {

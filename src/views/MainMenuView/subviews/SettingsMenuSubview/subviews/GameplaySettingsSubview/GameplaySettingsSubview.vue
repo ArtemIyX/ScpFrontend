@@ -55,6 +55,8 @@ function applyCultureChange(value: string | number | null): void {
     return
   }
 
+  language.value = value
+
   const client = getScpWebSocketClient()
   if (!client || client.connectionState !== 'open') {
     return
@@ -101,10 +103,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="settings-tab-view" aria-label="Gameplay settings">
-    <h1 class="settings-tab-view__title">Gameplay</h1>
-
-    <GField label="Language" width="full" class="settings-tab-view__language-field">
+  <GField label="Language" width="full" class="settings-tab-view__language-field">
       <GCombo
         v-model="language"
         :options="languageOptions"
@@ -114,7 +113,6 @@ onUnmounted(() => {
         @change="applyCultureChange"
       />
     </GField>
-  </section>
 </template>
 
 <style scoped>
@@ -137,7 +135,6 @@ onUnmounted(() => {
 }
 
 .settings-tab-view__language-field {
-  margin-top: 2rem;
   max-width: 28rem;
 }
 </style>
