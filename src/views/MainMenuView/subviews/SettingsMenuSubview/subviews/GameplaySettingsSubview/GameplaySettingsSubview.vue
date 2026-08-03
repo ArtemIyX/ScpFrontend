@@ -1,6 +1,27 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const language = ref('en')
+
+const languageOptions = [
+  { value: 'en', label: 'English' },
+  { value: 'ru', label: 'Русский' },
+]
+</script>
+
 <template>
   <section class="settings-tab-view" aria-label="Gameplay settings">
     <h1 class="settings-tab-view__title">Gameplay</h1>
+
+    <GField label="Language" width="full" class="settings-tab-view__language-field">
+      <GCombo
+        v-model="language"
+        :options="languageOptions"
+        width="full"
+        preset="quiet"
+        aria-label="Language"
+      />
+    </GField>
   </section>
 </template>
 
@@ -21,5 +42,10 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-shadow: 0 0 1.2rem rgba(198, 255, 74, 0.12);
+}
+
+.settings-tab-view__language-field {
+  margin-top: 2rem;
+  max-width: 28rem;
 }
 </style>
