@@ -1,0 +1,51 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+package scp.webui.v1;
+
+message LocalizationRequestData
+{
+  string table = 1;
+  string key = 2;
+}
+
+message LocalizationResponseData
+{
+  LocalizationRequestData request = 1;
+  string response = 2;
+}
+
+message RequestGetLocalization
+{
+  repeated LocalizationRequestData payload = 1;
+}
+
+message ResponseLocalization
+{
+  repeated LocalizationResponseData payload = 1;
+}
+
+message RequestGetCurrentCulture
+{
+  uint32 empty = 1;
+}
+
+message RequestGetSupportedCultures
+{
+  uint32 empty = 1;
+}
+
+message ResponseCurrentCulture
+{
+  string culture_code = 1;
+}
+
+message CultureData
+{
+  string code = 1;
+  string name = 2;
+}
+
+message ResponseSupportedCultures
+{
+  repeated CultureData cultures = 1;
+}

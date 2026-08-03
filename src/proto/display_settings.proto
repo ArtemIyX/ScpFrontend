@@ -117,7 +117,7 @@ message DisplaySliderSetRequest
 }
 
 // Requests one display settings section from the backend.
-message RequestGetDisplaySettings 
+message RequestGetDisplaySettings
 {
   DisplaySettingRequestType request_type = 1;
 }
@@ -149,7 +149,7 @@ message ResponseDisplaySettings
     VSyncContent vsync = 4;
     HdrResponse hdr = 5;
     FrameLimitContent frame_limit = 6;
-    
+
     AccessibilityResponse sliders_accessibility = 7;
     CameraResponse sliders_camera = 8;
   }
