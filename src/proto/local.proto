@@ -49,3 +49,13 @@ message ResponseSupportedCultures
 {
   repeated CultureData cultures = 1;
 }
+
+message MessageCultureChanged
+{
+  CultureData payload = 1;
+}
+
+message RequestSetCulture
+{
+  string code = 1;
+}

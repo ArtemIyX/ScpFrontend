@@ -43,6 +43,7 @@ export enum MessageType {
   REQUEST_GET_SUPPORTED_CULTURES = 27,
   RESPONSE_CURRENT_CULTURE = 28,
   RESPONSE_SUPPORTED_CULTURES = 29,
+  MESSAGE_CULTURE_CHANGED = 30,
   UNRECOGNIZED = -1,
 }
 
@@ -135,6 +136,9 @@ export function messageTypeFromJSON(object: any): MessageType {
     case 29:
     case "RESPONSE_SUPPORTED_CULTURES":
       return MessageType.RESPONSE_SUPPORTED_CULTURES;
+    case 30:
+    case "MESSAGE_CULTURE_CHANGED":
+      return MessageType.MESSAGE_CULTURE_CHANGED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -202,6 +206,8 @@ export function messageTypeToJSON(object: MessageType): string {
       return "RESPONSE_CURRENT_CULTURE";
     case MessageType.RESPONSE_SUPPORTED_CULTURES:
       return "RESPONSE_SUPPORTED_CULTURES";
+    case MessageType.MESSAGE_CULTURE_CHANGED:
+      return "MESSAGE_CULTURE_CHANGED";
     case MessageType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";

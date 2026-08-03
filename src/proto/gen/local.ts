@@ -48,6 +48,10 @@ export interface ResponseSupportedCultures {
   cultures: CultureData[];
 }
 
+export interface MessageCultureChanged {
+  payload: CultureData | undefined;
+}
+
 function createBaseLocalizationRequestData(): LocalizationRequestData {
   return { table: "", key: "" };
 }
@@ -640,6 +644,66 @@ export const ResponseSupportedCultures: MessageFns<ResponseSupportedCultures> = 
   fromPartial<I extends Exact<DeepPartial<ResponseSupportedCultures>, I>>(object: I): ResponseSupportedCultures {
     const message = createBaseResponseSupportedCultures();
     message.cultures = object.cultures?.map((e) => CultureData.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseMessageCultureChanged(): MessageCultureChanged {
+  return { payload: undefined };
+}
+
+export const MessageCultureChanged: MessageFns<MessageCultureChanged> = {
+  encode(message: MessageCultureChanged, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.payload !== undefined) {
+      CultureData.encode(message.payload, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MessageCultureChanged {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMessageCultureChanged();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.payload = CultureData.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MessageCultureChanged {
+    return { payload: isSet(object.payload) ? CultureData.fromJSON(object.payload) : undefined };
+  },
+
+  toJSON(message: MessageCultureChanged): unknown {
+    const obj: any = {};
+    if (message.payload !== undefined) {
+      obj.payload = CultureData.toJSON(message.payload);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MessageCultureChanged>, I>>(base?: I): MessageCultureChanged {
+    return MessageCultureChanged.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MessageCultureChanged>, I>>(object: I): MessageCultureChanged {
+    const message = createBaseMessageCultureChanged();
+    message.payload = (object.payload !== undefined && object.payload !== null)
+      ? CultureData.fromPartial(object.payload)
+      : undefined;
     return message;
   },
 };
