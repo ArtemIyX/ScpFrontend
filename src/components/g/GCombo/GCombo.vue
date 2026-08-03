@@ -22,12 +22,14 @@ const props = withDefaults(defineProps<GComboProps>(), {
 const attrs = useAttrs()
 const emit = defineEmits<GComboEmits>()
 const rootRef = ref<HTMLElement | null>(null)
+const menuRef = ref<HTMLElement | null>(null)
 const triggerRef = ref<HTMLButtonElement | null>(null)
 const listboxId = `gcombo-listbox-${Math.random().toString(36).slice(2, 10)}`
 const isOpen = ref(false)
 const activeIndex = ref(-1)
 const openDirection = ref<'down' | 'up'>('down')
 const suppressBlurClose = ref(false)
+const menuStyle = ref<Record<string, string>>({})
 
 const hasValue = computed(() => props.modelValue !== null && props.modelValue !== undefined)
 
@@ -79,6 +81,19 @@ function updateOpenDirection(): void {
 
   openDirection.value =
     spaceBelow < estimatedMenuHeight && spaceAbove > spaceBelow ? 'up' : 'down'
+
+  menuStyle.value =
+    openDirection.value === 'up'
+      ? {
+          bottom: `${window.innerHeight - rect.top + 8}px`,
+          left: `${rect.left}px`,
+          width: `${rect.width}px`,
+        }
+      : {
+          top: `${rect.bottom + 8}px`,
+          left: `${rect.left}px`,
+          width: `${rect.width}px`,
+        }
 }
 
 function openMenu(): void {
@@ -95,7 +110,7 @@ function openMenu(): void {
   updateOpenDirection()
 
   nextTick(() => {
-    const option = rootRef.value?.querySelector<HTMLElement>(`[data-gcombo-option-index="${activeIndex.value}"]`)
+    const option = menuRef.value?.querySelector<HTMLElement>(`[data-gcombo-option-index="${activeIndex.value}"]`)
     if (option && typeof option.scrollIntoView === 'function') {
       option.scrollIntoView({ block: 'nearest' })
     }
@@ -220,7 +235,7 @@ function onBlur(event: FocusEvent): void {
     }
 
     const active = document.activeElement as Node | null
-    if (!rootRef.value?.contains(active)) {
+    if (!rootRef.value?.contains(active) && !menuRef.value?.contains(active)) {
       closeMenu()
     }
   }, 0)
@@ -234,7 +249,7 @@ function onPointerDownOutside(event: MouseEvent): void {
   }
 
   const target = event.target as Node | null
-  if (target && !rootRef.value.contains(target)) {
+  if (target && !rootRef.value.contains(target) && !menuRef.value?.contains(target)) {
     closeMenu()
   }
 }
@@ -322,41 +337,6 @@ watch(
         ×
       </button>
 
-      <transition name="gcombo-pop">
-        <div
-          v-if="isOpen"
-          :id="listboxId"
-          class="gcombo__menu"
-          :class="{ 'gcombo__menu--up': openDirection === 'up' }"
-          role="listbox"
-          @pointerdown="onMenuPointerDown"
-          @wheel="onMenuWheel"
-        >
-          <button
-            v-for="(option, index) in options"
-            :key="option.value"
-            type="button"
-            class="gcombo__option"
-            :class="{
-              'gcombo__option--active': index === activeIndex,
-              'gcombo__option--selected': option.value === modelValue,
-              'gcombo__option--disabled': option.disabled,
-            }"
-            role="option"
-            :aria-selected="option.value === modelValue ? 'true' : 'false'"
-            :data-gcombo-option-index="index"
-            :disabled="option.disabled"
-            @mousedown.prevent
-            @mousemove="activeIndex = index"
-            @click="selectOption(option)"
-          >
-            <span class="gcombo__option-label">{{ option.label }}</span>
-            <span v-if="option.description" class="gcombo__option-description">
-              {{ option.description }}
-            </span>
-          </button>
-        </div>
-      </transition>
     </div>
 
     <span class="gcombo__meta-row">
@@ -368,6 +348,46 @@ watch(
       </GText>
     </span>
   </label>
+
+  <Teleport to="body">
+    <transition name="gcombo-pop">
+      <div
+        v-if="isOpen"
+        :id="listboxId"
+        ref="menuRef"
+        class="gcombo__menu"
+        :class="{ 'gcombo__menu--up': openDirection === 'up' }"
+        :style="menuStyle"
+        role="listbox"
+        @pointerdown="onMenuPointerDown"
+        @wheel="onMenuWheel"
+      >
+        <button
+          v-for="(option, index) in options"
+          :key="option.value"
+          type="button"
+          class="gcombo__option"
+          :class="{
+            'gcombo__option--active': index === activeIndex,
+            'gcombo__option--selected': option.value === modelValue,
+            'gcombo__option--disabled': option.disabled,
+          }"
+          role="option"
+          :aria-selected="option.value === modelValue ? 'true' : 'false'"
+          :data-gcombo-option-index="index"
+          :disabled="option.disabled"
+          @mousedown.prevent
+          @mousemove="activeIndex = index"
+          @click="selectOption(option)"
+        >
+          <span class="gcombo__option-label">{{ option.label }}</span>
+          <span v-if="option.description" class="gcombo__option-description">
+            {{ option.description }}
+          </span>
+        </button>
+      </div>
+    </transition>
+  </Teleport>
 </template>
 
-<style scoped src="./GCombo.css"></style>
+<style src="./GCombo.css"></style>
