@@ -19,6 +19,14 @@ import {
   type ResponseSingleKeySetting as ResponseSingleKeySettingShape,
 } from '@/proto/gen/keybings_settings'
 import {
+  MessageCultureChanged,
+  ResponseCurrentCulture,
+  ResponseSupportedCultures,
+  type MessageCultureChanged as MessageCultureChangedShape,
+  type ResponseCurrentCulture as ResponseCurrentCultureShape,
+  type ResponseSupportedCultures as ResponseSupportedCulturesShape,
+} from '@/proto/gen/local'
+import {
   MessageType,
   PingMessage,
   PongMessage,
@@ -38,6 +46,9 @@ export type ScpIncomingMessageMap = {
   [MessageType.RESPONSE_ALL_KEY_SETTINGS]: ResponseKeysSettingsShape
   [MessageType.RESPONSE_KEYS_SETTINGS]: ResponseMultipleKeySettingShape
   [MessageType.RESPONSE_SINGLE_KEY_SETTING]: ResponseSingleKeySettingShape
+  [MessageType.RESPONSE_CURRENT_CULTURE]: ResponseCurrentCultureShape
+  [MessageType.RESPONSE_SUPPORTED_CULTURES]: ResponseSupportedCulturesShape
+  [MessageType.MESSAGE_CULTURE_CHANGED]: MessageCultureChangedShape
 }
 
 export type ScpKnownMessageType = keyof ScpIncomingMessageMap
@@ -70,6 +81,9 @@ export class ScpWebSocketClient extends WebSocketClient {
     this.registerCodec(MessageType.RESPONSE_ALL_KEY_SETTINGS, ResponseKeysSettings)
     this.registerCodec(MessageType.RESPONSE_KEYS_SETTINGS, ResponseMultipleKeySetting)
     this.registerCodec(MessageType.RESPONSE_SINGLE_KEY_SETTING, ResponseSingleKeySetting)
+    this.registerCodec(MessageType.RESPONSE_CURRENT_CULTURE, ResponseCurrentCulture)
+    this.registerCodec(MessageType.RESPONSE_SUPPORTED_CULTURES, ResponseSupportedCultures)
+    this.registerCodec(MessageType.MESSAGE_CULTURE_CHANGED, MessageCultureChanged)
     this.onBytes((bytes) => {
       this.handleEnvelopeBytes(bytes)
     })

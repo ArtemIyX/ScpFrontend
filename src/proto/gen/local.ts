@@ -52,6 +52,10 @@ export interface MessageCultureChanged {
   payload: CultureData | undefined;
 }
 
+export interface RequestSetCulture {
+  code: string;
+}
+
 function createBaseLocalizationRequestData(): LocalizationRequestData {
   return { table: "", key: "" };
 }
@@ -704,6 +708,64 @@ export const MessageCultureChanged: MessageFns<MessageCultureChanged> = {
     message.payload = (object.payload !== undefined && object.payload !== null)
       ? CultureData.fromPartial(object.payload)
       : undefined;
+    return message;
+  },
+};
+
+function createBaseRequestSetCulture(): RequestSetCulture {
+  return { code: "" };
+}
+
+export const RequestSetCulture: MessageFns<RequestSetCulture> = {
+  encode(message: RequestSetCulture, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestSetCulture {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestSetCulture();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.code = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestSetCulture {
+    return { code: isSet(object.code) ? globalThis.String(object.code) : "" };
+  },
+
+  toJSON(message: RequestSetCulture): unknown {
+    const obj: any = {};
+    if (message.code !== "") {
+      obj.code = message.code;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestSetCulture>, I>>(base?: I): RequestSetCulture {
+    return RequestSetCulture.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestSetCulture>, I>>(object: I): RequestSetCulture {
+    const message = createBaseRequestSetCulture();
+    message.code = object.code ?? "";
     return message;
   },
 };
