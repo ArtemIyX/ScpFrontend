@@ -2,6 +2,8 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import {
+  connectScpWebSocket,
+  destroyScpWebSocketClient,
   messageTypeName,
   onScpWebSocketPacket,
   onScpWebSocketRuntimeState,
@@ -27,6 +29,9 @@ type ScrollFollowState = {
 
 const MAX_PACKET_ENTRIES = 500
 const isDebugPanelOpen = ref(false)
+const debugHost = ref('localhost')
+const debugPort = ref('18181')
+const connectionError = ref('')
 const sentPackets = ref<DebugPacketEntry[]>([])
 const receivedPackets = ref<DebugPacketEntry[]>([])
 const waitingPackets = ref<DebugWaitingEntry[]>([])
@@ -85,6 +90,27 @@ const socketState = computed(() => {
   }
 })
 
+const connectionLocked = computed(
+  () =>
+    runtimeSnapshot.value.connectionState === 'connecting' ||
+    runtimeSnapshot.value.connectionState === 'open',
+)
+const connectionActionLabel = computed(() => {
+  if (runtimeSnapshot.value.connectionState === 'connecting') {
+    return 'Connecting...'
+  }
+
+  return runtimeSnapshot.value.connectionState === 'open' ? 'Disconnect' : 'Connect'
+})
+const connectionActionDisabled = computed(() => {
+  if (connectionLocked.value) {
+    return runtimeSnapshot.value.connectionState === 'connecting'
+  }
+
+  const port = Number(debugPort.value)
+  return !debugHost.value.trim() || !Number.isInteger(port) || port < 1 || port > 65535
+})
+
 function appendPacketEntry(target: typeof sentPackets, event: ScpPacketEvent): void {
   target.value = [
     ...target.value.slice(-(MAX_PACKET_ENTRIES - 1)),
@@ -125,6 +151,42 @@ function clearPacketLog(): void {
   sentPackets.value = []
   receivedPackets.value = []
   waitingPackets.value = []
+}
+
+function connectDebugSocket(): void {
+  if (connectionLocked.value) {
+    return
+  }
+
+  const host = debugHost.value.trim()
+  const port = Number(debugPort.value)
+  if (!host || !Number.isInteger(port) || port < 1 || port > 65535) {
+    connectionError.value = 'Enter a host and a port from 1 to 65535.'
+    return
+  }
+
+  connectionError.value = ''
+
+  try {
+    connectScpWebSocket(host, port)
+  } catch (error) {
+    connectionError.value = error instanceof Error ? error.message : 'Failed to start connection.'
+  }
+}
+
+function disconnectDebugSocket(): void {
+  if (runtimeSnapshot.value.connectionState === 'open') {
+    destroyScpWebSocketClient()
+  }
+}
+
+function handleConnectionAction(): void {
+  if (runtimeSnapshot.value.connectionState === 'open') {
+    disconnectDebugSocket()
+    return
+  }
+
+  connectDebugSocket()
 }
 
 function toggleDebugPanel(): void {
@@ -250,6 +312,20 @@ onMounted(() => {
   unsubscribePacketEvents = onScpWebSocketPacket(handlePacket)
   unsubscribeRuntimeState = onScpWebSocketRuntimeState((snapshot) => {
     runtimeSnapshot.value = snapshot
+    if (snapshot.socketUrl) {
+      try {
+        const parsed = new URL(snapshot.socketUrl)
+        debugHost.value = parsed.hostname || debugHost.value
+        debugPort.value = parsed.port || debugPort.value
+      } catch {
+        // The socket URL is already rendered in the status header.
+      }
+    }
+
+    if (snapshot.connectionState === 'closed') {
+      connectionError.value = ''
+    }
+
     if (snapshot.connectionState === 'closed' || snapshot.connectionState === 'idle') {
       waitingPackets.value = []
     }
@@ -308,6 +384,37 @@ watch(
         @close="toggleDebugPanel"
       >
         <div class="debug-overlay__content">
+          <div class="debug-overlay__connect-row">
+            <GInput
+              v-model="debugHost"
+              label="Host"
+              width="full"
+              background
+              :disabled="connectionLocked"
+              :error="connectionError"
+            />
+            <GInput
+              v-model="debugPort"
+              label="Port"
+              type="number"
+              min="1"
+              max="65535"
+              step="1"
+              inputmode="numeric"
+              width="auto"
+              background
+              :disabled="connectionLocked"
+            />
+            <GButton
+              preset="accent"
+              background
+              :disabled="connectionActionDisabled"
+              @click="handleConnectionAction"
+            >
+              {{ connectionActionLabel }}
+            </GButton>
+          </div>
+
           <div class="debug-overlay__toolbar">
             <div class="debug-overlay__connection">
               <span
@@ -481,9 +588,16 @@ watch(
 
 .debug-overlay__content {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 0.875rem;
   min-height: 0;
+}
+
+.debug-overlay__connect-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(8rem, 10rem) auto;
+  align-items: end;
+  gap: 0.75rem;
 }
 
 .debug-overlay__toolbar,
@@ -636,6 +750,10 @@ watch(
 @media (max-width: 56rem) {
   .debug-overlay__window-shell {
     min-width: 30rem;
+  }
+
+  .debug-overlay__connect-row {
+    grid-template-columns: minmax(0, 1fr) minmax(6rem, 8rem) auto;
   }
 
   .debug-overlay__packet-grid {
