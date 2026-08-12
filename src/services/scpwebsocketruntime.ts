@@ -5,8 +5,10 @@ import { ScpWebSocketClient } from './scpwebsocketclient'
 
 let sharedScpWebSocketClient: ScpWebSocketClient | null = null
 
-export function createScpWebSocketClient(host: string): ScpWebSocketClient {
-  const url = normalizeSocketUrl(host)
+export type WebSocketPort = number | string
+
+export function createScpWebSocketClient(host: string, port?: WebSocketPort): ScpWebSocketClient {
+  const url = normalizeSocketUrl(host, port)
   let hasOpened = false
 
   if (sharedScpWebSocketClient) {
@@ -50,6 +52,11 @@ export function createScpWebSocketClient(host: string): ScpWebSocketClient {
   return sharedScpWebSocketClient
 }
 
+/** Connects to a game client using the separate IP/port values supplied by Unreal. */
+export function connectScpWebSocket(ip: string, port: WebSocketPort): ScpWebSocketClient {
+  return createScpWebSocketClient(ip, port)
+}
+
 export function getScpWebSocketClient(): ScpWebSocketClient | null {
   return sharedScpWebSocketClient
 }
@@ -71,8 +78,28 @@ export function destroyScpWebSocketClient(): void {
   sharedScpWebSocketClient = null
 }
 
-export function normalizeSocketUrl(host: string): string {
+export function normalizeSocketUrl(host: string, port?: WebSocketPort): string {
   const trimmedHost = host.trim()
+
+  if (!trimmedHost) {
+    throw new Error('WebSocket host cannot be empty.')
+  }
+
+  if (port !== undefined) {
+    if (trimmedHost.startsWith('ws://') || trimmedHost.startsWith('wss://')) {
+      throw new Error('WebSocket host must not include a protocol when port is provided.')
+    }
+
+    const normalizedPort = Number(port)
+    if (!Number.isInteger(normalizedPort) || normalizedPort < 1 || normalizedPort > 65535) {
+      throw new RangeError('WebSocket port must be an integer between 1 and 65535.')
+    }
+
+    const normalizedHost =
+      trimmedHost.includes(':') && !trimmedHost.startsWith('[') ? `[${trimmedHost}]` : trimmedHost
+
+    return `ws://${normalizedHost}:${normalizedPort}`
+  }
 
   if (trimmedHost.startsWith('ws://') || trimmedHost.startsWith('wss://')) {
     return trimmedHost

@@ -230,7 +230,7 @@ function onDebugPanelClose(): void {
             <GInput
               v-model="debugHost"
               label="Host"
-              helper="Unreal can override this through window.create_socket(host)."
+              helper="Unreal can connect with window.connect_socket(ip, port). Debug accepts host:port here."
               width="full"
               background
             />

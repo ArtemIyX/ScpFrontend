@@ -1,6 +1,7 @@
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 
 import type { GTabsItem } from '@/components/g/GTabs/GTabs'
+import { preloadSettingsLocalizations } from '@/localization'
 
 import AudioSettingsSubview from './subviews/AudioSettingsSubview'
 import ControlsSettingsSubview from './subviews/ControlsSettingsSubview'
@@ -55,6 +56,7 @@ export default defineComponent({
     KeyBindingsSettingsSubview,
   },
   setup() {
+    onMounted(() => preloadSettingsLocalizations())
     const activeTab = ref<SettingsTabValue>('display')
     const currentSubviewRef = ref<DirtyGuardSubview | null>(null)
     const pendingTab = ref<SettingsTabValue | null>(null)

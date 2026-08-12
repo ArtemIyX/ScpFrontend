@@ -9,6 +9,16 @@ This project is an in-game web UI for an Unreal Engine SCP horror game. The comp
 - Keep layouts game-like, compact, and runtime-safe.
 - Use browser-native elements only when a `G*` component does not exist yet.
 
+## Unreal WebSocket Connection
+
+The UI does not open a WebSocket when the page loads. Unreal selects the target game client by calling the window bridge after the browser page is ready:
+
+```cpp
+Browser->ExecuteJavaScript(TEXT("window.connect_socket('127.0.0.1', 18181);"));
+```
+
+The first argument is the game client IP/host and the second is its WebSocket port. Each browser instance can therefore connect to a different local game client. The existing `window.create_socket('host:port')` form remains available for the debug overlay and compatibility.
+
 ## Element Reference
 
 | Component | Use it for | Notes |
