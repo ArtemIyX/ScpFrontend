@@ -1,191 +1,277 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-import { createScpWebSocketClient, getScpWebSocketClient } from '@/services'
-import { MessageType, PingMessage } from '@/proto/gen/scp_webui'
+import {
+  messageTypeName,
+  onScpWebSocketPacket,
+  onScpWebSocketRuntimeState,
+  type ScpPacketEvent,
+  type ScpWebSocketRuntimeSnapshot,
+} from '@/services'
 
-type DebugLogLevel = 'log' | 'info' | 'warn' | 'error' | 'debug'
+import {
+  expectedResponseType,
+  removeMatchingWaitingEntry,
+  type DebugWaitingEntry,
+} from './debugpackets'
 
-type DebugLogEntry = {
+type DebugPacketEntry = {
   id: number
-  level: DebugLogLevel
-  text: string
-  timestamp: string
+  messageTypeName: string
+  timestamp: number
 }
 
-type ConsoleMethodName = 'log' | 'info' | 'warn' | 'error' | 'debug'
+type ScrollFollowState = {
+  value: boolean
+}
 
+const MAX_PACKET_ENTRIES = 500
 const isDebugPanelOpen = ref(false)
-const debugHost = ref('localhost:18181')
-const debugLogs = ref<DebugLogEntry[]>([])
-const debugWindowWidth = ref(36)
-const debugWindowHeight = ref(28)
-const debugWindowShellRef = ref<HTMLElement | null>(null)
-const debugLogViewportRef = ref<HTMLElement | null>(null)
-const activePacketTab = ref('ping')
-const pingCode = ref('1')
-let nextDebugLogId = 1
-let restoreConsole: (() => void) | null = null
-let debugResizeObserver: ResizeObserver | null = null
+const sentPackets = ref<DebugPacketEntry[]>([])
+const receivedPackets = ref<DebugPacketEntry[]>([])
+const waitingPackets = ref<DebugWaitingEntry[]>([])
+const runtimeSnapshot = ref<ScpWebSocketRuntimeSnapshot>({
+  socketUrl: null,
+  connectionState: 'idle',
+})
+const windowShellRef = ref<HTMLElement | null>(null)
+const sentViewportRef = ref<HTMLElement | null>(null)
+const receivedViewportRef = ref<HTMLElement | null>(null)
+const waitingViewportRef = ref<HTMLElement | null>(null)
+const windowPosition = ref({ left: 16, top: 72 })
+const sentFollow = ref(true)
+const receivedFollow = ref(true)
+const waitingFollow = ref(true)
 
-const socketStateLabel = computed(() => getScpWebSocketClient()?.connectionState ?? 'idle')
-const packetTabs = [
-  {
-    value: 'ping',
-    label: 'Ping',
-    description: 'Send a heartbeat packet.',
-  },
-] as const
+let nextEntryId = 1
+let unsubscribePacketEvents: (() => void) | null = null
+let unsubscribeRuntimeState: (() => void) | null = null
+let dragState: {
+  pointerId: number
+  startX: number
+  startY: number
+  startLeft: number
+  startTop: number
+} | null = null
 
-function toggleDebugPanel(): void {
-  if (isDebugPanelOpen.value) {
-    onDebugPanelClose()
-  }
-
-  isDebugPanelOpen.value = !isDebugPanelOpen.value
-
-  if (isDebugPanelOpen.value) {
-    requestAnimationFrame(() => {
-      onDebugPanelOpen()
-    })
-  }
-}
-
-function connectDebugSocket(): void {
-  createScpWebSocketClient(debugHost.value)
-}
-
-function sendPingPacket(): void {
-  const client = getScpWebSocketClient()
-  if (!client) {
-    console.warn('[scp-websocket] cannot send ping before socket creation')
-    return
-  }
-
-  const code = Number.parseInt(pingCode.value, 10)
-
-  client.sendTypedMessage(
-    MessageType.MESSAGE_PING,
-    {
-      clientTimeMs: Date.now().toString(),
-      code: Number.isFinite(code) ? code : 0,
-    },
-    PingMessage,
-  )
-
-  console.info('[scp-websocket] ping sent', {
-    clientTimeMs: Date.now().toString(),
-    code: Number.isFinite(code) ? code : 0,
-  })
-}
-
-function pushDebugLog(level: DebugLogLevel, args: unknown[]): void {
-  const entry: DebugLogEntry = {
-    id: nextDebugLogId++,
-    level,
-    text: args.map((arg) => formatConsoleArg(arg)).join(' '),
-    timestamp: new Date().toLocaleTimeString(),
-  }
-
-  debugLogs.value = [...debugLogs.value.slice(-199), entry]
-}
-
-function formatConsoleArg(value: unknown): string {
-  if (typeof value === 'string') {
-    return value
-  }
-
-  if (value instanceof Error) {
-    return value.stack ?? value.message
+const socketEndpoint = computed(() => {
+  const url = runtimeSnapshot.value.socketUrl
+  if (!url) {
+    return { host: '—', port: '—' }
   }
 
   try {
-    return JSON.stringify(value)
-  } catch {
-    return String(value)
-  }
-}
-
-function installConsoleCapture(): () => void {
-  const originalConsole = {
-    log: console.log,
-    info: console.info,
-    warn: console.warn,
-    error: console.error,
-    debug: console.debug,
-  }
-
-  const methods: ConsoleMethodName[] = ['log', 'info', 'warn', 'error', 'debug']
-
-  for (const method of methods) {
-    console[method] = (...args: unknown[]) => {
-      pushDebugLog(method, args)
-      originalConsole[method](...args)
+    const parsed = new URL(url)
+    return {
+      host: parsed.hostname || '—',
+      port: parsed.port || 'default',
     }
+  } catch {
+    return { host: url, port: '—' }
   }
+})
 
-  return () => {
-    console.log = originalConsole.log
-    console.info = originalConsole.info
-    console.warn = originalConsole.warn
-    console.error = originalConsole.error
-    console.debug = originalConsole.debug
+const socketState = computed(() => {
+  switch (runtimeSnapshot.value.connectionState) {
+    case 'connecting':
+      return { label: 'Connecting', color: 'yellow' }
+    case 'open':
+      return { label: 'Connected', color: 'green' }
+    case 'closed':
+      return { label: 'Disconnected', color: 'red' }
+    case 'idle':
+    default:
+      return { label: 'Not connected', color: 'gray' }
   }
+})
+
+function appendPacketEntry(target: typeof sentPackets, event: ScpPacketEvent): void {
+  target.value = [
+    ...target.value.slice(-(MAX_PACKET_ENTRIES - 1)),
+    {
+      id: nextEntryId++,
+      messageTypeName: event.messageTypeName,
+      timestamp: event.timestamp,
+    },
+  ]
 }
 
-function syncDebugWindowSize(element: HTMLElement | null): void {
-  if (!element) {
+function handlePacket(event: ScpPacketEvent): void {
+  if (event.direction === 'sent') {
+    appendPacketEntry(sentPackets, event)
+
+    const responseType = expectedResponseType(event.messageType)
+    if (responseType !== null) {
+      waitingPackets.value = [
+        ...waitingPackets.value,
+        {
+          id: nextEntryId++,
+          requestTypeName: event.messageTypeName,
+          responseType,
+          responseTypeName: messageTypeName(responseType),
+          timestamp: event.timestamp,
+        },
+      ].slice(-MAX_PACKET_ENTRIES)
+    }
+
     return
   }
 
-  debugWindowWidth.value = element.offsetWidth / 16
-  debugWindowHeight.value = element.offsetHeight / 16
+  appendPacketEntry(receivedPackets, event)
+  waitingPackets.value = removeMatchingWaitingEntry(waitingPackets.value, event.messageType)
+}
+
+function clearPacketLog(): void {
+  sentPackets.value = []
+  receivedPackets.value = []
+  waitingPackets.value = []
+}
+
+function toggleDebugPanel(): void {
+  isDebugPanelOpen.value = !isDebugPanelOpen.value
+  if (isDebugPanelOpen.value) {
+    requestAnimationFrame(clampWindowPosition)
+  }
+}
+
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.min(Math.max(value, minimum), Math.max(minimum, maximum))
+}
+
+function clampWindowPosition(): void {
+  const shell = windowShellRef.value
+  if (!shell) {
+    return
+  }
+
+  windowPosition.value = {
+    left: clamp(windowPosition.value.left, 0, window.innerWidth - shell.offsetWidth),
+    top: clamp(windowPosition.value.top, 0, window.innerHeight - shell.offsetHeight),
+  }
+}
+
+function onWindowPointerDown(event: PointerEvent): void {
+  const target = event.target
+  if (!(target instanceof Element)) {
+    return
+  }
+
+  if (!target.closest('.gwindow__header') || target.closest('button, input, textarea, select')) {
+    return
+  }
+
+  dragState = {
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    startLeft: windowPosition.value.left,
+    startTop: windowPosition.value.top,
+  }
+
+  document.body.style.userSelect = 'none'
+  window.addEventListener('pointermove', onWindowPointerMove)
+  window.addEventListener('pointerup', stopWindowDrag)
+  window.addEventListener('pointercancel', stopWindowDrag)
+}
+
+function onWindowPointerMove(event: PointerEvent): void {
+  if (!dragState || event.pointerId !== dragState.pointerId) {
+    return
+  }
+
+  const shell = windowShellRef.value
+  if (!shell) {
+    return
+  }
+
+  event.preventDefault()
+  windowPosition.value = {
+    left: clamp(
+      dragState.startLeft + event.clientX - dragState.startX,
+      0,
+      window.innerWidth - shell.offsetWidth,
+    ),
+    top: clamp(
+      dragState.startTop + event.clientY - dragState.startY,
+      0,
+      window.innerHeight - shell.offsetHeight,
+    ),
+  }
+}
+
+function stopWindowDrag(): void {
+  dragState = null
+  document.body.style.userSelect = ''
+  window.removeEventListener('pointermove', onWindowPointerMove)
+  window.removeEventListener('pointerup', stopWindowDrag)
+  window.removeEventListener('pointercancel', stopWindowDrag)
+}
+
+function updateFollowState(viewport: HTMLElement, followState: ScrollFollowState): void {
+  followState.value = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 32
+}
+
+function onSentScroll(event: Event): void {
+  if (event.currentTarget instanceof HTMLElement) {
+    updateFollowState(event.currentTarget, sentFollow)
+  }
+}
+
+function onReceivedScroll(event: Event): void {
+  if (event.currentTarget instanceof HTMLElement) {
+    updateFollowState(event.currentTarget, receivedFollow)
+  }
+}
+
+function onWaitingScroll(event: Event): void {
+  if (event.currentTarget instanceof HTMLElement) {
+    updateFollowState(event.currentTarget, waitingFollow)
+  }
+}
+
+function scrollToBottom(viewport: HTMLElement | null, followState: ScrollFollowState): void {
+  if (viewport && followState.value) {
+    viewport.scrollTop = viewport.scrollHeight
+  }
+}
+
+async function updateLogScrollPositions(): Promise<void> {
+  await nextTick()
+  scrollToBottom(sentViewportRef.value, sentFollow)
+  scrollToBottom(receivedViewportRef.value, receivedFollow)
+  scrollToBottom(waitingViewportRef.value, waitingFollow)
+}
+
+function formatTimestamp(timestamp: number): string {
+  return new Date(timestamp).toLocaleTimeString()
 }
 
 onMounted(() => {
-  restoreConsole = installConsoleCapture()
-  pushDebugLog('info', ['Debug console ready.'])
-
-  if (typeof ResizeObserver !== 'undefined') {
-    debugResizeObserver = new ResizeObserver(() => {
-      syncDebugWindowSize(debugWindowShellRef.value)
-    })
-  }
+  unsubscribePacketEvents = onScpWebSocketPacket(handlePacket)
+  unsubscribeRuntimeState = onScpWebSocketRuntimeState((snapshot) => {
+    runtimeSnapshot.value = snapshot
+    if (snapshot.connectionState === 'closed' || snapshot.connectionState === 'idle') {
+      waitingPackets.value = []
+    }
+  })
+  window.addEventListener('resize', clampWindowPosition)
 })
 
 onBeforeUnmount(() => {
-  restoreConsole?.()
-  restoreConsole = null
-  debugResizeObserver?.disconnect()
-  debugResizeObserver = null
+  unsubscribePacketEvents?.()
+  unsubscribeRuntimeState?.()
+  window.removeEventListener('resize', clampWindowPosition)
+  stopWindowDrag()
 })
 
 watch(
-  () => debugLogs.value.length,
-  async () => {
-    await nextTick()
-
-    const viewport = debugLogViewportRef.value
-    if (!viewport) {
-      return
-    }
-
-    viewport.scrollTop = viewport.scrollHeight
-  },
+  [
+    () => sentPackets.value.length,
+    () => receivedPackets.value.length,
+    () => waitingPackets.value.length,
+  ],
+  updateLogScrollPositions,
 )
-
-function onDebugPanelOpen(): void {
-  syncDebugWindowSize(debugWindowShellRef.value)
-
-  if (debugResizeObserver && debugWindowShellRef.value) {
-    debugResizeObserver.disconnect()
-    debugResizeObserver.observe(debugWindowShellRef.value)
-  }
-}
-
-function onDebugPanelClose(): void {
-  debugResizeObserver?.disconnect()
-}
 </script>
 
 <template>
@@ -202,98 +288,139 @@ function onDebugPanelClose(): void {
 
     <div
       v-if="isDebugPanelOpen"
-      ref="debugWindowShellRef"
+      ref="windowShellRef"
       class="debug-overlay__window-shell"
       :style="{
-        width: `${debugWindowWidth}rem`,
-        height: `${debugWindowHeight}rem`,
+        left: `${windowPosition.left}px`,
+        top: `${windowPosition.top}px`,
       }"
+      @pointerdown="onWindowPointerDown"
     >
       <GWindow
         class="debug-overlay__window"
-        title="Runtime Debug"
-        subtitle="Socket setup and browser console output."
-        status="Overlay"
+        title="Runtime Packet Monitor"
+        subtitle="Live protobuf traffic and pending responses."
+        :status="socketState.label"
         strong
         closable
         width="full"
         height="full"
-        @close="
-          () => {
-            onDebugPanelClose()
-            toggleDebugPanel()
-          }
-        "
+        @close="toggleDebugPanel"
       >
         <div class="debug-overlay__content">
-          <div class="debug-overlay__controls">
-            <GInput
-              v-model="debugHost"
-              label="Host"
-              helper="Unreal can connect with window.connect_socket(ip, port). Debug accepts host:port here."
-              width="full"
-              background
-            />
-
-            <div class="debug-overlay__actions">
-              <GButton preset="accent" background @click="connectDebugSocket">Connect</GButton>
-              <GText preset="technical" class="debug-overlay__status">
-                socket_state = {{ socketStateLabel }}
+          <div class="debug-overlay__toolbar">
+            <div class="debug-overlay__connection">
+              <span
+                class="debug-overlay__status-dot"
+                :class="`debug-overlay__status-dot--${socketState.color}`"
+                aria-hidden="true"
+              ></span>
+              <GText preset="technical">
+                {{ socketState.label }}
+              </GText>
+              <GText preset="technical" class="debug-overlay__endpoint">
+                host={{ socketEndpoint.host }} port={{ socketEndpoint.port }}
               </GText>
             </div>
+
+            <GButton preset="ghost" shape="chip" background @click="clearPacketLog">
+              Clear
+            </GButton>
           </div>
 
-          <div class="debug-overlay__packet-frame">
-            <GText preset="caps">Packets</GText>
-
-            <GTabs
-              v-model="activePacketTab"
-              :tabs="packetTabs"
-              preset="quiet"
-              width="full"
-              background
-              aria-label="Debug packet tabs"
-            >
-              <template #default>
-                <div v-if="activePacketTab === 'ping'" class="debug-overlay__packet-panel">
-                  <div class="debug-overlay__packet-fields">
-                    <GInput
-                      v-model="pingCode"
-                      label="Ping Code"
-                      helper="Uint32 test value for MESSAGE_PING."
-                      type="number"
-                      min="0"
-                      width="full"
-                      background
-                    />
-                  </div>
-
-                  <div class="debug-overlay__packet-actions">
-                    <GButton preset="accent" background @click="sendPingPacket">Send Ping</GButton>
-                    <GText preset="technical">message_type = MESSAGE_PING</GText>
-                  </div>
+          <div class="debug-overlay__packet-grid">
+            <section class="debug-overlay__packet-column">
+              <header class="debug-overlay__column-header">
+                <GText preset="caps">Sent packets</GText>
+                <GText preset="technical" class="debug-overlay__count">
+                  {{ sentPackets.length }}
+                </GText>
+              </header>
+              <div
+                ref="sentViewportRef"
+                class="debug-overlay__packet-scroller"
+                @scroll="onSentScroll"
+              >
+                <div v-if="sentPackets.length === 0" class="debug-overlay__empty">
+                  <GText preset="technical">No sent packets yet.</GText>
                 </div>
-              </template>
-            </GTabs>
-          </div>
-
-          <div class="debug-overlay__log-frame">
-            <GText preset="caps">Browser Console</GText>
-
-            <div ref="debugLogViewportRef" class="debug-overlay__log-scroller">
-              <div class="debug-overlay__log-list">
                 <div
-                  v-for="entry in debugLogs"
+                  v-for="entry in sentPackets"
                   :key="entry.id"
-                  class="debug-overlay__log-entry"
-                  :class="`debug-overlay__log-entry--${entry.level}`"
+                  class="debug-overlay__packet-entry debug-overlay__packet-entry--sent"
                 >
-                  <GText preset="technical" class="debug-overlay__log-line">
-                    [{{ entry.timestamp }}] {{ entry.level.toUpperCase() }} {{ entry.text }}
+                  <GText preset="technical" class="debug-overlay__packet-name">
+                    {{ entry.messageTypeName }}
+                  </GText>
+                  <GText preset="technical" class="debug-overlay__packet-time">
+                    {{ formatTimestamp(entry.timestamp) }}
                   </GText>
                 </div>
               </div>
-            </div>
+            </section>
+
+            <section class="debug-overlay__packet-column">
+              <header class="debug-overlay__column-header">
+                <GText preset="caps">Received packets</GText>
+                <GText preset="technical" class="debug-overlay__count">
+                  {{ receivedPackets.length }}
+                </GText>
+              </header>
+              <div
+                ref="receivedViewportRef"
+                class="debug-overlay__packet-scroller"
+                @scroll="onReceivedScroll"
+              >
+                <div v-if="receivedPackets.length === 0" class="debug-overlay__empty">
+                  <GText preset="technical">No received packets yet.</GText>
+                </div>
+                <div
+                  v-for="entry in receivedPackets"
+                  :key="entry.id"
+                  class="debug-overlay__packet-entry debug-overlay__packet-entry--received"
+                >
+                  <GText preset="technical" class="debug-overlay__packet-name">
+                    {{ entry.messageTypeName }}
+                  </GText>
+                  <GText preset="technical" class="debug-overlay__packet-time">
+                    {{ formatTimestamp(entry.timestamp) }}
+                  </GText>
+                </div>
+              </div>
+            </section>
+
+            <section class="debug-overlay__packet-column">
+              <header class="debug-overlay__column-header">
+                <GText preset="caps">Waiting for</GText>
+                <GText preset="technical" class="debug-overlay__count">
+                  {{ waitingPackets.length }}
+                </GText>
+              </header>
+              <div
+                ref="waitingViewportRef"
+                class="debug-overlay__packet-scroller"
+                @scroll="onWaitingScroll"
+              >
+                <div v-if="waitingPackets.length === 0" class="debug-overlay__empty">
+                  <GText preset="technical">Nothing waiting.</GText>
+                </div>
+                <div
+                  v-for="entry in waitingPackets"
+                  :key="entry.id"
+                  class="debug-overlay__packet-entry debug-overlay__packet-entry--waiting"
+                >
+                  <GText preset="technical" class="debug-overlay__packet-name">
+                    {{ entry.responseTypeName }}
+                  </GText>
+                  <GText preset="technical" class="debug-overlay__packet-detail">
+                    after {{ entry.requestTypeName }}
+                  </GText>
+                  <GText preset="technical" class="debug-overlay__packet-time">
+                    {{ formatTimestamp(entry.timestamp) }}
+                  </GText>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </GWindow>
@@ -318,148 +445,202 @@ function onDebugPanelClose(): void {
 
 .debug-overlay__window-shell {
   position: absolute;
-  top: 50%;
-  left: 1rem;
-  min-width: 24rem;
-  min-height: 18rem;
-  max-width: min(90vw, 56rem);
-  max-height: 85vh;
-  transform: translateY(-50%);
-  pointer-events: auto;
-  resize: both;
+  width: min(78rem, calc(100vw - 2rem));
+  height: min(42rem, calc(100vh - 2rem));
+  min-width: 42rem;
+  min-height: 22rem;
+  max-width: calc(100vw - 1rem);
+  max-height: calc(100vh - 1rem);
   overflow: hidden;
+  resize: both;
+  pointer-events: auto;
 }
 
 .debug-overlay__window {
   width: 100%;
   height: 100%;
   background:
-    linear-gradient(180deg, rgba(15, 20, 18, 0.96), rgba(5, 8, 8, 0.98)),
+    linear-gradient(180deg, rgba(15, 20, 18, 0.97), rgba(5, 8, 8, 0.99)),
     radial-gradient(circle at top left, rgba(198, 255, 74, 0.08), transparent 35%);
 }
 
+.debug-overlay__window :deep(.gwindow__header) {
+  cursor: move;
+  user-select: none;
+}
+
+.debug-overlay__window :deep(.gwindow__header button) {
+  cursor: pointer;
+}
+
 .debug-overlay__window :deep(.gwindow__body) {
+  display: grid;
   height: 100%;
   min-height: 0;
 }
 
 .debug-overlay__content {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  gap: 1rem;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.debug-overlay__controls {
-  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 0.875rem;
-}
-
-.debug-overlay__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.debug-overlay__status {
-  opacity: 0.82;
-}
-
-.debug-overlay__packet-frame {
-  display: grid;
-  gap: 0.5rem;
   min-height: 0;
 }
 
-.debug-overlay__packet-panel {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.debug-overlay__packet-fields {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.debug-overlay__packet-actions {
+.debug-overlay__toolbar,
+.debug-overlay__connection,
+.debug-overlay__column-header {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
 }
 
-.debug-overlay__log-frame {
+.debug-overlay__toolbar {
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.debug-overlay__connection {
+  min-width: 0;
+  gap: 0.5rem;
+}
+
+.debug-overlay__endpoint {
+  min-width: 0;
+  overflow: hidden;
+  color: rgba(210, 226, 214, 0.72);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.debug-overlay__status-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 50%;
+  box-shadow: 0 0 0.6rem currentColor;
+}
+
+.debug-overlay__status-dot--gray {
+  color: rgba(155, 166, 160, 0.8);
+  background: rgba(155, 166, 160, 0.8);
+}
+
+.debug-overlay__status-dot--yellow {
+  color: rgba(255, 210, 107, 0.95);
+  background: rgba(255, 210, 107, 0.95);
+}
+
+.debug-overlay__status-dot--green {
+  color: rgba(154, 238, 104, 0.98);
+  background: rgba(154, 238, 104, 0.98);
+}
+
+.debug-overlay__status-dot--red {
+  color: rgba(255, 118, 118, 0.98);
+  background: rgba(255, 118, 118, 0.98);
+}
+
+.debug-overlay__packet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.debug-overlay__packet-column {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 0.5rem;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.debug-overlay__log-scroller {
-  height: 100%;
-  min-height: 0;
   min-width: 0;
-  overflow: auto;
-  border: 0.0625rem solid rgba(210, 226, 214, 0.12);
+  min-height: 0;
+  padding: 0.625rem;
+  border: 1px solid rgba(210, 226, 214, 0.12);
   border-radius: 0.5rem;
-  background: rgba(3, 6, 7, 0.72);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(198, 255, 74, 0.45) rgba(255, 255, 255, 0.04);
+  background: rgba(3, 6, 7, 0.58);
+}
+
+.debug-overlay__column-header {
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 0.125rem;
+}
+
+.debug-overlay__count {
+  color: rgba(210, 226, 214, 0.58);
+}
+
+.debug-overlay__packet-scroller {
+  min-height: 0;
+  overflow: auto;
   overscroll-behavior: contain;
+  scrollbar-color: rgba(198, 255, 74, 0.45) rgba(255, 255, 255, 0.04);
+  scrollbar-width: thin;
 }
 
-.debug-overlay__log-scroller::-webkit-scrollbar {
-  width: 0.625rem;
+.debug-overlay__packet-scroller::-webkit-scrollbar {
+  width: 0.5rem;
 }
 
-.debug-overlay__log-scroller::-webkit-scrollbar-track {
+.debug-overlay__packet-scroller::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.03);
 }
 
-.debug-overlay__log-scroller::-webkit-scrollbar-thumb {
+.debug-overlay__packet-scroller::-webkit-scrollbar-thumb {
   background: rgba(198, 255, 74, 0.35);
   border-radius: 62.4375rem;
 }
 
-.debug-overlay__log-list {
+.debug-overlay__empty {
   display: grid;
-  align-content: start;
-  gap: 0.25rem;
-  padding: 0.5rem;
+  min-height: 100%;
+  place-items: center;
+  padding: 1rem;
+  color: rgba(210, 226, 214, 0.5);
+  text-align: center;
 }
 
-.debug-overlay__log-entry {
-  padding: 0.3125rem 0.5rem;
+.debug-overlay__packet-entry {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 0.25rem;
+  padding: 0.45rem 0.5rem;
   border-left: 0.125rem solid rgba(192, 205, 198, 0.22);
-  background: rgba(255, 255, 255, 0.018);
   border-radius: 0.25rem;
+  background: rgba(255, 255, 255, 0.018);
 }
 
-.debug-overlay__log-entry--info {
-  border-left-color: rgba(123, 198, 255, 0.72);
+.debug-overlay__packet-entry--sent {
+  border-left-color: rgba(123, 198, 255, 0.8);
 }
 
-.debug-overlay__log-entry--warn {
+.debug-overlay__packet-entry--received {
+  border-left-color: rgba(154, 238, 104, 0.82);
+}
+
+.debug-overlay__packet-entry--waiting {
   border-left-color: rgba(255, 210, 107, 0.9);
 }
 
-.debug-overlay__log-entry--error {
-  border-left-color: rgba(255, 118, 118, 0.92);
+.debug-overlay__packet-name {
+  overflow-wrap: anywhere;
+  color: rgba(240, 244, 238, 0.96);
 }
 
-.debug-overlay__log-entry--debug {
-  border-left-color: rgba(198, 255, 74, 0.72);
+.debug-overlay__packet-detail,
+.debug-overlay__packet-time {
+  color: rgba(210, 226, 214, 0.56);
+  font-size: 0.7rem;
 }
 
-.debug-overlay__log-line {
-  display: block;
-  font-size: 0.75rem;
-  line-height: 1.25;
-  white-space: pre-wrap;
-  word-break: break-word;
+@media (max-width: 56rem) {
+  .debug-overlay__window-shell {
+    min-width: 30rem;
+  }
+
+  .debug-overlay__packet-grid {
+    grid-template-columns: repeat(3, minmax(10rem, 1fr));
+    overflow-x: auto;
+  }
 }
 </style>

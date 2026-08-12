@@ -21,7 +21,10 @@ vi.mock('../services/scpwebsocketruntime', () => ({
   getScpWebSocketClient,
 }))
 
-import { installScpWebSocketWindowApi } from '../services/installScpWebSocketWindowApi'
+import {
+  installScpWebSocketWindowApi,
+  SCP_UI_LOADED_MESSAGE,
+} from '../services/installScpWebSocketWindowApi'
 
 describe('SCP WebSocket window API', () => {
   beforeEach(() => {
@@ -44,5 +47,9 @@ describe('SCP WebSocket window API', () => {
     target.create_socket('localhost:18181')
 
     expect(createScpWebSocketClient).toHaveBeenCalledWith('localhost:18181', undefined)
+  })
+
+  it('exposes the stable UI-loaded marker', () => {
+    expect(SCP_UI_LOADED_MESSAGE).toBe('SCP_UI_LOADED')
   })
 })

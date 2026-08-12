@@ -59,6 +59,14 @@ export type ScpKnownMessageType = keyof ScpIncomingMessageMap
 export type ScpEnvelopeHandler = (envelope: ScpEnvelope) => void
 export type ScpUnknownMessageHandler = (envelope: ScpEnvelope) => void
 export type ScpMessageHandler<TMessage> = (message: TMessage, envelope: ScpEnvelope) => void
+export type ScpPacketDirection = 'sent' | 'received'
+export type ScpPacketEvent = {
+  direction: ScpPacketDirection
+  messageType: number
+  messageTypeName: string
+  timestamp: number
+}
+export type ScpPacketHandler = (event: ScpPacketEvent) => void
 
 type Unsubscribe = () => void
 
@@ -70,6 +78,7 @@ type MessageCodec<TMessage> = {
 export class ScpWebSocketClient extends WebSocketClient {
   private readonly envelopeHandlers = new Set<ScpEnvelopeHandler>()
   private readonly unknownMessageHandlers = new Set<ScpUnknownMessageHandler>()
+  private readonly packetHandlers = new Set<ScpPacketHandler>()
   private readonly typedHandlers = new Map<number, Set<ScpMessageHandler<unknown>>>()
   private readonly codecs = new Map<number, MessageCodec<unknown>>()
 
@@ -109,6 +118,7 @@ export class ScpWebSocketClient extends WebSocketClient {
   sendEnvelope(envelope: ScpEnvelope): void {
     const bytes = ScpEnvelope.encode(envelope).finish()
     this.sendBytes(bytes)
+    this.publishPacket('sent', envelope.messageType)
   }
 
   registerCodec<TMessage>(messageType: number, codec: MessageCodec<TMessage>): void {
@@ -131,6 +141,14 @@ export class ScpWebSocketClient extends WebSocketClient {
     }
   }
 
+  onPacket(handler: ScpPacketHandler): Unsubscribe {
+    this.packetHandlers.add(handler)
+
+    return () => {
+      this.packetHandlers.delete(handler)
+    }
+  }
+
   onTypedMessage<TType extends ScpKnownMessageType>(
     messageType: TType,
     handler: ScpMessageHandler<ScpIncomingMessageMap[TType]>,
@@ -150,6 +168,7 @@ export class ScpWebSocketClient extends WebSocketClient {
   private handleEnvelopeBytes(bytes: Uint8Array): void {
     try {
       const envelope = ScpEnvelope.decode(bytes)
+      this.publishPacket('received', envelope.messageType)
 
       for (const handler of this.envelopeHandlers) {
         handler(envelope)
@@ -180,4 +199,22 @@ export class ScpWebSocketClient extends WebSocketClient {
       throw error
     }
   }
+
+  private publishPacket(direction: ScpPacketDirection, messageType: number): void {
+    const event: ScpPacketEvent = {
+      direction,
+      messageType,
+      messageTypeName: messageTypeName(messageType),
+      timestamp: Date.now(),
+    }
+
+    for (const handler of this.packetHandlers) {
+      handler(event)
+    }
+  }
+}
+
+export function messageTypeName(messageType: number): string {
+  const name = MessageType[messageType as MessageType]
+  return typeof name === 'string' ? name : `UNKNOWN_MESSAGE_TYPE_${messageType}`
 }

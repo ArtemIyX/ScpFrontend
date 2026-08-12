@@ -17,7 +17,13 @@ The UI does not open a WebSocket when the page loads. Unreal selects the target 
 Browser->ExecuteJavaScript(TEXT("window.connect_socket('127.0.0.1', 18181);"));
 ```
 
-The first argument is the game client IP/host and the second is its WebSocket port. Each browser instance can therefore connect to a different local game client. The existing `window.create_socket('host:port')` form remains available for the debug overlay and compatibility.
+The first argument is the game client IP/host and the second is its WebSocket port. Each browser instance can therefore connect to a different local game client. The existing `window.create_socket('host:port')` form remains available for compatibility.
+
+Once the bridge is installed and the Vue application is mounted, the UI writes the exact console marker `SCP_UI_LOADED`. Unreal can wait for this marker before calling `window.connect_socket(...)`.
+
+After the socket opens, the UI writes the exact console marker `SCP_WEBSOCKET_CONNECTED` and sends a binary `MESSAGE_PING` protobuf packet with `code = 0`. Unreal can use the marker for console detection and the ping for server-side client validation.
+
+The Debug window is a movable and resizable packet monitor. It shows sent packet names, received packet names, pending expected responses, and the active socket host, port, and connection state.
 
 ## Element Reference
 

@@ -1,11 +1,47 @@
-import { MessageType } from '@/proto/gen/scp_webui'
+import { MessageType, PingMessage } from '@/proto/gen/scp_webui'
 import { installLocalizationClient } from '@/localization'
 
-import { ScpWebSocketClient } from './scpwebsocketclient'
+import {
+  ScpWebSocketClient,
+  type ScpPacketHandler,
+} from './scpwebsocketclient'
+import type { WebSocketConnectionState } from './websocketclient'
 
 let sharedScpWebSocketClient: ScpWebSocketClient | null = null
+let unsubscribeSharedPacketEvents: (() => void) | null = null
+
+export type ScpWebSocketRuntimeSnapshot = {
+  socketUrl: string | null
+  connectionState: WebSocketConnectionState
+}
+
+const packetHandlers = new Set<ScpPacketHandler>()
+const runtimeStateHandlers = new Set<(snapshot: ScpWebSocketRuntimeSnapshot) => void>()
+let runtimeSnapshot: ScpWebSocketRuntimeSnapshot = {
+  socketUrl: null,
+  connectionState: 'idle',
+}
 
 export type WebSocketPort = number | string
+
+export const SCP_WEBSOCKET_CONNECTED_MESSAGE = 'SCP_WEBSOCKET_CONNECTED'
+
+function publishRuntimeSnapshot(snapshot: ScpWebSocketRuntimeSnapshot): void {
+  runtimeSnapshot = snapshot
+
+  for (const handler of runtimeStateHandlers) {
+    handler(snapshot)
+  }
+}
+
+function attachPacketForwarding(client: ScpWebSocketClient): void {
+  unsubscribeSharedPacketEvents?.()
+  unsubscribeSharedPacketEvents = client.onPacket((event) => {
+    for (const handler of packetHandlers) {
+      handler(event)
+    }
+  })
+}
 
 export function createScpWebSocketClient(host: string, port?: WebSocketPort): ScpWebSocketClient {
   const url = normalizeSocketUrl(host, port)
@@ -16,6 +52,7 @@ export function createScpWebSocketClient(host: string, port?: WebSocketPort): Sc
   }
 
   sharedScpWebSocketClient = new ScpWebSocketClient({ url })
+  attachPacketForwarding(sharedScpWebSocketClient)
   installLocalizationClient(sharedScpWebSocketClient)
   sharedScpWebSocketClient.onTypedMessage(MessageType.MESSAGE_PONG, (message) => {
     console.log("pong:" + JSON.stringify(message))
@@ -25,9 +62,20 @@ export function createScpWebSocketClient(host: string, port?: WebSocketPort): Sc
       return
     }
 
+    publishRuntimeSnapshot({ socketUrl: url, connectionState: state })
+
     if (state === 'open') {
       hasOpened = true
       console.info('[scp-websocket] connected', url)
+      console.info(SCP_WEBSOCKET_CONNECTED_MESSAGE)
+      sharedScpWebSocketClient.sendTypedMessage(
+        MessageType.MESSAGE_PING,
+        {
+          clientTimeMs: Date.now().toString(),
+          code: 0,
+        },
+        PingMessage,
+      )
       return
     }
 
@@ -61,6 +109,25 @@ export function getScpWebSocketClient(): ScpWebSocketClient | null {
   return sharedScpWebSocketClient
 }
 
+export function onScpWebSocketPacket(handler: ScpPacketHandler): () => void {
+  packetHandlers.add(handler)
+
+  return () => {
+    packetHandlers.delete(handler)
+  }
+}
+
+export function onScpWebSocketRuntimeState(
+  handler: (snapshot: ScpWebSocketRuntimeSnapshot) => void,
+): () => void {
+  runtimeStateHandlers.add(handler)
+  handler(runtimeSnapshot)
+
+  return () => {
+    runtimeStateHandlers.delete(handler)
+  }
+}
+
 export function requireScpWebSocketClient(): ScpWebSocketClient {
   if (!sharedScpWebSocketClient) {
     throw new Error('SCP WebSocket client has not been created yet.')
@@ -75,6 +142,12 @@ export function destroyScpWebSocketClient(): void {
   }
 
   sharedScpWebSocketClient.disconnect()
+  publishRuntimeSnapshot({
+    socketUrl: sharedScpWebSocketClient.socketUrl,
+    connectionState: 'closed',
+  })
+  unsubscribeSharedPacketEvents?.()
+  unsubscribeSharedPacketEvents = null
   sharedScpWebSocketClient = null
 }
 
